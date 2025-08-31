@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;  
 using DG.Tweening;
 using Unity.Mathematics;
 using UnityEngine;
@@ -21,6 +22,20 @@ public class HandView : MonoBehaviour
         // Update positions of all cards with animation over 0.5 seconds
         yield return UpdateCardPositions(0.5f);
     }
+        public CardView RemoveCard(Card card)
+    {
+        CardView cardView = GetCardView(card);
+        if (cardView == null) return null;
+        cards.Remove(cardView);
+        StartCoroutine(UpdateCardPositions(0.15f));
+        return cardView;
+    }
+
+    private CardView GetCardView(Card card)
+    {
+        return cards.Where(cardView => cardView.Card == card).FirstOrDefault();
+    }
+
 
     // idk, just update positions of the cards when adding
     private IEnumerator UpdateCardPositions(float duration)
