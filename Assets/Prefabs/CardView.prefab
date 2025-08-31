@@ -53,6 +53,9 @@ MonoBehaviour:
   damage: {fileID: 6687619334257079792}
   imagesSR: {fileID: 4949507007284239352}
   wrapper: {fileID: 5087615122854296471}
+  dropLayer:
+    serializedVersion: 2
+    m_Bits: 64
 --- !u!210 &7279992936063632519
 SortingGroup:
   m_ObjectHideFlags: 0

@@ -17,6 +17,7 @@ void OnEnable()
 {
     ActionSystem.AttachPerformer<DrawCardsGA>(DrawCardsPerformer);
     ActionSystem.AttachPerformer<DiscardAllCardsGA>(DiscardAllCardsPerformer);
+    ActionSystem.AttachPerformer<PlayCardsGA>(PlayCardPerformer);
     ActionSystem.SubscribeReaction<EnemyTurnGA>(EnemyTurnPreReaction, ReactionTiming.PRE);
     ActionSystem.SubscribeReaction<EnemyTurnGA>(EnemyTurnPostReaction, ReactionTiming.POST);
 }
@@ -25,6 +26,7 @@ void OnDisable()
 {
     ActionSystem.DetachPerformer<DrawCardsGA>();
     ActionSystem.DetachPerformer<DiscardAllCardsGA>();
+    ActionSystem.DetachPerformer<PlayCardsGA>();
     ActionSystem.UnsubscribeReaction<EnemyTurnGA>(EnemyTurnPreReaction, ReactionTiming.PRE);
     ActionSystem.UnsubscribeReaction<EnemyTurnGA>(EnemyTurnPostReaction, ReactionTiming.POST);
 }
@@ -39,25 +41,25 @@ public void Setup(List<CardData> deckData)
     }
 }
 
-private IEnumerator DrawCardsPerformer(DrawCardsGA drawCardsGA)
-{
-    int actualAmount = Mathf.Min(drawCardsGA.Amount, drawPile.Count);
-    int notDrawAmount = drawCardsGA.Amount - actualAmount;
-
-    for (int i = 0; i < actualAmount; i++)
+    private IEnumerator DrawCardsPerformer(DrawCardsGA drawCardsGA)
     {
-        yield return DrawCard();
-    }
+        int actualAmount = Mathf.Min(drawCardsGA.Amount, drawPile.Count);
+        int notDrawAmount = drawCardsGA.Amount - actualAmount;
 
-    if (notDrawAmount > 0)
-    {
-        RefillDeck();
-        for (int i = 0; i < notDrawAmount; i++)
+        for (int i = 0; i < actualAmount; i++)
         {
             yield return DrawCard();
         }
+
+        if (notDrawAmount > 0)
+        {
+            RefillDeck();
+            for (int i = 0; i < notDrawAmount; i++)
+            {
+                yield return DrawCard();
+            }
+        }
     }
-}
 
     private IEnumerator DiscardAllCardsPerformer(DiscardAllCardsGA discardAllCardsGA)
     {
@@ -69,6 +71,14 @@ private IEnumerator DrawCardsPerformer(DrawCardsGA drawCardsGA)
         }
         
         hand.Clear();
+    }
+    private IEnumerator PlayCardPerformer(PlayCardsGA playCardsGA)
+    {
+        hand.Remove(playCardsGA.Card);
+        CardView cardView = handView.RemoveCard(playCardsGA.Card);
+        // Additional card playing logic would go here
+        yield return DiscardCard(cardView);
+        //performs effects
     }
 
     //reactions
