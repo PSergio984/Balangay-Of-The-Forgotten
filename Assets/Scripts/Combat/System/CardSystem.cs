@@ -79,6 +79,11 @@ public void Setup(List<CardData> deckData)
         // Additional card playing logic would go here
         yield return DiscardCard(cardView);
         //performs effects
+        foreach (var effect in playCardsGA.Card.Effects)
+        {
+            PerformEffectGA performEffectGA = new(effect);
+            ActionSystem.Instance.AddReaction(performEffectGA);
+        }
     }
 
     //reactions
