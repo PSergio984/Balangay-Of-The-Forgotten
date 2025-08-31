@@ -29,5 +29,17 @@ public class CardView : MonoBehaviour
         stamina.text = card.Stamina.ToString();
         imagesSR.sprite = card.image;
     }
-   
+    private void OnMouseEnter()
+    {
+        wrapper.SetActive(false);
+        Vector3 pos = new(transform.position.x, -2, 0);
+        CardViewHoverSystem.Instance.Show(Card, pos);
+    }
+
+    void OnMouseExit()
+    {
+        CardViewHoverSystem.Instance.Hide();
+        wrapper.SetActive(true);
+    }
+
 }
