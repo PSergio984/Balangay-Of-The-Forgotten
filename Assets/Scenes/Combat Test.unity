@@ -453,7 +453,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f350334aac0a66044ba174ec9a96a92a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MatchSetupSystem
-  heroData: {fileID: 11400000, guid: a83a06f715f5393469e0ec728b3268bd, type: 2}
+  heroData: {fileID: 11400000, guid: ecd70fead39c604478465b5740ce1be9, type: 2}
 --- !u!1 &169638990
 GameObject:
   m_ObjectHideFlags: 0

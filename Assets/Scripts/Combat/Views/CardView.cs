@@ -1,5 +1,4 @@
 using TMPro;
-using UnityEditor.Scripting;
 using UnityEngine;
 
 // Represents the visual components and data display of a single card
