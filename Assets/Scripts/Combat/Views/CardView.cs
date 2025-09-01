@@ -5,7 +5,6 @@ using UnityEngine;
 public class CardView : MonoBehaviour
 {
 
-    
     // TEXT COMPONENTS IN THE CARD
     // Text component to display the card's title/name
     [SerializeField] private TMP_Text title;

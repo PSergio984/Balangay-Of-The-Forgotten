@@ -34,7 +34,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -5.36, y: -0.46}
+  m_AnchoredPosition: {x: -5.21, y: 0.33}
   m_SizeDelta: {x: 20, y: 5}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!23 &1138282576373855932
@@ -206,7 +206,7 @@ Transform:
   m_GameObject: {fileID: 6757213365071207454}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 9.54, y: 1.06, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -226,7 +226,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bae3637a5b2f3974cb217b2d7fd150d3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyView
-  healthText: {fileID: 9221024297192611722}
+  healthText: {fileID: 1501573709437341625}
+  NameText: {fileID: 9221024297192611722}
   spriteRenderer: {fileID: 5524720702786943516}
   attackText: {fileID: 6487009872886678393}
 --- !u!65 &7659909115800132482
@@ -258,6 +259,34 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 6299611088830314261}
     m_Modifications:
+    - target: {fileID: 2614564792396720829, guid: abfc41d4823e2cf41a3f50f9396393e8, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 2614564792396720829, guid: abfc41d4823e2cf41a3f50f9396393e8, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 2614564792396720829, guid: abfc41d4823e2cf41a3f50f9396393e8, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 2614564792396720829, guid: abfc41d4823e2cf41a3f50f9396393e8, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -5.96
+      objectReference: {fileID: 0}
+    - target: {fileID: 2614564792396720829, guid: abfc41d4823e2cf41a3f50f9396393e8, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -1.1769
+      objectReference: {fileID: 0}
+    - target: {fileID: 2614564792396720829, guid: abfc41d4823e2cf41a3f50f9396393e8, type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2710306368348089860, guid: abfc41d4823e2cf41a3f50f9396393e8, type: 3}
+      propertyPath: m_Name
+      value: HealthText
+      objectReference: {fileID: 0}
     - target: {fileID: 3284066645139058842, guid: abfc41d4823e2cf41a3f50f9396393e8, type: 3}
       propertyPath: m_Name
       value: Image
@@ -265,7 +294,11 @@ PrefabInstance:
     - target: {fileID: 5359590059526882101, guid: abfc41d4823e2cf41a3f50f9396393e8, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300000, guid: 3ec95886a95b1e147a9dfe4b0352f589, type: 3}
+      objectReference: {fileID: -7687192244545928105, guid: 5417804a64edb704f93cc64285d4d53b, type: 3}
+    - target: {fileID: 8443129629403683970, guid: abfc41d4823e2cf41a3f50f9396393e8, type: 3}
+      propertyPath: m_Name
+      value: NameText
+      objectReference: {fileID: 0}
     - target: {fileID: 8503662190939717528, guid: abfc41d4823e2cf41a3f50f9396393e8, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -315,6 +348,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: abfc41d4823e2cf41a3f50f9396393e8, type: 3}
+--- !u!114 &1501573709437341625 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1305058331028108944, guid: abfc41d4823e2cf41a3f50f9396393e8, type: 3}
+  m_PrefabInstance: {fileID: 489439863637817641}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9541d86e2fd84c1d9990edf0852d74ab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshPro
 --- !u!212 &5524720702786943516 stripped
 SpriteRenderer:
   m_CorrespondingSourceObject: {fileID: 5359590059526882101, guid: abfc41d4823e2cf41a3f50f9396393e8, type: 3}
