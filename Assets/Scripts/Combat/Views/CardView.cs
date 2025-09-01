@@ -1,4 +1,5 @@
 using TMPro;
+using UnityEditor.Scripting;
 using UnityEngine;
 
 // Represents the visual components and data display of a single card
@@ -67,7 +68,7 @@ public class CardView : MonoBehaviour
     void OnMouseUp()
     {
         if (!Interactions.Instance.PlayerCanInteract()) return;
-        if (Physics.Raycast(transform.position, Vector3.forward, out RaycastHit hit, 10f, dropLayer))
+        if (StaminaSystem.Instance.HasEnoughStamina(Card.Stamina) && Physics.Raycast(transform.position, Vector3.forward, out RaycastHit hit, 10f, dropLayer))
         {
             PlayCardsGA playCardGA = new(Card);
             ActionSystem.Instance.Perform(playCardGA);

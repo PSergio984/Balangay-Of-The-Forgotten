@@ -78,6 +78,8 @@ public void Setup(List<CardData> deckData)
         CardView cardView = handView.RemoveCard(playCardsGA.Card);
         // Additional card playing logic would go here
         yield return DiscardCard(cardView);
+        SpendStaminaGA spendStaminaGA = new (playCardsGA.Card.Stamina);
+        ActionSystem.Instance.AddReaction(spendStaminaGA);
         //performs effects
         foreach (var effect in playCardsGA.Card.Effects)
         {
