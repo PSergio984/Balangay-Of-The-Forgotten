@@ -453,16 +453,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f350334aac0a66044ba174ec9a96a92a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MatchSetupSystem
-  deckData:
-  - {fileID: 11400000, guid: 634b398ae2fb3d74a8956d12ab1dd669, type: 2}
-  - {fileID: 11400000, guid: 634b398ae2fb3d74a8956d12ab1dd669, type: 2}
-  - {fileID: 11400000, guid: 634b398ae2fb3d74a8956d12ab1dd669, type: 2}
-  - {fileID: 11400000, guid: 4dd843882586e4c4581bf5270fef77c3, type: 2}
-  - {fileID: 11400000, guid: 4dd843882586e4c4581bf5270fef77c3, type: 2}
-  - {fileID: 11400000, guid: 634b398ae2fb3d74a8956d12ab1dd669, type: 2}
-  - {fileID: 11400000, guid: 634b398ae2fb3d74a8956d12ab1dd669, type: 2}
-  - {fileID: 11400000, guid: 634b398ae2fb3d74a8956d12ab1dd669, type: 2}
-  - {fileID: 11400000, guid: 634b398ae2fb3d74a8956d12ab1dd669, type: 2}
+  heroData: {fileID: 11400000, guid: a83a06f715f5393469e0ec728b3268bd, type: 2}
 --- !u!1 &169638990
 GameObject:
   m_ObjectHideFlags: 0
@@ -611,6 +602,51 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CardViewCreator
   cardPrefab: {fileID: 2311257804522615, guid: c0725b9c7a3f258489ba30beecbc1a43, type: 3}
+--- !u!1 &368726116
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 368726117}
+  - component: {fileID: 368726118}
+  m_Layer: 0
+  m_Name: HeroSystem
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &368726117
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 368726116}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1687521520}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &368726118
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 368726116}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5967d4e0ffe13e34eb74acd92a8cc384, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::HeroSystem
+  <HeroView>k__BackingField: {fileID: 693463015}
 --- !u!1 &405109497
 GameObject:
   m_ObjectHideFlags: 0
@@ -1166,6 +1202,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 7836871753176773751, guid: 2ea412685a506404ab79b2528399428c, type: 3}
   m_PrefabInstance: {fileID: 5665699812765967541}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &693463015 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1247206982686742041, guid: 2ea412685a506404ab79b2528399428c, type: 3}
+  m_PrefabInstance: {fileID: 5665699812765967541}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: afd74147c43692a46b97e8c56c62b4ba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::HeroView
 --- !u!114 &843762449 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2311257804522615, guid: c0725b9c7a3f258489ba30beecbc1a43, type: 3}
@@ -2063,6 +2110,7 @@ Transform:
   - {fileID: 640971413}
   - {fileID: 447929219}
   - {fileID: 462900098}
+  - {fileID: 368726117}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1757174230
@@ -2151,6 +2199,22 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 405109498}
     m_Modifications:
+    - target: {fileID: 1822778642561894896, guid: 2ea412685a506404ab79b2528399428c, type: 3}
+      propertyPath: m_Size.x
+      value: 6.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 1822778642561894896, guid: 2ea412685a506404ab79b2528399428c, type: 3}
+      propertyPath: m_Size.y
+      value: 6.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 1822778642561894896, guid: 2ea412685a506404ab79b2528399428c, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 780b38776821cd7478e241926653375c, type: 3}
+    - target: {fileID: 1822778642561894896, guid: 2ea412685a506404ab79b2528399428c, type: 3}
+      propertyPath: m_WasSpriteAssigned
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3833778510174320965, guid: 2ea412685a506404ab79b2528399428c, type: 3}
       propertyPath: m_Name
       value: HeroView
@@ -2194,6 +2258,30 @@ PrefabInstance:
     - target: {fileID: 7836871753176773751, guid: 2ea412685a506404ab79b2528399428c, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8602461966529601656, guid: 2ea412685a506404ab79b2528399428c, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 8602461966529601656, guid: 2ea412685a506404ab79b2528399428c, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 8602461966529601656, guid: 2ea412685a506404ab79b2528399428c, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 8602461966529601656, guid: 2ea412685a506404ab79b2528399428c, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -5.84
+      objectReference: {fileID: 0}
+    - target: {fileID: 8602461966529601656, guid: 2ea412685a506404ab79b2528399428c, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.28
+      objectReference: {fileID: 0}
+    - target: {fileID: 8602461966529601656, guid: 2ea412685a506404ab79b2528399428c, type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e86731d6fced05449d6c461c2d1a74a, type: 3}
+  m_Name: Bagani
+  m_EditorClassIdentifier: Assembly-CSharp::HeroData
+  <Image>k__BackingField: {fileID: 21300000, guid: 00a675f855644944fb55c74ad65b90a3, type: 3}
+  <HeroName>k__BackingField: Bagani
+  <Health>k__BackingField: 500
+  <Deck>k__BackingField:
+  - {fileID: 11400000, guid: 57ce94d0d13facb489afbbfd10d20699, type: 2}
+  - {fileID: 11400000, guid: c8869bbac0c0b974c901ce9eecb092d7, type: 2}
+  - {fileID: 11400000, guid: 14db5b1b3d0c83d4387ca4040b997604, type: 2}
+  - {fileID: 11400000, guid: 84f05fc58ac0ef5479c783783f8843e9, type: 2}
+  - {fileID: 11400000, guid: 47d65ec7cba281c418201348a1c8e02a, type: 2}

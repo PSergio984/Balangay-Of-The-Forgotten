@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e86731d6fced05449d6c461c2d1a74a, type: 3}
+  m_Name: Mangangayaw
+  m_EditorClassIdentifier: Assembly-CSharp::HeroData
+  <Image>k__BackingField: {fileID: 21300000, guid: 568fff62f39d1ef48993d4409fd91274, type: 3}
+  <HeroName>k__BackingField: Mangangayaw
+  <Health>k__BackingField: 150
+  <Deck>k__BackingField:
+  - {fileID: 11400000, guid: 16e7b9915493a294e9423ea47041a4c8, type: 2}
+  - {fileID: 11400000, guid: d5e2ad42e7307d74590f2aa418fc078d, type: 2}
+  - {fileID: 11400000, guid: 19a216e427646f94d9c00328a25be6b6, type: 2}
+  - {fileID: 11400000, guid: ba6c853bdee5c884d81387e4528bcfef, type: 2}
+  - {fileID: 11400000, guid: 4669c89bc941a6c448b0951b08fab249, type: 2}
