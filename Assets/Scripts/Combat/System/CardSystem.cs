@@ -2,16 +2,101 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
+
+/* CARD SYSTEM DOCUMENTATION
+ * 
+ * Purpose: Manages all card-related functionality including deck, hand, and card actions
+ * 
+ * How it works:
+ * - Handles drawing cards from deck to hand with animations
+ * - Manages card playing, discarding, and deck shuffling
+ * - Processes card-related game actions and reactions
+ * - Controls card lifecycle from deck through hand to discard pile
+ * 
+ * Integration: Works with ActionSystem, HandView, EffectSystem, and other card components
+ */
+
+/// <summary>
+/// Core system that manages all card functionality including deck, hand, and card actions
+/// </summary>
+/// <remarks>
+/// <para><strong>Purpose:</strong> Controls all card-related gameplay mechanics and state</para>
+/// 
+/// <para><strong>What it does:</strong> This system handles everything related to cards - 
+/// drawing from deck, managing the hand, playing cards, discarding, and shuffling. 
+/// It also handles card animations and integrates with the action system to process 
+/// card-related actions.</para>
+/// 
+/// <para><strong>How it works:</strong></para>
+/// <list type="bullet">
+/// <item>Sets up deck from card data at game start</item>
+/// <item>Draws cards from deck to hand when requested</item>
+/// <item>Handles card playing with effects and stamina costs</item>
+/// <item>Manages discarding and deck refilling</item>
+/// <item>Responds to enemy turns by discarding/drawing cards</item>
+/// </list>
+/// 
+/// <para><strong>Needs:</strong> HandView for card display, ActionSystem for processing, card prefabs</para>
+/// 
+/// <para><strong>Works with:</strong> ActionSystem, HandView, EffectSystem, StaminaSystem</para>
+/// 
+/// <para><strong>How to use:</strong> Set up references in Inspector, system handles card management automatically</para>
+/// </remarks>
 public class CardSystem : Singleton<CardSystem>
 {
+    /// <summary>
+    /// Visual display system for cards in the player's hand
+    /// </summary>
+    /// <remarks>
+    /// This component handles the visual representation and layout of cards in the hand.
+    /// Assign the HandView GameObject in the Inspector.
+    /// </remarks>
+    [SerializeField] private HandView handView;
 
-[SerializeField] private HandView handView;
-
-private readonly List<Card> drawPile = new();
-private readonly List<Card> discardPile = new();
-private readonly List<Card> hand = new();
-[SerializeField] private Transform drawPilePoint;
-[SerializeField] private Transform discardPilePoint;
+    /// <summary>
+    /// Cards available to be drawn (the deck)
+    /// </summary>
+    /// <remarks>
+    /// This list contains all cards that can be drawn from the deck.
+    /// Cards are removed when drawn and added back when deck is refilled.
+    /// </remarks>
+    private readonly List<Card> drawPile = new();
+    
+    /// <summary>
+    /// Cards that have been used and discarded
+    /// </summary>
+    /// <remarks>
+    /// This list contains cards that have been played or discarded.
+    /// These cards get shuffled back into the deck when it's empty.
+    /// </remarks>
+    private readonly List<Card> discardPile = new();
+    
+    /// <summary>
+    /// Cards currently in the player's hand
+    /// </summary>
+    /// <remarks>
+    /// This list tracks which cards the player currently has available to play.
+    /// Cards are added when drawn and removed when played or discarded.
+    /// </remarks>
+    private readonly List<Card> hand = new();
+    
+    /// <summary>
+    /// World position where new cards appear when drawn
+    /// </summary>
+    /// <remarks>
+    /// Transform that defines where cards start their animation when being drawn.
+    /// Assign a GameObject position in the Inspector to set the draw pile location.
+    /// </remarks>
+    [SerializeField] private Transform drawPilePoint;
+    
+    /// <summary>
+    /// World position where cards move when discarded
+    /// </summary>
+    /// <remarks>
+    /// Transform that defines where cards animate to when being discarded.
+    /// Assign a GameObject position in the Inspector to set the discard pile location.
+    /// </remarks>
+    [SerializeField] private Transform discardPilePoint;
 
 void OnEnable()
 {

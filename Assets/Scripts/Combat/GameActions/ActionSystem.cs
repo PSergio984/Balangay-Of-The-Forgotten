@@ -3,33 +3,128 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
+/* ACTION SYSTEM DOCUMENTATION
+ * 
+ * Purpose: The brain of the card game that handles every action and reaction
+ * 
+ * How it works:
+ * - Processes all game actions in the right order (like playing cards, attacking, etc.)
+ * - Makes sure only one action happens at a time (turn-based rules)
+ * - Handles reactions that happen before, during, and after each action
+ * - Works like a chain reaction system for combo effects
+ * 
+ * Integration: The core system that all other game systems use to do things
+ */
 
+/// <summary>
+/// The main system that handles all actions and reactions in the card game
+/// </summary>
+/// <remarks>
+/// <para><strong>Purpose:</strong> Acts like the game's brain that processes every action in the right order</para>
+/// 
+/// <para><strong>What it does:</strong> This system is like the engine of the card game. 
+/// When anything happens (playing a card, attacking, healing, etc.), it goes through this 
+/// system. It makes sure everything happens in the right order and that reactions 
+/// (like "when you play a spell, draw a card") work correctly.</para>
+/// 
+/// <para><strong>How it works:</strong></para>
+/// <list type="bullet">
+/// <item>Something creates an action (like "play this card")</item>
+/// <item>System processes PRE reactions (things that happen before the action)</item>
+/// <item>System executes the main action (the actual card effect)</item>
+/// <item>System processes POST reactions (things that happen after the action)</item>
+/// <item>Each reaction can trigger more reactions, creating chain effects</item>
+/// </list>
+/// 
+/// <para><strong>Examples:</strong></para>
+/// <list type="bullet">
+/// <item>Player plays attack card → PRE: gain energy → MAIN: deal damage → POST: draw card</item>
+/// <item>Enemy dies → triggers "when enemy dies" effects → might trigger more effects</item>
+/// <item>Like Hearthstone's action processing but simpler to understand</item>
+/// </list>
+/// 
+/// <para><strong>Key Features:</strong></para>
+/// <list type="bullet">
+/// <item>Turn-based locking (only one action at a time)</item>
+/// <item>Three-phase processing (Pre → Main → Post)</item>
+/// <item>Chain reaction system for combos</item>
+/// <item>Custom action types with their own logic</item>
+/// <item>Global passive abilities that react to any action</item>
+/// </list>
+/// 
+/// <para><strong>Works with:</strong> Every other system in the game uses this to do actions</para>
+/// 
+/// <para><strong>How to use:</strong> Other systems call Perform() to do actions, register logic with AttachPerformer()</para>
+/// </remarks>
 // The main system that handles all actions in the card game
 // This is like the "game engine" that processes every move/action in order
 // Similar to how Hearthstone processes card effects in a specific sequence
 public class ActionSystem : Singleton<ActionSystem>
 {
+    /// <summary>
+    /// Currently executing list of reaction actions (temporary storage during processing)
+    /// </summary>
+    /// <remarks>
+    /// This holds reactions while they're being processed. Gets swapped out for different 
+    /// phases (pre, perform, post) as the action flows through the system.
+    /// </remarks>
     // Currently executing list of reaction actions (temporary storage during processing)
     private List<GameAction> reactions = null;
     
+    /// <summary>
+    /// Flag to prevent multiple actions from running at the same time
+    /// </summary>
+    /// <remarks>
+    /// Like a "turn lock" - only one action can be processed at a time.
+    /// Prevents chaos from multiple actions trying to execute simultaneously.
+    /// </remarks>
     // Flag to prevent multiple actions from running at the same time
     // Like a "turn lock" - only one action can be processed at a time
     public bool isPerforming { get; private set; } = false;
     
+    /// <summary>
+    /// Dictionary that stores reactions that happen BEFORE specific action types
+    /// </summary>
+    /// <remarks>
+    /// Key = Type of action (like "PlayCardAction"), Value = List of reactions to that action type.
+    /// Example: "Before any attack card is played, gain 1 block"
+    /// </remarks>
     // Dictionary that stores reactions that happen BEFORE specific action types
     // Key = Type of action (like "PlayCardAction"), Value = List of reactions to that action type
     // Example: "Before any attack card is played, gain 1 block"
     private static Dictionary<Type, List<Action<GameAction>>> preSubs = new();
     
+    /// <summary>
+    /// Dictionary that stores reactions that happen AFTER specific action types
+    /// </summary>
+    /// <remarks>
+    /// Example: "After any spell is cast, deal 1 damage to all enemies"
+    /// </remarks>
     // Dictionary that stores reactions that happen AFTER specific action types  
     // Example: "After any spell is cast, deal 1 damage to all enemies"
     private static Dictionary<Type, List<Action<GameAction>>> postSubs = new();
     
+    /// <summary>
+    /// Dictionary that stores the main logic for how each action type actually executes
+    /// </summary>
+    /// <remarks>
+    /// Key = Type of action, Value = Function that defines what that action actually does.
+    /// Example: AttackAction -> "reduce target's health by damage amount"
+    /// </remarks>
     // Dictionary that stores the main logic for how each action type actually executes
     // Key = Type of action, Value = Function that defines what that action actually does
     // Example: AttackAction -> "reduce target's health by damage amount"
     private static Dictionary<Type, Func<GameAction,IEnumerator>> performers = new();
 
+    /// <summary>
+    /// Main method to execute any action in the game
+    /// </summary>
+    /// <param name="action">The action to perform</param>
+    /// <param name="OnPerformFinished">Callback function to run when the entire action chain is complete</param>
+    /// <remarks>
+    /// This is like pressing "play" on a card or ability.
+    /// OnPerformFinished = callback function to run when the entire action chain is complete
+    /// </remarks>
     // Main method to execute any action in the game
     // This is like pressing "play" on a card or ability
     // OnPerformFinished = callback function to run when the entire action chain is complete
@@ -50,6 +145,13 @@ public class ActionSystem : Singleton<ActionSystem>
         }));
     }
     
+    /// <summary>
+    /// Method for other systems to add additional reactions during action processing
+    /// </summary>
+    /// <param name="gameAction">The reaction action to add to the current processing queue</param>
+    /// <remarks>
+    /// This is used internally during the Flow to queue up additional reactions
+    /// </remarks>
     // Method for other systems to add additional reactions during action processing
     // This is used internally during the Flow to queue up additional reactions
     public void AddReaction(GameAction gameAction)
@@ -57,6 +159,16 @@ public class ActionSystem : Singleton<ActionSystem>
         reactions?.Add(gameAction);
     }
 
+    /// <summary>
+    /// The main action processing pipeline - this is the heart of the system
+    /// </summary>
+    /// <param name="action">The action to process through all phases</param>
+    /// <param name="OnFlowFinished">Callback to run when all phases are complete</param>
+    /// <returns>Coroutine that processes through Pre -> Main -> Post phases</returns>
+    /// <remarks>
+    /// This processes actions in the correct order: Pre -> Main -> Post (like a assembly line).
+    /// Similar to how Hearthstone processes card effects in phases
+    /// </remarks>
     // The main action processing pipeline - this is the heart of the system
     // This processes actions in the correct order: Pre -> Main -> Post (like a assembly line)
     // Similar to how Hearthstone processes card effects in phases
@@ -84,6 +196,14 @@ public class ActionSystem : Singleton<ActionSystem>
         OnFlowFinished?.Invoke();
     }
 
+    /// <summary>
+    /// Recursively processes all reactions in the current reactions list
+    /// </summary>
+    /// <returns>Coroutine that processes each reaction through the full Flow</returns>
+    /// <remarks>
+    /// Each reaction is itself a GameAction, so it goes through the full Flow process.
+    /// This creates a chain reaction system (like combo effects in card games)
+    /// </remarks>
     // Recursively processes all reactions in the current reactions list
     // Each reaction is itself a GameAction, so it goes through the full Flow process
     // This creates a chain reaction system (like combo effects in card games)
@@ -97,6 +217,15 @@ public class ActionSystem : Singleton<ActionSystem>
         }
     }
     
+    /// <summary>
+    /// Executes the main logic/effect of an action
+    /// </summary>
+    /// <param name="action">The action whose main effect should be executed</param>
+    /// <returns>Coroutine that runs the action's custom logic</returns>
+    /// <remarks>
+    /// This is where the actual "meat" of what an action does happens.
+    /// Example: AttackAction actually reduces the target's health here
+    /// </remarks>
     // Executes the main logic/effect of an action
     // This is where the actual "meat" of what an action does happens
     // Example: AttackAction actually reduces the target's health here
@@ -114,6 +243,14 @@ public class ActionSystem : Singleton<ActionSystem>
         // If no custom logic is registered, the action does nothing (like a placeholder)
     }
     
+    /// <summary>
+    /// Triggers all global reactions that are subscribed to this specific action type
+    /// </summary>
+    /// <param name="action">The action that triggered these reactions</param>
+    /// <param name="subs">Dictionary of subscribed reactions (either pre or post)</param>
+    /// <remarks>
+    /// This is how passive abilities work: "Whenever you play a spell, gain 1 mana"
+    /// </remarks>
     // Triggers all global reactions that are subscribed to this specific action type
     // This is how passive abilities work: "Whenever you play a spell, gain 1 mana"
     private void PerformSubscribers(GameAction action, Dictionary<Type, List<Action<GameAction>>> subs)
@@ -132,6 +269,15 @@ public class ActionSystem : Singleton<ActionSystem>
         }
     }
 
+    /// <summary>
+    /// Registers custom logic for how a specific action type should execute
+    /// </summary>
+    /// <typeparam name="T">The specific action type to register logic for</typeparam>
+    /// <param name="performer">Function that defines what this action type does</param>
+    /// <remarks>
+    /// This is like defining what happens when you play a specific type of card.
+    /// Example: AttachPerformer&lt;AttackAction&gt;(attack => DealDamage(attack.target, attack.damage))
+    /// </remarks>
     // Registers custom logic for how a specific action type should execute
     // This is like defining what happens when you play a specific type of card
     // Example: AttachPerformer<AttackAction>(attack => DealDamage(attack.target, attack.damage))
@@ -154,6 +300,13 @@ public class ActionSystem : Singleton<ActionSystem>
         }
     }
     
+    /// <summary>
+    /// Removes all custom logic for a specific action type
+    /// </summary>
+    /// <typeparam name="T">The action type to remove logic for</typeparam>
+    /// <remarks>
+    /// This is like "disabling" a card type or removing a game mechanic
+    /// </remarks>
     // Removes all custom logic for a specific action type
     // This is like "disabling" a card type or removing a game mechanic
     public static void DetachPerformer<T>() where T: GameAction 
@@ -165,6 +318,17 @@ public class ActionSystem : Singleton<ActionSystem>
         }
     }
 
+    /// <summary>
+    /// Registers a global reaction that triggers whenever a specific action type happens
+    /// </summary>
+    /// <typeparam name="T">The action type to react to</typeparam>
+    /// <param name="reaction">Function to call when this action type happens</param>
+    /// <param name="timing">Whether to react before or after the action</param>
+    /// <remarks>
+    /// This is how you implement passive abilities and triggered effects.
+    /// Example: SubscribeReaction&lt;AttackAction&gt;(attack => player.GainEnergy(1), ReactionTiming.Post)
+    /// Means: "After any attack, the player gains 1 energy"
+    /// </remarks>
     // Registers a global reaction that triggers whenever a specific action type happens
     // This is how you implement passive abilities and triggered effects
     // Example: SubscribeReaction<AttackAction>(attack => player.GainEnergy(1), ReactionTiming.Post)
@@ -189,6 +353,16 @@ public class ActionSystem : Singleton<ActionSystem>
         }
     }
 
+    /// <summary>
+    /// Removes a specific global reaction from the system
+    /// </summary>
+    /// <typeparam name="T">The action type to stop reacting to</typeparam>
+    /// <param name="reaction">The reaction function to remove</param>
+    /// <param name="timing">Whether this was a pre or post reaction</param>
+    /// <remarks>
+    /// This is like "losing" a passive ability or removing a triggered effect.
+    /// Note: This currently has a bug - it creates a new function that won't match the original
+    /// </remarks>
     // Removes a specific global reaction from the system
     // This is like "losing" a passive ability or removing a triggered effect
     // Note: This currently has a bug - it creates a new function that won't match the original
