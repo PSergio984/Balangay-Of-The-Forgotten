@@ -3,90 +3,73 @@ using UnityEngine;
 
 /* DEAL DAMAGE GA DOCUMENTATION
  * 
- * Purpose: Action that hurts one or more characters in combat
+ * Why this exists: Keeps damage planning separate from actually hurting characters
  * 
- * How it works:
- * - Contains damage amount and list of targets to hurt
- * - Gets processed by DamageSystem to actually apply the damage
- * - Can target multiple characters at once (like area of effect spells)
- * - Used by attacks, spells, abilities, and any damage-dealing effects
+ * Design reasoning:
+ * - Separates "want to damage" from "actually damage" for cleaner code organization
+ * - Lets different parts of the game create damage without knowing how it works inside
+ * - Allows damage changes, blocking, and other systems to step in and modify things
+ * - Works the same way for hitting one target or many targets at once
  * 
- * Integration: Created by various systems, processed by DamageSystem through ActionSystem
+ * System integration: Part of the plan-then-do pattern for turn-based combat
  */
 
 /// <summary>
-/// Game action that represents dealing damage to one or more targets
+/// Action that represents wanting to hurt someone, kept separate from actually doing it
 /// </summary>
 /// <remarks>
-/// <para><strong>Purpose:</strong> The action used whenever something needs to hurt characters</para>
+/// <para><strong>Main purpose:</strong> Makes the damage system flexible by using a plan-then-do approach</para>
 /// 
-/// <para><strong>What it does:</strong> This action represents any kind of damage being dealt 
-/// in the game. Whether it's an enemy attacking the hero, a spell hitting multiple targets, 
-/// or a card effect dealing damage, this action carries all the information needed: how much 
-/// damage and who gets hurt. The DamageSystem processes this to actually reduce health and 
-/// show visual effects.</para>
+/// <para><strong>Why this approach:</strong> Instead of directly changing health numbers, 
+/// this creates a "plan to damage" that other parts of the game can see and change. 
+/// This lets us have complex combat features like damage shields, armor calculations, 
+/// critical hits, and special effects without the different parts of the game being 
+/// too connected to each other.</para>
 /// 
-/// <para><strong>How it works:</strong></para>
+/// <para><strong>Benefits of this design:</strong></para>
 /// <list type="bullet">
-/// <item>Something creates this action with damage amount and target list</item>
-/// <item>ActionSystem receives and processes the action</item>
-/// <item>DamageSystem handles the action and applies damage to each target</item>
-/// <item>Each target loses health and visual effects play</item>
-/// <item>Any "on damage" reactions get triggered</item>
+/// <item>Other systems can see damage coming and react before it happens</item>
+/// <item>Damage planning stays separate from actually changing health</item>
+/// <item>Easy to add damage-changing effects like armor, buffs, or shields</item>
+/// <item>All damage works the same way whether from spells, attacks, or effects</item>
+/// <item>Supports undo and replay features since damage is planned in steps</item>
 /// </list>
 /// 
-/// <para><strong>Examples:</strong></para>
-/// <list type="bullet">
-/// <item>Enemy attack: 5 damage to hero</item>
-/// <item>Fireball spell: 8 damage to all enemies</item>
-/// <item>Poison effect: 2 damage to poisoned character each turn</item>
-/// <item>Area spell: 4 damage to multiple selected targets</item>
-/// </list>
-/// 
-/// <para><strong>Works with:</strong> DamageSystem processes this, ActionSystem handles it, any system that deals damage creates it</para>
-/// 
-/// <para><strong>How to use:</strong> Create with damage amount and target list, send to ActionSystem</para>
+/// <para><strong>How it flows:</strong> Plan → Wait in line → Process → Others react</para>
 /// </remarks>
-// Game Action that represents dealing damage to one or more targets
-// This is used when attacks, spells, or abilities need to hurt characters
 public class DealDamageGA : GameAction
 {
     /// <summary>
-    /// The amount of damage this action will deal to targets
+    /// Starting damage amount before any changes or calculations
     /// </summary>
     /// <remarks>
-    /// This is how much health each target will lose when this action is processed.
-    /// All targets in the list will take this same amount of damage.
+    /// Raw damage number that gets handled by DamageSystem.
+    /// Things like armor, buffs, or resistances get applied when processing.
     /// </remarks>
-    // The amount of damage this action will deal to targets
     public int Amount { get; set; }
     
     /// <summary>
-    /// List of all combatants (heroes/enemies) that will receive this damage
+    /// Who will receive the damage
     /// </summary>
     /// <remarks>
-    /// These are the characters that will get hurt when this action is processed.
-    /// Can be a single target or multiple targets for area effects.
+    /// Works for both hitting one target or many targets.
+    /// List approach makes area effects work without special handling.
     /// </remarks>
-    // List of all combatants (heroes/enemies) that will receive this damage
     public List<CombatantView> Targets { get; set; }
     
     /// <summary>
-    /// Creates a new damage action with specified amount and targets
+    /// Creates damage action with safe copy of targets
     /// </summary>
-    /// <param name="amount">How much damage to deal</param>
-    /// <param name="targets">List of characters to hurt</param>
+    /// <param name="amount">Starting damage before changes</param>
+    /// <param name="targets">Characters who will get hurt</param>
     /// <remarks>
-    /// Constructor that creates a new damage action with specified amount and targets.
-    /// Makes a copy of the targets list to avoid reference issues where the original 
-    /// list might get modified after creating this action.
+    /// Safe copy prevents outside changes to the list from messing up planned actions.
+    /// Important for keeping the action system working properly where planned actions can't be changed.
     /// </remarks>
-    // Constructor that creates a new damage action with specified amount and targets
     public DealDamageGA(int amount, List<CombatantView> targets)
     {
-        // Store the damage amount to be dealt
         Amount = amount;
-        // Create a new list copy of the targets to avoid reference issues
+        // Safe copy prevents outside changes to planned action
         Targets = new(targets);
     }
 }
