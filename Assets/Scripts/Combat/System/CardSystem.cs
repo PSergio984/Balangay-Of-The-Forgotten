@@ -98,15 +98,31 @@ public class CardSystem : Singleton<CardSystem>
     /// </remarks>
     [SerializeField] private Transform discardPilePoint;
 
+    /// <summary>
+    /// Sets up event handlers when this system becomes active
+    /// </summary>
+    /// <remarks>
+    /// Unity calls this automatically when the GameObject goes from inactive to active.
+    /// Registers this system to handle card-related actions and enemy turn reactions.
+    /// </remarks>
 void OnEnable()
 {
+    // Register performers for card-related actions
     ActionSystem.AttachPerformer<DrawCardsGA>(DrawCardsPerformer);
     ActionSystem.AttachPerformer<DiscardAllCardsGA>(DiscardAllCardsPerformer);
     ActionSystem.AttachPerformer<PlayCardsGA>(PlayCardPerformer);
+    // Listen for enemy turns to handle cards automatically
     ActionSystem.SubscribeReaction<EnemyTurnGA>(EnemyTurnPreReaction, ReactionTiming.PRE);
     ActionSystem.SubscribeReaction<EnemyTurnGA>(EnemyTurnPostReaction, ReactionTiming.POST);
 }
 
+/// <summary>
+/// Cleans up event handlers when this system becomes inactive
+/// </summary>
+/// <remarks>
+/// Unity calls this automatically when the GameObject goes from active to inactive.
+/// Unregisters all handlers to prevent memory leaks and system errors.
+/// </remarks>
 void OnDisable()
 {
     ActionSystem.DetachPerformer<DrawCardsGA>();
@@ -117,17 +133,38 @@ void OnDisable()
 }
 // Performers
 
+    /// <summary>
+    /// Initializes the card deck from a list of card data assets
+    /// </summary>
+    /// <param name="deckData">List of CardData assets that define the deck contents</param>
+    /// <remarks>
+    /// This method sets up the initial deck by creating Card instances from CardData assets.
+    /// Each CardData gets converted into a playable Card and added to the draw pile.
+    /// Call this once at game start to prepare the deck for play.
+    /// </remarks>
     public void Setup(List<CardData> deckData)
     {
         foreach (var cardData in deckData)
         {
+            // Create a playable card from each card design
             Card card = new(cardData);
             drawPile.Add(card);
         }
     }
 
+    /// <summary>
+    /// Processes drawing the specified number of cards from deck to hand
+    /// </summary>
+    /// <param name="drawCardsGA">Action containing the number of cards to draw</param>
+    /// <returns>IEnumerator for coroutine execution with card drawing animations</returns>
+    /// <remarks>
+    /// This method handles drawing cards with deck management. If there aren't enough
+    /// cards in the draw pile, it refills the deck from discards and continues drawing.
+    /// Each card draw includes animation as cards move from deck to hand.
+    /// </remarks>
     private IEnumerator DrawCardsPerformer(DrawCardsGA drawCardsGA)
     {
+        // Calculate how many cards we can draw right now
         int actualAmount = Mathf.Min(drawCardsGA.Amount, drawPile.Count);
         int notDrawAmount = drawCardsGA.Amount - actualAmount;
 
@@ -136,6 +173,7 @@ void OnDisable()
             yield return DrawCard();
         }
 
+        // Need more cards? Shuffle discards back and keep drawing
         if (notDrawAmount > 0)
         {
             RefillDeck();
@@ -146,40 +184,88 @@ void OnDisable()
         }
     }
 
+    /// <summary>
+    /// Processes discarding all cards currently in the player's hand
+    /// </summary>
+    /// <param name="discardAllCardsGA">Action that triggers discarding all hand cards</param>
+    /// <returns>IEnumerator for coroutine execution with discard animations</returns>
+    /// <remarks>
+    /// This method removes all cards from the hand and moves them to the discard pile.
+    /// Each card gets animated as it moves from hand to discard pile.
+    /// Typically called at the end of the player's turn or when enemy turn starts.
+    /// </remarks>
     private IEnumerator DiscardAllCardsPerformer(DiscardAllCardsGA discardAllCardsGA)
     {
         foreach (var card in hand)
         {
+            // Get the visual representation and remove it from hand display
             CardView cardView = handView.RemoveCard(card);
             yield return DiscardCard(cardView);
         }
         
+        // Clear the hand data after all visual cards are discarded
         hand.Clear();
     }
+    /// <summary>
+    /// Handles the complete process of playing a card including effects and targeting
+    /// </summary>
+    /// <param name="playCardsGA">The action containing the card to be played</param>
+    /// <returns>IEnumerator for coroutine execution</returns>
+    /// <remarks>
+    /// This method processes the full card playing sequence: removes card from hand,
+    /// spends stamina, and executes all card effects with their target modes.
+    /// Each effect wrapper determines its own targets and gets processed separately.
+    /// </remarks>
     private IEnumerator PlayCardPerformer(PlayCardsGA playCardsGA)
     {
+        // Remove the played card from the player's hand
         hand.Remove(playCardsGA.Card);
+        // Get the visual card from the hand display and remove it
         CardView cardView = handView.RemoveCard(playCardsGA.Card);
-        // Additional card playing logic would go here
+        // Move the card to the discard pile with animation
         yield return DiscardCard(cardView);
+        // Create action to spend the card's stamina cost
         SpendStaminaGA spendStaminaGA = new (playCardsGA.Card.Stamina);
         ActionSystem.Instance.AddReaction(spendStaminaGA);
-        //performs effects
+        
+        // Process all effects on the card with their individual targeting
         foreach (var effectWrapper in playCardsGA.Card.OtherEffects)
         {
+            // Use the effect's target mode to determine who gets affected
             List<CombatantView> targets = effectWrapper.targetMode.GetTargets();
+            // Create an action to perform this specific effect on its targets
             PerformEffectGA performEffectGA = new(effectWrapper.effects,targets);
+            // Add the effect action to be processed by the EffectSystem
             ActionSystem.Instance.AddReaction(performEffectGA);
         }
     }
 
-    //reactions
+    
+    /// <summary>
+    /// REACTIONS
+    /// Reacts to enemy turn start by discarding all cards in hand
+    /// </summary>
+    /// <param name="enemyTurnGA">The enemy turn action that triggered this reaction</param>
+    /// <remarks>
+    /// This reaction happens before the enemy turn fully begins.
+    /// Automatically discards all cards in the player's hand to clear it for the next turn.
+    /// Part of the turn cycle management to reset the player's hand state.
+    /// </remarks>
     private void EnemyTurnPreReaction(EnemyTurnGA enemyTurnGA)
     {
         DiscardAllCardsGA discardAllCardsGA = new();
         ActionSystem.Instance.AddReaction(discardAllCardsGA);
     }
 
+    /// <summary>
+    /// Reacts to enemy turn end by drawing a new hand of cards
+    /// </summary>
+    /// <param name="enemyTurnGA">The enemy turn action that triggered this reaction</param>
+    /// <remarks>
+    /// This reaction happens after the enemy turn fully completes.
+    /// Automatically draws 5 cards to give the player a fresh hand for their next turn.
+    /// Part of the turn cycle management to prepare the player for their turn.
+    /// </remarks>
     private void EnemyTurnPostReaction(EnemyTurnGA enemyTurnGA)
     {
         DrawCardsGA drawCardsGA = new(5);
@@ -187,26 +273,60 @@ void OnDisable()
     }
 
 
+  /// <summary>
+  /// Draws a single card from the deck and adds it to the hand with animation
+  /// </summary>
+  /// <returns>IEnumerator for coroutine execution during card draw animation</returns>
+  /// <remarks>
+  /// This method handles the complete process of drawing one card: removes it from
+  /// the draw pile, adds it to the hand, creates the visual card, and animates it
+  /// moving from the draw pile position to the hand layout.
+  /// </remarks>
   private IEnumerator DrawCard()
     {
+        // Remove card from deck and add to hand data
         Card card = drawPile.Draw();
         hand.Add(card);
+        // Create visual card at deck position
         CardView cardView = CardViewCreator.Instance.CreateCardView(card, drawPilePoint.position, drawPilePoint.rotation);
+        // Animate card moving to hand layout
         yield return handView.AddCard(cardView);
     }
 
+    /// <summary>
+    /// Refills the draw pile by moving all discarded cards back to it
+    /// </summary>
+    /// <remarks>
+    /// This method is called when the draw pile is empty but more cards need to be drawn.
+    /// Moves all cards from the discard pile back to the draw pile and clears the discard pile.
+    /// Represents shuffling the discards back into the deck for continued play.
+    /// </remarks>
     private void RefillDeck()
     {
+        // Move all discarded cards back to draw pile (shuffle)
         drawPile.AddRange(discardPile);
         discardPile.Clear();
     }
 
+    /// <summary>
+    /// Discards a single card with animation and destroys its visual representation
+    /// </summary>
+    /// <param name="cardView">The visual card to be discarded</param>
+    /// <returns>IEnumerator for coroutine execution during discard animation</returns>
+    /// <remarks>
+    /// This method handles the complete discard process: adds the card to discard pile,
+    /// animates it scaling down and moving to discard position, then destroys the GameObject.
+    /// Used when cards are played or when hand is cleared.
+    /// </remarks>
     private IEnumerator DiscardCard(CardView cardView)
     {
+        // Add card data to discard pile
         discardPile.Add(cardView.Card);
+        // Animate card shrinking and moving to discard position
         cardView.transform.DOScale(Vector3.zero, 0.15f);
         Tween tween = cardView.transform.DOMove(discardPilePoint.position, 0.15f);
         yield return tween.WaitForCompletion();
+        // Clean up the visual GameObject
         Destroy(cardView.gameObject);
     }
 }

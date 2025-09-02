@@ -49,20 +49,32 @@ public class PerformEffectGA : GameAction
     /// The EffectSystem will take this effect and convert it into a specific game action.
     /// </remarks>
     public Effects Effect { get; set; }
+    
+    /// <summary>
+    /// The list of targets that this effect should be applied to
+    /// </summary>
+    /// <remarks>
+    /// This property contains the targets selected by the effect's target mode.
+    /// Can be null for effects that don't need targets (like card draw).
+    /// The effect will use these targets to determine who gets affected.
+    /// </remarks>
     public List<CombatantView> Targets { get; set; }
 
     /// <summary>
-    /// Creates a new effect performance action
+    /// Creates a new effect performance action with targets
     /// </summary>
     /// <param name="effect">The card effect to be processed</param>
+    /// <param name="targets">The targets selected by the target mode for this effect</param>
     /// <remarks>
-    /// Creates an action that wraps a card effect for processing by the EffectSystem.
-    /// The effect will be converted into appropriate game actions when processed.
+    /// Creates an action that wraps a card effect and its targets for processing by the EffectSystem.
+    /// The targets parameter comes from the effect's target mode (all enemies, random target, etc.).
+    /// Creates a copy of the targets list to prevent external modifications.
     /// </remarks>
     public PerformEffectGA(Effects effect, List<CombatantView> targets)
     {
         // Store the effect that needs to be processed
         Effect = effect;
+        // Store a copy of the targets to prevent external modifications (null-safe)
         Targets = targets == null ? null : new(targets);
     }
 }
