@@ -2,6 +2,8 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
+using System;
+using UnityEngine.Rendering;
 
 /* ENEMY SYSTEM DOCUMENTATION
  * 
@@ -47,6 +49,15 @@ using DG.Tweening;
 public class EnemySystem : Singleton<EnemySystem>
 {
     /// <summary>
+    /// Public access to all enemy views currently on the battlefield
+    /// </summary>
+    /// <remarks>
+    /// Provides easy access to the list of all active enemies for other systems.
+    /// Used by card effects, targeting systems, and damage calculations.
+    /// Gets the list from EnemyBoardView to maintain single source of truth.
+    /// </remarks>
+    public List<EnemyView> EnemyViews { get => enemyBoardView.EnemyViews; }
+    /// <summary>
     /// The visual board where enemies appear and are displayed to players
     /// </summary>
     /// <remarks>
@@ -55,7 +66,7 @@ public class EnemySystem : Singleton<EnemySystem>
     /// </remarks>
     // Reference to the visual board where enemies are displayed - assigned in Unity Inspector
     [SerializeField] private EnemyBoardView enemyBoardView;
-    
+
     //performers - these are methods that execute specific game actions
 
     /// <summary>
@@ -72,8 +83,10 @@ public class EnemySystem : Singleton<EnemySystem>
         ActionSystem.AttachPerformer<EnemyTurnGA>(EnemyTurnPerformer);
         // Register a method to handle when an enemy attacks the hero
         ActionSystem.AttachPerformer<AttackHeroGA>(AttackHeroPerformer);
+        // Register a method to handle when an enemy needs to be killed/removed
+        ActionSystem.AttachPerformer<KillEnemyGA>(KillEnemyPerformer);
     }
-    
+
     /// <summary>
     /// Cleans up enemy action handling when this system turns off
     /// </summary>
@@ -88,8 +101,10 @@ public class EnemySystem : Singleton<EnemySystem>
         ActionSystem.DetachPerformer<EnemyTurnGA>();
         // Unregister the attack hero handler
         ActionSystem.DetachPerformer<AttackHeroGA>();
+        // Unregister the kill enemy handler
+        ActionSystem.DetachPerformer<KillEnemyGA>();
     }
-    
+
     // This class will manage enemy behavior and actions
 
     /// <summary>
@@ -110,7 +125,7 @@ public class EnemySystem : Singleton<EnemySystem>
             enemyBoardView.AddEnemy(enemyData);
         }
     }
-    
+
     /// <summary>
     /// Makes all enemies perform their actions during enemy turn
     /// </summary>
@@ -135,7 +150,7 @@ public class EnemySystem : Singleton<EnemySystem>
         // Wait one frame before continuing (required for coroutines)
         yield return null;
     }
-    
+
     /// <summary>
     /// Handles the animation and damage when an enemy attacks the player
     /// </summary>
@@ -161,5 +176,21 @@ public class EnemySystem : Singleton<EnemySystem>
         DealDamageGA dealDamageGA = new(attacker.AttackPower, new() { HeroSystem.Instance.HeroView });
         // Add the damage action to the queue to actually hurt the hero
         ActionSystem.Instance.AddReaction(dealDamageGA);
+    }
+    
+    /// <summary>
+    /// Handles the death sequence when an enemy is killed
+    /// </summary>
+    /// <param name="killEnemyGA">The kill action containing which enemy to remove</param>
+    /// <returns>Waits for the removal animation to complete</returns>
+    /// <remarks>
+    /// This method processes enemy deaths by calling the board view's removal method.
+    /// The enemy gets removed with a nice scaling animation before being destroyed.
+    /// Keeps the battlefield clean by removing defeated enemies.
+    /// </remarks>
+    private IEnumerator KillEnemyPerformer(KillEnemyGA killEnemyGA)
+    {
+        // Use the board view to remove the enemy with animation
+        yield return enemyBoardView.RemoveEnemy(killEnemyGA.EnemyView);
     }
 }

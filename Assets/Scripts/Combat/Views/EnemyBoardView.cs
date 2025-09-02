@@ -1,5 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
+using System.Collections;
+using DG.Tweening;
 
 /* ENEMY BOARD VIEW DOCUMENTATION
  * 
@@ -51,7 +53,7 @@ public class EnemyBoardView : MonoBehaviour
     /// Set these up in the Inspector to control enemy positioning and spacing.
     /// </remarks>
     [SerializeField] private List<Transform> slots;
-    
+
     /// <summary>
     /// List of all enemy views currently active on the battlefield
     /// </summary>
@@ -60,7 +62,7 @@ public class EnemyBoardView : MonoBehaviour
     /// Other systems can use this to find all enemies for targeting, effects, etc.
     /// </remarks>
     public List<EnemyView> EnemyViews { get; private set; } = new();
-    
+
     /// <summary>
     /// Adds a new enemy to the battlefield in the next available slot
     /// </summary>
@@ -80,5 +82,28 @@ public class EnemyBoardView : MonoBehaviour
         enemyView.transform.parent = slot;
         // Add the new enemy to our list of active enemies
         EnemyViews.Add(enemyView);
+    }
+    
+    /// <summary>
+    /// Removes an enemy from the battlefield with smooth scaling animation
+    /// </summary>
+    /// <param name="enemyView">The enemy view to remove from the battlefield</param>
+    /// <returns>Coroutine that completes when the removal animation finishes</returns>
+    /// <remarks>
+    /// Removes an enemy from the battlefield with a nice visual effect. First removes 
+    /// the enemy from the active list, then plays a shrinking animation where the enemy 
+    /// scales down to zero over 0.25 seconds. After the animation completes, destroys 
+    /// the enemy GameObject. This creates a satisfying death/removal effect.
+    /// </remarks>
+    public IEnumerator RemoveEnemy(EnemyView enemyView)
+    {
+        // Remove the enemy from our active enemies list
+        EnemyViews.Remove(enemyView);
+        // Create a scaling animation that shrinks the enemy to zero size over 0.25 seconds
+        Tween tween = enemyView.transform.DOScale(Vector3.zero, 0.25f);
+        // Wait for the scaling animation to complete
+        yield return tween.WaitForCompletion();
+        // Destroy the enemy GameObject after the animation finishes
+        Destroy(enemyView.gameObject);
     }
 }

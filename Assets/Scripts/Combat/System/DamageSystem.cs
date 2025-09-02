@@ -101,15 +101,41 @@ public class DamageSystem : MonoBehaviour
         {
             // Apply the damage amount to this target (reduces their health)
             target.Damage(dealDamageGA.Amount);
-            
+
             // Find the sprite renderer to get the correct visual position
             SpriteRenderer spriteRenderer = target.GetComponentInChildren<SpriteRenderer>();
             Vector3 vfxPosition = spriteRenderer != null ? spriteRenderer.transform.position : target.transform.position;
-            
+
             // Spawn a visual effect at the sprite's position to show damage was dealt
             Instantiate(damageVFX, vfxPosition, Quaternion.identity);
             // Wait 0.15 seconds before damaging the next target (for visual timing)
             yield return new WaitForSeconds(0.15f);
+            
+            /// <summary>
+            /// Check if the target died from the damage and handle death
+            /// </summary>
+            /// <remarks>
+            /// After dealing damage, check if the target's health reached zero or below.
+            /// If it's an enemy that died, create a KillEnemyGA action to remove them.
+            /// Hero death handling is planned for future implementation.
+            /// </remarks>
+            // Check if the target died from the damage (health reached zero or below)
+            if(target.CurrentHealth <= 0)
+                {
+                // If the target is an enemy that died, create a kill enemy action
+                if (target is EnemyView enemyView)
+                {
+                    // Create action to kill and remove the defeated enemy
+                    KillEnemyGA killEnemyGA = new(enemyView);
+                    // Add the kill action to be processed after damage
+                    ActionSystem.Instance.AddReaction(killEnemyGA);
+                }
+                else
+                {
+                    //nothing here for now
+                    //handles heroes death        
+                }
+                }
         }
         // Wait one frame before continuing (required for coroutines)
         yield return null;
