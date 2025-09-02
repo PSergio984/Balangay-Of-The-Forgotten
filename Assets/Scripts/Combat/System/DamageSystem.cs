@@ -28,8 +28,13 @@ public class DamageSystem : MonoBehaviour
         {
             // Apply the damage amount to this target (reduces their health)
             target.Damage(dealDamageGA.Amount);
-            // Spawn a visual effect at the target's position to show damage was dealt
-            Instantiate(damageVFX, target.transform.position, Quaternion.identity);
+            
+            // Find the sprite renderer to get the correct visual position
+            SpriteRenderer spriteRenderer = target.GetComponentInChildren<SpriteRenderer>();
+            Vector3 vfxPosition = spriteRenderer != null ? spriteRenderer.transform.position : target.transform.position;
+            
+            // Spawn a visual effect at the sprite's position to show damage was dealt
+            Instantiate(damageVFX, vfxPosition, Quaternion.identity);
             // Wait 0.15 seconds before damaging the next target (for visual timing)
             yield return new WaitForSeconds(0.15f);
         }
