@@ -15,7 +15,24 @@ MonoBehaviour:
   <Description>k__BackingField: Piercing Arrow
   <Stamina>k__BackingField: 30
   <Image>k__BackingField: {fileID: 21300000, guid: ac4a4ff77c5020d479d8a84678c54aaf, type: 3}
-  <Effects>k__BackingField: []
+  <ManualTargetEffect>k__BackingField:
+    rid: 8634069038218609607
+  <OtherEffects>k__BackingField:
+  - <targetMode>k__BackingField:
+      rid: 8634069038218609608
+    <effects>k__BackingField:
+      rid: 8634069038218609609
   references:
     version: 2
-    RefIds: []
+    RefIds:
+    - rid: 8634069038218609607
+      type: {class: DealDamageEffect, ns: , asm: Assembly-CSharp}
+      data:
+        damageAmount: 100
+    - rid: 8634069038218609608
+      type: {class: RandomTargetTM, ns: , asm: Assembly-CSharp}
+      data: 
+    - rid: 8634069038218609609
+      type: {class: DealDamageEffect, ns: , asm: Assembly-CSharp}
+      data:
+        damageAmount: 150
