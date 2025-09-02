@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 /* PERFORM EFFECT GAME ACTION DOCUMENTATION
@@ -48,6 +49,7 @@ public class PerformEffectGA : GameAction
     /// The EffectSystem will take this effect and convert it into a specific game action.
     /// </remarks>
     public Effects Effect { get; set; }
+    public List<CombatantView> Targets { get; set; }
 
     /// <summary>
     /// Creates a new effect performance action
@@ -57,9 +59,10 @@ public class PerformEffectGA : GameAction
     /// Creates an action that wraps a card effect for processing by the EffectSystem.
     /// The effect will be converted into appropriate game actions when processed.
     /// </remarks>
-    public PerformEffectGA(Effects effect)
+    public PerformEffectGA(Effects effect, List<CombatantView> targets)
     {
         // Store the effect that needs to be processed
         Effect = effect;
+        Targets = targets == null ? null : new(targets);
     }
 }

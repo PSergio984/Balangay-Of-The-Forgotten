@@ -11,6 +11,8 @@
  * Integration: Used by EffectSystem, Card system, and all specific effect implementations
  */
 
+using System.Collections.Generic;
+
 /// <summary>
 /// Base class for all card effects that can be performed in the game
 /// </summary>
@@ -48,5 +50,5 @@ public abstract class Effects
     /// It defines how the effect translates into an action that game systems can process.
     /// For example, a damage effect would return a DealDamageGA action.
     /// </remarks>
-    public abstract GameAction GetGameAction();
+    public abstract GameAction GetGameAction(List<CombatantView> targets);
 }

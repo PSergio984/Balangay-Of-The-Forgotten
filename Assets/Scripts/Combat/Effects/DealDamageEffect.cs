@@ -66,10 +66,9 @@ public class DealDamageEffect : Effects
     /// Gets all enemies currently on the battlefield and creates a damage action that 
     /// will hurt each of them with the specified damage amount.
     /// </remarks>
-    public override GameAction GetGameAction()
+    public override GameAction GetGameAction(List<CombatantView> targets)
     {
-        // Get all enemies currently on the battlefield as damage targets
-        List<CombatantView> targets = new(EnemySystem.Instance.EnemyViews);
+
         // Create a damage action with the damage amount and all enemies as targets
         DealDamageGA dealDamageGA = new(damageAmount, targets);
         // Return the damage action to be processed

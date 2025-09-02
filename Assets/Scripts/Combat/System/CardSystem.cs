@@ -117,14 +117,14 @@ void OnDisable()
 }
 // Performers
 
-public void Setup(List<CardData> deckData)
-{
-    foreach (var cardData in deckData)
+    public void Setup(List<CardData> deckData)
     {
-        Card card = new(cardData);
-        drawPile.Add(card);
+        foreach (var cardData in deckData)
+        {
+            Card card = new(cardData);
+            drawPile.Add(card);
+        }
     }
-}
 
     private IEnumerator DrawCardsPerformer(DrawCardsGA drawCardsGA)
     {
@@ -150,7 +150,6 @@ public void Setup(List<CardData> deckData)
     {
         foreach (var card in hand)
         {
-            discardPile.Add(card);
             CardView cardView = handView.RemoveCard(card);
             yield return DiscardCard(cardView);
         }
@@ -166,9 +165,10 @@ public void Setup(List<CardData> deckData)
         SpendStaminaGA spendStaminaGA = new (playCardsGA.Card.Stamina);
         ActionSystem.Instance.AddReaction(spendStaminaGA);
         //performs effects
-        foreach (var effect in playCardsGA.Card.Effects)
+        foreach (var effectWrapper in playCardsGA.Card.OtherEffects)
         {
-            PerformEffectGA performEffectGA = new(effect);
+            List<CombatantView> targets = effectWrapper.targetMode.GetTargets();
+            PerformEffectGA performEffectGA = new(effectWrapper.effects,targets);
             ActionSystem.Instance.AddReaction(performEffectGA);
         }
     }
@@ -203,6 +203,7 @@ public void Setup(List<CardData> deckData)
 
     private IEnumerator DiscardCard(CardView cardView)
     {
+        discardPile.Add(cardView.Card);
         cardView.transform.DOScale(Vector3.zero, 0.15f);
         Tween tween = cardView.transform.DOMove(discardPilePoint.position, 0.15f);
         yield return tween.WaitForCompletion();

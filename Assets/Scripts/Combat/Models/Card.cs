@@ -76,7 +76,7 @@ public class Card
     /// Players need this much stamina to play the card.
     /// </remarks>
     public int Stamina { get; private set; }
-    
+
     /// <summary>
     /// List of all effects that this card performs when played
     /// </summary>
@@ -84,7 +84,8 @@ public class Card
     /// Returns the card's effects from the underlying CardData.
     /// These effects get processed by the EffectSystem when the card is played.
     /// </remarks>
-    public List<Effects> Effects => data.Effects;
+    public Effects ManualTargetEffects => data.ManualTargetEffect;
+    public List<AutoTargetEffect> OtherEffects => data.OtherEffects; 
     
     /// <summary>
     /// Reference to the original CardData that defines this card

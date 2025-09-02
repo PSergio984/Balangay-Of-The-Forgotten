@@ -79,7 +79,7 @@ public class EffectSystem : MonoBehaviour
     private IEnumerator PerformEffectPerformer(PerformEffectGA performEffectGA)
     {
         // Get the specific game action that this effect should perform (damage, heal, etc.)
-        GameAction effectAction = performEffectGA.Effect.GetGameAction();
+        GameAction effectAction = performEffectGA.Effect.GetGameAction(performEffectGA.Targets);
         // Add the effect's action to the action queue to be processed by other systems
         ActionSystem.Instance.AddReaction(effectAction);
         // Wait one frame before continuing to ensure proper coroutine execution flow
