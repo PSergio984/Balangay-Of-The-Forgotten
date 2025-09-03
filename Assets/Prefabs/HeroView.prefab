@@ -47,6 +47,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::HeroView
   healthText: {fileID: 3033076560843762790}
   NameText: {fileID: 4699126763313871957}
+  statusEffectsUI: {fileID: 5077156918235726462}
   spriteRenderer: {fileID: 1822778642561894896}
 --- !u!1001 &5992841156654959301
 PrefabInstance:
@@ -56,6 +57,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 7836871753176773751}
     m_Modifications:
+    - target: {fileID: 591286565303798011, guid: abfc41d4823e2cf41a3f50f9396393e8, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -0.27
+      objectReference: {fileID: 0}
+    - target: {fileID: 591286565303798011, guid: abfc41d4823e2cf41a3f50f9396393e8, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -2.8
+      objectReference: {fileID: 0}
     - target: {fileID: 900519335096749585, guid: abfc41d4823e2cf41a3f50f9396393e8, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
@@ -265,3 +274,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9541d86e2fd84c1d9990edf0852d74ab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshPro
+--- !u!114 &5077156918235726462 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1540079438297368763, guid: abfc41d4823e2cf41a3f50f9396393e8, type: 3}
+  m_PrefabInstance: {fileID: 5992841156654959301}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0cbd8775deffb8b459c1b63d3200bf1e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::StatusEffectsUI

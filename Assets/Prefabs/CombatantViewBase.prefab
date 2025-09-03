@@ -371,8 +371,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::StatusEffectsUI
   statusEffectUIPrefab: {fileID: 5011485877358572500, guid: 2e427b1bfb27e1c418427a32f592d4be, type: 3}
-  armorSprite: {fileID: 2911026836420107302, guid: 1fe897cc2e08b6742af50b0454f71f54, type: 3}
-  burnSprite: {fileID: -5505206405424069097, guid: 1fe897cc2e08b6742af50b0454f71f54, type: 3}
+  armorSprite: {fileID: 21300000, guid: 6d13f6ea92c812944a03bc26314663c8, type: 3}
+  burnSprite: {fileID: -6179551331178719187, guid: 21786f9c295c7f64b9feb46ef9d0c84f, type: 3}
 --- !u!114 &7886810224053934251
 MonoBehaviour:
   m_ObjectHideFlags: 0

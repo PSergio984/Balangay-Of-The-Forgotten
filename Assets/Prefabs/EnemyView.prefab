@@ -228,6 +228,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemyView
   healthText: {fileID: 1501573709437341625}
   NameText: {fileID: 9221024297192611722}
+  statusEffectsUI: {fileID: 1411210944844214674}
   spriteRenderer: {fileID: 5524720702786943516}
   attackText: {fileID: 6487009872886678393}
 --- !u!65 &7659909115800132482
@@ -416,6 +417,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: abfc41d4823e2cf41a3f50f9396393e8, type: 3}
+--- !u!114 &1411210944844214674 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1540079438297368763, guid: abfc41d4823e2cf41a3f50f9396393e8, type: 3}
+  m_PrefabInstance: {fileID: 489439863637817641}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0cbd8775deffb8b459c1b63d3200bf1e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::StatusEffectsUI
 --- !u!114 &1501573709437341625 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1305058331028108944, guid: abfc41d4823e2cf41a3f50f9396393e8, type: 3}

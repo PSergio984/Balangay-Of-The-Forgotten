@@ -15,7 +15,11 @@ MonoBehaviour:
   <Description>k__BackingField: Helmet
   <Stamina>k__BackingField: 0
   <Image>k__BackingField: {fileID: 21300000, guid: bdc735526f4846041aba4d7e4f90c753, type: 3}
-  <Effects>k__BackingField: []
+  <ManualTargetEffect>k__BackingField:
+    rid: -2
+  <OtherEffects>k__BackingField: []
   references:
     version: 2
-    RefIds: []
+    RefIds:
+    - rid: -2
+      type: {class: , ns: , asm: }
