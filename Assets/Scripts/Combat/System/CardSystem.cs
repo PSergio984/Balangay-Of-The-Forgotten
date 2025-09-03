@@ -116,9 +116,7 @@ void OnEnable()
     ActionSystem.AttachPerformer<DrawCardsGA>(DrawCardsPerformer);
     ActionSystem.AttachPerformer<DiscardAllCardsGA>(DiscardAllCardsPerformer);
     ActionSystem.AttachPerformer<PlayCardsGA>(PlayCardPerformer);
-    // Listen for enemy turns to handle cards automatically
-    ActionSystem.SubscribeReaction<EnemyTurnGA>(EnemyTurnPreReaction, ReactionTiming.PRE);
-    ActionSystem.SubscribeReaction<EnemyTurnGA>(EnemyTurnPostReaction, ReactionTiming.POST);
+  
 }
 
 /// <summary>
@@ -133,8 +131,7 @@ void OnDisable()
     ActionSystem.DetachPerformer<DrawCardsGA>();
     ActionSystem.DetachPerformer<DiscardAllCardsGA>();
     ActionSystem.DetachPerformer<PlayCardsGA>();
-    ActionSystem.UnsubscribeReaction<EnemyTurnGA>(EnemyTurnPreReaction, ReactionTiming.PRE);
-    ActionSystem.UnsubscribeReaction<EnemyTurnGA>(EnemyTurnPostReaction, ReactionTiming.POST);
+   
 }
 // Performers
 
@@ -254,37 +251,7 @@ void OnDisable()
     }
 
     
-    /// <summary>
-    /// REACTIONS
-    /// Reacts to enemy turn start by discarding all cards in hand
-    /// </summary>
-    /// <param name="enemyTurnGA">The enemy turn action that triggered this reaction</param>
-    /// <remarks>
-    /// This reaction happens before the enemy turn fully begins.
-    /// Automatically discards all cards in the player's hand to clear it for the next turn.
-    /// Part of the turn cycle management to reset the player's hand state.
-    /// </remarks>
-    private void EnemyTurnPreReaction(EnemyTurnGA enemyTurnGA)
-    {
-        DiscardAllCardsGA discardAllCardsGA = new();
-        ActionSystem.Instance.AddReaction(discardAllCardsGA);
-    }
-
-    /// <summary>
-    /// Reacts to enemy turn end by drawing a new hand of cards
-    /// </summary>
-    /// <param name="enemyTurnGA">The enemy turn action that triggered this reaction</param>
-    /// <remarks>
-    /// This reaction happens after the enemy turn fully completes.
-    /// Automatically draws 5 cards to give the player a fresh hand for their next turn.
-    /// Part of the turn cycle management to prepare the player for their turn.
-    /// </remarks>
-    private void EnemyTurnPostReaction(EnemyTurnGA enemyTurnGA)
-    {
-        DrawCardsGA drawCardsGA = new(5);
-        ActionSystem.Instance.AddReaction(drawCardsGA);
-    }
-
+   
 
   /// <summary>
   /// Draws a single card from the deck and adds it to the hand with animation

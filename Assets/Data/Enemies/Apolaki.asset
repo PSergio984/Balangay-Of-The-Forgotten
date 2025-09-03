@@ -15,4 +15,4 @@ MonoBehaviour:
   <Image>k__BackingField: {fileID: -7687192244545928105, guid: 5417804a64edb704f93cc64285d4d53b, type: 3}
   <EnemyName>k__BackingField: Apolaki
   <Health>k__BackingField: 200
-  <AttackPower>k__BackingField: 200
+  <AttackPower>k__BackingField: 10

@@ -15,4 +15,4 @@ MonoBehaviour:
   <Image>k__BackingField: {fileID: 1042819196194142475, guid: 41cfb781a5a5f3645811448dc18f884f, type: 3}
   <EnemyName>k__BackingField: Mayari
   <Health>k__BackingField: 300
-  <AttackPower>k__BackingField: 300
+  <AttackPower>k__BackingField: 10

@@ -58,9 +58,64 @@ public class HeroSystem : Singleton<HeroSystem>
     /// This method initializes the hero with all their starting information like health,
     /// appearance, name, and abilities. Called at the beginning of combat to prepare the hero.
     /// </remarks>
+    /// 
+    /// 
+
     public void Setup(HeroData heroData)
+        {
+            // Tell the hero view to set up the hero's appearance and stats
+            HeroView.Setup(heroData);
+        }
+    void OnEnable()
     {
-        // Tell the hero view to set up the hero's appearance and stats
-        HeroView.Setup(heroData);
+          // Listen for enemy turns to handle cards automatically
+    ActionSystem.SubscribeReaction<EnemyTurnGA>(EnemyTurnPreReaction, ReactionTiming.PRE);
+    ActionSystem.SubscribeReaction<EnemyTurnGA>(EnemyTurnPostReaction, ReactionTiming.POST);
     }
+
+    void OnDisable()
+    {
+         ActionSystem.UnsubscribeReaction<EnemyTurnGA>(EnemyTurnPreReaction, ReactionTiming.PRE);
+    ActionSystem.UnsubscribeReaction<EnemyTurnGA>(EnemyTurnPostReaction, ReactionTiming.POST);
+    }
+
+     /// <summary>
+    /// REACTIONS
+    /// Reacts to enemy turn start by discarding all cards in hand
+    /// </summary>
+    /// <param name="enemyTurnGA">The enemy turn action that triggered this reaction</param>
+    /// <remarks>
+    /// This reaction happens before the enemy turn fully begins.
+    /// Automatically discards all cards in the player's hand to clear it for the next turn.
+    /// Part of the turn cycle management to reset the player's hand state.
+    /// </remarks>
+    private void EnemyTurnPreReaction(EnemyTurnGA enemyTurnGA)
+    {
+        DiscardAllCardsGA discardAllCardsGA = new();
+        ActionSystem.Instance.AddReaction(discardAllCardsGA);
+    }
+
+    /// <summary>
+    /// Reacts to enemy turn end by drawing a new hand of cards
+    /// </summary>
+    /// <param name="enemyTurnGA">The enemy turn action that triggered this reaction</param>
+    /// <remarks>
+    /// This reaction happens after the enemy turn fully completes.
+    /// Automatically draws 5 cards to give the player a fresh hand for their next turn.
+    /// Part of the turn cycle management to prepare the player for their turn.
+    /// </remarks>
+    private void EnemyTurnPostReaction(EnemyTurnGA enemyTurnGA)
+    {
+        int burnStacks = HeroView.GetStatusEffectStacks(StatusEffectType.BURN);
+        if (burnStacks > 0)
+        {
+            ApplyBurnGA applyBurnGA = new(burnStacks, HeroView);
+            ActionSystem.Instance.AddReaction(applyBurnGA);
+        }
+          DrawCardsGA drawCardsGA = new(5);
+        ActionSystem.Instance.AddReaction(drawCardsGA);
+      
+    }
+
+   
 }

@@ -15,4 +15,4 @@ MonoBehaviour:
   <Image>k__BackingField: {fileID: -1888789171660899308, guid: a4cf24c2d5f33874388f64d835671fa3, type: 3}
   <EnemyName>k__BackingField: Bathala
   <Health>k__BackingField: 900
-  <AttackPower>k__BackingField: 900
+  <AttackPower>k__BackingField: 100

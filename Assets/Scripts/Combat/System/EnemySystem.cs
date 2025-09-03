@@ -145,9 +145,16 @@ public class EnemySystem : Singleton<EnemySystem>
     // Handles what happens during the enemy turn - makes all enemies attack
     private IEnumerator EnemyTurnPerformer(EnemyTurnGA enemyTurnGA)
     {
+
         // Loop through every enemy currently on the board
         foreach (var enemy in enemyBoardView.EnemyViews)
         {
+            int burnStacks = enemy.GetStatusEffectStacks(StatusEffectType.BURN);
+            if (burnStacks > 0)
+            {
+                ApplyBurnGA applyBurnGA = new(burnStacks, enemy);
+                ActionSystem.Instance.AddReaction(applyBurnGA);
+        }
             // Create an attack action with caster tracking for perk system
             AttackHeroGA attackHeroGA = new(enemy);
             // Add this attack to the action queue to be processed
