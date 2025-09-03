@@ -141,6 +141,9 @@ public class EnemySystem : Singleton<EnemySystem>
     /// This method runs when it becomes the enemies' turn to act.
     /// It goes through each enemy and creates AttackHeroGA actions with proper caster tracking.
     /// This enables the perk system to know which enemy attacked for reactive targeting.
+    /// 
+    /// BURN INTEGRATION: Also checks each enemy for burn stacks and applies burn damage.
+    /// Enemies take burn damage before attacking, same as the hero burn system.
     /// </remarks>
     // Handles what happens during the enemy turn - makes all enemies attack
     private IEnumerator EnemyTurnPerformer(EnemyTurnGA enemyTurnGA)
@@ -149,9 +152,11 @@ public class EnemySystem : Singleton<EnemySystem>
         // Loop through every enemy currently on the board
         foreach (var enemy in enemyBoardView.EnemyViews)
         {
+            // Check for burn stacks and apply damage if present
             int burnStacks = enemy.GetStatusEffectStacks(StatusEffectType.BURN);
             if (burnStacks > 0)
             {
+                // Apply burn damage = stack count
                 ApplyBurnGA applyBurnGA = new(burnStacks, enemy);
                 ActionSystem.Instance.AddReaction(applyBurnGA);
         }

@@ -9,8 +9,16 @@ using UnityEngine;
  * - Sets up the hero with their starting stats and appearance
  * - Provides access to hero information for other systems
  * - Manages hero state during combat
+ * - HANDLES TURN CYCLE REACTIONS: Now manages hand and burn effects during enemy turns
  * 
  * Integration: Works with HeroView for display and other systems for hero interactions
+ * 
+ * DESIGN CHANGE - Why enemy turn reactions moved here:
+ * Previously CardSystem handled discarding/drawing cards during enemy turns.
+ * This was moved to HeroSystem because these reactions are more about the HERO's
+ * state management than card mechanics. The hero needs a fresh hand each turn,
+ * and the hero takes burn damage. This makes HeroSystem a more general-purpose
+ * hero state manager rather than having hero-related logic scattered in other systems.
  */
 
 /// <summary>
@@ -66,6 +74,18 @@ public class HeroSystem : Singleton<HeroSystem>
             // Tell the hero view to set up the hero's appearance and stats
             HeroView.Setup(heroData);
         }
+    /// <summary>
+    /// Subscribe to enemy turn reactions when this system starts
+    /// </summary>
+    /// <remarks>
+    /// Sets up reactions to enemy turns for hero state management.
+    /// PRE reaction: Discard hand to reset for new turn
+    /// POST reaction: Apply burn damage and draw new hand
+    /// 
+    /// MOVED FROM CARD SYSTEM: These reactions used to be in CardSystem but were
+    /// moved here because they're about hero state management, not card mechanics.
+    /// Makes HeroSystem a more complete hero state manager.
+    /// </remarks>
     void OnEnable()
     {
           // Listen for enemy turns to handle cards automatically
@@ -73,6 +93,9 @@ public class HeroSystem : Singleton<HeroSystem>
     ActionSystem.SubscribeReaction<EnemyTurnGA>(EnemyTurnPostReaction, ReactionTiming.POST);
     }
 
+    /// <summary>
+    /// Unsubscribe from reactions when this system stops to prevent errors
+    /// </summary>
     void OnDisable()
     {
          ActionSystem.UnsubscribeReaction<EnemyTurnGA>(EnemyTurnPreReaction, ReactionTiming.PRE);
@@ -96,23 +119,39 @@ public class HeroSystem : Singleton<HeroSystem>
     }
 
     /// <summary>
-    /// Reacts to enemy turn end by drawing a new hand of cards
+    /// Reacts to enemy turn end by applying burn damage and drawing new hand
     /// </summary>
     /// <param name="enemyTurnGA">The enemy turn action that triggered this reaction</param>
     /// <remarks>
     /// This reaction happens after the enemy turn fully completes.
-    /// Automatically draws 5 cards to give the player a fresh hand for their next turn.
+    /// 
+    /// BURN EFFECT INTEGRATION:
+    /// First checks if the hero has burn stacks. If they do, creates an ApplyBurnGA
+    /// action to deal burn damage equal to the number of stacks. This is how the
+    /// burn damage over time effect works - it triggers at the end of every enemy turn.
+    /// 
+    /// Then draws 5 cards to give the player a fresh hand for their next turn.
     /// Part of the turn cycle management to prepare the player for their turn.
+    /// 
+    /// How to use burn effects:
+    /// 1. Cards/perks apply burn stacks using AddStatusEffectEffect with BURN type
+    /// 2. Status effects show burn icon with stack count to player
+    /// 3. Each enemy turn, this reaction triggers burn damage automatically
+    /// 4. BurnSystem handles the damage with fire visual effects
+    /// 5. Burn stacks reduce by 1 each time, creating countdown effect
     /// </remarks>
     private void EnemyTurnPostReaction(EnemyTurnGA enemyTurnGA)
     {
+        // Check if hero has burn stacks and apply damage if they do
         int burnStacks = HeroView.GetStatusEffectStacks(StatusEffectType.BURN);
         if (burnStacks > 0)
         {
+            // Create burn damage action (damage = number of burn stacks)
             ApplyBurnGA applyBurnGA = new(burnStacks, HeroView);
             ActionSystem.Instance.AddReaction(applyBurnGA);
         }
-          DrawCardsGA drawCardsGA = new(5);
+        // Draw new hand for the player's next turn
+        DrawCardsGA drawCardsGA = new(5);
         ActionSystem.Instance.AddReaction(drawCardsGA);
       
     }
