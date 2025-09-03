@@ -1,16 +1,21 @@
 using UnityEngine;
 
-/* PLAY CARDS GA DOCUMENTATION
- * 
- * Purpose: Action representing the player playing a card from their hand
+/* PLAY CARDS GA DESIGN
  * 
  * How it works:
  * - Contains reference to which card is being played
- * - Triggers the card's effects when processed
- * - Usually spends stamina and removes card from hand
- * - Core action for all card-based gameplay
+ * - Can optionally store a manually selected target for targeted cards
+ * - Triggers the card's effects when processed by ActionSystem
+ * - Spends stamina and removes card from hand
+ * - Core action for all card-based gameplay including manual targeting
  * 
- * Integration: Created by CardSystem when player clicks cards, processed by ActionSystem
+ * Design reasoning:
+ * - Single action handles both regular cards and manual target cards for consistency
+ * - Optional target parameter keeps the action flexible for different card types
+ * - Manual target gets passed through to effect system for precise targeting
+ * - Same stamina and hand management regardless of targeting method
+ * 
+ * Integration: Created by CardView when player plays cards, processed by CardSystem
  */
 
 /// <summary>
@@ -49,6 +54,16 @@ using UnityEngine;
 public class PlayCardsGA : GameAction
 {
     /// <summary>
+    /// The manually selected target for cards that need specific targeting
+    /// </summary>
+    /// <remarks>
+    /// This property holds the target that the player manually selected using the targeting system.
+    /// Only used for cards with ManualTargetEffects - remains null for regular cards.
+    /// Gets set when player uses targeting arrow to select a specific enemy.
+    /// </remarks>
+    public EnemyView ManualTarget { get; set; }
+    
+    /// <summary>
     /// The card that the player is playing
     /// </summary>
     /// <remarks>
@@ -56,18 +71,37 @@ public class PlayCardsGA : GameAction
     /// Contains all the card's data like effects, costs, name, and description.
     /// </remarks>
     public Card Card { get; private set; }
-    
-   /// <summary>
-   /// Creates a new play card action with the specified card
-   /// </summary>
-   /// <param name="card">The card being played by the player</param>
-   /// <remarks>
-   /// Constructor that creates a new card playing action. Stores which card 
-   /// is being played so the system knows what effects to trigger.
-   /// </remarks>
-   public PlayCardsGA(Card card)
+
+    /// <summary>
+    /// Creates a new play card action with the specified card
+    /// </summary>
+    /// <param name="card">The card being played by the player</param>
+    /// <remarks>
+    /// Constructor for regular cards that don't need manual targeting.
+    /// Sets ManualTarget to null since no specific target was selected.
+    /// </remarks>
+    public PlayCardsGA(Card card)
     {
         // Store which card is being played
-        this.Card = card;
+        Card = card;
+        // No manual target for regular cards
+        ManualTarget = null;
+    }
+    
+    /// <summary>
+    /// Creates a new play card action with a manually selected target
+    /// </summary>
+    /// <param name="card">The card being played by the player</param>
+    /// <param name="manualTarget">The specific enemy target selected by the player</param>
+    /// <remarks>
+    /// Constructor for cards that need manual targeting (like single-target damage spells).
+    /// Stores both the card and the specific target that the player selected using the targeting system.
+    /// </remarks>
+    public PlayCardsGA(Card card, EnemyView manualTarget)
+    {
+        // Store which card is being played
+        Card = card;
+        // Store the manually selected target
+        ManualTarget = manualTarget;
     }
 }

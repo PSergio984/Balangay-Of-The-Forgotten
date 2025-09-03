@@ -1,17 +1,23 @@
 using TMPro;
 using UnityEngine;
 
-/* CARD VIEW DOCUMENTATION
- * 
- * Purpose: Shows a card on screen and handles player interactions with it
+/* CARD VIEW DESIGN
  * 
  * How it works:
  * - Displays card info like name, description, and cost on the visual card
  * - Lets players hover over cards to see a bigger version
- * - Handles dragging cards to play them
- * - Checks if player has enough stamina before playing
+ * - Handles both drag-to-play and manual targeting interactions
+ * - For manual target cards: shows targeting arrow instead of dragging
+ * - For regular cards: uses drag-and-drop to play them
+ * - Checks if player has enough stamina before playing any card
  * 
- * Integration: Works with hover system, drag system, and stamina system
+ * Design reasoning:
+ * - Separates manual targeting from drag behavior to provide clear feedback
+ * - Manual target cards feel more precise and intentional than drag-and-drop
+ * - Both interaction styles use the same stamina validation for consistency
+ * - Visual feedback helps players understand different card interaction modes
+ * 
+ * Integration: Works with hover system, drag system, stamina system, and ManualTargetingSystem
  */
 
 /// <summary>
@@ -203,25 +209,36 @@ public class CardView : MonoBehaviour
     /// </summary>
     /// <remarks>
     /// Unity calls this automatically when the mouse button is pressed on the card.
-    /// Starts the card dragging process and prepares for card playing.
+    /// Branches between manual targeting and drag behavior based on card type.
     /// </remarks>
     void OnMouseDown()
     {
         // Check if player is allowed to interact with cards
         if (!Interactions.Instance.PlayerCanInteract()) return;
-        // Tell the game that player is now dragging a card
-        Interactions.Instance.PlayerIsDragging = true;
-        // Make sure the normal card is visible during dragging
-        wrapper.SetActive(true);
-        // Hide the big hover version since we're dragging now
-        CardViewHoverSystem.Instance.Hide();
-        // Remember where the card started so we can put it back if needed
-        dragStartPosition = transform.position;
-        dragStartRotation = transform.rotation;
-        // Make the card face forward while dragging
-        transform.rotation = Quaternion.Euler(0, 0, 0);
-        // Move the card to where the mouse is pointing
-        transform.position = MouseUtil.GetMousePositionInWorldSpace(-1);
+        
+        // Check if this card needs manual targeting (like single-target spells)
+        if (Card.ManualTargetEffects != null)
+        {
+            // Start targeting mode - shows arrow from card to mouse cursor
+            ManualTargetingSystem.Instance.StartTargeting(transform.position);
+        }
+        else
+        {
+            // Tell the game that player is now dragging a card
+            Interactions.Instance.PlayerIsDragging = true;
+            // Make sure the normal card is visible during dragging
+            wrapper.SetActive(true);
+            // Hide the big hover version since we're dragging now
+            CardViewHoverSystem.Instance.Hide();
+            // Remember where the card started so we can put it back if needed
+            dragStartPosition = transform.position;
+            dragStartRotation = transform.rotation;
+            // Make the card face forward while dragging
+            transform.rotation = Quaternion.Euler(0, 0, 0);
+            // Move the card to where the mouse is pointing
+            transform.position = MouseUtil.GetMousePositionInWorldSpace(-1);
+        }
+   
     }
     
     /// <summary>
@@ -229,44 +246,74 @@ public class CardView : MonoBehaviour
     /// </summary>
     /// <remarks>
     /// Unity calls this repeatedly while the mouse is held down and moving.
-    /// Makes the card follow the mouse cursor during dragging.
+    /// Only works for regular cards - manual target cards don't drag.
     /// </remarks>
     void OnMouseDrag()
     {
         // Check if player is allowed to interact with cards
         if (!Interactions.Instance.PlayerCanInteract()) return;
+        
+        // Manual target cards don't drag - they use targeting arrows instead
+        if(Card.ManualTargetEffects != null)
+        {
+            return;
+        }
         // Make the card follow the mouse position
         transform.position = MouseUtil.GetMousePositionInWorldSpace(-1);
     }
-    
+
     /// <summary>
     /// Called when player releases the mouse button
     /// </summary>
     /// <remarks>
     /// Unity calls this automatically when the mouse button is released.
-    /// Checks if the card can be played or should return to its original position.
+    /// Handles both manual targeting completion and drag-to-play validation.
     /// </remarks>
     void OnMouseUp()
     {
         // Check if player is allowed to interact with cards
         if (!Interactions.Instance.PlayerCanInteract()) return;
-        // Check if player has enough stamina AND the card is over a valid drop area
-        if (StaminaSystem.Instance.HasEnoughStamina(Card.Stamina) && Physics.Raycast(transform.position, Vector3.forward, out RaycastHit hit, 10f, dropLayer))
+
+        // Handle manual target cards (like single-target damage spells)
+        if (Card.ManualTargetEffects != null)
         {
-            // Player can play this card - create a play card action
-            PlayCardsGA playCardGA = new(Card);
-            // Tell the game to play the card
-            ActionSystem.Instance.Perform(playCardGA);
+            // End targeting and get the selected target from mouse position
+            EnemyView target = ManualTargetingSystem.Instance.EndTargeting(MouseUtil.GetMousePositionInWorldSpace(-1));
+            
+            // Play the card if valid target found and player has enough stamina
+            if(target!= null && StaminaSystem.Instance.HasEnoughStamina(Card.Stamina))
+            {
+                // Create play action with the selected target
+                PlayCardsGA playCardGA = new(Card, target);
+                ActionSystem.Instance.Perform(playCardGA);
+            }
+            else
+            {
+                // No valid target or not enough stamina - return card to original position
+                transform.position = dragStartPosition;
+                transform.rotation = dragStartRotation;
+            }
         }
         else
         {
-            // Player can't play the card - put it back where it came from
-            transform.position = dragStartPosition;
-            transform.rotation = dragStartRotation;
-        }
+            // Check if player has enough stamina AND the card is over a valid drop area
+            if (StaminaSystem.Instance.HasEnoughStamina(Card.Stamina) && Physics.Raycast(transform.position, Vector3.forward, out RaycastHit hit, 10f, dropLayer))
+            {
+                // Player can play this card - create a play card action
+                PlayCardsGA playCardGA = new(Card);
+                // Tell the game to play the card
+                ActionSystem.Instance.Perform(playCardGA);
+            }
+            else
+            {
+                // Player can't play the card - put it back where it came from
+                transform.position = dragStartPosition;
+                transform.rotation = dragStartRotation;
+            }
 
-        // Player is no longer dragging a card
-        Interactions.Instance.PlayerIsDragging = false;
+            // Player is no longer dragging a card
+            Interactions.Instance.PlayerIsDragging = false;
+        }
     }
 
 }

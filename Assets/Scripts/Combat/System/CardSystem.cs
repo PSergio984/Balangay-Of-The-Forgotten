@@ -3,17 +3,22 @@ using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
 
-/* CARD SYSTEM DOCUMENTATION
- * 
- * Purpose: Manages all card-related functionality including deck, hand, and card actions
+/* CARD SYSTEM DESIGN
  * 
  * How it works:
  * - Handles drawing cards from deck to hand with animations
- * - Manages card playing, discarding, and deck shuffling
+ * - Manages card playing including manual targeting and regular effects
  * - Processes card-related game actions and reactions
  * - Controls card lifecycle from deck through hand to discard pile
+ * - Routes manual target effects separately from auto-target effects
  * 
- * Integration: Works with ActionSystem, HandView, EffectSystem, and other card components
+ * Design reasoning:
+ * - Separates manual targeting from auto-targeting for cleaner effect processing
+ * - Manual target effects get the player-selected target directly
+ * - Other effects still use their own target modes for flexibility
+ * - Same card playing flow handles both targeting types seamlessly
+ * 
+ * Integration: Works with ActionSystem, HandView, EffectSystem, ManualTargetingSystem, and other card components
  */
 
 /// <summary>
@@ -213,8 +218,8 @@ void OnDisable()
     /// <returns>IEnumerator for coroutine execution</returns>
     /// <remarks>
     /// This method processes the full card playing sequence: removes card from hand,
-    /// spends stamina, and executes all card effects with their target modes.
-    /// Each effect wrapper determines its own targets and gets processed separately.
+    /// spends stamina, and executes effects with proper targeting. Manual target effects
+    /// use the player-selected target, while other effects use their own target modes.
     /// </remarks>
     private IEnumerator PlayCardPerformer(PlayCardsGA playCardsGA)
     {
@@ -228,7 +233,15 @@ void OnDisable()
         SpendStaminaGA spendStaminaGA = new (playCardsGA.Card.Stamina);
         ActionSystem.Instance.AddReaction(spendStaminaGA);
         
-        // Process all effects on the card with their individual targeting
+        // Handle manual target effects (like single-target damage spells)
+        if (playCardsGA.Card.ManualTargetEffects != null)
+        {
+            // Create effect action with the manually selected target
+            PerformEffectGA performEffectGA = new(playCardsGA.Card.ManualTargetEffects, new() { playCardsGA.ManualTarget });
+            ActionSystem.Instance.AddReaction(performEffectGA);
+        }
+        
+        // Process all other effects on the card with their individual targeting
         foreach (var effectWrapper in playCardsGA.Card.OtherEffects)
         {
             // Use the effect's target mode to determine who gets affected
