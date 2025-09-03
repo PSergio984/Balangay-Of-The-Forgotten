@@ -2,15 +2,19 @@ using UnityEngine;
 
 /* ATTACK HERO GA DOCUMENTATION
  * 
- * Purpose: Action representing an enemy attacking the player's hero
- * 
  * How it works:
  * - Contains reference to which enemy is doing the attacking
  * - Gets processed during enemy turns to hurt the player
+ * - Implements IHaveCaster so perks can target the attacking enemy
  * - Usually creates a DealDamageGA action to actually apply damage
- * - Part of the enemy AI behavior system
  * 
- * Integration: Created by EnemySystem during enemy turns, processed by ActionSystem
+ * Design reasoning:
+ * - IHaveCaster implementation enables reactive perks that target attackers
+ * - Stores both Attacker (for game logic) and Caster (for perk system)
+ * - Same enemy stored in two places for different system needs
+ * - Allows perks like "counter-attack" or "damage reflection" to work
+ * 
+ * Integration: Created by EnemySystem, processed by ActionSystem, supports perk reactive targeting
  */
 
 /// <summary>
@@ -21,33 +25,28 @@ using UnityEngine;
 /// 
 /// <para><strong>What it does:</strong> This action represents an enemy's attack on the player's 
 /// hero character. It contains information about which enemy is attacking, and when processed, 
-/// it typically creates a damage action to actually hurt the hero. This is a key part of 
-/// enemy AI behavior and turn-based combat flow.</para>
+/// it typically creates a damage action to actually hurt the hero. The key new feature is 
+/// that it implements IHaveCaster, which lets perks know who attacked so they can target 
+/// that enemy with reactive effects.</para>
 /// 
-/// <para><strong>How it works:</strong></para>
+/// <para><strong>Perk system integration:</strong> When this action happens, perks with 
+/// "UseActionCasterAsTarget" can automatically target the attacking enemy. This enables 
+/// defensive perks like counter-attacks, damage reflection, or debuffs that affect 
+/// whoever attacked the player.</para>
+/// 
+/// <para><strong>Examples with perks:</strong></para>
 /// <list type="bullet">
-/// <item>Enemy turn starts and EnemySystem decides this enemy should attack</item>
-/// <item>EnemySystem creates this action with the attacking enemy</item>
-/// <item>ActionSystem processes the attack action</item>
-/// <item>Attack handler creates a DealDamageGA to actually hurt the hero</item>
-/// <item>Hero takes damage and combat continues</item>
+/// <item>Goblin attacks, counter-attack perk damages the goblin back</item>
+/// <item>Dragon attacks, shield perk reduces damage and stuns the dragon</item>
+/// <item>Archer attacks, reflection perk bounces damage back to the archer</item>
 /// </list>
 /// 
-/// <para><strong>Examples:</strong></para>
-/// <list type="bullet">
-/// <item>"Goblin attacks hero for 3 damage"</item>
-/// <item>"Dragon attacks hero for 12 damage"</item>
-/// <item>"Skeleton archer shoots hero for 5 damage"</item>
-/// <item>Any enemy's basic attack on the player</item>
-/// </list>
-/// 
-/// <para><strong>Works with:</strong> EnemySystem creates these, ActionSystem processes them, usually creates DealDamageGA</para>
-/// 
-/// <para><strong>How to use:</strong> EnemySystem creates these during enemy turns with the attacking enemy</para>
+/// <para><strong>Works with:</strong> EnemySystem creates these, perk system can target the Caster</para>
 /// </remarks>
 // Game Action that represents an enemy attacking the hero player
 // This is like a "combat move" that gets processed by the action system
-public class AttackHeroGA : GameAction
+// Now supports perk system through IHaveCaster interface
+public class AttackHeroGA : GameAction,IHaveCaster
 {
     /// <summary>
     /// The enemy that is performing the attack
@@ -58,6 +57,15 @@ public class AttackHeroGA : GameAction
     /// </remarks>
     // The enemy that is performing the attack - stored as reference
     public EnemyView Attacker { get; private set; }
+
+    /// <summary>
+    /// The character who caused this action (same as Attacker, but for perk system)
+    /// </summary>
+    /// <remarks>
+    /// Required by IHaveCaster interface. Lets perks know who to target when using 
+    /// "target the action caster" mode. Always points to the same enemy as Attacker.
+    /// </remarks>
+    public CombatantView Caster { get; set; }
     
     /// <summary>
     /// Creates a new attack action with the specified enemy as attacker
@@ -65,13 +73,15 @@ public class AttackHeroGA : GameAction
     /// <param name="attacker">The enemy that will attack the hero</param>
     /// <remarks>
     /// Constructor that creates a new attack action with the specified enemy as attacker.
-    /// Stores which enemy is doing the attacking so the system knows whose attack 
-    /// power to use and which enemy gets credit for the attack.
+    /// Sets both Attacker (for game logic) and Caster (for perk system) to the same enemy.
+    /// This dual setup enables both normal combat and reactive perk targeting.
     /// </remarks>
     // Constructor - creates a new attack action with the specified enemy as attacker
     public AttackHeroGA(EnemyView attacker)
     {
         // Store which enemy is doing the attacking
         Attacker = attacker;
+        // Also store as Caster for perk system reactive targeting
+        Caster = attacker;
     }
 }

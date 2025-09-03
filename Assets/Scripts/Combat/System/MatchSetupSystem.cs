@@ -3,15 +3,20 @@ using UnityEngine;
 
 /* MATCH SETUP SYSTEM DOCUMENTATION
  * 
- * Purpose: Gets everything ready at the start of a battle
- * 
  * How it works:
  * - Sets up the hero with their stats and deck
  * - Creates all the enemies for this fight
  * - Prepares the card system with the hero's deck
+ * - Gives player starting perks for this battle
  * - Draws the starting hand of cards for the player
  * 
- * Integration: First system to run, works with all other combat systems
+ * Design reasoning:
+ * - Single place to initialize everything prevents setup order problems
+ * - Adding perk here shows how any system can give perks to the player
+ * - Simple setup process makes it easy to add new initialization steps
+ * - Everything happens in Start() so all systems are ready before gameplay begins
+ * 
+ * Integration: First system to run, works with all other combat systems including PerkSystem
  */
 
 /// <summary>
@@ -22,8 +27,8 @@ using UnityEngine;
 /// 
 /// <para><strong>What it does:</strong> This system runs once at the start of every battle 
 /// to make sure everything is ready. It creates the hero, spawns enemies, sets up the 
-/// card deck, and gives the player their starting hand. Without this, nothing else 
-/// would work properly.</para>
+/// card deck, gives player starting perks, and provides the starting hand. Without 
+/// this, nothing else would work properly.</para>
 /// 
 /// <para><strong>How it works:</strong></para>
 /// <list type="bullet">
@@ -31,14 +36,14 @@ using UnityEngine;
 /// <item>System tells HeroSystem to create the hero with their data</item>
 /// <item>System tells EnemySystem to create all enemies for this fight</item>
 /// <item>System tells CardSystem to prepare the hero's deck</item>
+/// <item>System gives player starting perks through PerkSystem</item>
 /// <item>System draws 5 cards for the player's starting hand</item>
 /// </list>
 /// 
-/// <para><strong>Needs:</strong> HeroData for hero setup, EnemyData list for enemies</para>
+/// <para><strong>Perk system integration:</strong> Shows how any system can easily give 
+/// perks to the player by creating a Perk from PerkData and adding it to PerkSystem.</para>
 /// 
-/// <para><strong>Works with:</strong> HeroSystem, EnemySystem, CardSystem, ActionSystem</para>
-/// 
-/// <para><strong>How to use:</strong> Put this on a GameObject and assign hero/enemy data in Inspector</para>
+/// <para><strong>Works with:</strong> HeroSystem, EnemySystem, CardSystem, PerkSystem, ActionSystem</para>
 /// </remarks>
 public class MatchSetupSystem : MonoBehaviour
 {
@@ -62,14 +67,24 @@ public class MatchSetupSystem : MonoBehaviour
    /// </remarks>
    [SerializeField] private List<EnemyData> enemyDatas;
 
-    /// <summary>
-    /// Sets up everything needed for combat when the battle scene starts
-    /// </summary>
-    /// <remarks>
-    /// Unity calls this automatically when the GameObject becomes active.
-    /// This is where all the combat systems get initialized in the right order.
-    /// Must happen before any other combat actions can work.
-    /// </remarks>
+   /// <summary>
+   /// Test perk to give the player at the start of battle
+   /// </summary>
+   /// <remarks>
+   /// Example of how to give perks to the player. Any system can create a Perk 
+   /// from PerkData and add it to PerkSystem to give the player new abilities.
+   /// This shows the simple pattern for perk integration.
+   /// </remarks>
+   [SerializeField] private PerkData perkData;
+   
+   /// <summary>
+   /// Sets up everything needed for combat when the battle scene starts
+   /// </summary>
+   /// <remarks>
+   /// Unity calls this automatically when the GameObject becomes active.
+   /// This is where all the combat systems get initialized in the right order.
+   /// Must happen before any other combat actions can work.
+   /// </remarks>
 private void Start()
     {
         // Create the hero character using the assigned hero data
@@ -78,6 +93,8 @@ private void Start()
         EnemySystem.Instance.Setup(enemyDatas);
         // Prepare the card system with the hero's deck of cards
         CardSystem.Instance.Setup(heroData.Deck);
+        // Give the player a starting perk - shows how any system can add perks
+        PerkSystem.Instance.AddPerk(new Perk(perkData));
         // Create an action to draw 5 cards for the player's starting hand
         DrawCardsGA drawCardsGA = new(5);
         // Execute the draw cards action to give the player their starting hand

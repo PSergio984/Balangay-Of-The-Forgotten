@@ -3,48 +3,45 @@ using UnityEngine;
 
 /* DEAL DAMAGE EFFECT DOCUMENTATION
  * 
- * Purpose: Card effect that deals damage to all enemies
- * 
  * How it works:
  * - Contains a damage amount that can be set in Inspector
- * - Targets all enemies currently on the battlefield
- * - Creates a DealDamageGA action when the card is played
- * - Part of the card effects system for damage-dealing cards
+ * - Uses provided targets instead of auto-targeting all enemies  
+ * - Creates a DealDamageGA action with proper caster tracking when effect triggers
+ * - Part of the card effects system for damage-dealing cards and perk effects
  * 
- * Integration: Inherits from Effects base class, works with card system and enemy targeting
+ * Design reasoning:
+ * - Flexible targeting allows both card effects and perk effects to use same damage logic
+ * - Caster parameter enables perk system to track who is dealing damage
+ * - Works with any target list instead of hardcoded "all enemies"
+ * - Same effect can be used by cards, perks, and other game systems
+ * 
+ * Integration: Inherits from Effects base class, works with perk system and card system
  */
 
 /// <summary>
-/// Card effect that deals damage to all enemies on the battlefield
+/// Card and perk effect that deals damage to specified targets
 /// </summary>
 /// <remarks>
-/// <para><strong>Purpose:</strong> Creates damage actions that hurt all enemies when card is played</para>
+/// <para><strong>Purpose:</strong> Creates damage actions for both card effects and perk effects</para>
 /// 
-/// <para><strong>What it does:</strong> This effect is used on cards that deal damage to enemies. 
-/// When a card with this effect is played, it creates a damage action that targets all 
-/// enemies currently on the battlefield. The damage amount can be set in the Inspector 
-/// to match the card's intended power level.</para>
+/// <para><strong>What it does:</strong> This effect is used on cards and perks that deal damage. 
+/// When triggered, it creates a damage action that targets whoever was specified in the 
+/// targets list. The damage amount can be set in the Inspector to match the intended 
+/// power level. Now works with the perk system for reactive damage effects.</para>
 /// 
-/// <para><strong>How it works:</strong></para>
-/// <list type="bullet">
-/// <item>Player plays a card that has this effect attached</item>
-/// <item>Card system calls GetGameAction() to get the effect</item>
-/// <item>This method gets list of all current enemies from EnemySystem</item>
-/// <item>Creates a DealDamageGA action with damage amount and enemy targets</item>
-/// <item>Returns the action to be processed by ActionSystem</item>
-/// </list>
+/// <para><strong>Perk system integration:</strong> When perks use this effect, they can 
+/// target specific characters (like "damage the attacker") instead of just all enemies. 
+/// The caster parameter ensures the perk system knows who is dealing the damage.</para>
 /// 
 /// <para><strong>Examples:</strong></para>
 /// <list type="bullet">
-/// <item>"Fireball" card - deals 5 damage to all enemies</item>
-/// <item>"Lightning Storm" card - deals 3 damage to all enemies</item>
-/// <item>"Meteor" card - deals 8 damage to all enemies</item>
-/// <item>Any area-of-effect damage spell</item>
+/// <item>"Fireball" card - deals 5 damage to selected targets</item>
+/// <item>Counter-attack perk - deals 3 damage back to attacking enemy</item>
+/// <item>Revenge perk - deals damage to whoever hurt the player</item>
+/// <item>Area damage perk - deals damage to all enemies when triggered</item>
 /// </list>
 /// 
-/// <para><strong>Works with:</strong> Effects base class, EnemySystem for targeting, DealDamageGA for damage</para>
-/// 
-/// <para><strong>How to use:</strong> Attach to card prefabs, set damage amount in Inspector</para>
+/// <para><strong>Works with:</strong> Effects base class, perk system for reactive damage, card system</para>
 /// </remarks>
 public class DealDamageEffect : Effects
 {
@@ -58,19 +55,22 @@ public class DealDamageEffect : Effects
    [SerializeField] private int damageAmount;
 
     /// <summary>
-    /// Creates a damage action that targets all enemies with the specified damage amount
+    /// Creates a damage action that targets the specified characters with caster tracking
     /// </summary>
-    /// <returns>DealDamageGA action that will hurt all current enemies</returns>
+    /// <param name="targets">Who should receive the damage</param>
+    /// <param name="caster">Who is dealing the damage</param>
+    /// <returns>DealDamageGA action that will hurt the specified targets</returns>
     /// <remarks>
-    /// This method is called by the card system when the card effect should be executed.
-    /// Gets all enemies currently on the battlefield and creates a damage action that 
-    /// will hurt each of them with the specified damage amount.
+    /// This method is called by both the card system and perk system when the effect should be executed.
+    /// Uses the provided targets list instead of hardcoded enemy targeting, making it flexible for 
+    /// both card effects (target all enemies) and perk effects (target specific characters).
+    /// Includes caster parameter so the perk system can track who is dealing damage.
     /// </remarks>
-    public override GameAction GetGameAction(List<CombatantView> targets)
+    public override GameAction GetGameAction(List<CombatantView> targets,CombatantView caster)
     {
 
-        // Create a damage action with the damage amount and all enemies as targets
-        DealDamageGA dealDamageGA = new(damageAmount, targets);
+        // Create a damage action with the damage amount, specified targets, and caster info
+        DealDamageGA dealDamageGA = new(damageAmount, targets,caster);
         // Return the damage action to be processed
         return dealDamageGA;
     }

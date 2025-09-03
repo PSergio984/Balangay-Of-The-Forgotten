@@ -3,40 +3,46 @@ using System.Collections.Generic;
 using UnityEngine;
 /* EFFECT SYSTEM DOCUMENTATION
  * 
- * Purpose: Handles the execution of card effects and abilities in the game
- * 
  * How it works:
- * - When a card is played, its effects are converted into PerformEffectGA actions
+ * - When a card is played or perk triggers, effects are converted into PerformEffectGA actions
  * - This system processes those actions and converts them into concrete game actions
+ * - Passes caster information so effects know who triggered them
  * - Examples: Damage effects become DealDamageGA, heal effects become HealGA, etc.
  * 
- * Integration: Works with ActionSystem to queue and execute effect-based actions
+ * Design reasoning:
+ * - Separates effect definition from effect execution for cleaner code
+ * - Works for both card effects and perk effects using the same processing
+ * - Caster tracking enables perk system to know who caused what
+ * - Single system handles all effect types consistently
+ * 
+ * Integration: Works with ActionSystem, supports both card system and perk system
  */
 /// <summary>
-/// Runs card effects when cards are played in the game
+/// Runs card and perk effects when they are triggered in the game
 /// </summary>
 /// <remarks>
-/// <para><strong>Purpose:</strong> Changes card effects into actions that the game can understand</para>
+/// <para><strong>Purpose:</strong> Changes effects into actions that the game can understand</para>
 /// 
-/// <para><strong>What it does:</strong> This system takes card effects 
-/// (like damage, healing, buffs) and turns them into game actions. When 
-/// you play a card, its effects get sent here to be changed into actions 
+/// <para><strong>What it does:</strong> This system takes effects from cards and perks 
+/// (like damage, healing, buffs) and turns them into game actions. When you play a card 
+/// or when a perk triggers, their effects get sent here to be changed into actions 
 /// like DealDamageGA or HealGA that other parts of the game can use.</para>
+/// 
+/// <para><strong>Perk system integration:</strong> Works exactly the same for perk effects 
+/// as for card effects. When a perk triggers, its effect goes through this same system. 
+/// The caster information gets passed through so the resulting actions know who 
+/// triggered them originally.</para>
 /// 
 /// <para><strong>How it works:</strong></para>
 /// <list type="bullet">
-/// <item>Player plays a card</item>
-/// <item>Card effects get wrapped in PerformEffectGA actions</item>
+/// <item>Player plays a card or perk condition is met</item>
+/// <item>Effects get wrapped in PerformEffectGA actions with target and caster info</item>
 /// <item>This system gets those actions from ActionSystem</item>
-/// <item>Effects get changed into real actions (damage becomes DealDamageGA, heal becomes HealGA)</item>
+/// <item>Effects get changed into real actions (damage becomes DealDamageGA, etc.)</item>
 /// <item>Real actions get sent back to ActionSystem to happen</item>
 /// </list>
 /// 
-/// <para><strong>Needs:</strong> ActionSystem must be in the scene to work</para>
-/// 
-/// <para><strong>Works with:</strong> ActionSystem to keep card effects separate from how they work</para>
-/// 
-/// <para><strong>How to use:</strong> Put this script on any GameObject in the scene. It will set itself up automatically</para>
+/// <para><strong>Works with:</strong> ActionSystem, card system, perk system - handles all effect processing</para>
 /// </remarks>
 public class EffectSystem : MonoBehaviour
 {
@@ -67,19 +73,21 @@ public class EffectSystem : MonoBehaviour
     }
     
     /// <summary>
-    /// Takes effect actions from cards and turns them into real game actions
+    /// Takes effect actions from cards and perks and turns them into real game actions
     /// </summary>
-    /// <param name="performEffectGA">The effect action that has the card effect to run</param>
+    /// <param name="performEffectGA">The effect action that has the effect to run</param>
     /// <returns>IEnumerator for running as a coroutine, waits one frame after finishing</returns>
     /// <remarks>
-    /// This is the main method that changes effects into actions. It takes card
-    /// effects and turns them into specific GameActions that other systems can use.
+    /// This is the main method that changes effects into actions. It takes effects from
+    /// both cards and perks and turns them into specific GameActions that other systems can use.
+    /// Passes along the caster information so the resulting actions know who triggered them.
     /// Runs as a coroutine to work properly with the action system timing.
     /// </remarks>
     private IEnumerator PerformEffectPerformer(PerformEffectGA performEffectGA)
     {
         // Get the specific game action that this effect should perform (damage, heal, etc.)
-        GameAction effectAction = performEffectGA.Effect.GetGameAction(performEffectGA.Targets);
+        // Pass the targets and caster info so the effect knows who is involved
+        GameAction effectAction = performEffectGA.Effect.GetGameAction(performEffectGA.Targets, HeroSystem.Instance.HeroView);
         // Add the effect's action to the action queue to be processed by other systems
         ActionSystem.Instance.AddReaction(effectAction);
         // Wait one frame before continuing to ensure proper coroutine execution flow

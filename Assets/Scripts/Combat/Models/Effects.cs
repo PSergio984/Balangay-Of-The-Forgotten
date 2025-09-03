@@ -7,8 +7,13 @@
  * - Abstract base class that all specific effects inherit from
  * - Forces each effect type to implement GetGameAction() method
  * - Allows effects to be stored in lists and processed uniformly
+ * - NOW SUPPORTS CASTER TRACKING: Effects can know who caused them for perk system
  * 
- * Integration: Used by EffectSystem, Card system, and all specific effect implementations
+ * Integration: Used by EffectSystem, Card system, Perk system, and all specific effect implementations
+ * 
+ * NEW PERK SYSTEM INTEGRATION:
+ * The caster parameter in GetGameAction lets perks track who did what action.
+ * This is crucial for reactive perks that need to target the source of damage/effects.
  */
 
 using System.Collections.Generic;
@@ -44,11 +49,18 @@ public abstract class Effects
     /// <summary>
     /// Converts this effect into a concrete game action that can be executed
     /// </summary>
+    /// <param name="targets">Who this effect should target</param>
+    /// <param name="caster">Who caused this effect (for perk system tracking)</param>
     /// <returns>A GameAction that represents what this effect does</returns>
     /// <remarks>
     /// This abstract method must be implemented by all effect types.
     /// It defines how the effect translates into an action that game systems can process.
     /// For example, a damage effect would return a DealDamageGA action.
+    /// 
+    /// PERK SYSTEM INTEGRATION:
+    /// The caster parameter is the key new addition for perks. It lets effects track
+    /// who caused them to happen. This is essential for reactive perks that need to
+    /// know "who dealt damage to me" or "who I just attacked" for proper targeting.
     /// </remarks>
-    public abstract GameAction GetGameAction(List<CombatantView> targets);
+    public abstract GameAction GetGameAction(List<CombatantView> targets,CombatantView caster);
 }

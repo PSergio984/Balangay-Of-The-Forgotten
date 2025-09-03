@@ -3,48 +3,45 @@ using UnityEngine;
 
 /* DRAW CARDS EFFECT DOCUMENTATION
  * 
- * Purpose: Card effect that draws additional cards from the deck
- * 
  * How it works:
  * - Contains a draw amount that can be set in Inspector
- * - Creates a DrawCardsGA action when the card is played
+ * - Creates a DrawCardsGA action when triggered
  * - Doesn't need targets since it affects the player's hand directly
- * - Perfect for utility cards that provide card advantage
+ * - Perfect for utility cards and perks that provide card advantage
  * 
- * Integration: Inherits from Effects base class, works with CardSystem for card drawing
+ * Design reasoning:
+ * - Simple effect that works for both cards and perks
+ * - Ignores targets and caster since card drawing affects player directly
+ * - Same effect can be used by cards ("Draw 2 cards") and perks ("Draw 1 card when attacked")
+ * - Clean separation between effect logic and who triggered it
+ * 
+ * Integration: Inherits from Effects base class, works with CardSystem and perk system
  */
 
 /// <summary>
-/// Card effect that draws additional cards from the deck into the player's hand
+/// Card and perk effect that draws additional cards from the deck into the player's hand
 /// </summary>
 /// <remarks>
 /// <para><strong>Purpose:</strong> Provides card advantage by drawing extra cards from the deck</para>
 /// 
-/// <para><strong>What it does:</strong> This effect is used on utility cards that let 
-/// the player draw more cards from their deck. When a card with this effect is played, 
-/// it creates a draw action that adds the specified number of cards to the player's 
-/// hand. This gives card advantage and more options for future turns.</para>
+/// <para><strong>What it does:</strong> This effect is used on utility cards and perks that let 
+/// the player draw more cards from their deck. When triggered, it creates a draw action that 
+/// adds the specified number of cards to the player's hand. This gives card advantage and 
+/// more options for future turns.</para>
 /// 
-/// <para><strong>How it works:</strong></para>
-/// <list type="bullet">
-/// <item>Player plays a card that has this effect attached</item>
-/// <item>Card system calls GetGameAction() to get the effect</item>
-/// <item>This method creates a DrawCardsGA action with the draw amount</item>
-/// <item>CardSystem processes the action and draws cards from deck to hand</item>
-/// <item>Player gets more cards to use in combat</item>
-/// </list>
+/// <para><strong>Perk system integration:</strong> Perks can use this effect to give the player 
+/// cards when certain conditions are met. For example, a perk might draw a card whenever 
+/// the player is attacked, or when they play a certain type of card.</para>
 /// 
 /// <para><strong>Examples:</strong></para>
 /// <list type="bullet">
 /// <item>"Study" card - draw 2 cards</item>
-/// <item>"Inspiration" card - draw 1 card</item>
-/// <item>"Research" card - draw 3 cards</item>
-/// <item>"Focus" card - draw 1 card and gain stamina</item>
+/// <item>Learning perk - draw 1 card when attacked</item>
+/// <item>Focus perk - draw 1 card when playing defensive cards</item>
+/// <item>Preparation perk - draw cards at start of turn</item>
 /// </list>
 /// 
-/// <para><strong>Works with:</strong> Effects base class, CardSystem for drawing mechanics</para>
-/// 
-/// <para><strong>How to use:</strong> Attach to utility card prefabs, set draw amount in Inspector, use NoTM target mode</para>
+/// <para><strong>Works with:</strong> Effects base class, CardSystem for drawing, perk system for triggers</para>
 /// </remarks>
 public class DrawCardsEffect : Effects
 {
@@ -60,14 +57,16 @@ public class DrawCardsEffect : Effects
     /// <summary>
     /// Creates a draw cards action with the specified amount
     /// </summary>
-    /// <param name="targets">Not used for this effect since card drawing doesn't need targets</param>
+    /// <param name="targets">Not used for this effect since card drawing affects player directly</param>
+    /// <param name="caster">Not used for this effect since drawing doesn't depend on who triggered it</param>
     /// <returns>DrawCardsGA action that will draw the specified number of cards</returns>
     /// <remarks>
-    /// This method is called by the card system when the card effect should be executed.
-    /// Ignores the targets parameter since card drawing affects the player directly.
-    /// Creates an action that the CardSystem will process to draw cards from deck.
+    /// This method is called by both the card system and perk system when the effect should be executed.
+    /// Ignores the targets and caster parameters since card drawing affects the player directly
+    /// regardless of who triggered it or what the targets were. Creates an action that the 
+    /// CardSystem will process to draw cards from deck.
     /// </remarks>
-    public override GameAction GetGameAction(List<CombatantView> targets)
+    public override GameAction GetGameAction(List<CombatantView> targets,CombatantView caster)
     {
         // Create a draw cards action with the specified amount
         DrawCardsGA drawCardsGA = new(drawAmount);
