@@ -58,6 +58,7 @@ public class PerkSystem : Singleton<PerkSystem>
     /// Each perk in this list will automatically trigger when its conditions are met.
     /// </remarks>
     private readonly List<Perk> perks = new();
+    [SerializeField]private PerksUI perksUI;
 
     /// <summary>
     /// Adds a new perk to the player and makes it start working
@@ -72,8 +73,10 @@ public class PerkSystem : Singleton<PerkSystem>
     {
         // Add the perk to our list of active perks
         perks.Add(perk);
-        // Tell the perk to start working (start listening for events)
+        // Tell the perk to start working (start listening for events)\
+        perksUI.AddPerkUI(perk);
         perk.OnAdd();
+        
     }
 
     /// <summary>
@@ -90,6 +93,7 @@ public class PerkSystem : Singleton<PerkSystem>
         // Remove the perk from our list of active perks
         perks.Remove(perk);
         // Tell the perk to stop working (stop listening for events)
+        perksUI.RemovePerkUI(perk);
         perk.OnRemove();
     }
 }
