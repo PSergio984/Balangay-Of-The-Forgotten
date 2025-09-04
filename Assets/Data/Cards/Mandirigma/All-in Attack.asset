@@ -13,9 +13,24 @@ MonoBehaviour:
   m_Name: All-in Attack
   m_EditorClassIdentifier: Assembly-CSharp::CardData
   <Description>k__BackingField: All In Attack
-  <Stamina>k__BackingField: 100
+  <Stamina>k__BackingField: 99
   <Image>k__BackingField: {fileID: 21300000, guid: 4f4725d0eefa6f14e9492a5d7297cf83, type: 3}
-  <Effects>k__BackingField: []
+  <ManualTargetEffect>k__BackingField:
+    rid: -2
+  <OtherEffects>k__BackingField:
+  - <targetMode>k__BackingField:
+      rid: 8634069063776600070
+    <effects>k__BackingField:
+      rid: 8634069063776600071
   references:
     version: 2
-    RefIds: []
+    RefIds:
+    - rid: -2
+      type: {class: , ns: , asm: }
+    - rid: 8634069063776600070
+      type: {class: AllEnemiesTM, ns: , asm: Assembly-CSharp}
+      data: 
+    - rid: 8634069063776600071
+      type: {class: DealDamageEffect, ns: , asm: Assembly-CSharp}
+      data:
+        damageAmount: 100
