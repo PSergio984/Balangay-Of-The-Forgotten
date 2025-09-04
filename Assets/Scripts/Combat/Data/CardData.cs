@@ -1,8 +1,7 @@
 using System.Collections.Generic;
-using SerializeReferenceEditor;
 using Unity.VisualScripting;
 using UnityEngine;
-
+using Sirenix.OdinInspector;
 /* CARD DATA DOCUMENTATION
  * 
  * Purpose: ScriptableObject that defines the design-time properties and data for cards
@@ -49,6 +48,8 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Data/Card")]
 public class CardData : ScriptableObject
 {
+    [Title("Card Information", "Basic properties of this card", TitleAlignments.Centered)]
+    [BoxGroup("Basic Info")]
     /// <summary>
     /// The name and description text displayed on the card
     /// </summary>
@@ -56,8 +57,15 @@ public class CardData : ScriptableObject
     /// This property holds the card's title and description that players see.
     /// Set this in the Inspector to define what the card is called and what it does.
     /// </remarks>
-    [field: SerializeField] public string Description { get; private set; }
+    [field: SerializeField] 
+    [field: BoxGroup("Basic Info")]
+    [field: LabelText("Card Description")]
+    [field: MultiLineProperty(3)]
+    [field: Required("Card must have a description!")]
+    [field: ValidateInput("@!string.IsNullOrWhiteSpace($value)", "Description cannot be empty or whitespace")]
+    public string Description { get; private set; }
     
+    [HorizontalGroup("Basic Info/Stats", 0.7f)]
     /// <summary>
     /// The stamina cost required to play this card
     /// </summary>
@@ -65,8 +73,13 @@ public class CardData : ScriptableObject
     /// This property defines how much stamina the player must spend to play this card.
     /// Set this in the Inspector to balance the card's power level with its cost.
     /// </remarks>
-    [field: SerializeField] public int Stamina { get; private set; }
-    
+    [field: SerializeField] 
+    [field: HorizontalGroup("Basic Info/Stats")]
+    [field: LabelText("Stamina Cost")]
+    [field: Range(0, 100)]
+    [field: InfoBox("@\"Stamina Cost: \" + Stamina + (Stamina == 0 ? \" (FREE!)\" : Stamina >= 80 ? \" (Expensive)\" : \" (Average)\")", InfoMessageType.None)]
+    public int Stamina { get; private set; }
+
     /// <summary>
     /// The artwork/image displayed on the card
     /// </summary>
@@ -74,8 +87,20 @@ public class CardData : ScriptableObject
     /// This property holds the sprite that appears as the card's visual artwork.
     /// Assign a sprite asset in the Inspector to give the card its visual appearance.
     /// </remarks>
-    [field: SerializeField] public Sprite Image { get; private set; }
+    [field: SerializeField]
+    [field: HorizontalGroup("Basic Info/Stats", 0.3f)]
+    [field: PreviewField(75)]
+    [field: LabelText("Card Art")]
+    [field: Required("Card needs artwork!")]
+    [field: AssetsOnly]
+    public Sprite Image { get; private set; }
 
+    [Title("Card Effects", "Define what this card does when played", TitleAlignments.Centered)]
+    [InfoBox("Manual Target Effect: Player chooses the target (like single-target damage)\n" +
+             "Other Effects: Automatic targeting (like area damage, self-buffs)", InfoMessageType.Info)]
+    
+    [InfoBox("@GetCardValidationMessage()", InfoMessageType.Warning, "HasCardValidationIssues")]
+    
     /// <summary>
     /// Single effect that requires manual target selection by the player
     /// </summary>
@@ -85,8 +110,12 @@ public class CardData : ScriptableObject
     /// Can be null if the card doesn't have any manual targeting effects.
     /// Set this in the Inspector for cards that need player target selection.
     /// </remarks>
-    [field: SerializeReference, SR] public Effects ManualTargetEffect { get; private set; } = null;
-    
+    [field: SerializeReference] 
+    [field: ShowInInspector]
+    [field: LabelText("Main Effect (Manual Target)")]
+    [field: InfoBox("This effect requires the player to choose a target", InfoMessageType.None, "@ManualTargetEffect != null")]
+    public Effects ManualTargetEffect { get; private set; } = null;
+        
     /// <summary>
     /// List of effects that automatically select their own targets
     /// </summary>
@@ -98,5 +127,42 @@ public class CardData : ScriptableObject
     /// Set these in the Inspector for cards with automatic or multiple effects.
     /// </remarks>
     //can have 1 effect, where you pick a target, also can have multiple other effects  where target is selected auto
-    [field: SerializeField] public List<AutoTargetEffect> OtherEffects { get; private set; }
+    [field: SerializeField] 
+    [field: LabelText("Secondary Effects (Auto-Target)")]
+    [field: ListDrawerSettings(ShowIndexLabels = true, DraggableItems = true)]
+    [field: ValidateInput("@ValidateOtherEffects()", "One or more auto-target effects have missing components")]
+    [field: InfoBox("@GetOtherEffectsInfo()", InfoMessageType.Info, "@OtherEffects != null && OtherEffects.Count > 0")]
+    public List<AutoTargetEffect> OtherEffects { get; private set; }
+    
+    // Validation methods for better debugging
+    private bool HasCardValidationIssues()
+    {
+        return ManualTargetEffect == null && (OtherEffects == null || OtherEffects.Count == 0);
+    }
+    
+    private string GetCardValidationMessage()
+    {
+        if (ManualTargetEffect == null && (OtherEffects == null || OtherEffects.Count == 0))
+            return "⚠️ This card has no effects! Add either a Manual Target Effect or Other Effects.";
+        return "";
+    }
+    
+    private bool ValidateOtherEffects()
+    {
+        if (OtherEffects == null) return true;
+        
+        for (int i = 0; i < OtherEffects.Count; i++)
+        {
+            var effect = OtherEffects[i];
+            if (effect == null) return false;
+            if (effect.targetMode == null || effect.effects == null) return false;
+        }
+        return true;
+    }
+    
+    private string GetOtherEffectsInfo()
+    {
+        if (OtherEffects == null || OtherEffects.Count == 0) return "";
+        return $"💡 This card has {OtherEffects.Count} auto-target effect(s)";
+    }
 }

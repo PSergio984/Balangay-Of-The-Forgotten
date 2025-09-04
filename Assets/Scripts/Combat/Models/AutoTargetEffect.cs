@@ -1,5 +1,6 @@
 using SerializeReferenceEditor;
 using UnityEngine;
+using Sirenix.OdinInspector;
 
 /* AUTO TARGET EFFECT DOCUMENTATION
  * 
@@ -56,8 +57,12 @@ public class AutoTargetEffect
     /// Examples: AllEnemiesTM targets all enemies, RandomTargetTM picks one random target.
     /// Set this in the Inspector to match the intended targeting behavior.
     /// </remarks>
-    [field: SerializeReference,SR] public TargetMode targetMode { get; private set; }
-    
+    [field: SerializeReference]
+    [field: ShowInInspector, PropertyOrder(1)]
+    [field: InfoBox("Choose how this effect selects targets")]
+    [field: LabelText("Target Selection")]
+    public TargetMode targetMode { get; private set; }
+
     /// <summary>
     /// The actual effect that gets applied to the selected targets
     /// </summary>
@@ -66,5 +71,9 @@ public class AutoTargetEffect
     /// Examples: DealDamageEffect for damage, HealEffect for healing, DrawCardsEffect for card draw.
     /// Set this in the Inspector to define what the effect actually does.
     /// </remarks>
-    [field: SerializeReference,SR] public Effects effects { get; private set; }
+    [field: SerializeReference]
+    [field: ShowInInspector, PropertyOrder(2)]
+    [field: InfoBox("Choose what effect to apply")]
+    [field: LabelText("Effect Type")]
+    public Effects effects { get; private set; }
 }
