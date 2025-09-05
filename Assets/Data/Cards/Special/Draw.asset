@@ -14,13 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CardData
   <Description>k__BackingField: Draw 2 Cards
   <Stamina>k__BackingField: 5
-  <Image>k__BackingField: {fileID: -5953764704377950759, guid: 780b38776821cd7478e241926653375c, type: 3}
-  <Effects>k__BackingField:
-  - rid: 3693726463528796417
+  <Image>k__BackingField: {fileID: 21300000, guid: 4f4725d0eefa6f14e9492a5d7297cf83, type: 3}
+  <ManualTargetEffect>k__BackingField:
+    rid: -2
+  <OtherEffects>k__BackingField: []
   references:
     version: 2
     RefIds:
-    - rid: 3693726463528796417
-      type: {class: DrawCardsEffect, ns: , asm: Assembly-CSharp}
-      data:
-        drawAmount: 2
+    - rid: -2
+      type: {class: , ns: , asm: }

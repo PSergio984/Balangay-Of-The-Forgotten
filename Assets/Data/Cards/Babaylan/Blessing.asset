@@ -17,11 +17,7 @@ MonoBehaviour:
   <Image>k__BackingField: {fileID: 21300000, guid: 425f9769f55dfbf4e9ccd2223cac028f, type: 3}
   <ManualTargetEffect>k__BackingField:
     rid: -2
-  <OtherEffects>k__BackingField:
-  - <targetMode>k__BackingField:
-      rid: -2
-    <effects>k__BackingField:
-      rid: -2
+  <OtherEffects>k__BackingField: []
   references:
     version: 2
     RefIds:

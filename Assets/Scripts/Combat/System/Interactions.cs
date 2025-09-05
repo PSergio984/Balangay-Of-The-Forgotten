@@ -50,6 +50,15 @@ public class Interactions : Singleton<Interactions>
     public bool PlayerIsDragging { get; set; } = false;
 
     /// <summary>
+    /// Tracks whether the player is currently targeting with a manual targeting card
+    /// </summary>
+    /// <remarks>
+    /// This property remembers if the player is in the middle of manual targeting.
+    /// Used to prevent other card interactions while targeting is happening.
+    /// </remarks>
+    public bool PlayerIsTargeting { get; set; } = false;
+
+    /// <summary>
     /// Checks if the player is allowed to interact with cards right now
     /// </summary>
     /// <returns>True if player can interact, false if they should wait</returns>
@@ -79,13 +88,15 @@ public class Interactions : Singleton<Interactions>
     /// <returns>True if player can hover, false if hovering should be blocked</returns>
     /// <remarks>
     /// This method checks if hovering should be allowed based on current player state.
-    /// Hovering is blocked when the player is dragging a card to avoid conflicts.
+    /// Hovering is blocked when the player is dragging a card or targeting to avoid conflicts.
     /// Used by cards before showing hover effects.
     /// </remarks>
     public bool PlayerCanHover()
     {
         // Don't allow hovering if player is dragging a card
         if (PlayerIsDragging) return false;
+        // Don't allow hovering if player is targeting with another card
+        if (PlayerIsTargeting) return false;
         // Otherwise hovering is allowed
         return true;
     }

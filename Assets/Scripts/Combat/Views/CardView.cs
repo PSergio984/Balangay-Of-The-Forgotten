@@ -1,5 +1,6 @@
 using TMPro;
 using UnityEngine;
+using DG.Tweening;
 
 /* CARD VIEW DESIGN
  * 
@@ -7,8 +8,11 @@ using UnityEngine;
  * - Displays card info like name, description, and cost on the visual card
  * - Lets players hover over cards to see a bigger version
  * - Handles both drag-to-play and manual targeting interactions
- * - For manual target cards: shows targeting arrow instead of dragging
- * - For regular cards: uses drag-and-drop to play them
+ * - For manual target cards: shows targeting arrow instead of dr        // Kill any existing animations to prevent conflicts
+        transform.DOKill();
+        
+        // Bring card to front using Canvas or SortingGroup
+        BringCardToFront();egular cards: uses drag-and-drop to play them
  * - Checks if player has enough stamina before playing any card
  * 
  * Design reasoning:
@@ -145,6 +149,63 @@ public class CardView : MonoBehaviour
     /// Used to put the card back to its original angle if it can't be played.
     /// </remarks>
     private Quaternion dragStartRotation;
+    
+    /// <summary>
+    /// Stores the original scale for optimized hover animations
+    /// </summary>
+    /// <remarks>
+    /// Remembers the card's normal size for returning after hover.
+    /// Used by DOTween for performance-optimized hover effects.
+    /// </remarks>
+    private Vector3 originalScale;
+    
+    /// <summary>
+    /// Stores the original position for optimized hover animations
+    /// </summary>
+    /// <remarks>
+    /// Remembers where the card should return to after hover animation ends.
+    /// Updated after hand positioning to ensure correct return position.
+    /// </remarks>
+    private Vector3 originalPosition;
+    
+    /// <summary>
+    /// Tracks if the card is currently being hovered for layer management
+    /// </summary>
+    /// <remarks>
+    /// Prevents layer conflicts and ensures proper visual stacking order.
+    /// </remarks>
+    private bool isHovering = false;
+    
+    /// <summary>
+    /// Flag to prevent hover during hand positioning animations
+    /// </summary>
+    /// <remarks>
+    /// Prevents hover issues while cards are animating to hand positions.
+    /// </remarks>
+    private bool isPositioning = false;
+
+    /// <summary>
+    /// Sets the card's sorting order using SortingGroup component
+    /// </summary>
+    /// <param name="sortingOrder">The sorting order value to set</param>
+    private void SetCardSortingOrder(int sortingOrder)
+    {
+        UnityEngine.Rendering.SortingGroup sortingGroup = GetComponent<UnityEngine.Rendering.SortingGroup>();
+        if (sortingGroup != null)
+        {
+            sortingGroup.sortingOrder = sortingOrder;
+        }
+    }
+
+    /// <summary>
+    /// Brings the card to the front (above other cards)
+    /// </summary>
+    private void BringCardToFront() => SetCardSortingOrder(100);
+
+    /// <summary>
+    /// Returns the card to normal sorting order
+    /// </summary>
+    private void ResetCardSortingOrder() => SetCardSortingOrder(1);
 
     /// <summary>
     /// Sets up this card visual with the card's information
@@ -166,6 +227,44 @@ public class CardView : MonoBehaviour
         stamina.text = card.Stamina.ToString();
         // Show the card's artwork
         imagesSR.sprite = card.image;
+        
+        // Store original scale for optimized hover animations
+        originalScale = transform.localScale;
+        // Position will be updated after hand positioning
+    }
+    
+    /// <summary>
+    /// Updates the original position after the card has been positioned in the hand
+    /// </summary>
+    /// <remarks>
+    /// Call this method after the card has been moved to its final position in the hand.
+    /// This ensures hover animations return to the correct hand position, not the draw pile.
+    /// Essential for proper DOTween hover optimization.
+    /// </remarks>
+    public void UpdateOriginalPosition()
+    {
+        // Safety check: ensure object is not destroyed
+        if (this == null || transform == null) return;
+        
+        originalPosition = transform.position;
+        originalScale = transform.localScale;
+        isPositioning = false; // Mark positioning as complete
+    }
+    
+    /// <summary>
+    /// Marks the card as being repositioned to prevent hover during animation
+    /// </summary>
+    /// <remarks>
+    /// Call this before starting hand positioning animations to prevent hover conflicts.
+    /// </remarks>
+    public void SetPositioning(bool positioning)
+    {
+        isPositioning = positioning;
+        if (positioning && isHovering)
+        {
+            // Force exit hover if we start positioning while hovering
+            OnMouseExit();
+        }
     }
     
     /// <summary>
@@ -173,18 +272,40 @@ public class CardView : MonoBehaviour
     /// </summary>
     /// <remarks>
     /// Unity calls this automatically when the mouse enters the card area.
-    /// Shows a bigger version of the card for easier reading.
+    /// Uses optimized DOTween animations instead of CardViewHoverSystem for better performance.
     /// </remarks>
     private void OnMouseEnter()
     {
+        // Safety check: ensure object is not destroyed
+        if (this == null || transform == null) return;
+        
+        // Prevent hover during positioning or if already hovering
+        if (isPositioning || isHovering) return;
+        
         // Check if player is allowed to hover (not dragging another card)
         if (!Interactions.Instance.PlayerCanHover()) return;
-        // Hide the small card version
-        wrapper.SetActive(false);
-        // Calculate where to show the big card version
-        Vector3 pos = new(transform.position.x, -2, 0);
-        // Show the big card version at that position
-        CardViewHoverSystem.Instance.Show(Card, pos);
+        
+        // Ensure we have valid original values for animation
+        if (originalScale == Vector3.zero) originalScale = transform.localScale;
+        if (originalPosition == Vector3.zero) originalPosition = transform.position;
+        
+        // Mark as hovering to prevent conflicts
+        isHovering = true;
+        
+        // Kill any existing animations to prevent conflicts
+        transform.DOKill();
+        
+        // Bring card to front using SortingGroup
+        BringCardToFront();
+        
+        
+        // Calculate hover position (move up and scale up)
+        Vector3 hoverPosition = originalPosition + Vector3.up * 0.5f;
+        Vector3 hoverScale = originalScale * 1.2f;
+        
+        // Optimized simultaneous scale and position animations
+        transform.DOScale(hoverScale, 0.3f).SetEase(Ease.OutBack);
+        transform.DOMove(hoverPosition, 0.3f).SetEase(Ease.OutBack);
     }
 
     /// <summary>
@@ -192,16 +313,35 @@ public class CardView : MonoBehaviour
     /// </summary>
     /// <remarks>
     /// Unity calls this automatically when the mouse leaves the card area.
-    /// Hides the big card version and shows the normal card again.
+    /// Uses optimized DOTween animations to return card to normal state.
     /// </remarks>
     void OnMouseExit()
     {
+        // Safety check: ensure object is not destroyed
+        if (this == null || transform == null) return;
+        
         // Check if player is allowed to hover
         if (!Interactions.Instance.PlayerCanHover()) return;
-        // Hide the big card version
-        CardViewHoverSystem.Instance.Hide();
-        // Show the normal card version again
-        wrapper.SetActive(true);
+        
+        // Ensure we have valid original values for animation
+        if (originalScale == Vector3.zero) originalScale = Vector3.one;
+        if (originalPosition == Vector3.zero) originalPosition = transform.position - Vector3.up * 0.5f;
+        
+        // Only process if we were actually hovering
+        if (!isHovering) return;
+        
+        // Mark as no longer hovering
+        isHovering = false;
+        
+        // Kill any existing animations to prevent conflicts
+        transform.DOKill();
+        
+        // Restore card to original sorting order using SortingGroup
+        ResetCardSortingOrder();
+        
+        // Optimized return animations (faster than hover in)
+        transform.DOScale(originalScale, 0.2f).SetEase(Ease.OutQuart);
+        transform.DOMove(originalPosition, 0.2f).SetEase(Ease.OutQuart);
     }
 
     /// <summary>
@@ -219,6 +359,20 @@ public class CardView : MonoBehaviour
         // Check if this card needs manual targeting (like single-target spells)
         if (Card.ManualTargetEffects != null)
         {
+            // Remember where the card started so we can put it back if targeting fails
+            dragStartPosition = transform.position;
+            dragStartRotation = transform.rotation;
+            
+            // Set targeting state to prevent other cards from being hovered
+            Interactions.Instance.PlayerIsTargeting = true;
+            
+            // Keep the card at elevated sorting order during targeting (don't let OnMouseExit reset it)
+            // Mark as not hovering to prevent OnMouseExit conflicts, but keep the elevated sorting
+            isHovering = false;
+            
+            // Ensure the card stays above others during targeting
+            BringCardToFront();
+            
             // Start targeting mode - shows arrow from card to mouse cursor
             ManualTargetingSystem.Instance.StartTargeting(transform.position);
         }
@@ -226,10 +380,10 @@ public class CardView : MonoBehaviour
         {
             // Tell the game that player is now dragging a card
             Interactions.Instance.PlayerIsDragging = true;
-            // Make sure the normal card is visible during dragging
-            wrapper.SetActive(true);
-            // Hide the big hover version since we're dragging now
-            CardViewHoverSystem.Instance.Hide();
+            // Kill any hover animations since we're now dragging
+            transform.DOKill();
+            // Reset to normal scale and position for dragging
+            transform.localScale = originalScale;
             // Remember where the card started so we can put it back if needed
             dragStartPosition = transform.position;
             dragStartRotation = transform.rotation;
@@ -283,15 +437,24 @@ public class CardView : MonoBehaviour
             // Play the card if valid target found and player has enough stamina
             if(target!= null && StaminaSystem.Instance.HasEnoughStamina(Card.Stamina))
             {
+                // Clear targeting state since targeting is complete
+                Interactions.Instance.PlayerIsTargeting = false;
                 // Create play action with the selected target
                 PlayCardsGA playCardGA = new(Card, target);
                 ActionSystem.Instance.Perform(playCardGA);
             }
             else
             {
-                // No valid target or not enough stamina - return card to original position
-                transform.position = dragStartPosition;
-                transform.rotation = dragStartRotation;
+                // Clear targeting state since targeting failed
+                Interactions.Instance.PlayerIsTargeting = false;
+                // No valid target or not enough stamina - return card to original position with smooth animation
+                // Use originalPosition (hand position) instead of dragStartPosition for manual targeting cards
+                transform.DOMove(originalPosition, 0.3f).SetEase(Ease.OutQuart);
+                transform.DORotate(dragStartRotation.eulerAngles, 0.3f).SetEase(Ease.OutQuart);
+                transform.DOScale(originalScale, 0.3f).SetEase(Ease.OutQuart);
+                
+                // Reset sorting order back to normal after targeting fails
+                ResetCardSortingOrder();
             }
         }
         else
@@ -309,10 +472,38 @@ public class CardView : MonoBehaviour
                 // Player can't play the card - put it back where it came from
                 transform.position = dragStartPosition;
                 transform.rotation = dragStartRotation;
+                transform.localScale = originalScale;
             }
 
             // Player is no longer dragging a card
             Interactions.Instance.PlayerIsDragging = false;
+        }
+    }
+
+    /// <summary>
+    /// Clean up DOTween animations when the card is destroyed to prevent errors
+    /// </summary>
+    private void OnDestroy()
+    {
+        try
+        {
+            // Reset hovering state
+            isHovering = false;
+            
+            // Kill all DOTween animations on this transform to prevent errors
+            // when the card is destroyed while animations are still running
+            if (transform != null)
+            {
+                transform.DOKill();
+            }
+            
+            // Also kill any animations that might be targeting this object by ID
+            DOTween.Kill(this);
+        }
+        catch (System.Exception e)
+        {
+            // Log the error but don't let it crash the game
+            Debug.LogWarning($"Error cleaning up CardView animations: {e.Message}");
         }
     }
 

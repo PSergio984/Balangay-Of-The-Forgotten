@@ -78,12 +78,22 @@ public class CardViewCreator : Singleton<CardViewCreator>
     {
         // Instantiate a new card view from the prefab at the specified position and rotation
         CardView cardView = Instantiate(cardPrefab, position, rotation);
+        
+        // Set up the card with its data first (name, cost, description, etc.)
+        cardView.Setup(card);
+        
+        // Mark as positioning to prevent hover during creation animation
+        cardView.SetPositioning(true);
+        
         // Set the initial scale to zero to prepare for animation
         cardView.transform.localScale = Vector3.zero;
+        
         // Animate the card scaling from zero to full size with a bounce effect over 0.5 seconds
-        cardView.transform.DOScale(Vector3.one, 0.5f).SetEase(Ease.OutBack);
-        // Set up the card with its data (name, cost, description, etc.)
-        cardView.Setup(card);
+        // When animation completes, update the original scale for hover system
+        cardView.transform.DOScale(Vector3.one, 0.5f)
+            .SetEase(Ease.OutBack)
+            .OnComplete(() => cardView.UpdateOriginalPosition());
+        
         // Return the created and animated card view
         return cardView;
     }

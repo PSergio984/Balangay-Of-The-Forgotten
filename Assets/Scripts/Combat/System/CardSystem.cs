@@ -306,7 +306,16 @@ void OnDisable()
         cardView.transform.DOScale(Vector3.zero, 0.15f);
         Tween tween = cardView.transform.DOMove(discardPilePoint.position, 0.15f);
         yield return tween.WaitForCompletion();
-        // Clean up the visual GameObject
-        Destroy(cardView.gameObject);
+        
+        // Additional safety: ensure animations are fully cleaned up before destroying
+        if (cardView != null && cardView.gameObject != null)
+        {
+            // Kill any remaining animations on this card
+            cardView.transform.DOKill();
+            DOTween.Kill(cardView);
+            
+            // Clean up the visual GameObject
+            Destroy(cardView.gameObject);
+        }
     }
 }

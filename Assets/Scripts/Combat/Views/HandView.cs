@@ -152,6 +152,15 @@ public class HandView : MonoBehaviour
             yield break;
         }
 
+        // Mark all cards as positioning to prevent hover during animation
+        foreach (var card in cards)
+        {
+            if (card != null)
+            {
+                card.SetPositioning(true);
+            }
+        }
+
         // Calculate spacing between cards (10% of spline length per card)
         float cardSpacing = 1f / 10f;
         // Calculate the starting position for the first card to center the hand
@@ -175,7 +184,17 @@ public class HandView : MonoBehaviour
             // Animate card rotation to match spline orientation
             cards[i].transform.DORotate(rotation.eulerAngles, duration);
         }
+        
         // Wait for the animation to complete before finishing the coroutine
         yield return new WaitForSeconds(duration);
+        
+        // Update original positions after animation completes and mark positioning as done
+        for (int i = 0; i < cards.Count; i++)
+        {
+            if (cards[i] != null)
+            {
+                cards[i].UpdateOriginalPosition();
+            }
+        }
     }
 }
