@@ -169,6 +169,15 @@ public class CardView : MonoBehaviour
     private Vector3 originalPosition;
     
     /// <summary>
+    /// Stores the original rotation for optimized hover animations
+    /// </summary>
+    /// <remarks>
+    /// Remembers the card's original rotation for returning after hover.
+    /// Updated after hand positioning to ensure correct return rotation.
+    /// </remarks>
+    private Quaternion originalRotation;
+    
+    /// <summary>
     /// Tracks if the card is currently being hovered for layer management
     /// </summary>
     /// <remarks>
@@ -230,15 +239,17 @@ public class CardView : MonoBehaviour
         
         // Store original scale for optimized hover animations
         originalScale = transform.localScale;
+        // Store original rotation for optimized hover animations
+        originalRotation = transform.rotation;
         // Position will be updated after hand positioning
     }
     
     /// <summary>
-    /// Updates the original position after the card has been positioned in the hand
+    /// Updates the original position, rotation, and scale after the card has been positioned in the hand
     /// </summary>
     /// <remarks>
     /// Call this method after the card has been moved to its final position in the hand.
-    /// This ensures hover animations return to the correct hand position, not the draw pile.
+    /// This ensures hover animations return to the correct hand position, rotation, and scale.
     /// Essential for proper DOTween hover optimization.
     /// </remarks>
     public void UpdateOriginalPosition()
@@ -247,6 +258,7 @@ public class CardView : MonoBehaviour
         if (this == null || transform == null) return;
         
         originalPosition = transform.position;
+        originalRotation = transform.rotation;
         originalScale = transform.localScale;
         isPositioning = false; // Mark positioning as complete
     }
@@ -298,14 +310,15 @@ public class CardView : MonoBehaviour
         // Bring card to front using SortingGroup
         BringCardToFront();
         
-        
-        // Calculate hover position (move up and scale up)
-        Vector3 hoverPosition = originalPosition + Vector3.up * 0.5f;
+        // Calculate hover transformations (move up, scale up, rotate to straight)
+        Vector3 hoverPosition = originalPosition + Vector3.up * 2.5f;
         Vector3 hoverScale = originalScale * 1.2f;
+        Quaternion hoverRotation = Quaternion.identity; // Straight rotation (0, 0, 0)
         
-        // Optimized simultaneous scale and position animations
-        transform.DOScale(hoverScale, 0.3f).SetEase(Ease.OutBack);
+        // Optimized simultaneous animations
         transform.DOMove(hoverPosition, 0.3f).SetEase(Ease.OutBack);
+        transform.DOScale(hoverScale, 0.3f).SetEase(Ease.OutBack);
+        transform.DORotate(hoverRotation.eulerAngles, 0.3f).SetEase(Ease.OutBack);
     }
 
     /// <summary>
@@ -326,6 +339,7 @@ public class CardView : MonoBehaviour
         // Ensure we have valid original values for animation
         if (originalScale == Vector3.zero) originalScale = Vector3.one;
         if (originalPosition == Vector3.zero) originalPosition = transform.position - Vector3.up * 0.5f;
+        if (originalRotation == Quaternion.identity) originalRotation = transform.rotation;
         
         // Only process if we were actually hovering
         if (!isHovering) return;
@@ -338,10 +352,11 @@ public class CardView : MonoBehaviour
         
         // Restore card to original sorting order using SortingGroup
         ResetCardSortingOrder();
-        
+
         // Optimized return animations (faster than hover in)
-        transform.DOScale(originalScale, 0.2f).SetEase(Ease.OutQuart);
         transform.DOMove(originalPosition, 0.2f).SetEase(Ease.OutQuart);
+        transform.DOScale(originalScale, 0.2f).SetEase(Ease.OutQuart);
+        transform.DORotate(originalRotation.eulerAngles, 0.2f).SetEase(Ease.OutQuart);
     }
 
     /// <summary>

@@ -695,6 +695,7 @@ GameObject:
   m_Component:
   - component: {fileID: 195932801}
   - component: {fileID: 195932802}
+  - component: {fileID: 195932803}
   m_Layer: 0
   m_Name: TargetArrowView
   m_TagString: Untagged
@@ -733,6 +734,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ArrowView
   arrowHead: {fileID: 1967330022}
   lineRenderer: {fileID: 1271430545}
+--- !u!210 &195932803
+SortingGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 195932800}
+  m_Enabled: 1
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 101
+  m_SortAtRoot: 0
 --- !u!1 &367266926
 GameObject:
   m_ObjectHideFlags: 0
