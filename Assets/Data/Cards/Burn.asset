@@ -13,8 +13,10 @@ MonoBehaviour:
   m_Name: Burn
   m_EditorClassIdentifier: Assembly-CSharp::CardData
   <Description>k__BackingField: Apply 100 Burn
+  <Information>k__BackingField: Test
   <Stamina>k__BackingField: 10
   <Image>k__BackingField: {fileID: -6179551331178719187, guid: 21786f9c295c7f64b9feb46ef9d0c84f, type: 3}
+  <RoleIcon>k__BackingField: {fileID: 21300000, guid: 105a27556221c144ba99d465f1441627, type: 3}
   <ManualTargetEffect>k__BackingField:
     rid: -2
   <OtherEffects>k__BackingField:
