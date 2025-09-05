@@ -13,9 +13,15 @@ MonoBehaviour:
   m_Name: Purify
   m_EditorClassIdentifier: Assembly-CSharp::CardData
   <Description>k__BackingField: Purify
+  <Information>k__BackingField: test
   <Stamina>k__BackingField: 40
   <Image>k__BackingField: {fileID: 21300000, guid: ac3dd19cf7a2587458e4628a933f2608, type: 3}
-  <Effects>k__BackingField: []
+  <RoleIcon>k__BackingField: {fileID: 21300000, guid: d758037223fc4a544a6984664b1f0cbf, type: 3}
+  <ManualTargetEffect>k__BackingField:
+    rid: -2
+  <OtherEffects>k__BackingField: []
   references:
     version: 2
-    RefIds: []
+    RefIds:
+    - rid: -2
+      type: {class: , ns: , asm: }

@@ -5,23 +5,21 @@ using DG.Tweening;
 /* CARD VIEW DESIGN
  * 
  * How it works:
- * - Displays card info like name, description, and cost on the visual card
- * - Lets players hover over cards to see a bigger version
+ * - Displays card info like description, information, stamina cost, artwork, and role icon
+ * - Uses DOTween for smooth hover animations (scale, position, rotation)
  * - Handles both drag-to-play and manual targeting interactions
- * - For manual target cards: shows targeting arrow instead of dr        // Kill any existing animations to prevent conflicts
-        transform.DOKill();
-        
-        // Bring card to front using Canvas or SortingGroup
-        BringCardToFront();egular cards: uses drag-and-drop to play them
+ * - For manual target cards: shows targeting arrow instead of dragging
+ * - For regular cards: uses drag-and-drop to play them
  * - Checks if player has enough stamina before playing any card
  * 
  * Design reasoning:
  * - Separates manual targeting from drag behavior to provide clear feedback
  * - Manual target cards feel more precise and intentional than drag-and-drop
  * - Both interaction styles use the same stamina validation for consistency
+ * - DOTween provides smooth, optimized animations for better UX
  * - Visual feedback helps players understand different card interaction modes
  * 
- * Integration: Works with hover system, drag system, stamina system, and ManualTargetingSystem
+ * Integration: Works with DOTween hover system, drag system, stamina system, and ManualTargetingSystem
  */
 
 /// <summary>
@@ -31,22 +29,22 @@ using DG.Tweening;
 /// <para><strong>Purpose:</strong> Shows card information and handles player interactions</para>
 /// 
 /// <para><strong>What it does:</strong> This component makes cards visible to players 
-/// and lets them interact with the cards. It shows the card's name, description, 
-/// cost, and artwork. Players can hover over cards to see them bigger, and drag 
-/// cards to play them if they have enough stamina.</para>
+/// and lets them interact with the cards. It shows the card's description, information, 
+/// stamina cost, artwork, and role icon. Players can hover over cards to see smooth 
+/// animations, and drag cards to play them if they have enough stamina.</para>
 /// 
 /// <para><strong>How it works:</strong></para>
 /// <list type="bullet">
 /// <item>Card gets created and displays its information</item>
-/// <item>Player hovers mouse over card to see bigger version</item>
+/// <item>Player hovers mouse over card to see smooth scale/position/rotation animations</item>
 /// <item>Player clicks and drags card to play it</item>
 /// <item>Game checks if player has enough stamina to play the card</item>
 /// <item>Card either gets played or returns to hand</item>
 /// </list>
 /// 
-/// <para><strong>Needs:</strong> Card data to display, hover system for big view, stamina system for costs</para>
+/// <para><strong>Needs:</strong> Card data to display, DOTween for animations, stamina system for costs</para>
 /// 
-/// <para><strong>Works with:</strong> CardViewHoverSystem for big card view, StaminaSystem for costs, ActionSystem for playing</para>
+/// <para><strong>Works with:</strong> DOTween for animations, StaminaSystem for costs, ActionSystem for playing</para>
 /// 
 /// <para><strong>How to use:</strong> Attach to card prefab and assign UI text components in Inspector</para>
 /// </remarks>
@@ -73,6 +71,8 @@ public class CardView : MonoBehaviour
     /// </remarks>
     // Text component to display the card's description or effect text
     [SerializeField] private TMP_Text description;
+    [SerializeField] private TMP_Text information;
+
     
     /// <summary>
     /// Text that shows how much stamina the card costs to play
@@ -84,15 +84,6 @@ public class CardView : MonoBehaviour
     // Text component to display the stamina cost required to play the card
     [SerializeField] private TMP_Text stamina;
     
-    /// <summary>
-    /// Text that shows how much damage the card deals
-    /// </summary>
-    /// <remarks>
-    /// This text component displays the damage value if the card attacks.
-    /// Not all cards have damage, so this might be empty.
-    /// </remarks>
-    // Text component to display the damage value the card deals
-    [SerializeField] private TMP_Text damage;
     
     /// <summary>
     /// Image component that shows the card's artwork
@@ -103,7 +94,7 @@ public class CardView : MonoBehaviour
     /// </remarks>
     // Sprite renderer component to display the card's artwork/image
     [SerializeField] private SpriteRenderer imagesSR;
-    
+
     /// <summary>
     /// Container that holds all the visual parts of the card
     /// </summary>
@@ -112,6 +103,8 @@ public class CardView : MonoBehaviour
     /// Gets hidden when showing the big hover version of the card.
     /// </remarks>
     // GameObject that wraps/contains all the card's visual elements
+    
+    [SerializeField] private SpriteRenderer imagesRole;
     [SerializeField] private GameObject wrapper;
     
     /// <summary>
@@ -232,10 +225,13 @@ public class CardView : MonoBehaviour
         title.text = card.Title;
         // Show what the card does in the description text
         description.text = card.Description;
+        information.text = card.Information;
         // Show how much stamina the card costs
         stamina.text = card.Stamina.ToString();
         // Show the card's artwork
         imagesSR.sprite = card.image;
+        // Show the card's role icon
+        imagesRole.sprite = card.RoleIcon;
         
         // Store original scale for optimized hover animations
         originalScale = transform.localScale;

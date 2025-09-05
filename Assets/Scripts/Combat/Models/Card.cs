@@ -55,10 +55,18 @@ public class Card
     /// </summary>
     /// <remarks>
     /// Returns the card's description from the underlying CardData.
-    /// This explains the card's effects and abilities to the player.
+    /// This explains the card in general way.
     /// </remarks>
     public string Description => data.Description;
-    
+     /// <summary>
+    /// The description text explaining more info about this card
+    /// </summary>
+    /// <remarks>
+    /// Returns the card's information from the underlying CardData.
+    /// This explains the card's effects and abilities to the player.
+    /// </remarks>
+    public string Information => data.Information;
+
     /// <summary>
     /// The visual artwork/image displayed on this card
     /// </summary>
@@ -84,6 +92,7 @@ public class Card
     /// Returns the card's effects from the underlying CardData.
     /// These effects get processed by the EffectSystem when the card is played.
     /// </remarks>
+    public Sprite RoleIcon => data.RoleIcon;
     public Effects ManualTargetEffects => data.ManualTargetEffect;
     public List<AutoTargetEffect> OtherEffects => data.OtherEffects; 
     
