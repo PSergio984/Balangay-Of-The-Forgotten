@@ -139,11 +139,16 @@ public class EnemySystem : Singleton<EnemySystem>
     /// <returns>Waits one frame for proper timing</returns>
     /// <remarks>
     /// This method runs when it becomes the enemies' turn to act.
-    /// It goes through each enemy and creates AttackHeroGA actions with proper caster tracking.
-    /// This enables the perk system to know which enemy attacked for reactive targeting.
     /// 
-    /// BURN INTEGRATION: Also checks each enemy for burn stacks and applies burn damage.
+    /// TURN ORDER: Burn damage is applied FIRST, then surviving enemies attack.
+    /// This prevents enemies from attacking after dying to burn damage.
+    /// 
+    /// BURN INTEGRATION: Checks each enemy for burn stacks and applies burn damage.
     /// Enemies take burn damage before attacking, same as the hero burn system.
+    /// 
+    /// ATTACK INTEGRATION: Creates AttackHeroGA actions with proper caster tracking.
+    /// This enables the perk system to know which enemy attacked for reactive targeting.
+    /// Only living enemies (CurrentHealth > 0) can attack.
     /// </remarks>
     // Handles what happens during the enemy turn - makes all enemies attack
     private IEnumerator EnemyTurnPerformer(EnemyTurnGA enemyTurnGA)
@@ -159,16 +164,18 @@ public class EnemySystem : Singleton<EnemySystem>
                 // Apply burn damage = stack count
                 ApplyBurnGA applyBurnGA = new(burnStacks, enemy);
                 ActionSystem.Instance.AddReaction(applyBurnGA);
-        }
+            }
+            
             // Create an attack action with caster tracking for perk system
+            // Note: Dead enemies will be removed by KillEnemyGA after damage is processed
+            // This ensures proper turn order: Burn → Damage Processing → Death → Attack
             AttackHeroGA attackHeroGA = new(enemy);
-            // Add this attack to the action queue to be processed
             ActionSystem.Instance.AddReaction(attackHeroGA);
         }
         // Wait one frame before continuing (required for coroutines)
         yield return null;
     }
-
+  
     /// <summary>
     /// Handles the animation and damage when an enemy attacks the player
     /// </summary>
@@ -176,7 +183,11 @@ public class EnemySystem : Singleton<EnemySystem>
     /// <returns>Waits for animations to complete before continuing</returns>
     /// <remarks>
     /// This method creates the visual attack sequence with animations and damage creation.
-    /// The enemy moves forward, deals damage with proper caster tracking, then moves back.
+    /// 
+    /// BURN INTEGRATION: Checks if enemy is still alive before attacking.
+    /// If enemy died to burn damage, the attack is cancelled silently.
+    /// 
+    /// ANIMATION: The enemy moves forward, deals damage with proper caster tracking, then moves back.
     /// The caster info gets passed to DealDamageGA so perks can know who dealt the damage.
     /// </remarks>
     // Handles the visual animation and damage when an enemy attacks the hero
@@ -184,6 +195,14 @@ public class EnemySystem : Singleton<EnemySystem>
     {
         // Get the enemy that's performing the attack
         EnemyView attacker = attackHeroGA.Attacker;
+        
+        // Check if the enemy is still alive (might have died to burn damage)
+        if (attacker.CurrentHealth <= 0)
+        {
+            // Enemy is dead, cancel the attack silently
+            yield break;
+        }
+        
         // Animate the enemy moving forward (attack windup) - moves left 1 unit in 0.15 seconds
         Tween tween = attacker.transform.DOMoveX(attacker.transform.position.x - 1f, 0.15f);
         // Wait for the forward movement animation to complete

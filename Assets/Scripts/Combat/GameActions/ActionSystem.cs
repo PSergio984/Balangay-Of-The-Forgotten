@@ -111,9 +111,6 @@ public class ActionSystem : Singleton<ActionSystem>
     /// Key = Type of action, Value = Function that defines what that action actually does.
     /// Example: AttackAction -> "reduce target's health by damage amount"
     /// </remarks>
-    // Dictionary that stores the main logic for how each action type actually executes
-    // Key = Type of action, Value = Function that defines what that action actually does
-    // Example: AttackAction -> "reduce target's health by damage amount"
     private static Dictionary<Type, Func<GameAction,IEnumerator>> performers = new();
 
     /// <summary>
@@ -128,7 +125,7 @@ public class ActionSystem : Singleton<ActionSystem>
     // Main method to execute any action in the game
     // This is like pressing "play" on a card or ability
     // OnPerformFinished = callback function to run when the entire action chain is complete
-    public void Perform(GameAction action,System.Action OnPerformFinished = null)
+    public void Perform(GameAction action, System.Action OnPerformFinished = null)
     {
         // Prevent multiple actions from running simultaneously (like turn-based rules)
         if(isPerforming) return;
