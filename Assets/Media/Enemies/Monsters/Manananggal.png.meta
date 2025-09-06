@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 46964833e2efc8e4485aa37657abb90d
+guid: 4ad91ecf2b6cbdb4185bbb404148a67d
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 1070346235713488549
-    second: Tiyanak Swarm_0
+      213: 5482757282655046882
+    second: Manananggal_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -46,7 +46,7 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 2
+  spriteMode: 1
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -126,13 +126,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Tiyanak Swarm_0
+      name: Manananggal_0
       rect:
         serializedVersion: 2
-        x: 69
-        y: 9
-        width: 502
-        height: 592
+        x: 59
+        y: 0
+        width: 522
+        height: 631
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -141,8 +141,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 5a6016efa32aade00800000000000000
-      internalID: 1070346235713488549
+      spriteID: 2ec075e13baa61c40800000000000000
+      internalID: 5482757282655046882
       vertices: []
       indices: 
       edges: []
@@ -151,7 +151,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 5e97eb03825dee720800000000000000
     internalID: 0
     vertices: []
     indices: 
@@ -161,7 +161,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Tiyanak Swarm_0: 1070346235713488549
+      Manananggal_0: 5482757282655046882
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

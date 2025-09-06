@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d6b46991f21540249a505cc6d07a919b, type: 3}
-  m_Name: Apolaki
+  m_Name: Bakunawa
   m_EditorClassIdentifier: Assembly-CSharp::EnemyData
-  <Image>k__BackingField: {fileID: -7687192244545928105, guid: 5417804a64edb704f93cc64285d4d53b, type: 3}
-  <EnemyName>k__BackingField: Apolaki
-  <Health>k__BackingField: 768
-  <AttackPower>k__BackingField: 137
+  <Image>k__BackingField: {fileID: 7511935507092196789, guid: 251d619571f7a0a4c991316c82f362ec, type: 3}
+  <EnemyName>k__BackingField: Bakunawa
+  <Health>k__BackingField: 200
+  <AttackPower>k__BackingField: 50

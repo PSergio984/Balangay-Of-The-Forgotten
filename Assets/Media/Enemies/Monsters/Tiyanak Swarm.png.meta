@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 15a2ca1658111364e866390b6c4c8012
+guid: 46964833e2efc8e4485aa37657abb90d
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -1955448553306655712
-    second: Background_0
+      213: 1070346235713488549
+    second: Tiyanak Swarm_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -126,13 +126,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Background_0
+      name: Tiyanak Swarm_0
       rect:
         serializedVersion: 2
-        x: 0
-        y: 0
-        width: 3840
-        height: 2160
+        x: 69
+        y: 9
+        width: 502
+        height: 592
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -141,8 +141,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 024fa93b6e9dcd4e0800000000000000
-      internalID: -1955448553306655712
+      spriteID: 5a6016efa32aade00800000000000000
+      internalID: 1070346235713488549
       vertices: []
       indices: 
       edges: []
@@ -161,7 +161,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Background_0: -1955448553306655712
+      Tiyanak Swarm_0: 1070346235713488549
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
