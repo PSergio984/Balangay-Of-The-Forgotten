@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d6b46991f21540249a505cc6d07a919b, type: 3}
-  m_Name: Bathala
+  m_Name: Manananggal
   m_EditorClassIdentifier: Assembly-CSharp::EnemyData
-  <Image>k__BackingField: {fileID: -9044131101817165679, guid: 5d2799539d81f7643b8fbe41c1998db1, type: 3}
-  <EnemyName>k__BackingField: Bathala
-  <Health>k__BackingField: 900
-  <AttackPower>k__BackingField: 100
+  <Image>k__BackingField: {fileID: 21300000, guid: 4ad91ecf2b6cbdb4185bbb404148a67d, type: 3}
+  <EnemyName>k__BackingField: Manananggal
+  <Health>k__BackingField: 283
+  <AttackPower>k__BackingField: 212
