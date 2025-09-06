@@ -26,6 +26,7 @@
  */
 
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
@@ -67,10 +68,12 @@ public class BurnSystem : MonoBehaviour
     /// <remarks>
     /// This method creates the complete burn damage experience:
     /// 1. Spawns fire visual effects at target location
-    /// 2. Applies the burn damage to the target
+    /// 2. Creates a DealDamageGA action for proper damage processing (including armor)
     /// 3. Reduces burn stacks by 1 (burn "ticks down")
     /// 4. Waits for effects to finish before continuing
     /// 
+    /// IMPROVEMENT: Now uses DealDamageGA instead of direct damage to ensure
+    /// proper armor calculation and death handling through the standard damage system.
     /// The damage equals the burn stacks, so more stacks = more damage per turn.
     /// After taking damage, burn stacks automatically reduce by 1.
     /// </remarks>
@@ -80,8 +83,13 @@ public class BurnSystem : MonoBehaviour
         CombatantView target = applyBurnGA.Target;
         // Create fire visual effects at the target's position
         Instantiate(burnVFX, target.transform.position, Quaternion.identity);
-        // Apply the burn damage to the target
-        target.Damage(applyBurnGA.BurnDamage);
+        
+        // Create a proper damage action instead of direct damage
+        // This ensures armor calculation and death handling work correctly
+        List<CombatantView> burnTargets = new() { target };
+        DealDamageGA burnDamageGA = new(applyBurnGA.BurnDamage, burnTargets, null);
+        ActionSystem.Instance.AddReaction(burnDamageGA);
+        
         // Reduce burn stacks by 1 (burn effect "ticks down")
         target.RemoveStatusEffect(StatusEffectType.BURN, 1);
         // Wait for visual effects to finish before continuing

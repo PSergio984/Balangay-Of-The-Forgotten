@@ -166,53 +166,26 @@ public class CombatantView : MonoBehaviour
     /// Reduces health, prevents going below zero, plays screen shake effect,
     /// and updates the health display. Makes combat feel impactful with visual feedback.
     /// 
-    /// NEW STATUS EFFECT INTEGRATION:
-    /// Now checks for armor status effects before applying damage. Armor absorbs damage
-    /// first before health is reduced. This creates tactical depth where players can
-    /// use armor effects to protect themselves.
-    /// 
-    /// NOTE: This armor checking logic could be improved and moved to a dedicated
-    /// damage calculation system. Currently mixing UI logic with damage logic here.
-    /// Consider creating a separate DamageCalculator class to handle armor interactions
-    /// and keep this class focused on visual representation.
+    /// IMPROVED DESIGN: Armor calculation is now handled by ArmorStatusEffectSystem
+    /// through pre-event subscription. This keeps the damage method focused on
+    /// applying final damage and visual effects rather than complex calculations.
     /// </remarks>
     // Applies damage to this combatant, reducing health and playing damage effects
     public void Damage(int damageAmount)
     {
-        // Calculate how much damage actually gets through after armor
-        int remainingDamage = damageAmount;
-        int currentArmor = GetStatusEffectStacks(StatusEffectType.ARMOR);
-
-        // If this combatant has armor, use it to absorb damage first
-        if (currentArmor > 0)
+        // Apply damage to health (armor has already been calculated by ArmorStatusEffectSystem)
+        CurrentHealth -= damageAmount;
+        if (CurrentHealth < 0)
         {
-            // Armor completely absorbs the damage
-            if (currentArmor >= damageAmount)
-            {
-                RemoveStatusEffect(StatusEffectType.ARMOR, remainingDamage);
-                remainingDamage = 0;
-            }
-            // Armor partially absorbs damage, some gets through
-            else if (currentArmor < damageAmount)
-            {
-                RemoveStatusEffect(StatusEffectType.ARMOR, currentArmor);
-                remainingDamage -= currentArmor;
-            }
+            CurrentHealth = 0;
         }
 
-        // Apply any remaining damage to health after armor absorption
-        if (remainingDamage > 0)
-        {
-            CurrentHealth -= remainingDamage;
-            if (CurrentHealth < 0)
-            {
-                CurrentHealth = 0;
-            }
-        }
-            // Play a screen shake animation when taking damage (0.2 seconds, 0.5 intensity)
-            transform.DOShakePosition(0.2f, 0.5f);
-            // Update the health display to show the new health value
-            UpdateHealthText();
+        // Play a screen shake animation when taking damage (0.2 seconds, 0.5 intensity)
+        // Then return to original position to fix animation issue
+        transform.DOShakePosition(0.2f, 0.5f);
+        
+        // Update the health display to show the new health value
+        UpdateHealthText();
     }
 
     /// <summary>

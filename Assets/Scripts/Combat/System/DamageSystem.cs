@@ -99,15 +99,26 @@ public class DamageSystem : MonoBehaviour
         // Loop through every target that should receive damage
         foreach (var target in dealDamageGA.Targets)
         {
+            // Check if target still exists (might have been destroyed by previous damage)
+            if (target == null)
+            {
+                continue; // Skip this target and move to the next one
+            }
+
             // Apply the damage amount to this target (reduces their health)
             target.Damage(dealDamageGA.Amount);
 
-            // Find the sprite renderer to get the correct visual position
-            SpriteRenderer spriteRenderer = target.GetComponentInChildren<SpriteRenderer>();
-            Vector3 vfxPosition = spriteRenderer != null ? spriteRenderer.transform.position : target.transform.position;
+            // Check if target still exists after taking damage (safety check)
+            if (target != null)
+            {
+                // Find the sprite renderer to get the correct visual position
+                SpriteRenderer spriteRenderer = target.GetComponentInChildren<SpriteRenderer>();
+                Vector3 vfxPosition = spriteRenderer != null ? spriteRenderer.transform.position : target.transform.position;
 
-            // Spawn a visual effect at the sprite's position to show damage was dealt
-            Instantiate(damageVFX, vfxPosition, Quaternion.identity);
+                // Spawn a visual effect at the sprite's position to show damage was dealt
+                Instantiate(damageVFX, vfxPosition, Quaternion.identity);
+            }
+            
             // Wait 0.15 seconds before damaging the next target (for visual timing)
             yield return new WaitForSeconds(0.15f);
             
@@ -119,8 +130,8 @@ public class DamageSystem : MonoBehaviour
             /// If it's an enemy that died, create a KillEnemyGA action to remove them.
             /// Hero death handling is planned for future implementation.
             /// </remarks>
-            // Check if the target died from the damage (health reached zero or below)
-            if(target.CurrentHealth <= 0)
+            // Check if the target still exists and died from the damage
+            if(target != null && target.CurrentHealth <= 0)
                 {
                 // If the target is an enemy that died, create a kill enemy action
                 if (target is EnemyView enemyView)
