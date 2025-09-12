@@ -14,5 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemyData
   <Image>k__BackingField: {fileID: 21300000, guid: 46964833e2efc8e4485aa37657abb90d, type: 3}
   <EnemyName>k__BackingField: Tiyanak
-  <Health>k__BackingField: 1451
-  <AttackPower>k__BackingField: 20
+  <Health>k__BackingField: 2150
+  <AttackPower>k__BackingField: 33
+  <MagicPower>k__BackingField: 100
+  <Defense>k__BackingField: 125

@@ -269,8 +269,12 @@ public class ActionSystem : Singleton<ActionSystem>
     /// <summary>
     /// Registers custom logic for how a specific action type should execute
     /// </summary>
-    /// <typeparam name="T">The specific action type to register logic for</typeparam>
-    /// <param name="performer">Function that defines what this action type does</param>
+    /// <typeparam name="T">The specific action type to register logic for, it needs to inherit from <see cref="GameAction"/>
+    /// it basically enforces that T is a GameAction or subclass of GameAction and method can only be called with those types
+    /// </typeparam>
+    /// <typeparam name="Func<T, IEnumerator>">it needs to have a param of a class that inherits from GameAction 
+    /// and return it as IEnumerator for coroutines</typeparam>
+    /// <param name="performer">Function that defines what this action type does, </param>
     /// <remarks>
     /// This is like defining what happens when you play a specific type of card.
     /// Example: AttachPerformer&lt;AttackAction&gt;(attack => DealDamage(attack.target, attack.damage))
@@ -278,20 +282,23 @@ public class ActionSystem : Singleton<ActionSystem>
     // Registers custom logic for how a specific action type should execute
     // This is like defining what happens when you play a specific type of card
     // Example: AttachPerformer<AttackAction>(attack => DealDamage(attack.target, attack.damage))
+
     public static void AttachPerformer<T>(Func<T, IEnumerator> performer) where T : GameAction
     {
         // Get the type of action we're registering logic for
         Type type = typeof(T);
-        
+
         // Create a wrapper function that converts the generic GameAction to the specific type
-        IEnumerator wrappedPerformer(GameAction action)=> performer((T)action);
-        
+        IEnumerator wrappedPerformer(GameAction action) => performer((T)action);
+
         // Check if we already have logic registered for this action type
-        if(performers.ContainsKey(type)){
+        if (performers.ContainsKey(type))
+        {
             // Add to existing logic (allows for multiple effects on one action type)
             performers[type] += wrappedPerformer;
         }
-        else{
+        else
+        {
             // Register new logic for this action type
             performers.Add(type, wrappedPerformer);
         }

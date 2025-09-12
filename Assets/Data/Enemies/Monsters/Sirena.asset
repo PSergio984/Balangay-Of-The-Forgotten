@@ -14,5 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemyData
   <Image>k__BackingField: {fileID: 21300000, guid: ca7645a415e2ba14381496d45592af4a, type: 3}
   <EnemyName>k__BackingField: Sirena
-  <Health>k__BackingField: 184
-  <AttackPower>k__BackingField: 357
+  <Health>k__BackingField: 2100
+  <AttackPower>k__BackingField: 20
+  <MagicPower>k__BackingField: 100
+  <Defense>k__BackingField: 80

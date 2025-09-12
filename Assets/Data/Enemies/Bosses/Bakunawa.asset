@@ -14,5 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemyData
   <Image>k__BackingField: {fileID: 7511935507092196789, guid: 251d619571f7a0a4c991316c82f362ec, type: 3}
   <EnemyName>k__BackingField: Bakunawa
-  <Health>k__BackingField: 200
-  <AttackPower>k__BackingField: 50
+  <Health>k__BackingField: 3000
+  <AttackPower>k__BackingField: 40
+  <MagicPower>k__BackingField: 350
+  <Defense>k__BackingField: 190
