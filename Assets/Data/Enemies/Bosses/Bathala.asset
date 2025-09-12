@@ -14,5 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemyData
   <Image>k__BackingField: {fileID: 21300000, guid: f9acfcbf3c9a61b4695de006087b1424, type: 3}
   <EnemyName>k__BackingField: Bathala
-  <Health>k__BackingField: 2226
-  <AttackPower>k__BackingField: 280
+  <Health>k__BackingField: 3000
+  <AttackPower>k__BackingField: 110
+  <MagicPower>k__BackingField: 300
+  <Defense>k__BackingField: 200

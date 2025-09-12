@@ -14,5 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemyData
   <Image>k__BackingField: {fileID: 21300000, guid: 4ad91ecf2b6cbdb4185bbb404148a67d, type: 3}
   <EnemyName>k__BackingField: Manananggal
-  <Health>k__BackingField: 283
-  <AttackPower>k__BackingField: 212
+  <Health>k__BackingField: 2000
+  <AttackPower>k__BackingField: 230
+  <MagicPower>k__BackingField: 34
+  <Defense>k__BackingField: 100
