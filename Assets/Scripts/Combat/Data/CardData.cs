@@ -40,7 +40,7 @@ using Sirenix.OdinInspector;
 /// <item>ManualTargetEffect - Player chooses the target (like single-target damage)</item>
 /// <item>OtherEffects - Automatic targeting based on target modes (like area damage)</item>
 /// </list>
-/// 
+///  
 /// <para><strong>Works with:</strong> Card model for runtime instances, CardSystem for gameplay</para>
 /// 
 /// <para><strong>How to use:</strong> Create menu "Data/Card" to make new card assets, set properties in Inspector</para>
