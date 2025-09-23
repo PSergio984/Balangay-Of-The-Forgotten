@@ -165,7 +165,7 @@ public class Perk
             }
             
             // Create the actual action that will do the perk's effect
-            GameAction perkEffectAction = effect.effects.GetGameAction(targets, HeroSystem.Instance.HeroView);
+            GameAction perkEffectAction = effect.effects.GetGameAction(targets, CurrentHeroUtil.GetCurrentHero());
             // Add the action to the game to be processed
             ActionSystem.Instance.AddReaction(perkEffectAction);
         }

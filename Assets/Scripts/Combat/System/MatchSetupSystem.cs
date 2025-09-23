@@ -55,7 +55,7 @@ public class MatchSetupSystem : MonoBehaviour
    /// Includes things like max health, starting deck, and other stats.
    /// Assign a HeroData asset in the Inspector.
    /// </remarks>
-   [SerializeField] private HeroData heroData;
+   [SerializeField] private List<HeroData> heroDatas;
    
    /// <summary>
    /// List of all enemies that will appear in this battle
@@ -87,17 +87,12 @@ public class MatchSetupSystem : MonoBehaviour
    /// </remarks>
 private void Start()
     {
-        // Create the hero character using the assigned hero data
-        HeroSystem.Instance.Setup(heroData);
-        // Create all enemy characters using the assigned enemy data list
+        HeroSystem.Instance.Setup(heroDatas);
         EnemySystem.Instance.Setup(enemyDatas);
-        // Prepare the card system with the hero's deck of cards
-        CardSystem.Instance.Setup(heroData.Deck);
-        // Give the player a starting perk - shows how any system can add perks
+        // Pass all heroDatas to CardSystem for multi-hero support
+        CardSystem.Instance.Setup(heroDatas);
         PerkSystem.Instance.AddPerk(new Perk(perkData));
-        // Create an action to draw 5 cards for the player's starting hand
         DrawCardsGA drawCardsGA = new(5);
-        // Execute the draw cards action to give the player their starting hand
         ActionSystem.Instance.Perform(drawCardsGA);
     }
 }

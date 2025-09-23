@@ -53,9 +53,29 @@ public class EndTurnButtonUI : MonoBehaviour
     /// </remarks>
     public void OnClick()
     {
-        // Create a new enemy turn action to start the enemy phase
-        EnemyTurnGA enemyTurnGA = new();
-        // Send the action to the action system to process the turn change
-        ActionSystem.Instance.Perform(enemyTurnGA);
+        int heroCount = CurrentHeroUtil.GetHeroCount();
+        int currentHeroIndex = CurrentHeroUtil.CurrentHeroIndex;
+        Debug.Log($"[EndTurnButtonUI] CurrentHeroIndex: {currentHeroIndex} / {heroCount - 1}");
+
+        // Always discard current hero's hand before advancing
+        ActionSystem.Instance.Perform(new DiscardAllCardsGA(), () =>
+        {
+            // If all heroes have acted, start enemy turn and reset to first hero
+            if (currentHeroIndex >= heroCount - 1)
+            {
+                Debug.Log("[EndTurnButtonUI] All heroes finished, starting enemy turn.");
+                CurrentHeroUtil.CurrentHeroIndex = 0;
+                EnemyTurnGA enemyTurnGA = new();
+                ActionSystem.Instance.Perform(enemyTurnGA);
+            }
+            else
+            {
+                // Advance to next hero
+                CurrentHeroUtil.CurrentHeroIndex++;
+                Debug.Log($"[EndTurnButtonUI] Next hero: {CurrentHeroUtil.CurrentHeroIndex}");
+                // Draw new hand for the next hero using CardSystem performer
+                ActionSystem.Instance.Perform(new DrawCardsGA(5));
+            }
+        });
     }
 }

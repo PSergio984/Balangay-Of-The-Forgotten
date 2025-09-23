@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 /* HERO SYSTEM DOCUMENTATION
@@ -48,6 +49,8 @@ using UnityEngine;
 /// </remarks>
 public class HeroSystem : Singleton<HeroSystem>
 {
+    // Expose all hero views for targeting
+    public List<HeroView> HeroViews => HeroBoardView.HeroViews;
     /// <summary>
     /// The visual display component that shows the hero to players
     /// </summary>
@@ -56,7 +59,7 @@ public class HeroSystem : Singleton<HeroSystem>
     /// Other systems can access this to affect the hero's appearance or get hero info.
     /// Assign a HeroView GameObject in the Inspector.
     /// </remarks>
-    [field: SerializeField] public HeroView HeroView { get; private set; }
+    [field: SerializeField] private HeroBoardView HeroBoardView;
 
     /// <summary>
     /// Sets up the hero character with their starting information
@@ -69,10 +72,13 @@ public class HeroSystem : Singleton<HeroSystem>
     /// 
     /// 
 
-    public void Setup(HeroData heroData)
+    public void Setup(List<HeroData> heroDatas)
         {
-            // Tell the hero view to set up the hero's appearance and stats
-            HeroView.Setup(heroData);
+            foreach (var heroData in heroDatas)
+            {
+                // Tell the hero view to set up the hero's appearance and stats
+                HeroBoardView.AddHero(heroData);
+            }
         }
     /// <summary>
     /// Subscribe to enemy turn reactions when this system starts
@@ -89,8 +95,8 @@ public class HeroSystem : Singleton<HeroSystem>
     void OnEnable()
     {
           // Listen for enemy turns to handle cards automatically
-    ActionSystem.SubscribeReaction<EnemyTurnGA>(EnemyTurnPreReaction, ReactionTiming.PRE);
-    ActionSystem.SubscribeReaction<EnemyTurnGA>(EnemyTurnPostReaction, ReactionTiming.POST);
+        ActionSystem.SubscribeReaction<EnemyTurnGA>(EnemyTurnPreReaction, ReactionTiming.PRE);
+        ActionSystem.SubscribeReaction<EnemyTurnGA>(EnemyTurnPostReaction, ReactionTiming.POST);
     }
 
     /// <summary>
@@ -98,8 +104,8 @@ public class HeroSystem : Singleton<HeroSystem>
     /// </summary>
     void OnDisable()
     {
-         ActionSystem.UnsubscribeReaction<EnemyTurnGA>(EnemyTurnPreReaction, ReactionTiming.PRE);
-    ActionSystem.UnsubscribeReaction<EnemyTurnGA>(EnemyTurnPostReaction, ReactionTiming.POST);
+        ActionSystem.UnsubscribeReaction<EnemyTurnGA>(EnemyTurnPreReaction, ReactionTiming.PRE);
+        ActionSystem.UnsubscribeReaction<EnemyTurnGA>(EnemyTurnPostReaction, ReactionTiming.POST);
     }
 
      /// <summary>
@@ -143,12 +149,16 @@ public class HeroSystem : Singleton<HeroSystem>
     private void EnemyTurnPostReaction(EnemyTurnGA enemyTurnGA)
     {
         // Check if hero has burn stacks and apply damage if they do
-        int burnStacks = HeroView.GetStatusEffectStacks(StatusEffectType.BURN);
-        if (burnStacks > 0)
+        // For now, apply burn to the first hero in the party (can be expanded for all heroes)
+        if (HeroViews.Count > 0)
         {
-            // Create burn damage action (damage = number of burn stacks)
-            ApplyBurnGA applyBurnGA = new(burnStacks, HeroView);
-            ActionSystem.Instance.AddReaction(applyBurnGA);
+            var firstHero = HeroViews[0];
+            int burnStacks = firstHero.GetStatusEffectStacks(StatusEffectType.BURN);
+            if (burnStacks > 0)
+            {
+                ApplyBurnGA applyBurnGA = new(burnStacks, firstHero);
+                ActionSystem.Instance.AddReaction(applyBurnGA);
+            }
         }
         // Draw new hand for the player's next turn
         DrawCardsGA drawCardsGA = new(5);
