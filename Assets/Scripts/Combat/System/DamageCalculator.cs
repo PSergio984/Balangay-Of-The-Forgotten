@@ -24,7 +24,7 @@ public static class DamageCalculator
     /// Calculates if an attack hits, based on accuracy and a d20 roll.
     /// </summary>
     /// <param name="accuracy">Chance to hit (0-1, e.g. 0.75 for 75%)</param>
-    /// <returns>True if hit, false if miss</returns>
+/// <returns>True if hit, false if miss</returns>
     public static bool CalculateAccuracy(float accuracy)
     {
         // Simulate d20 roll: 1 = miss, 20 = crit, else check accuracy
@@ -51,17 +51,4 @@ public static class DamageCalculator
         return roll <= threshold;
     }
 
-    /// <summary>
-    /// Calculates the final defense value for the formula.
-    /// </summary>
-    /// <param name="defTarget">Base defense of the target</param>
-    /// <param name="defIncrease">Flat or % defense increase</param>
-    /// <param name="defDecreased">Flat or % defense decrease</param>
-    /// <param name="defIgnored">Flat or % defense ignored</param>
-    /// <returns>Final defense value</returns>
-    public static float CalculateFinalDefense(float defTarget, float defIncrease, float defDecreased, float defIgnored)
-    {
-        // DEF_final = (DEF_target + %DEF_increase) - DEF_decreased - %DEF_ignored
-        return (defTarget + defIncrease) - defDecreased - defIgnored;
-    }
 }

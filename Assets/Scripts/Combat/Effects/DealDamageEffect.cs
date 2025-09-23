@@ -52,7 +52,13 @@ public class DealDamageEffect : Effects
    /// The amount of damage that will be dealt to all enemies when this effect triggers.
    /// Set this value in the Inspector to match the card's intended power.
    /// </remarks>
-   [SerializeField] private int damageAmount;
+    [SerializeField] private float baseDamage = 0f;
+    [SerializeField] private float accuracy = 1f; // 1 = 100% hit
+    [SerializeField] private float critChance = 0f; // 0 = no crit
+    [SerializeField] private float defenseIgnore = 0f; // 0 = normal, 0.2 = ignore 20% DEF
+    [SerializeField] private float AttackAmp = 1f; // Multiplier for caster's AttackPower
+    [SerializeField] private float MagicAmp = 1f; // Multiplier for caster's MagicPower
+   
 
     /// <summary>
     /// Creates a damage action that targets the specified characters with caster tracking
@@ -68,79 +74,33 @@ public class DealDamageEffect : Effects
     /// </remarks>
     public override GameAction GetGameAction(List<CombatantView> targets, CombatantView caster)
     {
-        // Example values for demonstration; replace with actual stat retrieval in your game
-        float dmgAmp = 1.0f; // e.g., 1 + sum of all %DMG amplifications
-        // Set coefficient dynamically: 1 for HeroView (Player→Boss), 1.5 for EnemyView (Boss→Player)
-        float coefficient = 1.0f;
-        if (caster is EnemyView)
-            coefficient = 1.5f;
-        else if (caster is HeroView)
-            coefficient = 1.0f;
+        float coefficient = caster is EnemyView ? 1.5f : 1.0f;
         float critMultiplier = 1.0f;
-        float accuracy = 1.0f; // 0-1, e.g., 0.75 for 75% accuracy
-        float critChance = 0.0f; // 0-1, e.g., 0.25 for 25% crit chance
-
 
         bool hit = DamageCalculator.CalculateAccuracy(accuracy);
-        int finalDamage = 0;
         if (!hit)
         {
-            // Missed attack, all targets take 0 damage
-            DealDamageGA missGA = new(0, targets, caster);
-            return missGA;
+            return new DealDamageGA(0, targets, caster);
         }
 
-        // Crit check ONCE for the whole attack
         bool isCrit = DamageCalculator.CalculateCrit(critChance);
-        // Set crit multiplier based on crit and context
         if (isCrit)
         {
-            if (caster is HeroView)
-                critMultiplier = 1.5f;
-            else if (caster is EnemyView)
-                critMultiplier = 1.2f;
-            else
-                critMultiplier = 1.0f;
-        }
-        else
-        {
-            critMultiplier = 1.0f;
+            critMultiplier = caster is HeroView ? 1.5f : caster is EnemyView ? 1.2f : 1.0f;
         }
 
-        // For simplicity, use the first target's defense for group attacks (customize as needed)
         float defTarget = 0f;
-        float defIncrease = 0f;
-        float defDecreased = 0f;
-        float defIgnored = 0f;
         if (targets.Count > 0)
-         {
-             // Try to get defense from the first target
-             var firstTarget = targets[0];
-             // If CombatantView has a Defense property, use it directly
-             // Otherwise, check for HeroView or EnemyView and get their defense
-             if (firstTarget is HeroView hero)
-             {
-                 defTarget = hero.Defense; // Assumes HeroView has Defense property
-             }
-             else if (firstTarget is EnemyView enemy)
-             {
-                 defTarget = enemy.Defense; // Assumes EnemyView has Defense property
-             }
-             else
-             {
-                 // If CombatantView has Defense, use reflection as fallback (not recommended for perf)
-                 var defProp = firstTarget.GetType().GetProperty("Defense");
-                 if (defProp != null)
-                 {
-                     defTarget = (float)System.Convert.ChangeType(defProp.GetValue(firstTarget), typeof(float));
-                 }
-             }
-         }
-        float defFinal = DamageCalculator.CalculateFinalDefense(defTarget, defIncrease, defDecreased, defIgnored);
-        finalDamage = DamageCalculator.CalculateDamage(damageAmount, dmgAmp, coefficient, defFinal, critMultiplier);
+        {
+            defTarget = targets[0].Defense;
+        }
 
-        // All targets take the same damage if hit
-        DealDamageGA dealDamageGA = new(finalDamage, targets, caster);
-        return dealDamageGA;
+        // New damage formula: baseDamage + (AttackAmp * caster.AttackPower) + (MagicAmp * caster.MagicPower)
+        float skillPower = baseDamage + (AttackAmp * caster.AttackPower) + (MagicAmp * caster.MagicPower);
+
+        // Use target's defense directly, ignore defFinal calculation
+        int finalDamage = DamageCalculator.CalculateDamage(skillPower, 1f, coefficient, defTarget, critMultiplier);
+
+        return new DealDamageGA(finalDamage, targets, caster);
     }
 }
