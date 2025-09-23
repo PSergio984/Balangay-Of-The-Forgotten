@@ -61,7 +61,7 @@ public class PlayCardsGA : GameAction
     /// Only used for cards with ManualTargetEffects - remains null for regular cards.
     /// Gets set when player uses targeting arrow to select a specific enemy.
     /// </remarks>
-    public EnemyView ManualTarget { get; set; }
+    public HeroView ManualTarget { get; set; }
     
     /// <summary>
     /// The card that the player is playing
@@ -97,7 +97,7 @@ public class PlayCardsGA : GameAction
     /// Constructor for cards that need manual targeting (like single-target damage spells).
     /// Stores both the card and the specific target that the player selected using the targeting system.
     /// </remarks>
-    public PlayCardsGA(Card card, EnemyView manualTarget)
+    public PlayCardsGA(Card card, HeroView manualTarget)
     {
         // Store which card is being played
         Card = card;
