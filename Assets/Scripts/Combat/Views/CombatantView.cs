@@ -71,6 +71,21 @@ public class CombatantView : MonoBehaviour
     /// </remarks>
     // UI text component that shows the character's name
     [SerializeField] private TMP_Text NameText;
+    
+
+    /// <summary>
+    /// UI text component that shows the character's magic power
+    /// </summary>
+    [SerializeField] private TMP_Text MagicText;
+    /// <summary>
+    /// UI text component that shows the character's attack power
+    /// </summary>
+    [SerializeField] private TMP_Text AttackText;
+
+    /// <summary>
+    /// UI text component that shows the character's defense stat
+    /// </summary>
+    [SerializeField] private TMP_Text DefenseText;
 
     /// <summary>
     /// UI component that manages and displays all status effects for this combatant
@@ -119,6 +134,21 @@ public class CombatantView : MonoBehaviour
     /// </remarks>
     // The current health points this combatant has remaining
     public int CurrentHealth { get; private set; }
+    
+        /// <summary>
+        /// The defense stat of this combatant (used in damage reduction)
+        /// </summary>
+        public float Defense { get; protected set; }
+
+        /// <summary>
+        /// The attack power stat of this combatant (used for base damage)
+        /// </summary>
+        public float AttackPower { get; protected set; }
+
+        /// <summary>
+        /// The magic power stat of this combatant (used for magic skills)
+        /// </summary>
+        public float MagicPower { get; protected set; }
 
     /// <summary>
     /// Sets up the basic properties of this combatant
@@ -126,20 +156,25 @@ public class CombatantView : MonoBehaviour
     /// <param name="health">Starting health value (becomes both current and max health)</param>
     /// <param name="image">Sprite image to display for this character</param>
     /// <param name="name">Name to display for this character</param>
+    /// <param name="magicPower">Magic power stat</param>
+    /// <param name="attackPower">Attack power stat</param>
+    /// <param name="defense">Defense stat</param>
     /// <remarks>
     /// Called by child classes (HeroView, EnemyView) to initialize the character.
     /// Sets up health, appearance, and name, then updates the health display.
     /// </remarks>
-    // Sets up the basic properties of this combatant (health, appearance, name)
-    protected void SetupBase(int health, Sprite image, string name)
+    // Sets up the basic properties of this combatant (health, appearance, name, stats)
+    protected void SetupBase(int health, Sprite image, string name, float magicPower, float attackPower, float defense)
     {
-        // Set both max health and current health to the starting health value
         MaxHealth = CurrentHealth = health;
-        // Set the visual sprite image for this combatant
+        MagicPower = magicPower;
+        AttackPower = attackPower;
+        Defense = defense;
         spriteRenderer.sprite = image;
-        // Display the combatant's name in the UI text
         NameText.text = name;
-        // Update the health display to show current health
+        MagicText.text = $"MP: {MagicPower}";
+        AttackText.text = $"ATK: {AttackPower}";
+        DefenseText.text = $"DEF: {Defense}";
         UpdateHealthText();
     }
 

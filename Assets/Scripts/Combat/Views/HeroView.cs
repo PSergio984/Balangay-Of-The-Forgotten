@@ -59,7 +59,7 @@ public class HeroView : CombatantView
    /// </remarks>
    public void Setup(HeroData heroData)
    {
-       // Set up the base combatant properties (health, image, name) using parent class method
-       SetupBase(heroData.Health, heroData.Image, heroData.HeroName);
+       // Set up the base combatant properties using explicit values
+       SetupBase(heroData.Health, heroData.Image, heroData.HeroName, heroData.MagicPower, heroData.AttackPower, heroData.Defense);
    }
 }

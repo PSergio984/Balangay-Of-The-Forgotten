@@ -95,6 +95,12 @@ public class CardView : MonoBehaviour
     // Sprite renderer component to display the card's artwork/image
     [SerializeField] private SpriteRenderer imagesSR;
 
+
+    /// <summary>
+    /// Image component that shows the card's role icon
+    /// </summary>
+    [SerializeField] private SpriteRenderer imagesRole;
+
     /// <summary>
     /// Container that holds all the visual parts of the card
     /// </summary>
@@ -103,8 +109,6 @@ public class CardView : MonoBehaviour
     /// Gets hidden when showing the big hover version of the card.
     /// </remarks>
     // GameObject that wraps/contains all the card's visual elements
-    
-    [SerializeField] private SpriteRenderer imagesRole;
     [SerializeField] private GameObject wrapper;
     
     /// <summary>

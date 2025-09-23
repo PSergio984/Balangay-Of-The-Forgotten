@@ -42,24 +42,8 @@ using UnityEngine;
 /// </remarks>
 public class EnemyView : CombatantView
 {
-    /// <summary>
-    /// UI text that displays the enemy's attack power
-    /// </summary>
-    /// <remarks>
-    /// Shows how much damage this enemy will deal when attacking.
-    /// Helps players make strategic decisions about which enemies to target first.
-    /// </remarks>
-    [SerializeField] private TMP_Text attackText;
-    
-    /// <summary>
-    /// How much damage this enemy deals when attacking
-    /// </summary>
-    /// <remarks>
-    /// This is the base attack damage the enemy will deal to the player.
-    /// Can be modified by buffs, debuffs, or other game effects.
-    /// </remarks>
-    public int AttackPower { get; set; }
 
+    
     /// <summary>
     /// Sets up this enemy view with data from an EnemyData asset
     /// </summary>
@@ -68,26 +52,12 @@ public class EnemyView : CombatantView
     /// This initializes the enemy with all its starting values. Sets attack power,
     /// updates the attack display, then calls the base setup for health, image, and name.
     /// </remarks>
+    /// 
     public void Setup(EnemyData enemyData)
     {
-        // Set the attack power from the enemy data
-        AttackPower = enemyData.AttackPower;
-        // Update the UI to show the attack power
-        UpdateAttackText();
-        // Set up the base combatant properties (health, image, name) using parent class method
-        SetupBase(enemyData.Health, enemyData.Image, enemyData.EnemyName);
+        // Set up the base combatant properties using explicit values
+        SetupBase(enemyData.Health, enemyData.Image, enemyData.EnemyName, enemyData.MagicPower, enemyData.AttackPower, enemyData.Defense);
     }   
     
-    /// <summary>
-    /// Updates the attack text display to show current attack power
-    /// </summary>
-    /// <remarks>
-    /// Called whenever the attack power changes to keep the UI accurate.
-    /// Shows attack in format "ATK: X" so players know the threat level.
-    /// </remarks>
-    private void UpdateAttackText()
-    {
-        // Display attack power in format "ATK: X"
-        attackText.text = "ATK: " + AttackPower;
-    }
+   
 }
