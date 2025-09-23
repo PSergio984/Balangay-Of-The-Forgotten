@@ -2,50 +2,48 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /* HERO SYSTEM DOCUMENTATION
- * 
- * Purpose: Manages the player's hero character and their stats
- * 
+ *
+ * Purpose: Manages the party of player heroes and their stats
+ *
  * How it works:
- * - Holds reference to the hero's visual display
- * - Sets up the hero with their starting stats and appearance
- * - Provides access to hero information for other systems
- * - Manages hero state during combat
- * - HANDLES TURN CYCLE REACTIONS: Now manages hand and burn effects during enemy turns
- * 
+ * - Holds reference to all hero visual displays (multi-hero/party support)
+ * - Sets up each hero with their starting stats and appearance
+ * - Provides access to all hero information for other systems
+ * - Manages per-hero state during combat (health, status, hand, etc.)
+ * - Handles turn cycle reactions for each hero: discarding/drawing hands, burn effects, etc.
+ *
  * Integration: Works with HeroView for display and other systems for hero interactions
- * 
+ *
  * DESIGN CHANGE - Why enemy turn reactions moved here:
  * Previously CardSystem handled discarding/drawing cards during enemy turns.
- * This was moved to HeroSystem because these reactions are more about the HERO's
- * state management than card mechanics. The hero needs a fresh hand each turn,
- * and the hero takes burn damage. This makes HeroSystem a more general-purpose
- * hero state manager rather than having hero-related logic scattered in other systems.
+ * This was moved to HeroSystem because these reactions are about per-hero state management, not card mechanics.
+ * The party system requires each hero to have their own hand and burn logic. This makes HeroSystem a general-purpose
+ * party/hero state manager rather than having hero-related logic scattered in other systems.
  */
 
 /// <summary>
-/// System that manages the player's hero character and their information
+/// System that manages the party of player heroes and their information
 /// </summary>
 /// <remarks>
-/// <para><strong>Purpose:</strong> Controls the player's hero character and their stats</para>
-/// 
-/// <para><strong>What it does:</strong> This system manages everything about the player's 
-/// hero character. It sets up the hero's starting health, appearance, and other stats. 
-/// Other parts of the game can use this system to check hero information or affect 
-/// the hero during combat.</para>
-/// 
+/// <para><strong>Purpose:</strong> Controls all player heroes and their stats in a party-based system</para>
+///
+/// <para><strong>What it does:</strong> This system manages everything about the player's party of heroes.
+/// It sets up each hero's starting health, appearance, and other stats. Other parts of the game can use this system
+/// to check or affect any hero during combat.</para>
+///
 /// <para><strong>How it works:</strong></para>
 /// <list type="bullet">
-/// <item>Game starts and hero data gets loaded</item>
-/// <item>System sets up the hero with their stats and appearance</item>
-/// <item>HeroView displays the hero to the player</item>
-/// <item>Other systems can access hero info through this system</item>
+/// <item>Game starts and all hero data gets loaded</item>
+/// <item>System sets up each hero with their stats and appearance</item>
+/// <item>HeroBoardView displays all heroes to the player</item>
+/// <item>Other systems can access any hero info through this system</item>
 /// </list>
-/// 
-/// <para><strong>Needs:</strong> HeroView component for displaying the hero, HeroData for stats</para>
-/// 
+///
+/// <para><strong>Needs:</strong> HeroView component for displaying each hero, HeroData for stats</para>
+///
 /// <para><strong>Works with:</strong> HeroView for display, combat systems for health/damage</para>
-/// 
-/// <para><strong>How to use:</strong> Put this on a GameObject and assign the HeroView in Inspector</para>
+///
+/// <para><strong>How to use:</strong> Put this on a GameObject and assign the HeroBoardView in Inspector</para>
 /// </remarks>
 public class HeroSystem : Singleton<HeroSystem>
 {

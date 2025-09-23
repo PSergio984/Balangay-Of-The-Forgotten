@@ -85,14 +85,32 @@ public class MatchSetupSystem : MonoBehaviour
    /// This is where all the combat systems get initialized in the right order.
    /// Must happen before any other combat actions can work.
    /// </remarks>
-private void Start()
+    /// <summary>
+    /// Sets up everything needed for combat when the battle scene starts
+    /// </summary>
+    /// <remarks>
+    /// Unity calls this automatically when the GameObject becomes active.
+    /// This is where all the combat systems get initialized in the right order.
+    /// Must happen before any other combat actions can work.
+    /// </remarks>
+    private void Start()
     {
+        // Create all hero characters using the assigned hero data list (multi-hero/party support)
         HeroSystem.Instance.Setup(heroDatas);
+
+        // Create all enemy characters using the assigned enemy data list
         EnemySystem.Instance.Setup(enemyDatas);
-        // Pass all heroDatas to CardSystem for multi-hero support
+
+        // Prepare the card system with all hero decks (multi-hero support)
         CardSystem.Instance.Setup(heroDatas);
+
+        // Give the player a starting perk - shows how any system can add perks
         PerkSystem.Instance.AddPerk(new Perk(perkData));
+
+        // Create an action to draw 5 cards for the starting hand of the first hero
         DrawCardsGA drawCardsGA = new(5);
+
+        // Execute the draw cards action to give the first hero their starting hand
         ActionSystem.Instance.Perform(drawCardsGA);
     }
 }
