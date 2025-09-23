@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemyData
   <Image>k__BackingField: {fileID: 21300000, guid: 3ec80d9cec164c64ab832c6e1128947f, type: 3}
   <EnemyName>k__BackingField: Minokawa
-  <Health>k__BackingField: 4200
-  <AttackPower>k__BackingField: 350
+  <Health>k__BackingField: 1000
+  <AttackPower>k__BackingField: 300
   <MagicPower>k__BackingField: 40
   <Defense>k__BackingField: 190

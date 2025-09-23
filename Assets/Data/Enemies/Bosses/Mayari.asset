@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemyData
   <Image>k__BackingField: {fileID: 7744061964198697673, guid: d201257aada4f1b4486dcd2ec41fc81b, type: 3}
   <EnemyName>k__BackingField: Mayari
-  <Health>k__BackingField: 3000
+  <Health>k__BackingField: 2100
   <AttackPower>k__BackingField: 300
   <MagicPower>k__BackingField: 120
   <Defense>k__BackingField: 180
