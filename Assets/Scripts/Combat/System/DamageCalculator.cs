@@ -5,7 +5,7 @@ public static class DamageCalculator
     /// <summary>
     /// Calculates the final damage using the provided DND-like formula.
     /// </summary>
-    /// <param name="baseDamage">Skill base damage (DMG_skill)</param>
+    /// <param name="baseDamage">Base damage of the card</param>
     /// <param name="dmgAmp">Amplification multiplier (DMG_AMP, e.g. 1.2 for +20%)</param>
     /// <param name="coefficient">Player/Boss coefficient (C: 1 for Player→Boss, 1.5 for Boss→Player)</param>
     /// <param name="defFinal">Final defense value (DEF_final)</param>

@@ -45,19 +45,34 @@ using UnityEngine;
 /// </remarks>
 public class DealDamageEffect : Effects
 {
-   /// <summary>
-   /// How much damage this effect deals to each target
-   /// </summary>
-   /// <remarks>
-   /// The amount of damage that will be dealt to all enemies when this effect triggers.
-   /// Set this value in the Inspector to match the card's intended power.
-   /// </remarks>
-    [SerializeField] private float baseDamage = 0f;
-    [SerializeField] private float accuracy = 1f; // 1 = 100% hit
-    [SerializeField] private float critChance = 0f; // 0 = no crit
-    [SerializeField] private float defenseIgnore = 0f; // 0 = normal, 0.2 = ignore 20% DEF
-    [SerializeField] private float AttackAmp = 1f; // Multiplier for caster's AttackPower
-    [SerializeField] private float MagicAmp = 1f; // Multiplier for caster's MagicPower
+        /// <summary>
+        /// Flat skill damage added to the total damage. Set in Inspector.
+        /// <br/>Total Damage = baseDamage + (AttackAmp × caster.AttackPower) + (MagicAmp × caster.MagicPower)
+        /// </summary>
+        [SerializeField] private float baseDamage = 0f;
+        /// <summary>
+        /// Chance to hit (0-1, e.g. 1 = 100% hit, 0.8 = 80% hit). Set in Inspector.
+        /// </summary>
+        [SerializeField] private float accuracy = 1f; // 1 = 100% hit
+        /// <summary>
+        /// Chance to crit (0-1, e.g. 0.25 = 25% crit chance). Set in Inspector.
+        /// </summary>
+        [SerializeField] private float critChance = 0f; // 0 = no crit
+        /// <summary>
+        /// Percent of target's defense ignored (0 = normal, 0.2 = ignore 20% DEF). Set in Inspector.
+        /// </summary>
+        [SerializeField] private float defenseIgnore = 0f; // 0 = normal, 0.2 = ignore 20% DEF
+        /// <summary>
+        /// Multiplier for caster's AttackPower. Set in Inspector.
+        /// <br/>Use for physical or hybrid attacks. Set to 0 for pure magic moves.
+        /// </summary>
+        [SerializeField] private float AttackAmp = 1f; // Multiplier for caster's AttackPower
+        /// <summary>
+        /// Multiplier for caster's MagicPower. Set in Inspector.
+        /// <br/>Use for magical or hybrid attacks. Set to 0 for pure physical moves.
+        /// </summary>
+        [SerializeField] private float MagicAmp = 1f; // Multiplier for caster's MagicPower
+   
    
 
     /// <summary>
