@@ -46,8 +46,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: afd74147c43692a46b97e8c56c62b4ba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HeroView
-  healthText: {fileID: 3033076560843762790}
-  NameText: {fileID: 4699126763313871957}
+  healthText: {fileID: 4699126763313871957}
+  NameText: {fileID: 3033076560843762790}
+  MagicText: {fileID: 570034148899041392}
+  AttackText: {fileID: 6955594597374322694}
+  DefenseText: {fileID: 6857139501811646239}
   statusEffectsUI: {fileID: 5077156918235726462}
   spriteRenderer: {fileID: 1822778642561894896}
 --- !u!65 &-4528005571670633682
@@ -177,11 +180,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6971036089279254098, guid: abfc41d4823e2cf41a3f50f9396393e8, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -0.48
+      value: 0.04
       objectReference: {fileID: 0}
     - target: {fileID: 6971036089279254098, guid: abfc41d4823e2cf41a3f50f9396393e8, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 2.14
+      value: -2.12
+      objectReference: {fileID: 0}
+    - target: {fileID: 8319701409960845583, guid: abfc41d4823e2cf41a3f50f9396393e8, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 2.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 8319701409960845583, guid: abfc41d4823e2cf41a3f50f9396393e8, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -1.27
       objectReference: {fileID: 0}
     - target: {fileID: 8443129629403683970, guid: abfc41d4823e2cf41a3f50f9396393e8, type: 3}
       propertyPath: m_Name
@@ -190,6 +201,14 @@ PrefabInstance:
     - target: {fileID: 8443129629403683970, guid: abfc41d4823e2cf41a3f50f9396393e8, type: 3}
       propertyPath: m_Layer
       value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 8456996871510962455, guid: abfc41d4823e2cf41a3f50f9396393e8, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -3.31
+      objectReference: {fileID: 0}
+    - target: {fileID: 8456996871510962455, guid: abfc41d4823e2cf41a3f50f9396393e8, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -2.04
       objectReference: {fileID: 0}
     - target: {fileID: 8503662190939717528, guid: abfc41d4823e2cf41a3f50f9396393e8, type: 3}
       propertyPath: m_LocalPosition.x
@@ -244,6 +263,10 @@ PrefabInstance:
       value: 'Name: Mandirigma'
       objectReference: {fileID: 0}
     - target: {fileID: 8736277700817544867, guid: abfc41d4823e2cf41a3f50f9396393e8, type: 3}
+      propertyPath: m_margin.y
+      value: -0.22009611
+      objectReference: {fileID: 0}
+    - target: {fileID: 8736277700817544867, guid: abfc41d4823e2cf41a3f50f9396393e8, type: 3}
       propertyPath: m_fontAsset
       value: 
       objectReference: {fileID: 11400000, guid: 4e8dd65133158cd4283d4ffa9261a4f8, type: 2}
@@ -275,23 +298,42 @@ PrefabInstance:
       propertyPath: m_hasFontAssetChanged
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 9099830617726667927, guid: abfc41d4823e2cf41a3f50f9396393e8, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -3.98
+      objectReference: {fileID: 0}
+    - target: {fileID: 9099830617726667927, guid: abfc41d4823e2cf41a3f50f9396393e8, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -1.24
+      objectReference: {fileID: 0}
     - target: {fileID: 9121598992925917676, guid: abfc41d4823e2cf41a3f50f9396393e8, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: -7964874584001456753, guid: 4e8dd65133158cd4283d4ffa9261a4f8, type: 2}
     - target: {fileID: 9171633910482918789, guid: abfc41d4823e2cf41a3f50f9396393e8, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -0.61
+      value: 3.44
       objectReference: {fileID: 0}
     - target: {fileID: 9171633910482918789, guid: abfc41d4823e2cf41a3f50f9396393e8, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -2.04
+      value: -2.06
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: abfc41d4823e2cf41a3f50f9396393e8, type: 3}
+--- !u!114 &570034148899041392 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6107991936922729141, guid: abfc41d4823e2cf41a3f50f9396393e8, type: 3}
+  m_PrefabInstance: {fileID: 5992841156654959301}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9541d86e2fd84c1d9990edf0852d74ab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshPro
 --- !u!212 &1822778642561894896 stripped
 SpriteRenderer:
   m_CorrespondingSourceObject: {fileID: 5359590059526882101, guid: abfc41d4823e2cf41a3f50f9396393e8, type: 3}
@@ -335,3 +377,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cbd8775deffb8b459c1b63d3200bf1e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::StatusEffectsUI
+--- !u!114 &6857139501811646239 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 865726095398974938, guid: abfc41d4823e2cf41a3f50f9396393e8, type: 3}
+  m_PrefabInstance: {fileID: 5992841156654959301}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9541d86e2fd84c1d9990edf0852d74ab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshPro
+--- !u!114 &6955594597374322694 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3723884430287037123, guid: abfc41d4823e2cf41a3f50f9396393e8, type: 3}
+  m_PrefabInstance: {fileID: 5992841156654959301}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9541d86e2fd84c1d9990edf0852d74ab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshPro

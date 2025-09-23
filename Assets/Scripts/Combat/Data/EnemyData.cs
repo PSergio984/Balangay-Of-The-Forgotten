@@ -37,21 +37,21 @@ public class EnemyData : ScriptableObject
     [field: Range(1, 500)]
     [field: ValidateInput("@AttackPower > 0", "Attack Power must be greater than 0")]
     [field: InfoBox("@\"ATK: \" + AttackPower + (AttackPower <= 5 ? \" (Weak)\" : AttackPower >= 20 ? \" (Strong)\" : \" (Normal)\")", InfoMessageType.None)]
-    public int AttackPower { get; private set; }
+    public float AttackPower { get; private set; }
     
     [HorizontalGroup("Secondary Stats")]
     [field: SerializeField]
     [field: LabelText("Magic Power (MAG)")]
     [field: Range(1, 500)]
     [field: ValidateInput("@MagicPower > 0", "Magic Power must be greater than 0")]
-    public int MagicPower { get; private set; }
+    public float MagicPower { get; private set; }
     
     [HorizontalGroup("Secondary Stats")]
     [field: SerializeField]
     [field: LabelText("Defense (DEF)")]
     [field: Range(1, 500)]
     [field: ValidateInput("@Defense > 0", "Defense must be greater than 0")]
-    public int Defense { get; private set; }
+    public float Defense { get; private set; }
     
     
 }

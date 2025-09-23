@@ -75,7 +75,7 @@ public class ArmorStatusEffectSystem : MonoBehaviour
             // Only process if target has armor
             if (armorStacks > 0)
             {
-                int remainingDamage = damageAction.Amount;
+                int remainingDamage = (int)damageAction.Amount;
                 
                 // Armor completely absorbs the damage
                 if (armorStacks >= remainingDamage)

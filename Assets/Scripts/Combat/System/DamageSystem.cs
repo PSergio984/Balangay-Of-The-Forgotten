@@ -106,7 +106,7 @@ public class DamageSystem : MonoBehaviour
             }
 
             // Apply the damage amount to this target (reduces their health)
-            target.Damage(dealDamageGA.Amount);
+            target.Damage((int)dealDamageGA.Amount);
 
             // Check if target still exists after taking damage (safety check)
             if (target != null)

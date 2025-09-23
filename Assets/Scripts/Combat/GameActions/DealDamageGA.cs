@@ -53,7 +53,7 @@ public class DealDamageGA : GameAction, IHaveCaster
     /// Raw damage number that gets handled by DamageSystem.
     /// Things like armor, buffs, or resistances get applied when processing.
     /// </remarks>
-    public int Amount { get; set; }
+    public float Amount { get; set; }
     
     /// <summary>
     /// Who will receive the damage
@@ -85,7 +85,7 @@ public class DealDamageGA : GameAction, IHaveCaster
     /// Caster parameter enables perk system to know who caused the damage.
     /// Important for keeping the action system working properly where planned actions can't be changed.
     /// </remarks>
-    public DealDamageGA(int amount, List<CombatantView> targets, CombatantView caster)
+    public DealDamageGA(float amount, List<CombatantView> targets, CombatantView caster)
     {
         Amount = amount;
         // Safe copy prevents outside changes to planned action
