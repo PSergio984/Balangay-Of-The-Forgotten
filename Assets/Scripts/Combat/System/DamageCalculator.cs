@@ -24,7 +24,7 @@ public static class DamageCalculator
     /// Calculates if an attack hits, based on accuracy and a d20 roll.
     /// </summary>
     /// <param name="accuracy">Chance to hit (0-1, e.g. 0.75 for 75%)</param>
-/// <returns>True if hit, false if miss</returns>
+   /// <returns>True if hit, false if miss</returns>
     public static bool CalculateAccuracy(float accuracy)
     {
         // Simulate d20 roll: 1 = miss, 20 = crit, else check accuracy

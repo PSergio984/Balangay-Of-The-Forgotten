@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemyData
   <Image>k__BackingField: {fileID: -312960777802842039, guid: c7b30abf60dfe9448b45597da8c184d0, type: 3}
   <EnemyName>k__BackingField: Apolaki
-  <Health>k__BackingField: 3000
-  <AttackPower>k__BackingField: 420
+  <Health>k__BackingField: 1700
+  <AttackPower>k__BackingField: 360
   <MagicPower>k__BackingField: 70
   <Defense>k__BackingField: 150

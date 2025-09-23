@@ -32,7 +32,12 @@ MonoBehaviour:
     - rid: 8634069057923187646
       type: {class: DealDamageEffect, ns: , asm: Assembly-CSharp}
       data:
-        damageAmount: 100
+        baseDamage: 0
+        accuracy: 0.8
+        critChance: 0
+        defenseIgnore: 0
+        AttackAmp: 3.34
+        MagicAmp: 0
     - rid: 8634069515110449820
       type: {class: HeroTM, ns: , asm: Assembly-CSharp}
       data: 

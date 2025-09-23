@@ -30,11 +30,21 @@ MonoBehaviour:
     - rid: 8634069038218609607
       type: {class: DealDamageEffect, ns: , asm: Assembly-CSharp}
       data:
-        damageAmount: 100
+        baseDamage: 0
+        accuracy: 1
+        critChance: 0
+        defenseIgnore: 0
+        AttackAmp: 1
+        MagicAmp: 1
     - rid: 8634069038218609608
       type: {class: RandomTargetTM, ns: , asm: Assembly-CSharp}
       data: 
     - rid: 8634069038218609609
       type: {class: DealDamageEffect, ns: , asm: Assembly-CSharp}
       data:
-        damageAmount: 150
+        baseDamage: 0
+        accuracy: 0.8
+        critChance: 0
+        defenseIgnore: 100
+        AttackAmp: 2.25
+        MagicAmp: 1
