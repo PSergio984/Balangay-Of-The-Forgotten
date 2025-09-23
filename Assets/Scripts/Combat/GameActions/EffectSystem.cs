@@ -87,7 +87,7 @@ public class EffectSystem : MonoBehaviour
     {
         // Get the specific game action that this effect should perform (damage, heal, etc.)
         // Pass the targets and caster info so the effect knows who is involved
-        GameAction effectAction = performEffectGA.Effect.GetGameAction(performEffectGA.Targets, HeroSystem.Instance.HeroView);
+        GameAction effectAction = performEffectGA.Effect.GetGameAction(performEffectGA.Targets, CurrentHeroUtil.GetCurrentHero());
         // Add the effect's action to the action queue to be processed by other systems
         ActionSystem.Instance.AddReaction(effectAction);
         // Wait one frame before continuing to ensure proper coroutine execution flow

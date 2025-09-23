@@ -1,9 +1,10 @@
-using UnityEngine;
+
 using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
 using System;
-using UnityEngine.Rendering;
+using UnityEngine;
+using Random = UnityEngine.Random;
 
 /* ENEMY SYSTEM DOCUMENTATION
  * 
@@ -210,7 +211,7 @@ public class EnemySystem : Singleton<EnemySystem>
         // Animate the enemy moving back to original position - moves right 1 unit in 0.25 seconds
         attacker.transform.DOMoveX(attacker.transform.position.x + 1f, 0.25f);
         // Create a damage action with caster tracking for perk system
-        DealDamageGA dealDamageGA = new(attacker.AttackPower, new() { HeroSystem.Instance.HeroView },attackHeroGA.Caster);
+        DealDamageGA dealDamageGA = new(attacker.AttackPower, new() { HeroSystem.Instance.HeroViews[Random.Range(0, 4)] }, attackHeroGA.Caster);
         // Add the damage action to the queue to actually hurt the hero
         ActionSystem.Instance.AddReaction(dealDamageGA);
     }

@@ -57,9 +57,9 @@ public class TestSystem : MonoBehaviour
     /// Called automatically by Unity when the game starts.
     /// Sends the test card data to CardSystem for deck initialization.
     /// </remarks>
-    private void Start()
-    {
-        // Set up CardSystem with the test card data for development testing
-        CardSystem.Instance.Setup(deckData);
-    }
+    // private void Start()
+    // {
+    //     // Set up CardSystem with the test card data for development testing
+    //     CardSystem.Instance.Setup(deckData);
+    // }
 }
