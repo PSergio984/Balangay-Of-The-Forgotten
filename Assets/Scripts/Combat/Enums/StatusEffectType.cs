@@ -26,9 +26,54 @@ public enum StatusEffectType
     /// Armor effect - reduces incoming damage
     /// </summary>
     ARMOR,
-    
+
+    /// <summary>
+    /// Attack Up effect - increases attack stat
+    /// </summary>
+    ATTACK_UP,
+
     /// <summary>
     /// Burn effect - deals damage over time
     /// </summary>
-    BURN
+    BURN,
+
+    /// <summary>
+    /// Crit Up effect - increases critical hit chance
+    /// </summary>
+    CRIT_UP,
+
+    /// <summary>
+    /// Defense Down effect - decreases defense stat
+    /// </summary>
+    DEFENSE_DOWN,
+
+    /// <summary>
+    /// Defense Up effect - increases defense stat
+    /// </summary>
+    DEFENSE_UP,
+
+    /// <summary>
+    /// Dmg Up effect - increases damage dealt
+    /// </summary>
+    DMG_UP,
+
+    /// <summary>
+    /// Ignore Defense effect - ignores a portion of target's defense
+    /// </summary>
+    IGNORE_DEFENSE,
+
+    /// <summary>
+    /// Invulnerable effect - makes combatant immune to damage
+    /// </summary>
+    INVULNERABLE,
+
+    /// <summary>
+    /// Taunt effect - forces enemies to target this combatant
+    /// </summary>
+    TAUNT,
+
+    /// <summary>
+    /// Temporary HP effect - adds temporary health that can absorb damage
+    /// </summary>
+    TEMP_HP,
 }
