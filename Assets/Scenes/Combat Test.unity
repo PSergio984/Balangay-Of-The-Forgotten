@@ -574,9 +574,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MatchSetupSystem
   heroDatas:
+  - {fileID: 11400000, guid: ecd70fead39c604478465b5740ce1be9, type: 2}
   - {fileID: 11400000, guid: a83a06f715f5393469e0ec728b3268bd, type: 2}
   - {fileID: 11400000, guid: 00604324e0069ad408f4fd447ca991d4, type: 2}
-  - {fileID: 11400000, guid: ecd70fead39c604478465b5740ce1be9, type: 2}
   - {fileID: 11400000, guid: f22d3d7dafeec894e8377b3099e8cda6, type: 2}
   enemyDatas:
   - {fileID: 11400000, guid: 2e357dbd3dbadc848a8449ee7b5ea48e, type: 2}
@@ -929,7 +929,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5967d4e0ffe13e34eb74acd92a8cc384, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HeroSystem
-  HeroBoardView: {fileID: 0}
+  HeroBoardView: {fileID: 1413238674}
 --- !u!1 &405109497
 GameObject:
   m_ObjectHideFlags: 0
@@ -1603,7 +1603,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a7331cf9929c78948b4d1112b906ccb5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HeroViewCreator
-  heroViewPrefab: {fileID: 0}
+  heroViewPrefab: {fileID: 1247206982686742041, guid: 2ea412685a506404ab79b2528399428c, type: 3}
 --- !u!1 &619394800
 GameObject:
   m_ObjectHideFlags: 0
@@ -2900,7 +2900,6 @@ GameObject:
   - component: {fileID: 1623214357}
   - component: {fileID: 1623214356}
   - component: {fileID: 1623214355}
-  - component: {fileID: 1623214358}
   m_Layer: 5
   m_Name: StaminaUI
   m_TagString: Untagged
@@ -2979,19 +2978,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1623214353}
   m_CullTransparentMesh: 1
---- !u!114 &1623214358
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1623214353}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a7331cf9929c78948b4d1112b906ccb5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::HeroViewCreator
-  heroViewPrefab: {fileID: 0}
 --- !u!1 &1687521519
 GameObject:
   m_ObjectHideFlags: 0

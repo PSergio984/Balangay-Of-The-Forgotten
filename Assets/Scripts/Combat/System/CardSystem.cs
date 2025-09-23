@@ -4,47 +4,48 @@ using System.Collections.Generic;
 using DG.Tweening;
 
 /* CARD SYSTEM DESIGN
- * 
+ *
  * How it works:
- * - Handles drawing cards from deck to hand with animations
+ * - Each hero has their own deck, hand, and discard pile (no cross-hero card access)
+ * - Handles drawing cards from the correct hero's deck to their hand with animations
  * - Manages card playing including manual targeting and regular effects
  * - Processes card-related game actions and reactions
- * - Controls card lifecycle from deck through hand to discard pile
+ * - Controls card lifecycle from deck through hand to discard pile, all per-hero
  * - Routes manual target effects separately from auto-target effects
- * 
+ *
  * Design reasoning:
+ * - Ensures strict per-hero deck/hand/discard logic for party-based gameplay
  * - Separates manual targeting from auto-targeting for cleaner effect processing
  * - Manual target effects get the player-selected target directly
  * - Other effects still use their own target modes for flexibility
  * - Same card playing flow handles both targeting types seamlessly
- * 
+ *
  * Integration: Works with ActionSystem, HandView, EffectSystem, ManualTargetingSystem, and other card components
  */
 
 /// <summary>
-/// Core system that manages all card functionality including deck, hand, and card actions
+/// Core system that manages all card functionality including per-hero deck, hand, and card actions
 /// </summary>
 /// <remarks>
-/// <para><strong>Purpose:</strong> Controls all card-related gameplay mechanics and state</para>
-/// 
-/// <para><strong>What it does:</strong> This system handles everything related to cards - 
-/// drawing from deck, managing the hand, playing cards, discarding, and shuffling. 
-/// It also handles card animations and integrates with the action system to process 
-/// card-related actions.</para>
-/// 
+/// <para><strong>Purpose:</strong> Controls all card-related gameplay mechanics and state for each hero independently</para>
+///
+/// <para><strong>What it does:</strong> This system handles everything related to cards for each hero -
+/// drawing from the correct hero's deck, managing their hand, playing cards, discarding, and shuffling.
+/// It also handles card animations and integrates with the action system to process card-related actions.</para>
+///
 /// <para><strong>How it works:</strong></para>
 /// <list type="bullet">
-/// <item>Sets up deck from card data at game start</item>
-/// <item>Draws cards from deck to hand when requested</item>
-/// <item>Handles card playing with effects and stamina costs</item>
-/// <item>Manages discarding and deck refilling</item>
-/// <item>Responds to enemy turns by discarding/drawing cards</item>
+/// <item>Sets up a separate deck, hand, and discard pile for each hero at game start</item>
+/// <item>Draws cards from the correct hero's deck to their hand when requested</item>
+/// <item>Handles card playing with effects and stamina costs, always using the correct hero's hand</item>
+/// <item>Manages discarding and deck refilling per-hero (no cross-hero card movement)</item>
+/// <item>Responds to enemy turns by discarding/drawing cards for the correct hero</item>
 /// </list>
-/// 
+///
 /// <para><strong>Needs:</strong> HandView for card display, ActionSystem for processing, card prefabs</para>
-/// 
+///
 /// <para><strong>Works with:</strong> ActionSystem, HandView, EffectSystem, StaminaSystem</para>
-/// 
+///
 /// <para><strong>How to use:</strong> Set up references in Inspector, system handles card management automatically</para>
 /// </remarks>
 public class CardSystem : Singleton<CardSystem>
@@ -57,11 +58,13 @@ public class CardSystem : Singleton<CardSystem>
     private List<List<Card>> drawPiles = new();
     private List<List<Card>> discardPiles = new();
     private List<List<Card>> hands = new();
-    private int activeHeroIndex = 0;
 
+    // Only for UI/display, not for logic
+    private int activeHeroIndex = 0;
     public int ActiveHeroIndex => activeHeroIndex;
     public int HeroCount => drawPiles.Count;
 
+    // Set active hero for UI, but do NOT use for logic
     public void SetActiveHero(int heroIndex)
     {
         if (heroIndex >= 0 && heroIndex < drawPiles.Count)
@@ -144,26 +147,20 @@ public class CardSystem : Singleton<CardSystem>
     /// </remarks>
     private IEnumerator DrawCardsPerformer(DrawCardsGA drawCardsGA)
     {
-    int heroIndex = CurrentHeroUtil.CurrentHeroIndex;
-    Debug.Log($"[CardSystem] Drawing cards for hero index: {heroIndex}");
-    var drawPile = drawPiles[heroIndex];
-    var discardPile = discardPiles[heroIndex];
-    var hand = hands[heroIndex];
-        int actualAmount = Mathf.Min(drawCardsGA.Amount, drawPile.Count);
-        int notDrawAmount = drawCardsGA.Amount - actualAmount;
-
-        for (int i = 0; i < actualAmount; i++)
+        int heroIndex = CurrentHeroUtil.CurrentHeroIndex;
+        Debug.Log($"[CardSystem] Drawing cards for hero index: {heroIndex}");
+        var drawPile = drawPiles[heroIndex];
+        var discardPile = discardPiles[heroIndex];
+        var hand = hands[heroIndex];
+        int totalToDraw = drawCardsGA.Amount;
+        for (int i = 0; i < totalToDraw; i++)
         {
-            yield return DrawCard(heroIndex);
-        }
-
-        if (notDrawAmount > 0)
-        {
-            RefillDeck(heroIndex);
-            for (int i = 0; i < notDrawAmount; i++)
+            // If deck is empty, try to refill from discard
+            if (drawPile.Count == 0 && discardPile.Count > 0)
             {
-                yield return DrawCard(heroIndex);
+                RefillDeck(heroIndex);
             }
+            yield return DrawCard(heroIndex);
         }
     }
 
@@ -181,10 +178,12 @@ public class CardSystem : Singleton<CardSystem>
     {
         int heroIndex = CurrentHeroUtil.CurrentHeroIndex;
         var hand = hands[heroIndex];
-        foreach (var card in hand)
+        // Copy to avoid modifying collection during iteration
+        var handCopy = new List<Card>(hand);
+        foreach (var card in handCopy)
         {
             CardView cardView = handView.RemoveCard(card);
-            yield return DiscardCard(cardView);
+            yield return DiscardCard(cardView, heroIndex);
         }
         hand.Clear();
     }
@@ -205,7 +204,7 @@ public class CardSystem : Singleton<CardSystem>
         var discardPile = discardPiles[heroIndex];
         hand.Remove(playCardsGA.Card);
         CardView cardView = handView.RemoveCard(playCardsGA.Card);
-        yield return DiscardCard(cardView);
+    yield return DiscardCard(cardView, heroIndex);
         SpendStaminaGA spendStaminaGA = new (playCardsGA.Card.Stamina);
         ActionSystem.Instance.AddReaction(spendStaminaGA);
 
@@ -239,7 +238,12 @@ public class CardSystem : Singleton<CardSystem>
     {
         var drawPile = drawPiles[heroIndex];
         var hand = hands[heroIndex];
-        Card card = drawPile.Draw();
+        Card card = null;
+        if (drawPile.Count > 0)
+        {
+            card = drawPile[0];
+            drawPile.RemoveAt(0);
+        }
         if (card == null)
         {
             Debug.LogWarning($"[CardSystem] Tried to draw a card for hero {heroIndex}, but deck and discard are empty.");
@@ -260,10 +264,10 @@ public class CardSystem : Singleton<CardSystem>
     /// </remarks>
     private void RefillDeck(int heroIndex)
     {
-        var drawPile = drawPiles[heroIndex];
-        var discardPile = discardPiles[heroIndex];
-        drawPile.AddRange(discardPile);
-        discardPile.Clear();
+    var drawPile = drawPiles[heroIndex];
+    var discardPile = discardPiles[heroIndex];
+    drawPile.AddRange(discardPile);
+    discardPile.Clear();
     }
 
     /// <summary>
@@ -276,9 +280,10 @@ public class CardSystem : Singleton<CardSystem>
     /// animates it scaling down and moving to discard position, then destroys the GameObject.
     /// Used when cards are played or when hand is cleared.
     /// </remarks>
-    private IEnumerator DiscardCard(CardView cardView)
+    // Overload to specify heroIndex
+    private IEnumerator DiscardCard(CardView cardView, int heroIndex)
     {
-        var discardPile = discardPiles[activeHeroIndex];
+        var discardPile = discardPiles[heroIndex];
         discardPile.Add(cardView.Card);
         cardView.transform.DOScale(Vector3.zero, 0.15f);
         Tween tween = cardView.transform.DOMove(discardPilePoint.position, 0.15f);
@@ -290,4 +295,4 @@ public class CardSystem : Singleton<CardSystem>
             Destroy(cardView.gameObject);
         }
     }
-}
+    }
