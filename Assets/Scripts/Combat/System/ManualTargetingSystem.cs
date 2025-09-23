@@ -86,13 +86,13 @@ public class ManualTargetingSystem : Singleton<ManualTargetingSystem>
     /// Ends targeting process and returns the selected target if valid
     /// </summary>
     /// <param name="endPosition">Where the player released the mouse (target location)</param>
-    /// <returns>EnemyView if valid target found, null if no valid target</returns>
+    /// <returns>HeroView if valid target found, null if no valid target</returns>
     /// <remarks>
     /// Called when player releases mouse to select target. Uses raycast to check
     /// if there's a valid target at the end position. Hides the arrow visual
     /// regardless of whether a valid target was found.
     /// </remarks>
-    public EnemyView EndTargeting(Vector3 endPosition)
+    public HeroView EndTargeting(Vector3 endPosition)
     {
         // Hide the targeting arrow since targeting is finished
         arrowView.gameObject.SetActive(false);
@@ -100,10 +100,10 @@ public class ManualTargetingSystem : Singleton<ManualTargetingSystem>
         // Check if there's a valid target where the player clicked
         if (Physics.Raycast(endPosition, Vector3.forward, out RaycastHit hit, 10f, targetLayerMask) && 
             hit.collider != null && 
-            hit.transform.TryGetComponent(out EnemyView enemyView))
+            hit.transform.TryGetComponent(out HeroView heroView))
         {
             // Valid target found - return it
-            return enemyView;
+            return heroView;
         }
         
         // No valid target found

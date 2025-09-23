@@ -443,7 +443,7 @@ public class CardView : MonoBehaviour
         if (Card.ManualTargetEffects != null)
         {
             // End targeting and get the selected target from mouse position
-            EnemyView target = ManualTargetingSystem.Instance.EndTargeting(MouseUtil.GetMousePositionInWorldSpace(-1));
+            HeroView target = ManualTargetingSystem.Instance.EndTargeting(MouseUtil.GetMousePositionInWorldSpace(-1));
             
             // Play the card if valid target found and player has enough stamina
             if(target!= null && StaminaSystem.Instance.HasEnoughStamina(Card.Stamina))

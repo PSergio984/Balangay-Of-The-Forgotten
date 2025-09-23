@@ -10,7 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 7836871753176773751}
   - component: {fileID: 1247206982686742041}
-  m_Layer: 0
+  - component: {fileID: -4528005571670633682}
+  m_Layer: 7
   m_Name: HeroView
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -27,7 +28,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.55, y: 0.55, z: 0.55}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 2677894596413044061}
@@ -49,6 +50,27 @@ MonoBehaviour:
   NameText: {fileID: 4699126763313871957}
   statusEffectsUI: {fileID: 5077156918235726462}
   spriteRenderer: {fileID: 1822778642561894896}
+--- !u!65 &-4528005571670633682
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3833778510174320965}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &5992841156654959301
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -73,6 +95,10 @@ PrefabInstance:
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: -7964874584001456753, guid: 4e8dd65133158cd4283d4ffa9261a4f8, type: 2}
+    - target: {fileID: 965356848671135990, guid: abfc41d4823e2cf41a3f50f9396393e8, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 1305058331028108944, guid: abfc41d4823e2cf41a3f50f9396393e8, type: 3}
       propertyPath: m_fontAsset
       value: 
@@ -129,6 +155,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: HealthText
       objectReference: {fileID: 0}
+    - target: {fileID: 2710306368348089860, guid: abfc41d4823e2cf41a3f50f9396393e8, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 3162758254623073385, guid: abfc41d4823e2cf41a3f50f9396393e8, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 3284066645139058842, guid: abfc41d4823e2cf41a3f50f9396393e8, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 5359590059526882101, guid: abfc41d4823e2cf41a3f50f9396393e8, type: 3}
       propertyPath: m_Sprite
       value: 
@@ -148,6 +186,10 @@ PrefabInstance:
     - target: {fileID: 8443129629403683970, guid: abfc41d4823e2cf41a3f50f9396393e8, type: 3}
       propertyPath: m_Name
       value: NameText
+      objectReference: {fileID: 0}
+    - target: {fileID: 8443129629403683970, guid: abfc41d4823e2cf41a3f50f9396393e8, type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 8503662190939717528, guid: abfc41d4823e2cf41a3f50f9396393e8, type: 3}
       propertyPath: m_LocalPosition.x
@@ -192,6 +234,10 @@ PrefabInstance:
     - target: {fileID: 8642917124413522030, guid: abfc41d4823e2cf41a3f50f9396393e8, type: 3}
       propertyPath: m_Name
       value: CombatantViewBase
+      objectReference: {fileID: 0}
+    - target: {fileID: 8642917124413522030, guid: abfc41d4823e2cf41a3f50f9396393e8, type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 8736277700817544867, guid: abfc41d4823e2cf41a3f50f9396393e8, type: 3}
       propertyPath: m_text

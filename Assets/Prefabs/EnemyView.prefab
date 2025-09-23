@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 5624960612057680535}
   - component: {fileID: 1138282576373855932}
   - component: {fileID: 6487009872886678393}
-  m_Layer: 7
+  m_Layer: 0
   m_Name: AttackText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -190,7 +190,7 @@ GameObject:
   - component: {fileID: 6299611088830314261}
   - component: {fileID: 8822996112574267595}
   - component: {fileID: 7659909115800132482}
-  m_Layer: 7
+  m_Layer: 0
   m_Name: EnemyView
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -312,6 +312,10 @@ PrefabInstance:
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: -7964874584001456753, guid: 4e8dd65133158cd4283d4ffa9261a4f8, type: 2}
+    - target: {fileID: 965356848671135990, guid: abfc41d4823e2cf41a3f50f9396393e8, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1305058331028108944, guid: abfc41d4823e2cf41a3f50f9396393e8, type: 3}
       propertyPath: m_margin.y
       value: 0.14594078
@@ -358,7 +362,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2710306368348089860, guid: abfc41d4823e2cf41a3f50f9396393e8, type: 3}
       propertyPath: m_Layer
-      value: 7
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3162758254623073385, guid: abfc41d4823e2cf41a3f50f9396393e8, type: 3}
+      propertyPath: m_Layer
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3284066645139058842, guid: abfc41d4823e2cf41a3f50f9396393e8, type: 3}
       propertyPath: m_Name
@@ -366,7 +374,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3284066645139058842, guid: abfc41d4823e2cf41a3f50f9396393e8, type: 3}
       propertyPath: m_Layer
-      value: 7
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3645048977168393474, guid: abfc41d4823e2cf41a3f50f9396393e8, type: 3}
       propertyPath: m_PresetInfoIsWorld
@@ -394,7 +402,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8443129629403683970, guid: abfc41d4823e2cf41a3f50f9396393e8, type: 3}
       propertyPath: m_Layer
-      value: 7
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8503662190939717528, guid: abfc41d4823e2cf41a3f50f9396393e8, type: 3}
       propertyPath: m_LocalPosition.x
@@ -442,7 +450,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8642917124413522030, guid: abfc41d4823e2cf41a3f50f9396393e8, type: 3}
       propertyPath: m_Layer
-      value: 7
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8736277700817544867, guid: abfc41d4823e2cf41a3f50f9396393e8, type: 3}
       propertyPath: m_fontAsset

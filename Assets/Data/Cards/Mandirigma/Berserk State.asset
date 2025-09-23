@@ -19,9 +19,20 @@ MonoBehaviour:
   <RoleIcon>k__BackingField: {fileID: 21300000, guid: 0f40153a1aeaf1348981c8654b35d01d, type: 3}
   <ManualTargetEffect>k__BackingField:
     rid: -2
-  <OtherEffects>k__BackingField: []
+  <OtherEffects>k__BackingField:
+  - <targetMode>k__BackingField:
+      rid: 8634069515110449821
+    <effects>k__BackingField:
+      rid: 8634069515110449822
   references:
     version: 2
     RefIds:
     - rid: -2
       type: {class: , ns: , asm: }
+    - rid: 8634069515110449821
+      type: {class: EveryoneTM, ns: , asm: Assembly-CSharp}
+      data: 
+    - rid: 8634069515110449822
+      type: {class: DealDamageEffect, ns: , asm: Assembly-CSharp}
+      data:
+        damageAmount: 0
