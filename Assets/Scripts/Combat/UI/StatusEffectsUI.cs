@@ -43,7 +43,7 @@ public class StatusEffectsUI : MonoBehaviour
     /// These images represent each type of status effect visually.
     /// Armor sprite for armor effects, burn sprite for burn effects, etc.
     /// </remarks>
-    [SerializeField] private Sprite armorSprite, burnSprite;
+    [SerializeField] private Sprite armorSprite, attackUpSprite, burnSprite, critUpSprite, defenseDownSprite, defenseUpSprite, dmgUpSprite, ignoreDefenseSprite, invulnerableSprite, tauntSprite, tempHpSprite;
     
     /// <summary>
     /// Dictionary tracking all currently displayed status effect UIs
@@ -110,11 +110,17 @@ public class StatusEffectsUI : MonoBehaviour
     {
         return statusEffectType switch
         {
-            // Armor effect shows a shield-like sprite
             StatusEffectType.ARMOR => armorSprite,
-            // Burn effect shows a fire-like sprite
+            StatusEffectType.ATTACK_UP => attackUpSprite,
             StatusEffectType.BURN => burnSprite,
-            // Unknown effect types return null (no sprite)
+            StatusEffectType.CRIT_UP => critUpSprite,
+            StatusEffectType.DEFENSE_DOWN => defenseDownSprite,
+            StatusEffectType.DEFENSE_UP => defenseUpSprite,
+            StatusEffectType.DMG_UP => dmgUpSprite,
+            StatusEffectType.IGNORE_DEFENSE => ignoreDefenseSprite,
+            StatusEffectType.INVULNERABLE => invulnerableSprite,
+            StatusEffectType.TAUNT => tauntSprite,
+            StatusEffectType.TEMP_HP => tempHpSprite,
             _ => null,
         };
     }

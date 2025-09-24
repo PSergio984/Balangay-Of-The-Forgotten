@@ -12,9 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d6b46991f21540249a505cc6d07a919b, type: 3}
   m_Name: Apolaki
   m_EditorClassIdentifier: Assembly-CSharp::EnemyData
-  <Image>k__BackingField: {fileID: -312960777802842039, guid: c7b30abf60dfe9448b45597da8c184d0, type: 3}
+  <Image>k__BackingField: {fileID: 21300000, guid: c7b30abf60dfe9448b45597da8c184d0, type: 3}
   <EnemyName>k__BackingField: Apolaki
   <Health>k__BackingField: 1700
   <AttackPower>k__BackingField: 360
   <MagicPower>k__BackingField: 70
   <Defense>k__BackingField: 150
+  <Moveset>k__BackingField:
+  - {fileID: 11400000, guid: 6d31a1e68608f5a409c475849e9f9aa6, type: 2}

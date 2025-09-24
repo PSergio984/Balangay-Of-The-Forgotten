@@ -1,10 +1,25 @@
 fileFormatVersion: 2
-guid: 251d619571f7a0a4c991316c82f362ec
+guid: df7549f40319e1945a655f4f57b6ccea
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 7511935507092196789
-    second: Bakunawa_0
+      213: -4586139286690665960
+    second: guardian_s oath_0
+  - first:
+      213: -1243182502352036437
+    second: guardian_s oath_1
+  - first:
+      213: 2257055216551304095
+    second: guardian_s oath_2
+  - first:
+      213: 634241474661095831
+    second: guardian_s oath_3
+  - first:
+      213: -6626794431937531858
+    second: guardian_s oath_4
+  - first:
+      213: -2674604282509420841
+    second: guardian_s oath_5
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -126,13 +141,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Bakunawa_0
+      name: guardian_s oath_0
       rect:
         serializedVersion: 2
-        x: 89
-        y: 79
-        width: 542
-        height: 802
+        x: 287
+        y: 305
+        width: 506
+        height: 452
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -141,8 +156,118 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 5bdcfd33b81cf3860800000000000000
-      internalID: 7511935507092196789
+      spriteID: 81ae65efd92ca50c0800000000000000
+      internalID: -4586139286690665960
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: guardian_s oath_1
+      rect:
+        serializedVersion: 2
+        x: 305
+        y: 755
+        width: 56
+        height: 56
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bad535cc9145fbee0800000000000000
+      internalID: -1243182502352036437
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: guardian_s oath_2
+      rect:
+        serializedVersion: 2
+        x: 647
+        y: 737
+        width: 92
+        height: 92
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f9b9bf4d2cba25f10800000000000000
+      internalID: 2257055216551304095
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: guardian_s oath_3
+      rect:
+        serializedVersion: 2
+        x: 251
+        y: 287
+        width: 92
+        height: 92
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7999ef6c2474dc800800000000000000
+      internalID: 634241474661095831
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: guardian_s oath_4
+      rect:
+        serializedVersion: 2
+        x: 395
+        y: 233
+        width: 56
+        height: 56
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e20b3dc0395e804a0800000000000000
+      internalID: -6626794431937531858
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: guardian_s oath_5
+      rect:
+        serializedVersion: 2
+        x: 737
+        y: 287
+        width: 92
+        height: 92
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7d699426395e1ead0800000000000000
+      internalID: -2674604282509420841
       vertices: []
       indices: 
       edges: []
@@ -161,7 +286,12 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Bakunawa_0: 7511935507092196789
+      guardian_s oath_0: -4586139286690665960
+      guardian_s oath_1: -1243182502352036437
+      guardian_s oath_2: 2257055216551304095
+      guardian_s oath_3: 634241474661095831
+      guardian_s oath_4: -6626794431937531858
+      guardian_s oath_5: -2674604282509420841
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

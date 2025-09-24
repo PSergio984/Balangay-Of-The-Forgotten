@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 251d619571f7a0a4c991316c82f362ec
+guid: 0b2f5866b3848224fb38e5e43e391337
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 7511935507092196789
-    second: Bakunawa_0
+      213: -5538738184119238449
+    second: Shield Bash_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -126,13 +126,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Bakunawa_0
+      name: Shield Bash_0
       rect:
         serializedVersion: 2
-        x: 89
-        y: 79
-        width: 542
-        height: 802
+        x: 107
+        y: 53
+        width: 884
+        height: 956
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -141,8 +141,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 5bdcfd33b81cf3860800000000000000
-      internalID: 7511935507092196789
+      spriteID: fc04eaf87f27223b0800000000000000
+      internalID: -5538738184119238449
       vertices: []
       indices: 
       edges: []
@@ -161,7 +161,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Bakunawa_0: 7511935507092196789
+      Shield Bash_0: -5538738184119238449
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
