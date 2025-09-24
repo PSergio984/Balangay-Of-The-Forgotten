@@ -155,20 +155,13 @@ public class EnemySystem : Singleton<EnemySystem>
     private IEnumerator EnemyTurnPerformer(EnemyTurnGA enemyTurnGA)
     {
 
-        // Loop through every enemy currently on the board
-        foreach (var enemy in enemyBoardView.EnemyViews)
-        {
-            // Check for burn stacks and apply damage if present
-            int burnStacks = enemy.GetStatusEffectStacks(StatusEffectType.BURN);
-            if (burnStacks > 0)
-            {
-                // Apply burn damage = stack count
-                ApplyBurnGA applyBurnGA = new(burnStacks, enemy);
-                ActionSystem.Instance.AddReaction(applyBurnGA);
-            }
-            
-            // Create an attack action with caster tracking for perk system
-            // Note: Dead enemies will be removed by KillEnemyGA after damage is processed
+    // Use StatusEffectTickSystem to process all enemy status effect ticks
+        StatusEffectTickSystem.Instance.TickStatusEffects(enemyBoardView.EnemyViews.ConvertAll(e => (CombatantView)e));
+    // After status effect ticks, make all enemies attack
+    foreach (var enemy in enemyBoardView.EnemyViews)
+    {
+        // Create an attack action with caster tracking for perk system
+        // Note: Dead enemies will be removed by KillEnemyGA after damage is processed
             // This ensures proper turn order: Burn → Damage Processing → Death → Attack
             AttackHeroGA attackHeroGA = new(enemy);
             ActionSystem.Instance.AddReaction(attackHeroGA);

@@ -150,23 +150,8 @@ public class HeroSystem : Singleton<HeroSystem>
     /// </remarks>
     private void EnemyTurnPostReaction(EnemyTurnGA enemyTurnGA)
     {
-        // Apply burn and reduce Invulnerable stacks for all heroes
-        foreach (var hero in HeroViews)
-        {
-            // Burn damage
-            int burnStacks = hero.GetStatusEffectStacks(StatusEffectType.BURN);
-            if (burnStacks > 0)
-            {
-                ApplyBurnGA applyBurnGA = new(burnStacks, hero);
-                ActionSystem.Instance.AddReaction(applyBurnGA);
-            }
-            // Invulnerable stack reduction
-            int invulStacks = hero.GetStatusEffectStacks(StatusEffectType.INVULNERABLE);
-            if (invulStacks > 0)
-            {
-                hero.RemoveStatusEffect(StatusEffectType.INVULNERABLE, 1);
-            }
-        }
+        // Use StatusEffectTickSystem to process all enemy status effect ticks
+        StatusEffectTickSystem.Instance.TickStatusEffects(HeroBoardView.HeroViews.ConvertAll(e => (CombatantView)e));
         // Draw new hand for the player's next turn
         DrawCardsGA drawCardsGA = new(5);
         ActionSystem.Instance.AddReaction(drawCardsGA);
