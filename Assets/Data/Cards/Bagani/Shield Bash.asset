@@ -15,7 +15,7 @@ MonoBehaviour:
   <Description>k__BackingField: Shield Bash
   <Information>k__BackingField: test
   <Stamina>k__BackingField: 20
-  <Image>k__BackingField: {fileID: 21300000, guid: f73f68fe6815f5548a6c2a61b9e49add, type: 3}
+  <Image>k__BackingField: {fileID: 21300000, guid: 0b2f5866b3848224fb38e5e43e391337, type: 3}
   <RoleIcon>k__BackingField: {fileID: 21300000, guid: 2696e95f1e73f4b4a986dd2593fd13b0, type: 3}
   <ManualTargetEffect>k__BackingField:
     rid: -2

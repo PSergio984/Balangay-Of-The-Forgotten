@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 251d619571f7a0a4c991316c82f362ec
+guid: 151cbacb01ab64043951a40703c215ed
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 7511935507092196789
-    second: Bakunawa_0
+      213: -6234443117175072907
+    second: last stand_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -126,13 +126,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Bakunawa_0
+      name: last stand_0
       rect:
         serializedVersion: 2
-        x: 89
-        y: 79
+        x: 339
+        y: 259
         width: 542
-        height: 802
+        height: 722
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -141,8 +141,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 5bdcfd33b81cf3860800000000000000
-      internalID: 7511935507092196789
+      spriteID: 5779664340fca79a0800000000000000
+      internalID: -6234443117175072907
       vertices: []
       indices: 
       edges: []
@@ -161,7 +161,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Bakunawa_0: 7511935507092196789
+      last stand_0: -6234443117175072907
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

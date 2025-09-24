@@ -1,10 +1,19 @@
 fileFormatVersion: 2
-guid: 251d619571f7a0a4c991316c82f362ec
+guid: 3a407efcaee3ff947985fafa1017759e
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 7511935507092196789
-    second: Bakunawa_0
+      213: 8884450956226027453
+    second: taunt_0
+  - first:
+      213: 3694105366958170120
+    second: taunt_1
+  - first:
+      213: -4941823259070761408
+    second: taunt_2
+  - first:
+      213: 3464921677159071052
+    second: taunt_3
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -126,13 +135,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Bakunawa_0
+      name: taunt_0
       rect:
         serializedVersion: 2
-        x: 89
-        y: 79
-        width: 542
-        height: 802
+        x: 377
+        y: 755
+        width: 128
+        height: 128
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -141,8 +150,74 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 5bdcfd33b81cf3860800000000000000
-      internalID: 7511935507092196789
+      spriteID: dbf5b36a219eb4b70800000000000000
+      internalID: 8884450956226027453
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: taunt_1
+      rect:
+        serializedVersion: 2
+        x: 539
+        y: 755
+        width: 38
+        height: 182
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 800e7605249144330800000000000000
+      internalID: 3694105366958170120
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: taunt_2
+      rect:
+        serializedVersion: 2
+        x: 611
+        y: 755
+        width: 128
+        height: 128
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 046f254cded1b6bb0800000000000000
+      internalID: -4941823259070761408
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: taunt_3
+      rect:
+        serializedVersion: 2
+        x: 269
+        y: 215
+        width: 578
+        height: 524
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c4dfd9d48efd51030800000000000000
+      internalID: 3464921677159071052
       vertices: []
       indices: 
       edges: []
@@ -161,7 +236,10 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Bakunawa_0: 7511935507092196789
+      taunt_0: 8884450956226027453
+      taunt_1: 3694105366958170120
+      taunt_2: -4941823259070761408
+      taunt_3: 3464921677159071052
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

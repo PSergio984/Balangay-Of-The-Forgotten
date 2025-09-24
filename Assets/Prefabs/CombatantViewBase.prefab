@@ -552,6 +552,7 @@ MonoBehaviour:
   statusEffectUIPrefab: {fileID: 5011485877358572500, guid: 2e427b1bfb27e1c418427a32f592d4be, type: 3}
   armorSprite: {fileID: 21300000, guid: 6d13f6ea92c812944a03bc26314663c8, type: 3}
   burnSprite: {fileID: 21300000, guid: 6f8feab35fd9bcf429c94eb37edee724, type: 3}
+  tauntSprite: {fileID: 21300000, guid: 3a407efcaee3ff947985fafa1017759e, type: 3}
 --- !u!114 &7886810224053934251
 MonoBehaviour:
   m_ObjectHideFlags: 0
