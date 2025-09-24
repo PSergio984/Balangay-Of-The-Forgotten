@@ -1,3 +1,5 @@
+
+using System.Collections.Generic;
 using UnityEngine;
 
 /* ATTACK HERO GA DOCUMENTATION
@@ -48,6 +50,7 @@ using UnityEngine;
 // Now supports perk system through IHaveCaster interface
 public class AttackHeroGA : GameAction,IHaveCaster
 {
+
     /// <summary>
     /// The enemy that is performing the attack
     /// </summary>
@@ -57,6 +60,14 @@ public class AttackHeroGA : GameAction,IHaveCaster
     /// </remarks>
     // The enemy that is performing the attack - stored as reference
     public EnemyView Attacker { get; private set; }
+
+    /// <summary>
+    /// The hero targets for this attack action. Can be overridden by status effects (e.g., taunt).
+    /// </summary>
+    /// <remarks>
+    /// By default, this is null and targeting is handled by the EnemySystem. If set, this list overrides default targeting logic.
+    /// </remarks>
+    public List<HeroView> Targets { get; set; }
 
     /// <summary>
     /// The character who caused this action (same as Attacker, but for perk system)
@@ -79,9 +90,11 @@ public class AttackHeroGA : GameAction,IHaveCaster
     // Constructor - creates a new attack action with the specified enemy as attacker
     public AttackHeroGA(EnemyView attacker)
     {
-        // Store which enemy is doing the attacking
-        Attacker = attacker;
-        // Also store as Caster for perk system reactive targeting
-        Caster = attacker;
+    // Store which enemy is doing the attacking
+    Attacker = attacker;
+    // Also store as Caster for perk system reactive targeting
+    Caster = attacker;
+    // Targets is null by default; can be set by status effect systems
+    Targets = null;
     }
 }

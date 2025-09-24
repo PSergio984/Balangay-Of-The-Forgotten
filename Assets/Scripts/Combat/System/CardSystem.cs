@@ -204,7 +204,7 @@ public class CardSystem : Singleton<CardSystem>
         var discardPile = discardPiles[heroIndex];
         hand.Remove(playCardsGA.Card);
         CardView cardView = handView.RemoveCard(playCardsGA.Card);
-    yield return DiscardCard(cardView, heroIndex);
+        yield return DiscardCard(cardView, heroIndex);
         SpendStaminaGA spendStaminaGA = new (playCardsGA.Card.Stamina);
         ActionSystem.Instance.AddReaction(spendStaminaGA);
 

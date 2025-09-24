@@ -43,7 +43,11 @@ using UnityEngine;
 public class EnemyView : CombatantView
 {
 
-    
+    /// <summary>
+    /// The EnemyData asset containing stats, moveset, and other info for this enemy
+    /// </summary>
+    public EnemyData Data { get; private set; }
+
     /// <summary>
     /// Sets up this enemy view with data from an EnemyData asset
     /// </summary>
@@ -51,13 +55,12 @@ public class EnemyView : CombatantView
     /// <remarks>
     /// This initializes the enemy with all its starting values. Sets attack power,
     /// updates the attack display, then calls the base setup for health, image, and name.
+    /// Also stores the EnemyData reference for moveset and other logic.
     /// </remarks>
-    /// 
     public void Setup(EnemyData enemyData)
     {
+        Data = enemyData;
         // Set up the base combatant properties using explicit values
         SetupBase(enemyData.Health, enemyData.Image, enemyData.EnemyName, enemyData.MagicPower, enemyData.AttackPower, enemyData.Defense);
-    }   
-    
-   
+    }
 }
