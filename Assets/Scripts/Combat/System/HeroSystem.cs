@@ -123,45 +123,53 @@ public class HeroSystem : Singleton<HeroSystem>
     }
 
     /// <summary>
-    /// Reacts to enemy turn end by applying burn damage and drawing new hand
+    /// Reacts to enemy turn end by applying burn damage, reducing Invulnerable stacks, and drawing new hand
     /// </summary>
     /// <param name="enemyTurnGA">The enemy turn action that triggered this reaction</param>
     /// <remarks>
-    /// This reaction happens after the enemy turn fully completes.
+/// This reaction happens after the enemy turn fully completes.
     /// 
-    /// BURN EFFECT INTEGRATION:
-    /// First checks if the hero has burn stacks. If they do, creates an ApplyBurnGA
-    /// action to deal burn damage equal to the number of stacks. This is how the
-    /// burn damage over time effect works - it triggers at the end of every enemy turn.
+    /// <b>BURN EFFECT INTEGRATION:</b>
+    /// For each hero in the party, checks for burn stacks and creates an ApplyBurnGA action
+    /// to deal burn damage equal to the number of stacks. Burn damage is processed for all heroes,
+    /// not just the first hero, supporting multi-hero parties. Burn stacks reduce by 1 each time, creating a countdown effect.
     /// 
-    /// Then draws 5 cards to give the player a fresh hand for their next turn.
-    /// Part of the turn cycle management to prepare the player for their turn.
+    /// <b>INVULNERABLE EFFECT INTEGRATION:</b>
+    /// For each hero in the party, checks for Invulnerable stacks and reduces them by 1 at the end of the enemy turn.
+    /// This ensures Invulnerable status expires after a set number of turns, regardless of whether the hero was attacked.
     /// 
-    /// How to use burn effects:
-    /// 1. Cards/perks apply burn stacks using AddStatusEffectEffect with BURN type
-    /// 2. Status effects show burn icon with stack count to player
-    /// 3. Each enemy turn, this reaction triggers burn damage automatically
-    /// 4. BurnSystem handles the damage with fire visual effects
-    /// 5. Burn stacks reduce by 1 each time, creating countdown effect
+    /// <b>TURN CYCLE MANAGEMENT:</b>
+    /// After processing status effects, draws 5 cards to give the player a fresh hand for their next turn.
+    /// 
+    /// <b>How to use status effects:</b>
+    /// 1. Cards/perks apply burn or Invulnerable stacks using AddStatusEffectEffect with the appropriate type
+    /// 2. Status effects show icons and stack counts to the player
+    /// 3. Each enemy turn, this reaction triggers burn damage and Invulnerable stack reduction automatically
+    /// 4. BurnSystem and InvulnerableStatusEffectSystem handle the effects and damage blocking
+    /// 5. Stacks reduce by 1 each time, creating countdown effects for both statuses
     /// </remarks>
     private void EnemyTurnPostReaction(EnemyTurnGA enemyTurnGA)
     {
-        // Check if hero has burn stacks and apply damage if they do
-        // For now, apply burn to the first hero in the party (can be expanded for all heroes)
-        if (HeroViews.Count > 0)
+        // Apply burn and reduce Invulnerable stacks for all heroes
+        foreach (var hero in HeroViews)
         {
-            var firstHero = HeroViews[0];
-            int burnStacks = firstHero.GetStatusEffectStacks(StatusEffectType.BURN);
+            // Burn damage
+            int burnStacks = hero.GetStatusEffectStacks(StatusEffectType.BURN);
             if (burnStacks > 0)
             {
-                ApplyBurnGA applyBurnGA = new(burnStacks, firstHero);
+                ApplyBurnGA applyBurnGA = new(burnStacks, hero);
                 ActionSystem.Instance.AddReaction(applyBurnGA);
+            }
+            // Invulnerable stack reduction
+            int invulStacks = hero.GetStatusEffectStacks(StatusEffectType.INVULNERABLE);
+            if (invulStacks > 0)
+            {
+                hero.RemoveStatusEffect(StatusEffectType.INVULNERABLE, 1);
             }
         }
         // Draw new hand for the player's next turn
         DrawCardsGA drawCardsGA = new(5);
         ActionSystem.Instance.AddReaction(drawCardsGA);
-      
     }
 
    
