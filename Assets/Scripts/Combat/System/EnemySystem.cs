@@ -88,8 +88,6 @@ public class EnemySystem : Singleton<EnemySystem>
     {
         // Register a method to handle when it's the enemy's turn
         ActionSystem.AttachPerformer<EnemyTurnGA>(EnemyTurnPerformer);
-        // Register a method to handle when an enemy attacks the hero
-        ActionSystem.AttachPerformer<AttackHeroGA>(AttackHeroPerformer);
         // Register a method to handle when an enemy needs to be killed/removed
         ActionSystem.AttachPerformer<KillEnemyGA>(KillEnemyPerformer);
     }
@@ -106,8 +104,6 @@ public class EnemySystem : Singleton<EnemySystem>
     {
         // Unregister the enemy turn handler
         ActionSystem.DetachPerformer<EnemyTurnGA>();
-        // Unregister the attack hero handler
-        ActionSystem.DetachPerformer<AttackHeroGA>();
         // Unregister the kill enemy handler
         ActionSystem.DetachPerformer<KillEnemyGA>();
     }
@@ -155,16 +151,49 @@ public class EnemySystem : Singleton<EnemySystem>
     private IEnumerator EnemyTurnPerformer(EnemyTurnGA enemyTurnGA)
     {
 
-    // Use StatusEffectTickSystem to process all enemy status effect ticks
+        // Use StatusEffectTickSystem to process all enemy status effect ticks
         StatusEffectTickSystem.Instance.TickStatusEffects(enemyBoardView.EnemyViews.ConvertAll(e => (CombatantView)e));
-    // After status effect ticks, make all enemies attack
-    foreach (var enemy in enemyBoardView.EnemyViews)
-    {
-        // Create an attack action with caster tracking for perk system
-        // Note: Dead enemies will be removed by KillEnemyGA after damage is processed
-            // This ensures proper turn order: Burn → Damage Processing → Death → Attack
-            AttackHeroGA attackHeroGA = new(enemy);
-            ActionSystem.Instance.AddReaction(attackHeroGA);
+
+        // After status effect ticks, make all enemies use a move from their moveset
+        foreach (var enemy in enemyBoardView.EnemyViews)
+        {
+            // Skip dead enemies
+            if (enemy.CurrentHealth <= 0)
+                continue;
+
+            // Get the moveset from EnemyData
+            var moveset = enemy.Data?.Moveset;
+            if (moveset == null || moveset.Count == 0)
+            {
+                // Fallback: basic attack if no moveset
+                AttackHeroGA fallbackAttack = new(enemy);
+                ActionSystem.Instance.AddReaction(fallbackAttack);
+                continue;
+            }
+
+            // Randomly select a move
+            var move = moveset[Random.Range(0, moveset.Count)];
+
+            // Handle manual target effect (single-target, e.g., attack or debuff)
+            if (move.ManualTargetEffect != null)
+            {
+                // For now, target a random hero (could be improved with AI logic)
+                var heroTargets = HeroSystem.Instance.HeroViews;
+                var target = heroTargets[Random.Range(0, heroTargets.Count)];
+                PerformEffectGA performEffectGA = new(move.ManualTargetEffect, new List<CombatantView> { target });
+                ActionSystem.Instance.AddReaction(performEffectGA);
+            }
+
+            // Handle auto-target effects (area, self-buff, etc.)
+            if (move.OtherEffects != null && move.OtherEffects.Count > 0)
+            {
+                foreach (var effectWrapper in move.OtherEffects)
+                {
+                    List<CombatantView> targets = effectWrapper.targetMode.GetTargets();
+                    PerformEffectGA performEffectGA = new(effectWrapper.effects, targets);
+                    ActionSystem.Instance.AddReaction(performEffectGA);
+                }
+            }
         }
         // Wait one frame before continuing (required for coroutines)
         yield return null;
@@ -177,9 +206,6 @@ public class EnemySystem : Singleton<EnemySystem>
     /// <returns>Waits for animations to complete before continuing</returns>
     /// <remarks>
     /// This method creates the visual attack sequence with animations and damage creation.
-    /// 
-    /// BURN INTEGRATION: Checks if enemy is still alive before attacking.
-    /// If enemy died to burn damage, the attack is cancelled silently.
     /// 
     /// ANIMATION: The enemy moves forward, deals damage with proper caster tracking, then moves back.
     /// The caster info gets passed to DealDamageGA so perks can know who dealt the damage.
