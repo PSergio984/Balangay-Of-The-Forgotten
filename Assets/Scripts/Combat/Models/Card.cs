@@ -74,8 +74,15 @@ public class Card
     /// Returns the card's sprite image from the underlying CardData.
     /// This is the artwork that appears on the card in the game.
     /// </remarks>
-    public Sprite image => data.Image;
-    
+    public Sprite Image => data.Image;
+
+    // These properties now look inside the CardData's 'Role' asset to get the right sprite.
+    public Sprite RoleIcon => data.RoleData.RoleIcon;
+    public Sprite RoleBackgroundSprite => data.RoleData.RoleBackgroundSprite;
+    public Sprite MainBorderSprite => data.RoleData.MainBorderSprite;
+    public Sprite InnerBorderSprite => data.RoleData.InnerBorderSprite;
+    public Sprite LowerBorderSprite => data.RoleData.LowerBorderSprite;
+
     /// <summary>
     /// The current stamina cost required to play this card
     /// </summary>
@@ -85,14 +92,6 @@ public class Card
     /// </remarks>
     public int Stamina { get; private set; }
 
-    /// <summary>
-    /// List of all effects that this card performs when played
-    /// </summary>
-    /// <remarks>
-    /// Returns the card's effects from the underlying CardData.
-    /// These effects get processed by the EffectSystem when the card is played.
-    /// </remarks>
-    public Sprite RoleIcon => data.RoleIcon;
     public Effects ManualTargetEffects => data.ManualTargetEffect;
     public List<AutoTargetEffect> OtherEffects => data.OtherEffects; 
     

@@ -101,6 +101,11 @@ public class CardView : MonoBehaviour
     /// </summary>
     [SerializeField] private SpriteRenderer imagesRole;
 
+     // ADD RENDERERS FOR THE NEW PARTS
+    [Header("Role-Based Sprites")]
+    [SerializeField] private SpriteRenderer borderSR;     // For the border
+    [SerializeField] private SpriteRenderer backgroundSR; // For the background
+
     /// <summary>
     /// Container that holds all the visual parts of the card
     /// </summary>
@@ -128,6 +133,7 @@ public class CardView : MonoBehaviour
     /// Gets set when the visual card is created.
     /// </remarks>
     public Card Card { get; private set; }
+
     
     /// <summary>
     /// Remembers where the card was before dragging started
@@ -234,14 +240,18 @@ public class CardView : MonoBehaviour
         stamina.text = card.Stamina.ToString();
         // Show the card's artwork
         imagesSR.sprite = card.image;
-        // Show the card's role icon
+        // NOW, SET ALL THE ROLE-BASED SPRITES
         imagesRole.sprite = card.RoleIcon;
-        
+        borderSR.sprite = card.CardBorder;
+        backgroundSR.sprite = card.CardBackground;
+
+
         // Store original scale for optimized hover animations
         originalScale = transform.localScale;
         // Store original rotation for optimized hover animations
         originalRotation = transform.rotation;
         // Position will be updated after hand positioning
+        
     }
     
     /// <summary>

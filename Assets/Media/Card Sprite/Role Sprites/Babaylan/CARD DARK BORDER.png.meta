@@ -1,13 +1,10 @@
 fileFormatVersion: 2
-guid: 105a27556221c144ba99d465f1441627
+guid: 761790c0edffd6d46972d34429f17287
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -3152180383845805149
-    second: Healer_0
-  - first:
-      213: -1577015749045243486
-    second: Healer_1
+      213: -8329860363021467340
+    second: CARD DARK BORDER_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -129,35 +126,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Healer_0
+      name: CARD DARK BORDER_0
       rect:
         serializedVersion: 2
-        x: 42
-        y: 40
-        width: 1847
-        height: 1335
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 3a39ae054a43144d0800000000000000
-      internalID: -3152180383845805149
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Healer_1
-      rect:
-        serializedVersion: 2
-        x: 1368
+        x: 0
         y: 0
-        width: 312
-        height: 150
+        width: 1500
+        height: 2100
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -166,8 +141,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 2a136f818805d1ae0800000000000000
-      internalID: -1577015749045243486
+      spriteID: 431cf712224666c80800000000000000
+      internalID: -8329860363021467340
       vertices: []
       indices: 
       edges: []
@@ -186,8 +161,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Healer_0: -3152180383845805149
-      Healer_1: -1577015749045243486
+      CARD DARK BORDER_0: -8329860363021467340
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
