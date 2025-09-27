@@ -1,13 +1,13 @@
 fileFormatVersion: 2
-guid: d758037223fc4a544a6984664b1f0cbf
+guid: 00f458d8c7252ba45aea4f00dd9efa24
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -7285376162372006033
-    second: Mage_0
+      213: -4624383499949477986
+    second: RoleIcon_0
   - first:
-      213: 1377322663251520538
-    second: Mage_1
+      213: -2066073773415666793
+    second: RoleIcon_1
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -129,13 +129,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Mage_0
+      name: RoleIcon_0
       rect:
         serializedVersion: 2
-        x: 47
-        y: 19
-        width: 1128
-        height: 2049
+        x: 0
+        y: 0
+        width: 92
+        height: 169
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -144,20 +144,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: f6fc7badaf425ea90800000000000000
-      internalID: -7285376162372006033
+      spriteID: e9f655435b3e2dfb0800000000000000
+      internalID: -4624383499949477986
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Mage_1
+      name: RoleIcon_1
       rect:
         serializedVersion: 2
-        x: 250
-        y: 1756
-        width: 723
-        height: 821
+        x: 15
+        y: 141
+        width: 61
+        height: 68
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -166,8 +166,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: a1ca3343aab3d1310800000000000000
-      internalID: 1377322663251520538
+      spriteID: 79beecf79d4d353e0800000000000000
+      internalID: -2066073773415666793
       vertices: []
       indices: 
       edges: []
@@ -186,8 +186,8 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Mage_0: -7285376162372006033
-      Mage_1: 1377322663251520538
+      RoleIcon_0: -4624383499949477986
+      RoleIcon_1: -2066073773415666793
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -78,8 +78,7 @@ public class ActionSystem : Singleton<ActionSystem>
     /// Like a "turn lock" - only one action can be processed at a time.
     /// Prevents chaos from multiple actions trying to execute simultaneously.
     /// </remarks>
-    // Flag to prevent multiple actions from running at the same time
-    // Like a "turn lock" - only one action can be processed at a time
+   
     public bool isPerforming { get; private set; } = false;
     
     /// <summary>
@@ -164,11 +163,7 @@ public class ActionSystem : Singleton<ActionSystem>
     /// <returns>Coroutine that processes through Pre -> Main -> Post phases</returns>
     /// <remarks>
     /// This processes actions in the correct order: Pre -> Main -> Post (like a assembly line).
-    /// Similar to how Hearthstone processes card effects in phases
     /// </remarks>
-    // The main action processing pipeline - this is the heart of the system
-    // This processes actions in the correct order: Pre -> Main -> Post (like a assembly line)
-    // Similar to how Hearthstone processes card effects in phases
     private IEnumerator Flow(GameAction action, Action OnFlowFinished = null)
     {
         // PHASE 1: Process all PRE-reactions (things that happen before the main action)
@@ -220,12 +215,11 @@ public class ActionSystem : Singleton<ActionSystem>
     /// <param name="action">The action whose main effect should be executed</param>
     /// <returns>Coroutine that runs the action's custom logic</returns>
     /// <remarks>
-    /// This is where the actual "meat" of what an action does happens.
+    /// This is where the actual  action does happens.
+    ///  Executes the main logic/effect of an action
     /// Example: AttackAction actually reduces the target's health here
     /// </remarks>
-    // Executes the main logic/effect of an action
-    // This is where the actual "meat" of what an action does happens
-    // Example: AttackAction actually reduces the target's health here
+
     private IEnumerator PerformPerformer(GameAction action)
     {
         // Get the specific type of this action (AttackAction, HealAction, etc.)
@@ -294,7 +288,8 @@ public class ActionSystem : Singleton<ActionSystem>
         // Check if we already have logic registered for this action type
         if (performers.ContainsKey(type))
         {
-            // Add to existing logic (allows for multiple effects on one action type)
+            // Add to existing logic
+            // Useful for UI and animations like adding visual effects on top of core logic
             performers[type] += wrappedPerformer;
         }
         else
@@ -333,14 +328,11 @@ public class ActionSystem : Singleton<ActionSystem>
     /// Example: SubscribeReaction&lt;AttackAction&gt;(attack => player.GainEnergy(1), ReactionTiming.Post)
     /// Means: "After any attack, the player gains 1 energy"
     /// </remarks>
-    // Registers a global reaction that triggers whenever a specific action type happens
-    // This is how you implement passive abilities and triggered effects
-    // Example: SubscribeReaction<AttackAction>(attack => player.GainEnergy(1), ReactionTiming.Post)
-    // Means: "After any attack, the player gains 1 energy"
     public static void SubscribeReaction<T>(Action<T> reaction,ReactionTiming timing) where T: GameAction
     {
         // Choose the correct dictionary based on timing (before or after the action)
-        Dictionary<Type,List<Action<GameAction>>> subs = timing == ReactionTiming.PRE ? preSubs : postSubs;
+        // then add the reaction to that dictionary
+        Dictionary<Type, List<Action<GameAction>>> subs = timing == ReactionTiming.PRE ? preSubs : postSubs;
         
         // Create a wrapper function that converts GameAction to the specific type
         void wrappedReaction(GameAction action) => reaction((T)action);
@@ -350,9 +342,10 @@ public class ActionSystem : Singleton<ActionSystem>
             // Add this reaction to the existing list
             subs[typeof(T)].Add(wrappedReaction);
         }
-        else{
-            // Create a new list for this action type and add our reaction
+        else{//If not → make a new list and add it.
+            // Create a new list for this action type 
             subs.Add(typeof(T),new ());
+            //and add our reaction
             subs[typeof(T)].Add(wrappedReaction);
         }
     }

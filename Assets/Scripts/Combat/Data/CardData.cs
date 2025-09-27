@@ -110,23 +110,12 @@ public class CardData : ScriptableObject
     [field: Required("Card needs artwork!")]
     [field: AssetsOnly]
     public Sprite Image { get; private set; }
+    [Title("Card Role")]
+    [InfoBox("Drag the Role Data asset here. This will define the card's border, background, and role icon.")]
+    [SerializeField]
+    [Required("The card must be assigned a role!")]
+    public CardRoleData RoleData;
 
-    /// <summary>
-    /// The role icon displayed on the card (tank, fighter, support, etc.)
-    /// </summary>
-    /// <remarks>
-    /// This property holds the sprite that shows what class/role this card belongs to.
-    /// Examples: sword icon for fighter cards, shield for tank cards, staff for support.
-    /// Assign a role-specific sprite asset in the Inspector to categorize the card.
-    /// This helps players quickly identify what type of card they're looking at.
-    /// </remarks>
-    [field: SerializeField]
-    [field: HorizontalGroup("Basic Info/Stats", 0.3f)]
-    [field: PreviewField(75)]
-    [field: LabelText("Card Role Icon")]
-    [field: Required("Card needs Role Icon!")]
-    [field: AssetsOnly]
-    public Sprite RoleIcon { get; private set; }
 
     [Title("Card Effects", "Define what this card does when played", TitleAlignments.Centered)]
     [InfoBox("Manual Target Effect: Player chooses the target (like single-target damage)\n" +

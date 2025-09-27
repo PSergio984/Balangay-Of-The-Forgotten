@@ -580,7 +580,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: f22d3d7dafeec894e8377b3099e8cda6, type: 2}
   enemyDatas:
   - {fileID: 11400000, guid: 2e357dbd3dbadc848a8449ee7b5ea48e, type: 2}
-  - {fileID: 11400000, guid: 2e357dbd3dbadc848a8449ee7b5ea48e, type: 2}
+  - {fileID: 11400000, guid: 47ba028629da84246952941a644ef81e, type: 2}
   perkData: {fileID: 11400000, guid: fd4f31f9e5198d040aa58d94ad128b49, type: 2}
 --- !u!1 &160960753
 GameObject:

@@ -53,6 +53,8 @@ MonoBehaviour:
   stamina: {fileID: 360757638961564808}
   imagesSR: {fileID: 4949507007284239352}
   imagesRole: {fileID: 4365808079887279785}
+  borderSR: {fileID: 0}
+  backgroundSR: {fileID: 0}
   wrapper: {fileID: 5087615122854296471}
   dropLayer:
     serializedVersion: 2
@@ -101,7 +103,7 @@ GameObject:
   - component: {fileID: 4049789817476806746}
   - component: {fileID: 4365808079887279785}
   m_Layer: 0
-  m_Name: Role
+  m_Name: RoleIcon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

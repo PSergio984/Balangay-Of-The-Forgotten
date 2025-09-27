@@ -1,16 +1,10 @@
 fileFormatVersion: 2
-guid: 0f40153a1aeaf1348981c8654b35d01d
+guid: d026c4b1b326fdd409b0f01f6a5949d1
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 712035800519618848
-    second: Sword_0
-  - first:
-      213: 1497478763720940017
-    second: Sword_1
-  - first:
-      213: -3664594969507694454
-    second: Sword_2
+      213: 207422876496634410
+    second: CARD CIRCLE_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -132,13 +126,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Sword_0
+      name: CARD CIRCLE_0
       rect:
         serializedVersion: 2
-        x: 365
-        y: 385
-        width: 618
-        height: 617
+        x: 0
+        y: 0
+        width: 348
+        height: 333
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -147,52 +141,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 021355db9c8a1e900800000000000000
-      internalID: 712035800519618848
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Sword_1
-      rect:
-        serializedVersion: 2
-        x: 671
-        y: 691
-        width: 1640
-        height: 1636
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 1f9174a600d18c410800000000000000
-      internalID: 1497478763720940017
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Sword_2
-      rect:
-        serializedVersion: 2
-        x: 59
-        y: 78
-        width: 414
-        height: 412
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: a887fc48a4eb42dc0800000000000000
-      internalID: -3664594969507694454
+      spriteID: a222fd7d10ae0e200800000000000000
+      internalID: 207422876496634410
       vertices: []
       indices: 
       edges: []
@@ -211,9 +161,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Sword_0: 712035800519618848
-      Sword_1: 1497478763720940017
-      Sword_2: -3664594969507694454
+      CARD CIRCLE_0: 207422876496634410
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
