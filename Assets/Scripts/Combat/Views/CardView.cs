@@ -239,11 +239,11 @@ public class CardView : MonoBehaviour
         // Show how much stamina the card costs
         stamina.text = card.Stamina.ToString();
         // Show the card's artwork
-        imagesSR.sprite = card.image;
+        imagesSR.sprite = card.Image;
         // NOW, SET ALL THE ROLE-BASED SPRITES
         imagesRole.sprite = card.RoleIcon;
-        borderSR.sprite = card.CardBorder;
-        backgroundSR.sprite = card.CardBackground;
+        borderSR.sprite = card.MainBorderSprite;
+        backgroundSR.sprite = card.RoleBackgroundSprite;
 
 
         // Store original scale for optimized hover animations

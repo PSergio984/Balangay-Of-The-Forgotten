@@ -110,11 +110,16 @@ public class CardData : ScriptableObject
     [field: Required("Card needs artwork!")]
     [field: AssetsOnly]
     public Sprite Image { get; private set; }
-    [Title("Card Role")]
-    [InfoBox("Drag the Role Data asset here. This will define the card's border, background, and role icon.")]
-    [SerializeField]
-    [Required("The card must be assigned a role!")]
-    public CardRoleData RoleData;
+
+    /// <summary>
+    /// The role defines the visual theme of the card (border, icon, etc.).
+    /// </summary>
+    [field: SerializeField]
+    [field: BoxGroup("Basic Info")]
+    [field: Required("Card must have a role!")]
+    [field: AssetsOnly]
+    [field: LabelText("Card Role")]
+    public CardRoleData RoleData { get; private set; }
 
 
     [Title("Card Effects", "Define what this card does when played", TitleAlignments.Centered)]

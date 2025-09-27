@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 52324f393f315e14fa75a0e4c6aaba17
+guid: 870446614a28167408d7fbdd22ea55a5
 TrueTypeFontImporter:
   externalObjects: {}
   serializedVersion: 4
@@ -9,10 +9,10 @@ TrueTypeFontImporter:
   characterPadding: 1
   includeFontData: 1
   fontNames:
-  - Omega Pixel Biform
+  - Pixeloid Sans
   fallbackFontReferences: []
   customCharacters: 
-  fontRenderingMode: 0
+  fontRenderingMode: 2
   ascentCalculationMode: 1
   useLegacyBoundsCalculation: 0
   shouldRoundAdvanceValue: 1
