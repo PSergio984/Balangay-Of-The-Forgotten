@@ -205,12 +205,12 @@ public class CardSystem : Singleton<CardSystem>
         hand.Remove(playCardsGA.Card);
         CardView cardView = handView.RemoveCard(playCardsGA.Card);
         yield return DiscardCard(cardView, heroIndex);
-        SpendStaminaGA spendStaminaGA = new (playCardsGA.Card.Stamina);
-        ActionSystem.Instance.AddReaction(spendStaminaGA);
+        // SpendStaminaGA spendStaminaGA = new (playCardsGA.Card.Stamina);
+        // ActionSystem.Instance.AddReaction(spendStaminaGA);
 
-        if (playCardsGA.Card.ManualTargetEffects != null)
+        if (playCardsGA.Card.ManualTargetEffect != null)
         {
-            PerformEffectGA performEffectGA = new(playCardsGA.Card.ManualTargetEffects, new() { playCardsGA.ManualTarget });
+            PerformEffectGA performEffectGA = new(playCardsGA.Card.ManualTargetEffect, new() { playCardsGA.ManualTarget });
             ActionSystem.Instance.AddReaction(performEffectGA);
         }
 
