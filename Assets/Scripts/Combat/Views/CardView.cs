@@ -5,21 +5,21 @@ using DG.Tweening;
 /* CARD VIEW DESIGN
  * 
  * How it works:
- * - Displays card info like description, information, stamina cost, artwork, and role icon
+ * - Displays card info like description, information artwork, and role icon
  * - Uses DOTween for smooth hover animations (scale, position, rotation)
  * - Handles both drag-to-play and manual targeting interactions
  * - For manual target cards: shows targeting arrow instead of dragging
  * - For regular cards: uses drag-and-drop to play them
- * - Checks if player has enough stamina before playing any card
+ * 
  * 
  * Design reasoning:
  * - Separates manual targeting from drag behavior to provide clear feedback
  * - Manual target cards feel more precise and intentional than drag-and-drop
- * - Both interaction styles use the same stamina validation for consistency
+ * - Both interaction styles use the same  for consistency
  * - DOTween provides smooth, optimized animations for better UX
  * - Visual feedback helps players understand different card interaction modes
  * 
- * Integration: Works with DOTween hover system, drag system, stamina system, and ManualTargetingSystem
+ * Integration: Works with DOTween hover system, drag system, and ManualTargetingSystem
  */
 
 /// <summary>
@@ -30,7 +30,7 @@ using DG.Tweening;
 /// 
 /// <para><strong>What it does:</strong> This component makes cards visible to players 
 /// and lets them interact with the cards. It shows the card's description, information, 
-/// stamina cost, artwork, and role icon. Players can hover over cards to see smooth 
+///  artwork, and role icon. Players can hover over cards to see smooth 
 /// animations, and drag cards to play them if they have enough stamina.</para>
 /// 
 /// <para><strong>How it works:</strong></para>
@@ -38,13 +38,13 @@ using DG.Tweening;
 /// <item>Card gets created and displays its information</item>
 /// <item>Player hovers mouse over card to see smooth scale/position/rotation animations</item>
 /// <item>Player clicks and drags card to play it</item>
-/// <item>Game checks if player has enough stamina to play the card</item>
+/// <item>Game checks if player has enough to play the card</item>
 /// <item>Card either gets played or returns to hand</item>
 /// </list>
 /// 
-/// <para><strong>Needs:</strong> Card data to display, DOTween for animations, stamina system for costs</para>
+/// <para><strong>Needs:</strong> Card data to display, DOTween for animations</para>
 /// 
-/// <para><strong>Works with:</strong> DOTween for animations, StaminaSystem for costs, ActionSystem for playing</para>
+/// <para><strong>Works with:</strong> DOTween for animations, , ActionSystem for playing</para>
 /// 
 /// <para><strong>How to use:</strong> Attach to card prefab and assign UI text components in Inspector</para>
 /// </remarks>
@@ -74,16 +74,6 @@ public class CardView : MonoBehaviour
     [SerializeField] private TMP_Text information;
 
     
-    /// <summary>
-    /// Text that shows how much stamina the card costs to play
-    /// </summary>
-    /// <remarks>
-    /// This text component displays the stamina cost.
-    /// Players need this much stamina to use the card.
-    /// </remarks>
-    // Text component to display the stamina cost required to play the card
-    [SerializeField] private TMP_Text stamina;
-    
     
     /// <summary>
     /// Image component that shows the card's artwork
@@ -99,12 +89,19 @@ public class CardView : MonoBehaviour
     /// <summary>
     /// Image component that shows the card's role icon
     /// </summary>
-    [SerializeField] private SpriteRenderer imagesRole;
+
+    [SerializeField] private SpriteRenderer RoleCircle;
+
+    [SerializeField] private SpriteRenderer Glass;
 
      // ADD RENDERERS FOR THE NEW PARTS
     [Header("Role-Based Sprites")]
     [SerializeField] private SpriteRenderer borderSR;     // For the border
     [SerializeField] private SpriteRenderer backgroundSR; // For the background
+    [SerializeField] private SpriteRenderer MainBorder;
+    [SerializeField] private SpriteRenderer OuterBorder;
+    [SerializeField] private SpriteRenderer LowerBorder;
+    [SerializeField] private SpriteRenderer RoleIcon;
 
     /// <summary>
     /// Container that holds all the visual parts of the card
@@ -236,14 +233,12 @@ public class CardView : MonoBehaviour
         // Show what the card does in the description text
         description.text = card.Description;
         information.text = card.Information;
-        // Show how much stamina the card costs
-        stamina.text = card.Stamina.ToString();
         // Show the card's artwork
         imagesSR.sprite = card.Image;
         // NOW, SET ALL THE ROLE-BASED SPRITES
-        imagesRole.sprite = card.RoleIcon;
-        borderSR.sprite = card.MainBorderSprite;
-        backgroundSR.sprite = card.RoleBackgroundSprite;
+    RoleIcon.sprite = card.RoleIcon;
+    borderSR.sprite = card.MainBorder;
+    backgroundSR.sprite = card.RoleBackground;
 
 
         // Store original scale for optimized hover animations
@@ -382,7 +377,7 @@ public class CardView : MonoBehaviour
         if (!Interactions.Instance.PlayerCanInteract()) return;
         
         // Check if this card needs manual targeting (like single-target spells)
-        if (Card.ManualTargetEffects != null)
+        if (Card.ManualTargetEffect != null)
         {
             // Remember where the card started so we can put it back if targeting fails
             dragStartPosition = transform.position;
@@ -433,7 +428,7 @@ public class CardView : MonoBehaviour
         if (!Interactions.Instance.PlayerCanInteract()) return;
         
         // Manual target cards don't drag - they use targeting arrows instead
-        if(Card.ManualTargetEffects != null)
+        if(Card.ManualTargetEffect != null)
         {
             return;
         }
@@ -454,13 +449,12 @@ public class CardView : MonoBehaviour
         if (!Interactions.Instance.PlayerCanInteract()) return;
 
         // Handle manual target cards (like single-target damage spells)
-        if (Card.ManualTargetEffects != null)
+        if (Card.ManualTargetEffect != null)
         {
             // End targeting and get the selected target from mouse position
             HeroView target = ManualTargetingSystem.Instance.EndTargeting(MouseUtil.GetMousePositionInWorldSpace(-1));
             
-            // Play the card if valid target found and player has enough stamina
-            if(target!= null && StaminaSystem.Instance.HasEnoughStamina(Card.Stamina))
+            if(target!= null)
             {
                 // Clear targeting state since targeting is complete
                 Interactions.Instance.PlayerIsTargeting = false;
@@ -472,7 +466,7 @@ public class CardView : MonoBehaviour
             {
                 // Clear targeting state since targeting failed
                 Interactions.Instance.PlayerIsTargeting = false;
-                // No valid target or not enough stamina - return card to original position with smooth animation
+                // No valid target- return card to original position with smooth animation
                 // Use originalPosition (hand position) instead of dragStartPosition for manual targeting cards
                 transform.DOMove(originalPosition, 0.3f).SetEase(Ease.OutQuart);
                 transform.DORotate(dragStartRotation.eulerAngles, 0.3f).SetEase(Ease.OutQuart);
@@ -484,8 +478,7 @@ public class CardView : MonoBehaviour
         }
         else
         {
-            // Check if player has enough stamina AND the card is over a valid drop area
-            if (StaminaSystem.Instance.HasEnoughStamina(Card.Stamina) && Physics.Raycast(transform.position, Vector3.forward, out RaycastHit hit, 10f, dropLayer))
+            if (Physics.Raycast(transform.position, Vector3.forward, out RaycastHit hit, 10f, dropLayer))
             {
                 // Player can play this card - create a play card action
                 PlayCardsGA playCardGA = new(Card);

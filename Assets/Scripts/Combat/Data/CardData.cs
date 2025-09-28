@@ -89,12 +89,12 @@ public class CardData : ScriptableObject
     /// This property defines how much stamina the player must spend to play this card.
     /// Set this in the Inspector to balance the card's power level with its cost.
     /// </remarks>
-    [field: SerializeField] 
-    [field: HorizontalGroup("Basic Info/Stats")]
-    [field: LabelText("Stamina Cost")]
-    [field: Range(0, 100)]
-    [field: InfoBox("@\"Stamina Cost: \" + Stamina + (Stamina == 0 ? \" (FREE!)\" : Stamina >= 80 ? \" (Expensive)\" : \" (Average)\")", InfoMessageType.None)]
-    public int Stamina { get; private set; }
+    // [field: SerializeField] 
+    // [field: HorizontalGroup("Basic Info/Stats")]
+    // [field: LabelText("Stamina Cost")]
+    // [field: Range(0, 100)]
+    // [field: InfoBox("@\"Stamina Cost: \" + Stamina + (Stamina == 0 ? \" (FREE!)\" : Stamina >= 80 ? \" (Expensive)\" : \" (Average)\")", InfoMessageType.None)]
+    // public int Stamina { get; private set; }
 
     /// <summary>
     /// The artwork/image displayed on the card

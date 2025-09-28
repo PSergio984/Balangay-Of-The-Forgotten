@@ -48,6 +48,13 @@ public class Card
     /// Returns the card's title from the underlying CardData.
     /// This is what players see as the card's name in the game.
     /// </remarks>
+    /// <summary>
+    /// The display name/title of this card
+    /// </summary>
+    /// <remarks>
+    /// Returns the card's title from the underlying CardData.
+    /// This is what players see as the card's name in the game.
+    /// </remarks>
     public string Title => data.Description;
     
     /// <summary>
@@ -57,9 +64,16 @@ public class Card
     /// Returns the card's description from the underlying CardData.
     /// This explains the card in general way.
     /// </remarks>
+    /// <summary>
+    /// The description text explaining what this card does
+    /// </summary>
+    /// <remarks>
+    /// Returns the card's description from the underlying CardData.
+    /// This explains the card in general way.
+    /// </remarks>
     public string Description => data.Description;
-     /// <summary>
-    /// The description text explaining more info about this card
+    /// <summary>
+    /// The information text providing extra details about this card
     /// </summary>
     /// <remarks>
     /// Returns the card's information from the underlying CardData.
@@ -74,27 +88,54 @@ public class Card
     /// Returns the card's sprite image from the underlying CardData.
     /// This is the artwork that appears on the card in the game.
     /// </remarks>
-    public Sprite Image => data.Image;
-
-    // These properties now look inside the CardData's 'Role' asset to get the right sprite.
-    public Sprite RoleIcon => data.RoleData.RoleIcon;
-    public Sprite RoleBackgroundSprite => data.RoleData.RoleBackgroundSprite;
-    public Sprite MainBorderSprite => data.RoleData.MainBorderSprite;
-    public Sprite InnerBorderSprite => data.RoleData.InnerBorderSprite;
-    public Sprite LowerBorderSprite => data.RoleData.LowerBorderSprite;
-
     /// <summary>
-    /// The current stamina cost required to play this card
+    /// The visual artwork/image displayed on this card
     /// </summary>
     /// <remarks>
-    /// This property stores the stamina cost and can be modified during gameplay.
-    /// Players need this much stamina to play the card.
+    /// Returns the card's sprite image from the underlying CardData.
+    /// This is the artwork that appears on the card in the game.
     /// </remarks>
-    public int Stamina { get; private set; }
+    public Sprite Image => data.Image;
 
-    public Effects ManualTargetEffects => data.ManualTargetEffect;
+    // Role-based visual properties (from CardRoleData asset)
+    /// <summary>
+    /// The icon representing the card's role (from CardRoleData)
+    /// </summary>
+    public Sprite RoleIcon => data.RoleData.RoleIcon;
+    /// <summary>
+    /// The background sprite for the card's role (from CardRoleData)
+    /// </summary>
+    public Sprite RoleBackground => data.RoleData.RoleBackgroundSprite;
+    /// <summary>
+    /// The main border sprite for the card's role (from CardRoleData)
+    /// </summary>
+    public Sprite MainBorder => data.RoleData.MainBorderSprite;
+    /// <summary>
+    /// The inner border sprite for the card's role (from CardRoleData)
+    /// </summary>
+    public Sprite InnerBorder => data.RoleData.InnerBorderSprite;
+    /// <summary>
+    /// The lower border sprite for the card's role (from CardRoleData)
+    /// </summary>
+    public Sprite LowerBorder => data.RoleData.LowerBorderSprite;
+
+
+    /// <summary>
+    /// The main effect that requires manual target selection (if any)
+    /// </summary>
+    public Effects ManualTargetEffect => data.ManualTargetEffect;
+    /// <summary>
+    /// List of secondary effects that use automatic targeting
+    /// </summary>
     public List<AutoTargetEffect> OtherEffects => data.OtherEffects; 
     
+    /// <summary>
+    /// Reference to the original CardData that defines this card
+    /// </summary>
+    /// <remarks>
+    /// This field holds the ScriptableObject data that defines the card's properties.
+    /// Used to access the original card design data.
+    /// </remarks>
     /// <summary>
     /// Reference to the original CardData that defines this card
     /// </summary>
@@ -112,11 +153,19 @@ public class Card
     /// Creates a runtime card from the design-time CardData.
     /// Copies the stamina value so it can be modified during gameplay if needed.
     /// </remarks>
+    /// <summary>
+    /// Creates a new card instance from card data
+    /// </summary>
+    /// <param name="cardData">The CardData asset that defines this card's properties</param>
+    /// <remarks>
+    /// Creates a runtime card from the design-time CardData.
+    /// Copies the stamina value so it can be modified during gameplay if needed.
+    /// </remarks>
     public Card(CardData cardData)
     {
         // Store reference to the original card data
         data = cardData;
         // Copy stamina value so it can be modified during gameplay
-        Stamina = cardData.Stamina;
+       // Stamina = cardData.Stamina; // Disabled for testing purposes
     }
 }
