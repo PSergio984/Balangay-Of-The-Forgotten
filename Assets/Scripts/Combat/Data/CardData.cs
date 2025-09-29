@@ -109,7 +109,22 @@ public class CardData : ScriptableObject
     [field: LabelText("Card Art")]
     [field: Required("Card needs artwork!")]
     [field: AssetsOnly]
-    public Sprite Image { get; private set; }
+    public Sprite Art { get; private set; }
+
+       /// <summary>
+    /// The background display image for the card
+    /// </summary>
+    /// <remarks>
+    /// This property holds the sprite that appears as the card's background image.
+    /// Assign a sprite asset in the Inspector to give the card its visual background appearance.
+    /// </remarks>
+    [field: SerializeField]
+    [field: HorizontalGroup("Basic Info/Stats", 0.3f)]
+    [field: PreviewField(75)]
+    [field: LabelText("Card Background Art")]
+    [field: Required("Card needs Background Art!")]
+    [field: AssetsOnly]
+    public Sprite BackgroundArt { get; private set; }
 
     /// <summary>
     /// The role defines the visual theme of the card (border, icon, etc.).

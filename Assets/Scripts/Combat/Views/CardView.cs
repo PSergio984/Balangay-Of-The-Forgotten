@@ -83,7 +83,17 @@ public class CardView : MonoBehaviour
     /// Assign a SpriteRenderer component in the Inspector.
     /// </remarks>
     // Sprite renderer component to display the card's artwork/image
-    [SerializeField] private SpriteRenderer imagesSR;
+    [SerializeField] private SpriteRenderer CardArt;
+
+    /// <summary>
+    /// Image component that shows the card's background art
+    /// </summary>
+    /// <remarks>
+    /// This component displays the background art on the card.
+    /// Assign a SpriteRenderer component in the Inspector.
+    /// </remarks>
+    // Sprite renderer component to display the card's background art
+    [SerializeField] private SpriteRenderer BackgroundArt;
 
 
     /// <summary>
@@ -92,15 +102,27 @@ public class CardView : MonoBehaviour
 
     [SerializeField] private SpriteRenderer RoleCircle;
 
-    [SerializeField] private SpriteRenderer Glass;
+    [SerializeField] private SpriteRenderer GlassTop;
+    [SerializeField] private SpriteRenderer GlassBottom;
 
      // ADD RENDERERS FOR THE NEW PARTS
     [Header("Role-Based Sprites")]
-    [SerializeField] private SpriteRenderer borderSR;     // For the border
-    [SerializeField] private SpriteRenderer backgroundSR; // For the background
+
+    /// <summary>
+    /// Main border for the card (role-based)
+    /// </summary>
     [SerializeField] private SpriteRenderer MainBorder;
-    [SerializeField] private SpriteRenderer OuterBorder;
+    /// <summary>
+    /// Inner/dark border for the card (role-based)
+    /// </summary>
+    [SerializeField] private SpriteRenderer DarkBorder;
+    /// <summary>
+    /// Lower border for the card (role-based)
+    /// </summary>
     [SerializeField] private SpriteRenderer LowerBorder;
+    /// <summary>
+    /// Role icon for the card (role-based)
+    /// </summary>
     [SerializeField] private SpriteRenderer RoleIcon;
 
     /// <summary>
@@ -234,13 +256,13 @@ public class CardView : MonoBehaviour
         description.text = card.Description;
         information.text = card.Information;
         // Show the card's artwork
-        imagesSR.sprite = card.Image;
+        CardArt.sprite = card.CardArt;
+        BackgroundArt.sprite = card.CardBackground;
         // NOW, SET ALL THE ROLE-BASED SPRITES
-    RoleIcon.sprite = card.RoleIcon;
-    borderSR.sprite = card.MainBorder;
-    backgroundSR.sprite = card.RoleBackground;
-
-
+        RoleIcon.sprite = card.RoleIcon;
+        MainBorder.sprite = card.MainBorder;
+        DarkBorder.sprite = card.DarkBorder;
+        LowerBorder.sprite = card.LowerBorder;
         // Store original scale for optimized hover animations
         originalScale = transform.localScale;
         // Store original rotation for optimized hover animations

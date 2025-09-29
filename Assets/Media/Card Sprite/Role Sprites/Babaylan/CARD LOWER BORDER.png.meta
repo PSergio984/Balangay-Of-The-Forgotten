@@ -1,13 +1,10 @@
 fileFormatVersion: 2
-guid: 72ad729d2067f2343a7f5b3080329a8b
+guid: 4a13dfbe5dedc314da505d8b86e2b611
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 2169332516459086549
-    second: CARD TO SEE LETTER_0
-  - first:
-      213: 4927594590847489290
-    second: CARD TO SEE LETTER_1
+      213: 3301911131531946391
+    second: CARD LOWER BORDER_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -129,35 +126,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: CARD TO SEE LETTER_0
-      rect:
-        serializedVersion: 2
-        x: 0
-        y: 1835
-        width: 1500
-        height: 265
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 5d28f3b1e640b1e10800000000000000
-      internalID: 2169332516459086549
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: CARD TO SEE LETTER_1
+      name: CARD LOWER BORDER_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 1500
-        height: 790
+        width: 1416
+        height: 690
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -166,8 +141,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: a05d9904c25526440800000000000000
-      internalID: 4927594590847489290
+      spriteID: 799aeda0eaeb2dd20800000000000000
+      internalID: 3301911131531946391
       vertices: []
       indices: 
       edges: []
@@ -186,8 +161,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      CARD TO SEE LETTER_0: 2169332516459086549
-      CARD TO SEE LETTER_1: 4927594590847489290
+      CARD LOWER BORDER_0: 3301911131531946391
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
