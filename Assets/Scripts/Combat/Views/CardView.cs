@@ -60,7 +60,7 @@ public class CardView : MonoBehaviour
     /// Assign a TextMeshPro component in the Inspector.
     /// </remarks>
     // Text component to display the card's title/name
-    [SerializeField] private TMP_Text title;
+    [SerializeField] private TMP_Text Title;
     
     /// <summary>
     /// Text that explains what the card does when played
@@ -70,8 +70,8 @@ public class CardView : MonoBehaviour
     /// Assign a TextMeshPro component in the Inspector.
     /// </remarks>
     // Text component to display the card's description or effect text
-    [SerializeField] private TMP_Text description;
-    [SerializeField] private TMP_Text information;
+    [SerializeField] private TMP_Text Description;
+    [SerializeField] private TMP_Text Information;
 
     
     
@@ -124,6 +124,10 @@ public class CardView : MonoBehaviour
     /// Role icon for the card (role-based)
     /// </summary>
     [SerializeField] private SpriteRenderer RoleIcon;
+    /// <summary>
+    /// Role Background Icon for the card (role-based)
+    /// </summary>
+    [SerializeField] private SpriteRenderer RoleCircleIcon;
 
     /// <summary>
     /// Container that holds all the visual parts of the card
@@ -251,15 +255,16 @@ public class CardView : MonoBehaviour
         // Remember which card this visual represents
         Card = card;
         // Show the card's name in the title text
-        title.text = card.Title;
+        Title.text = card.Title;
         // Show what the card does in the description text
-        description.text = card.Description;
-        information.text = card.Information;
+        Description.text = card.Description;
+        Information.text = card.Information;
         // Show the card's artwork
         CardArt.sprite = card.CardArt;
         BackgroundArt.sprite = card.CardBackground;
         // NOW, SET ALL THE ROLE-BASED SPRITES
         RoleIcon.sprite = card.RoleIcon;
+        RoleCircleIcon.sprite = card.RoleCircleIcon;
         MainBorder.sprite = card.MainBorder;
         DarkBorder.sprite = card.DarkBorder;
         LowerBorder.sprite = card.LowerBorder;

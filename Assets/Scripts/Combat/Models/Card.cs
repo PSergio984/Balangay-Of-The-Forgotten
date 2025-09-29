@@ -90,6 +90,10 @@ public class Card
     /// </summary>
     public Sprite RoleIcon => data.RoleData.RoleIcon;
     /// <summary>
+    /// The icon representing the role's background (from CardRoleData)
+    /// </summary>
+    public Sprite RoleCircleIcon => data.RoleData.RoleCircleIcon;
+    /// <summary>
     /// The main border sprite for the card's role (from CardRoleData)
     /// </summary>
     public Sprite MainBorder => data.RoleData.MainBorderSprite;
