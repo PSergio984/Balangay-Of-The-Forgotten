@@ -37,6 +37,15 @@ public class CardRoleData : ScriptableObject
     [Required]
     public Sprite RoleIcon;
 
+
+    /// <summary>
+    /// The background circle of the role (displayed on the card).
+    /// </summary>
+    [Tooltip("The background circle of the role.")]
+    [PreviewField(75, ObjectFieldAlignment.Left)]
+    [Required]
+    public Sprite RoleCircleIcon;
+
     /// <summary>
     /// The main border sprite used for cards of this role.
     /// </summary>
