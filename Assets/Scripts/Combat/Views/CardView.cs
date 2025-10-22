@@ -69,9 +69,8 @@ public class CardView : MonoBehaviour
     /// This text component displays what the card targets.
     /// Assign a TextMeshPro component in the Inspector.
     /// </remarks>
-    // Text component to display the card's title/name
+    // Text component to display the card's target mode
     [SerializeField] private TMP_Text Target;
-
     /// <summary>
     /// Text that explains what the card does when played
     /// </summary>

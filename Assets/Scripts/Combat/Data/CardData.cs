@@ -56,8 +56,8 @@ public class CardData : ScriptableObject
     /// The title of the card
     /// </summary>
     /// <remarks>
-    /// This property holds the card's title mode that players see.
-    /// Set this in the Inspector to define what the card will title when played.
+    /// This property holds the card's title that players see.
+    /// Set this in the Inspector to define the card's title text.
     /// </remarks>
     [field: SerializeField]
     [field: BoxGroup("Basic Info")]
@@ -67,12 +67,12 @@ public class CardData : ScriptableObject
     [field: ValidateInput("@!string.IsNullOrWhiteSpace($value)", "title cannot be empty or whitespace")]
     public string Title { get; private set; }
 
-
+    /// <summary>
     /// <summary>
     /// The target mode of the card (choose what this card targets when played)
     /// </summary>
     /// <remarks>
-    /// Select from dropdown: AllEnemies, Everyone, Self, RandomEnemy.
+    /// Select from options: Area of Attack, Single Ally, All Allies, Self, Single Target.
     /// </remarks>
     [field: SerializeField]
     [field: BoxGroup("Basic Info")]
@@ -80,14 +80,13 @@ public class CardData : ScriptableObject
     [field: Required("Card must have a Target Mode!")]
     [field: EnumToggleButtons] // Now shows "Area of Attack" instead of "AreaOfAttack"
     public CardTargetMode Target { get; private set; }
-
-
     /// <summary>
     /// Additional Description text displayed on the card
+    /// <summary>
+    /// Description text displayed on the card
     /// </summary>
     /// <remarks>
-    /// This property holds detailed Description about the card's mechanics, lore, or usage tips.
-    /// This complements the Description field by providing extra context or flavor text.
+    /// This property holds detailed information about the card's mechanics, lore, or usage tips.
     /// Set this in the Inspector to give players more details about the card.
     /// </remarks>
     [field: SerializeField]
@@ -96,10 +95,7 @@ public class CardData : ScriptableObject
     [field: MultiLineProperty(3)]
     [field: Required("Card must have Description!")]
     [field: ValidateInput("@!string.IsNullOrWhiteSpace($value)", "Description cannot be empty or whitespace")]
-    public string Description { get; private set; }
-
-    [HorizontalGroup("Basic Info/Stats", 0.7f)]
-    /// <summary>
+    public string Description { get; private set; }    /// <summary>
     /// The stamina cost required to play this card
     /// </summary>
     /// <remarks>
