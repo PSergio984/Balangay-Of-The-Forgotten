@@ -12,11 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f203e740a37d6044b12d78636dde4c6, type: 3}
   m_Name: Piercing Arrow
   m_EditorClassIdentifier: Assembly-CSharp::CardData
-  <Description>k__BackingField: Piercing Arrow
-  <Information>k__BackingField: test
-  <Stamina>k__BackingField: 30
-  <Image>k__BackingField: {fileID: 21300000, guid: ac4a4ff77c5020d479d8a84678c54aaf, type: 3}
-  <RoleIcon>k__BackingField: {fileID: 21300000, guid: a51c82bdb4519d64db41247581f615d4, type: 3}
+  <Title>k__BackingField: PIERCING ARROW
+  <Target>k__BackingField: 4
+  <Description>k__BackingField: Deals 225% ATK, ignores defense, 80% hit
+  <Art>k__BackingField: {fileID: 21300000, guid: fff4f63a01c20564194ebba1d65c2e6a, type: 3}
+  <BackgroundArt>k__BackingField: {fileID: 21300000, guid: 680849f4f87527943a8c87a5718fc2cc, type: 3}
+  <RoleData>k__BackingField: {fileID: 11400000, guid: 22c12e1b910d4314f914ae5367dc7d2e, type: 2}
   <ManualTargetEffect>k__BackingField:
     rid: 8634069038218609607
   <OtherEffects>k__BackingField:

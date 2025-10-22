@@ -71,7 +71,7 @@ public class EnemyData : ScriptableObject
         if (Moveset.Any(move => move == null)) return false;
 
         // Check for reasonable moveset size
-        if (Moveset.Count < 5 || Moveset.Count > 50) return false;
+        if (Moveset.Count < 3 || Moveset.Count > 50) return false;
         
         return true;
     }

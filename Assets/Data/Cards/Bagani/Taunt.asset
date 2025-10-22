@@ -12,11 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f203e740a37d6044b12d78636dde4c6, type: 3}
   m_Name: Taunt
   m_EditorClassIdentifier: Assembly-CSharp::CardData
-  <Description>k__BackingField: Taunt
-  <Information>k__BackingField: test
-  <Stamina>k__BackingField: 0
-  <Image>k__BackingField: {fileID: 21300000, guid: 3a407efcaee3ff947985fafa1017759e, type: 3}
-  <RoleIcon>k__BackingField: {fileID: 21300000, guid: 2696e95f1e73f4b4a986dd2593fd13b0, type: 3}
+  <Title>k__BackingField: TAUNT
+  <Target>k__BackingField: 4
+  <Description>k__BackingField: Boss targets you for 2 turns
+  <Art>k__BackingField: {fileID: 21300000, guid: 73dc1ecceb7afb042993660c571e1bcb, type: 3}
+  <BackgroundArt>k__BackingField: {fileID: 21300000, guid: 8f042a3ef46026c4391110dba1f592fb, type: 3}
+  <RoleData>k__BackingField: {fileID: 11400000, guid: 8a873cc1966fdd641a8f8d3b47bd0288, type: 2}
   <ManualTargetEffect>k__BackingField:
     rid: -2
   <OtherEffects>k__BackingField:

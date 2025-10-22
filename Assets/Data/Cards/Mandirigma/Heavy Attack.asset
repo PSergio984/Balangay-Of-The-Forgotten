@@ -12,11 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f203e740a37d6044b12d78636dde4c6, type: 3}
   m_Name: Heavy Attack
   m_EditorClassIdentifier: Assembly-CSharp::CardData
-  <Description>k__BackingField: Heavy Attack
-  <Information>k__BackingField: test
-  <Stamina>k__BackingField: 40
-  <Image>k__BackingField: {fileID: 21300000, guid: 89a6ede59cf442f45889dbaba8941bde, type: 3}
-  <RoleIcon>k__BackingField: {fileID: 21300000, guid: 0f40153a1aeaf1348981c8654b35d01d, type: 3}
+  <Title>k__BackingField: HEAVY ATTACK
+  <Target>k__BackingField: 4
+  <Description>k__BackingField: 'Deals 334% ATK, 80% hit, 50% chance to inflict Bonecracked:
+    Reduce target DEF by 10% for next turn'
+  <Art>k__BackingField: {fileID: 21300000, guid: 2abdd3ce7dcad3d47a9c6c619e3ad23a, type: 3}
+  <BackgroundArt>k__BackingField: {fileID: 21300000, guid: 4a639004020b7db49b5c72376628a912, type: 3}
+  <RoleData>k__BackingField: {fileID: 11400000, guid: a0daa321f3e42da4481eea6b7e5f4a54, type: 2}
   <ManualTargetEffect>k__BackingField:
     rid: -2
   <OtherEffects>k__BackingField:

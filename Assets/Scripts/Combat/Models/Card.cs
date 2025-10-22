@@ -47,7 +47,16 @@ public class Card
     /// Returns the card's title from the underlying CardData.
     /// This is what players see as the card's name in the game.
     /// </remarks>
-    public string Title => data.Description;
+    public string Title => data.Title;
+
+    /// <summary>
+    /// The display target of this card
+    /// </summary>
+    /// <remarks>
+    /// Returns the card's title from the underlying CardData.
+    /// This is what players see as the card's name in the game.
+    /// </remarks>
+    public string Target => data.Target.ToDisplayString();
     
     /// <summary>
     /// The description text explaining what this card does
@@ -57,14 +66,7 @@ public class Card
     /// This explains the card in general way.
     /// </remarks>
     public string Description => data.Description;
-    /// <summary>
-    /// The information text providing extra details about this card
-    /// </summary>
-    /// <remarks>
-    /// Returns the card's information from the underlying CardData.
-    /// This explains the card's effects and abilities to the player.
-    /// </remarks>
-    public string Information => data.Information;
+    
 
     /// <summary>
     /// The visual artwork/image displayed on this card
