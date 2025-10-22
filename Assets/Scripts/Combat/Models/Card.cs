@@ -53,11 +53,10 @@ public class Card
     /// The display target of this card
     /// </summary>
     /// <remarks>
-    /// Returns the card's title from the underlying CardData.
-    /// This is what players see as the card's name in the game.
+    /// Returns the card's target information from the underlying CardData.
+    /// This indicates what type of target the card can be played on (e.g., enemy, ally, self).
     /// </remarks>
-    public string Target => data.Target.ToDisplayString();
-    
+    public string Target => data.Target.ToDisplayString();    
     /// <summary>
     /// The description text explaining what this card does
     /// </summary>
