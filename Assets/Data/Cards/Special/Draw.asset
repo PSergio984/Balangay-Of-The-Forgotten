@@ -12,11 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f203e740a37d6044b12d78636dde4c6, type: 3}
   m_Name: Draw
   m_EditorClassIdentifier: Assembly-CSharp::CardData
+  <Title>k__BackingField: Draw
+  <Target>k__BackingField: 3
   <Description>k__BackingField: Draw 2 Cards
-  <Information>k__BackingField: test
-  <Stamina>k__BackingField: 5
-  <Image>k__BackingField: {fileID: 21300000, guid: 4f4725d0eefa6f14e9492a5d7297cf83, type: 3}
-  <RoleIcon>k__BackingField: {fileID: 21300000, guid: 105a27556221c144ba99d465f1441627, type: 3}
+  <Art>k__BackingField: {fileID: 21300000, guid: c9088d55835c11840aac8b9c38a21eca, type: 3}
+  <BackgroundArt>k__BackingField: {fileID: 21300000, guid: 14cdfad1f7a2de342834402204d74dd3, type: 3}
+  <RoleData>k__BackingField: {fileID: 11400000, guid: a0daa321f3e42da4481eea6b7e5f4a54, type: 2}
   <ManualTargetEffect>k__BackingField:
     rid: -2
   <OtherEffects>k__BackingField: []

@@ -63,6 +63,16 @@ public class CardView : MonoBehaviour
     [SerializeField] private TMP_Text Title;
     
     /// <summary>
+    /// Text that shows the card's target mode to the player
+    /// </summary>
+    /// <remarks>
+    /// This text component displays what the card targets.
+    /// Assign a TextMeshPro component in the Inspector.
+    /// </remarks>
+    // Text component to display the card's title/name
+    [SerializeField] private TMP_Text Target;
+
+    /// <summary>
     /// Text that explains what the card does when played
     /// </summary>
     /// <remarks>
@@ -71,7 +81,6 @@ public class CardView : MonoBehaviour
     /// </remarks>
     // Text component to display the card's description or effect text
     [SerializeField] private TMP_Text Description;
-    [SerializeField] private TMP_Text Information;
 
     
     
@@ -94,13 +103,6 @@ public class CardView : MonoBehaviour
     /// </remarks>
     // Sprite renderer component to display the card's background art
     [SerializeField] private SpriteRenderer BackgroundArt;
-
-
-    /// <summary>
-    /// Image component that shows the card's role icon
-    /// </summary>
-
-    [SerializeField] private SpriteRenderer RoleCircle;
 
     [SerializeField] private SpriteRenderer GlassTop;
     [SerializeField] private SpriteRenderer GlassBottom;
@@ -258,7 +260,7 @@ public class CardView : MonoBehaviour
         Title.text = card.Title;
         // Show what the card does in the description text
         Description.text = card.Description;
-        Information.text = card.Information;
+        Target.text = card.Target;
         // Show the card's artwork
         CardArt.sprite = card.CardArt;
         BackgroundArt.sprite = card.CardBackground;
