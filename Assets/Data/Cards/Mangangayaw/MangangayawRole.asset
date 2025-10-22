@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fdaace69d5048df4ba94e75c80625eb5, type: 3}
+  m_Name: MangangayawRole
+  m_EditorClassIdentifier: Assembly-CSharp::CardRoleData
+  RoleIcon: {fileID: 21300000, guid: 43ebd5cdefdcd854b9f2598bb5f9dbdc, type: 3}
+  RoleCircleIcon: {fileID: 21300000, guid: 62962ef4e74c83c44a4660c796984a73, type: 3}
+  MainBorderSprite: {fileID: 21300000, guid: 7825e8b2aef931942858cfcbd9204ef9, type: 3}
+  DarkBorderSprite: {fileID: 21300000, guid: 76cbe4494fd2e1a4d938200387bb6eb5, type: 3}
+  LowerBorderSprite: {fileID: 21300000, guid: c731c5972ef218242b3c196aafda4c6b, type: 3}

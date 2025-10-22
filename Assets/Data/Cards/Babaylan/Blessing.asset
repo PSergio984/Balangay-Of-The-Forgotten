@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f203e740a37d6044b12d78636dde4c6, type: 3}
   m_Name: Blessing
   m_EditorClassIdentifier: Assembly-CSharp::CardData
-  <Description>k__BackingField: Blessnig
+  <Description>k__BackingField: Blessing
   <Information>k__BackingField: test
-  <Stamina>k__BackingField: 20
-  <Image>k__BackingField: {fileID: 21300000, guid: 425f9769f55dfbf4e9ccd2223cac028f, type: 3}
-  <RoleIcon>k__BackingField: {fileID: 21300000, guid: d758037223fc4a544a6984664b1f0cbf, type: 3}
+  <Art>k__BackingField: {fileID: 0}
+  <BackgroundArt>k__BackingField: {fileID: 0}
+  <RoleData>k__BackingField: {fileID: 0}
   <ManualTargetEffect>k__BackingField:
     rid: -2
   <OtherEffects>k__BackingField: []
