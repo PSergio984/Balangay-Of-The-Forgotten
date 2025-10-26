@@ -203,6 +203,9 @@ public class CardView : MonoBehaviour
     /// Updated after hand positioning to ensure correct return rotation.
     /// </remarks>
     private Quaternion originalRotation;
+
+    // Track if original values have been initialized
+    private bool originalsInitialized = false;
     
     /// <summary>
     /// Tracks if the card is currently being hovered for layer management
@@ -275,11 +278,10 @@ public class CardView : MonoBehaviour
         DarkBorder.sprite = card.DarkBorder;
         LowerBorder.sprite = card.LowerBorder;
         // Store original scale for optimized hover animations
-        originalScale = transform.localScale;
-        Debug.Log("og " +originalScale);
-        // Store original rotation for optimized hover animations
-        originalRotation = transform.rotation;
-        // Position will be updated after hand positioning
+    originalScale = transform.localScale;
+    originalRotation = transform.rotation;
+    // Position will be updated after hand positioning
+    originalsInitialized = true;
         
     }
     
@@ -296,12 +298,11 @@ public class CardView : MonoBehaviour
         // Safety check: ensure object is not destroyed
         if (this == null || transform == null) return;
         
-        originalPosition = transform.position;
-        originalRotation = transform.rotation;
-         Debug.Log("update" + originalScale);
-        originalScale = transform.localScale;
-          Debug.Log("update 2" + originalScale);
-        isPositioning = false; // Mark positioning as complete
+    originalPosition = transform.position;
+    originalRotation = transform.rotation;
+    originalScale = transform.localScale;
+    originalsInitialized = true;
+    isPositioning = false; // Mark positioning as complete
     }
     
     /// <summary>
@@ -316,18 +317,18 @@ public class CardView : MonoBehaviour
         if (positioning && isHovering)
         {
             // Force exit hover if we start positioning while hovering
-            OnMouseExit();
+            ForceExitHover();
         }
     }
-  private void OnMouseEnter()
+    private void OnMouseEnter()
     {
         // Prevent rapid firing
         if (Time.time - lastHoverEventTime < HOVER_DEBOUNCE_TIME) return;
         
         // Safety checks
-        if (this == null || transform == null) return;
-        if (isPositioning || isHovering) return;
-        if (!Interactions.Instance.PlayerCanHover()) return;
+    if (this == null || transform == null) return;
+    if (isPositioning || isHovering) return;
+    if (Interactions.Instance == null || !Interactions.Instance.PlayerCanHover()) return;
         
         // CRITICAL: Only allow ONE card to hover at a time
         if (currentlyHoveredCard != null && currentlyHoveredCard != this)
@@ -340,26 +341,27 @@ public class CardView : MonoBehaviour
         currentlyHoveredCard = this;
         lastHoverEventTime = Time.time;
         
-        // Ensure original values are set
-        if (originalScale == Vector3.zero) originalScale = transform.localScale;
-        if (originalPosition == Vector3.zero) originalPosition = transform.position;
-        if (originalRotation == Quaternion.identity) originalRotation = transform.rotation;
+        // Ensure original values are set (fallback for edge cases)
+        if (!originalsInitialized)
+        {
+            originalScale = transform.localScale;
+            originalPosition = transform.position;
+            originalRotation = transform.rotation;
+            originalsInitialized = true;
+        }
         
-        isHovering = true;
-        Debug.Log($"OnMouseEnter: {name} (clearing others)");
+    isHovering = true;
+    transform.DOKill();
+    BringCardToFront();
         
-        transform.DOKill();
-        BringCardToFront();
-        
-        // Perfect card game hover with rotation
-        Vector3 hoverPosition = originalPosition + Vector3.up * 0.2f;
-        Vector3 hoverScale = originalScale * 1.1f;
-        Quaternion straightRotation = Quaternion.identity; // 0 degrees = straight
-        
-        // Animate to hover state
-        transform.DOMove(hoverPosition, 0.25f).SetEase(Ease.OutQuint);
-        transform.DOScale(hoverScale, 0.25f).SetEase(Ease.OutQuint);
-        transform.DORotate(straightRotation.eulerAngles, 0.25f).SetEase(Ease.OutQuint);
+    // Perfect card game hover with rotation
+    Vector3 hoverPosition = originalPosition + Vector3.up * 0.2f;
+    Vector3 hoverScale = originalScale * 1.1f;
+    Quaternion straightRotation = Quaternion.identity; // 0 degrees = straight
+    // Animate to hover state
+    transform.DOMove(hoverPosition, 0.25f).SetEase(Ease.OutQuint);
+    transform.DOScale(hoverScale, 0.25f).SetEase(Ease.OutQuint);
+    transform.DORotate(straightRotation.eulerAngles, 0.25f).SetEase(Ease.OutQuint);
     }
 
     void OnMouseExit()
@@ -371,8 +373,6 @@ public class CardView : MonoBehaviour
         if (this == null || transform == null) return;
         if (!Interactions.Instance.PlayerCanHover()) return;
         if (!isHovering) return;
-        
-        Debug.Log($"OnMouseExit: {name}");
         
         // Clear static reference if this was the hovered card
         if (currentlyHoveredCard == this)
@@ -396,13 +396,17 @@ public class CardView : MonoBehaviour
     private void ForceExitHover()
     {
         if (!isHovering) return;
-        
-        Debug.Log($"ForceExit: {name}");
-        
+
+        // Clear static reference if this is the hovered card
+        if (currentlyHoveredCard == this)
+        {
+            currentlyHoveredCard = null;
+        }
+
         isHovering = false;
         transform.DOKill();
         ResetCardSortingOrder();
-        
+
         // Instant return to original state
         transform.DOMove(originalPosition, 0.15f).SetEase(Ease.OutQuart);
         transform.DOScale(originalScale, 0.15f).SetEase(Ease.OutQuart);
