@@ -53,6 +53,7 @@ public class EndTurnButtonUI : MonoBehaviour
     /// </remarks>
     public void OnClick()
     {
+        Debug.Log("[EndTurnButtonUI] End Turn button clicked.");
         int heroCount = CurrentHeroUtil.GetHeroCount();
         int currentHeroIndex = CurrentHeroUtil.CurrentHeroIndex;
         Debug.Log($"[EndTurnButtonUI] CurrentHeroIndex: {currentHeroIndex} / {heroCount - 1}");
