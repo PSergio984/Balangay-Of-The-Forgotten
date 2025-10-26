@@ -12,11 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f203e740a37d6044b12d78636dde4c6, type: 3}
   m_Name: Mana Surge
   m_EditorClassIdentifier: Assembly-CSharp::CardData
-  <Description>k__BackingField: Mana Surge
-  <Information>k__BackingField: test
-  <Stamina>k__BackingField: 25
-  <Image>k__BackingField: {fileID: 21300000, guid: 48ede3a4b58898f4f886bf463654514c, type: 3}
-  <RoleIcon>k__BackingField: {fileID: 21300000, guid: d758037223fc4a544a6984664b1f0cbf, type: 3}
+  <Title>k__BackingField: MANA SURGE
+  <Target>k__BackingField: 4
+  <Description>k__BackingField: Deals 100% MAG, 100% hit
+  <Art>k__BackingField: {fileID: 21300000, guid: 8c02c6ecd2ea35947b38194fe04dd849, type: 3}
+  <BackgroundArt>k__BackingField: {fileID: 21300000, guid: 795b6dd0812ad0041892dabc204f370b, type: 3}
+  <RoleData>k__BackingField: {fileID: 11400000, guid: 70c6f55cc48d66941a8ebb26b3d1f41f, type: 2}
   <ManualTargetEffect>k__BackingField:
     rid: -2
   <OtherEffects>k__BackingField:

@@ -12,11 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f203e740a37d6044b12d78636dde4c6, type: 3}
   m_Name: Berserk State
   m_EditorClassIdentifier: Assembly-CSharp::CardData
-  <Description>k__BackingField: Berserk State
-  <Information>k__BackingField: test
-  <Stamina>k__BackingField: 0
-  <Image>k__BackingField: {fileID: 21300000, guid: fcdb44c1a791cd84ebc004f1eea2617a, type: 3}
-  <RoleIcon>k__BackingField: {fileID: 21300000, guid: 0f40153a1aeaf1348981c8654b35d01d, type: 3}
+  <Title>k__BackingField: BERSERK
+  <Target>k__BackingField: 3
+  <Description>k__BackingField: Rage (3 turns) +50% DMG, attacks ignore, 20% of enemy
+    DEF, +20% HIT,HP must be 50% or less
+  <Art>k__BackingField: {fileID: 21300000, guid: d53f79a6fe91f1c4284b4cfd5706dc3e, type: 3}
+  <BackgroundArt>k__BackingField: {fileID: 21300000, guid: f295cb3d99888604c943565dc6bd2c6a, type: 3}
+  <RoleData>k__BackingField: {fileID: 11400000, guid: a0daa321f3e42da4481eea6b7e5f4a54, type: 2}
   <ManualTargetEffect>k__BackingField:
     rid: -2
   <OtherEffects>k__BackingField:

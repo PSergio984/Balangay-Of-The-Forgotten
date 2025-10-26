@@ -12,11 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f203e740a37d6044b12d78636dde4c6, type: 3}
   m_Name: Focus Aim
   m_EditorClassIdentifier: Assembly-CSharp::CardData
-  <Description>k__BackingField: Focus Aim
-  <Information>k__BackingField: test
-  <Stamina>k__BackingField: 10
-  <Image>k__BackingField: {fileID: 21300000, guid: 04f32987bbff4804b8cf9a818b1000bd, type: 3}
-  <RoleIcon>k__BackingField: {fileID: 21300000, guid: a51c82bdb4519d64db41247581f615d4, type: 3}
+  <Title>k__BackingField: FOCUS AIM
+  <Target>k__BackingField: 3
+  <Description>k__BackingField: Next 2 turns +30% hit chance and attacks ignore 20%
+    of enemy DEF
+  <Art>k__BackingField: {fileID: 21300000, guid: 02c8cf444e0a3524588db22136153427, type: 3}
+  <BackgroundArt>k__BackingField: {fileID: 21300000, guid: 2c5106143b3f44e4496283d09d8da8a7, type: 3}
+  <RoleData>k__BackingField: {fileID: 11400000, guid: 22c12e1b910d4314f914ae5367dc7d2e, type: 2}
   <ManualTargetEffect>k__BackingField:
     rid: -2
   <OtherEffects>k__BackingField: []

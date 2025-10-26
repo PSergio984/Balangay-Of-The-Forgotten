@@ -12,11 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f203e740a37d6044b12d78636dde4c6, type: 3}
   m_Name: Purify
   m_EditorClassIdentifier: Assembly-CSharp::CardData
-  <Description>k__BackingField: Purify
-  <Information>k__BackingField: test
-  <Stamina>k__BackingField: 40
-  <Image>k__BackingField: {fileID: 21300000, guid: ac3dd19cf7a2587458e4628a933f2608, type: 3}
-  <RoleIcon>k__BackingField: {fileID: 21300000, guid: d758037223fc4a544a6984664b1f0cbf, type: 3}
+  <Title>k__BackingField: PURIFY
+  <Target>k__BackingField: 2
+  <Description>k__BackingField: Removes all debuff to all players
+  <Art>k__BackingField: {fileID: 21300000, guid: 6c46e1a8c3a02974da9aeb09bbdefac0, type: 3}
+  <BackgroundArt>k__BackingField: {fileID: 21300000, guid: c9ce38404e2ef6342ab77eb8d004a759, type: 3}
+  <RoleData>k__BackingField: {fileID: 11400000, guid: 70c6f55cc48d66941a8ebb26b3d1f41f, type: 2}
   <ManualTargetEffect>k__BackingField:
     rid: -2
   <OtherEffects>k__BackingField: []
