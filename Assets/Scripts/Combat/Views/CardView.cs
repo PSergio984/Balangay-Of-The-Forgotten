@@ -271,6 +271,7 @@ public class CardView : MonoBehaviour
         LowerBorder.sprite = card.LowerBorder;
         // Store original scale for optimized hover animations
         originalScale = transform.localScale;
+        Debug.Log("og " +originalScale);
         // Store original rotation for optimized hover animations
         originalRotation = transform.rotation;
         // Position will be updated after hand positioning
@@ -292,7 +293,9 @@ public class CardView : MonoBehaviour
         
         originalPosition = transform.position;
         originalRotation = transform.rotation;
+         Debug.Log("update" + originalScale);
         originalScale = transform.localScale;
+          Debug.Log("update 2" + originalScale);
         isPositioning = false; // Mark positioning as complete
     }
     
@@ -317,7 +320,7 @@ public class CardView : MonoBehaviour
     /// </summary>
     /// <remarks>
     /// Unity calls this automatically when the mouse enters the card area.
-    /// Uses optimized DOTween animations instead of CardViewHoverSystem for better performance.
+    /// Uses optimized DOTween animations.
     /// </remarks>
     private void OnMouseEnter()
     {
@@ -336,7 +339,7 @@ public class CardView : MonoBehaviour
         
         // Mark as hovering to prevent conflicts
         isHovering = true;
-        
+         Debug.Log("OnMouseEnter called on CardView");
         // Kill any existing animations to prevent conflicts
         transform.DOKill();
         
@@ -365,10 +368,11 @@ public class CardView : MonoBehaviour
     {
         // Safety check: ensure object is not destroyed
         if (this == null || transform == null) return;
-        
+
         // Check if player is allowed to hover
         if (!Interactions.Instance.PlayerCanHover()) return;
         
+        Debug.Log("OnMouseExit called on CardView");
         // Ensure we have valid original values for animation
         if (originalScale == Vector3.zero) originalScale = Vector3.one;
         if (originalPosition == Vector3.zero) originalPosition = transform.position - Vector3.up * 0.5f;

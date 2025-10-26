@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1e86731d6fced05449d6c461c2d1a74a, type: 3}
   m_Name: Bagani
   m_EditorClassIdentifier: Assembly-CSharp::HeroData
-  <Image>k__BackingField: {fileID: 21300000, guid: 74aa2285aaf0dec40a10d3438e6cfb95, type: 3}
+  <Image>k__BackingField: {fileID: 21300000, guid: 90c2c5d76e0aec44391da2c42ed93032, type: 3}
   <HeroName>k__BackingField: Bagani
   <Health>k__BackingField: 1000
   <AttackPower>k__BackingField: 75
