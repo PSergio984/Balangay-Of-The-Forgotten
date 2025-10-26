@@ -211,7 +211,7 @@ public class CardView : MonoBehaviour
     /// Prevents layer conflicts and ensures proper visual stacking order.
     /// </remarks>
     private bool isHovering = false;
-    
+
     /// <summary>
     /// Flag to prevent hover during hand positioning animations
     /// </summary>
@@ -219,6 +219,11 @@ public class CardView : MonoBehaviour
     /// Prevents hover issues while cards are animating to hand positions.
     /// </remarks>
     private bool isPositioning = false;
+    
+    // ADD these static fields for single-card hover management
+    private static CardView currentlyHoveredCard;
+    private float lastHoverEventTime = 0f;
+    private const float HOVER_DEBOUNCE_TIME = 0.1f;
 
     /// <summary>
     /// Sets the card's sorting order using SortingGroup component
@@ -314,87 +319,97 @@ public class CardView : MonoBehaviour
             OnMouseExit();
         }
     }
-    
-    /// <summary>
-    /// Called when player moves mouse over the card
-    /// </summary>
-    /// <remarks>
-    /// Unity calls this automatically when the mouse enters the card area.
-    /// Uses optimized DOTween animations.
-    /// </remarks>
-    private void OnMouseEnter()
+  private void OnMouseEnter()
     {
-        // Safety check: ensure object is not destroyed
+        // Prevent rapid firing
+        if (Time.time - lastHoverEventTime < HOVER_DEBOUNCE_TIME) return;
+        
+        // Safety checks
         if (this == null || transform == null) return;
-        
-        // Prevent hover during positioning or if already hovering
         if (isPositioning || isHovering) return;
-        
-        // Check if player is allowed to hover (not dragging another card)
         if (!Interactions.Instance.PlayerCanHover()) return;
         
-        // Ensure we have valid original values for animation
+        // CRITICAL: Only allow ONE card to hover at a time
+        if (currentlyHoveredCard != null && currentlyHoveredCard != this)
+        {
+            // Force exit the previous card
+            currentlyHoveredCard.ForceExitHover();
+        }
+        
+        // Set this as the current hovered card
+        currentlyHoveredCard = this;
+        lastHoverEventTime = Time.time;
+        
+        // Ensure original values are set
         if (originalScale == Vector3.zero) originalScale = transform.localScale;
         if (originalPosition == Vector3.zero) originalPosition = transform.position;
-        
-        // Mark as hovering to prevent conflicts
-        isHovering = true;
-         Debug.Log("OnMouseEnter called on CardView");
-        // Kill any existing animations to prevent conflicts
-        transform.DOKill();
-        
-        // Bring card to front using SortingGroup
-        BringCardToFront();
-        
-        // Calculate hover transformations (move up, scale up, rotate to straight)
-        Vector3 hoverPosition = originalPosition + Vector3.up * 2.5f;
-        Vector3 hoverScale = originalScale * 1.2f;
-        Quaternion hoverRotation = Quaternion.identity; // Straight rotation (0, 0, 0)
-        
-        // Optimized simultaneous animations
-        transform.DOMove(hoverPosition, 0.3f).SetEase(Ease.OutBack);
-        transform.DOScale(hoverScale, 0.3f).SetEase(Ease.OutBack);
-        transform.DORotate(hoverRotation.eulerAngles, 0.3f).SetEase(Ease.OutBack);
-    }
-
-    /// <summary>
-    /// Called when player moves mouse away from the card
-    /// </summary>
-    /// <remarks>
-    /// Unity calls this automatically when the mouse leaves the card area.
-    /// Uses optimized DOTween animations to return card to normal state.
-    /// </remarks>
-    void OnMouseExit()
-    {
-        // Safety check: ensure object is not destroyed
-        if (this == null || transform == null) return;
-
-        // Check if player is allowed to hover
-        if (!Interactions.Instance.PlayerCanHover()) return;
-        
-        Debug.Log("OnMouseExit called on CardView");
-        // Ensure we have valid original values for animation
-        if (originalScale == Vector3.zero) originalScale = Vector3.one;
-        if (originalPosition == Vector3.zero) originalPosition = transform.position - Vector3.up * 0.5f;
         if (originalRotation == Quaternion.identity) originalRotation = transform.rotation;
         
-        // Only process if we were actually hovering
+        isHovering = true;
+        Debug.Log($"OnMouseEnter: {name} (clearing others)");
+        
+        transform.DOKill();
+        BringCardToFront();
+        
+        // Perfect card game hover with rotation
+        Vector3 hoverPosition = originalPosition + Vector3.up * 0.2f;
+        Vector3 hoverScale = originalScale * 1.1f;
+        Quaternion straightRotation = Quaternion.identity; // 0 degrees = straight
+        
+        // Animate to hover state
+        transform.DOMove(hoverPosition, 0.25f).SetEase(Ease.OutQuint);
+        transform.DOScale(hoverScale, 0.25f).SetEase(Ease.OutQuint);
+        transform.DORotate(straightRotation.eulerAngles, 0.25f).SetEase(Ease.OutQuint);
+    }
+
+    void OnMouseExit()
+    {
+        // Prevent rapid firing
+        if (Time.time - lastHoverEventTime < HOVER_DEBOUNCE_TIME) return;
+        
+        // Safety checks
+        if (this == null || transform == null) return;
+        if (!Interactions.Instance.PlayerCanHover()) return;
         if (!isHovering) return;
         
-        // Mark as no longer hovering
+        Debug.Log($"OnMouseExit: {name}");
+        
+        // Clear static reference if this was the hovered card
+        if (currentlyHoveredCard == this)
+        {
+            currentlyHoveredCard = null;
+        }
+        
+        lastHoverEventTime = Time.time;
         isHovering = false;
         
-        // Kill any existing animations to prevent conflicts
         transform.DOKill();
-        
-        // Restore card to original sorting order using SortingGroup
         ResetCardSortingOrder();
-
-        // Optimized return animations (faster than hover in)
+        
+        // Return to original hand position and rotation
         transform.DOMove(originalPosition, 0.2f).SetEase(Ease.OutQuart);
         transform.DOScale(originalScale, 0.2f).SetEase(Ease.OutQuart);
         transform.DORotate(originalRotation.eulerAngles, 0.2f).SetEase(Ease.OutQuart);
     }
+    
+    // ADD: Force exit method for clearing other cards
+    private void ForceExitHover()
+    {
+        if (!isHovering) return;
+        
+        Debug.Log($"ForceExit: {name}");
+        
+        isHovering = false;
+        transform.DOKill();
+        ResetCardSortingOrder();
+        
+        // Instant return to original state
+        transform.DOMove(originalPosition, 0.15f).SetEase(Ease.OutQuart);
+        transform.DOScale(originalScale, 0.15f).SetEase(Ease.OutQuart);
+        transform.DORotate(originalRotation.eulerAngles, 0.15f).SetEase(Ease.OutQuart);
+    }
+    
+   
 
     /// <summary>
     /// Called when player clicks down on the card
@@ -535,6 +550,12 @@ public class CardView : MonoBehaviour
     /// </summary>
     private void OnDestroy()
     {
+        // Clear static reference if this card was hovered
+        if (currentlyHoveredCard == this)
+        {
+            currentlyHoveredCard = null;
+        }
+        
         try
         {
             // Reset hovering state
