@@ -1534,10 +1534,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6f3c7910c9e0b194ca53c815479cdbcf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CardHoverManager
-  hoverCheckInterval: 0.016
-  cardLayerMask:
-    serializedVersion: 2
-    m_Bits: 247
+  currentHoveredCard: {fileID: 0}
 --- !u!1 &583315162
 GameObject:
   m_ObjectHideFlags: 0
