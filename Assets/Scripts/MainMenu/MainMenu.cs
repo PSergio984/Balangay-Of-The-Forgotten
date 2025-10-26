@@ -52,6 +52,7 @@ using UnityEditor;
 /// </remarks>
 public class MainMenu : MonoBehaviour
 {
+    [SerializeField] private int SceneIndex = 1;
     /// <summary>
     /// Button that starts the game when clicked
     /// </summary>
@@ -82,7 +83,7 @@ public class MainMenu : MonoBehaviour
     void Start()
     {
         // Add listener for the Start button to call the StartGame method when clicked
-        StartButton.onClick.AddListener(StartGame);
+        StartButton.onClick.AddListener(() => StartGame(SceneIndex));
         // Add listener for the Quit button to call the QuitGame method when clicked
         QuitButton.onClick.AddListener(QuitGame);
     }
@@ -94,10 +95,10 @@ public class MainMenu : MonoBehaviour
     /// Called when the start button is clicked. Loads scene index 1 which should 
     /// be the main game scene. Make sure scene 1 is added to build settings.
     /// </remarks>
-    private void StartGame()
+    private void StartGame(int SceneIndex)
     {
        // Load scene index 1 (the main game scene)
-       SceneManager.LoadScene(1);
+       SceneManager.LoadScene(SceneIndex);
     }
 
     /// <summary>

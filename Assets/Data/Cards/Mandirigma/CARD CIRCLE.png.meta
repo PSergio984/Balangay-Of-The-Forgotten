@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 1fb968016da126c46b5da433ed4449a2
+guid: 61c3977242ea4c5439d8340fd6c5208b
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 7483672765400934980
-    second: Balangay_Logo_0
+      213: 207422876496634410
+    second: CARD CIRCLE_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -109,30 +109,17 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 4
-    buildTarget: WindowsStoreApps
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 1
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    ignorePlatformSupport: 0
-    androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Balangay_Logo_0
+      name: CARD CIRCLE_0
       rect:
         serializedVersion: 2
-        x: 73
-        y: 4
-        width: 1651
-        height: 770
+        x: 0
+        y: 0
+        width: 160
+        height: 153
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -141,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 44aecfcdab85bd760800000000000000
-      internalID: 7483672765400934980
+      spriteID: a222fd7d10ae0e200800000000000000
+      internalID: 207422876496634410
       vertices: []
       indices: 
       edges: []
@@ -161,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Balangay_Logo_0: 7483672765400934980
+      CARD CIRCLE_0: 207422876496634410
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
