@@ -30,7 +30,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 5712421253342861794}
   m_Father: {fileID: 0}
@@ -47,18 +47,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c041f436366de674a8875b1446df1b8d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CardView
-  title: {fileID: 5259370794400157219}
-  description: {fileID: 3476999933804902075}
-  information: {fileID: 6687619334257079792}
+  Title: {fileID: 5259370794400157219}
+  Target: {fileID: 3476999933804902075}
+  Description: {fileID: 6687619334257079792}
   CardArt: {fileID: 4949507007284239352}
   BackgroundArt: {fileID: 979942943040251932}
-  RoleCircle: {fileID: 594944840159868534}
   GlassTop: {fileID: 9183091360684869377}
   GlassBottom: {fileID: 3123752115087314568}
   MainBorder: {fileID: 8448441523621888149}
   DarkBorder: {fileID: 492712455726380438}
   LowerBorder: {fileID: 5642074075289601798}
   RoleIcon: {fileID: 4365808079887279785}
+  RoleCircleIcon: {fileID: 594944840159868534}
   wrapper: {fileID: 5087615122854296471}
   dropLayer:
     serializedVersion: 2
@@ -94,8 +94,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 3.6, y: 4.8, z: 0.01}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Size: {x: 0.45229626, y: 0.6225623, z: 1}
+  m_Center: {x: 0.0033715963, y: -0.0059003085, z: 0}
 --- !u!1 &742951304317067163
 GameObject:
   m_ObjectHideFlags: 0
@@ -1021,8 +1021,8 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 8466209629851723785}
   - {fileID: 4049789817476806746}
@@ -1050,7 +1050,7 @@ GameObject:
   - component: {fileID: 5773520509824909290}
   - component: {fileID: 3476999933804902075}
   m_Layer: 0
-  m_Name: Aiming Mode
+  m_Name: Target
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1319,7 +1319,7 @@ GameObject:
   - component: {fileID: 5836698399591110320}
   - component: {fileID: 6687619334257079792}
   m_Layer: 0
-  m_Name: Info
+  m_Name: Description
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

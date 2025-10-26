@@ -17,7 +17,7 @@ MonoBehaviour:
     rid: 8634069057923187028
   <AutoTargetEffect>k__BackingField:
     rid: 8634069057923187029
-  <UseAutoTarget>k__BackingField: 0
+  <UseAutoTarget>k__BackingField: 1
   <UseActionCasterAsTarget>k__BackingField: 1
   references:
     version: 2
@@ -38,4 +38,9 @@ MonoBehaviour:
     - rid: 8634069057923187030
       type: {class: DealDamageEffect, ns: , asm: Assembly-CSharp}
       data:
-        damageAmount: 50
+        baseDamage: 0
+        accuracy: 1
+        critChance: 0
+        defenseIgnore: 0
+        AttackAmp: 1
+        MagicAmp: 1

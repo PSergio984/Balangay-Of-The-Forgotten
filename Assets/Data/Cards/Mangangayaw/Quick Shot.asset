@@ -12,11 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f203e740a37d6044b12d78636dde4c6, type: 3}
   m_Name: Quick Shot
   m_EditorClassIdentifier: Assembly-CSharp::CardData
-  <Description>k__BackingField: Quick Shot
-  <Information>k__BackingField: test
-  <Stamina>k__BackingField: 15
-  <Image>k__BackingField: {fileID: 21300000, guid: 730651882ba3c2f4da02f2e05d21f878, type: 3}
-  <RoleIcon>k__BackingField: {fileID: 21300000, guid: a51c82bdb4519d64db41247581f615d4, type: 3}
+  <Title>k__BackingField: QUICK SHOT
+  <Target>k__BackingField: 4
+  <Description>k__BackingField: Deals 200 damage, 90% Hit Rate
+  <Art>k__BackingField: {fileID: 21300000, guid: 20a2a0db281e1024eb56131be735d4b7, type: 3}
+  <BackgroundArt>k__BackingField: {fileID: 21300000, guid: ce42a0dd549148942802ec803be9fff3, type: 3}
+  <RoleData>k__BackingField: {fileID: 11400000, guid: 22c12e1b910d4314f914ae5367dc7d2e, type: 2}
   <ManualTargetEffect>k__BackingField:
     rid: -2
   <OtherEffects>k__BackingField:

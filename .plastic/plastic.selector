@@ -1,4 +1,4 @@
-repository "Balangay_Combat_Testing/Balangay_Combat_Testing@18968317720975@cloud"
+repository "Balangay_Of_The_Forgotten/Balangay_Of_The_Forgotten@18968317720975@cloud"
   path "/"
     br "/main"
     co "/main"

@@ -12,11 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f203e740a37d6044b12d78636dde4c6, type: 3}
   m_Name: Heal
   m_EditorClassIdentifier: Assembly-CSharp::CardData
-  <Description>k__BackingField: Heal
-  <Information>k__BackingField: test
-  <Stamina>k__BackingField: 30
-  <Image>k__BackingField: {fileID: 21300000, guid: f089689b4df8c3141a20a4eda8821f05, type: 3}
-  <RoleIcon>k__BackingField: {fileID: 21300000, guid: d758037223fc4a544a6984664b1f0cbf, type: 3}
+  <Title>k__BackingField: HEAL
+  <Target>k__BackingField: 3
+  <Description>k__BackingField: Restore HP equivalent to 100 (+50% MAG) to ally,
+    and heals self for 50% of the amount, CD 2
+  <Art>k__BackingField: {fileID: 21300000, guid: cdfc936997ae4a746a01fdc39d91df6d, type: 3}
+  <BackgroundArt>k__BackingField: {fileID: 21300000, guid: 46379c755df98e34d832285df43440eb, type: 3}
+  <RoleData>k__BackingField: {fileID: 11400000, guid: 70c6f55cc48d66941a8ebb26b3d1f41f, type: 2}
   <ManualTargetEffect>k__BackingField:
     rid: 8634069522204328275
   <OtherEffects>k__BackingField: []

@@ -12,11 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f203e740a37d6044b12d78636dde4c6, type: 3}
   m_Name: All-in Attack
   m_EditorClassIdentifier: Assembly-CSharp::CardData
-  <Description>k__BackingField: All In Attack
-  <Information>k__BackingField: test
-  <Stamina>k__BackingField: 0
-  <Image>k__BackingField: {fileID: 21300000, guid: 4f4725d0eefa6f14e9492a5d7297cf83, type: 3}
-  <RoleIcon>k__BackingField: {fileID: 21300000, guid: 0f40153a1aeaf1348981c8654b35d01d, type: 3}
+  <Title>k__BackingField: ALL IN
+  <Target>k__BackingField: 4
+  <Description>k__BackingField: Deals 834%, ATK, 40% hit
+  <Art>k__BackingField: {fileID: 21300000, guid: 45d0cd59adcc3fd49a127a126119f7fc, type: 3}
+  <BackgroundArt>k__BackingField: {fileID: 21300000, guid: 7c6c903c0662ceb4aac33286bd7a5d5b, type: 3}
+  <RoleData>k__BackingField: {fileID: 11400000, guid: a0daa321f3e42da4481eea6b7e5f4a54, type: 2}
   <ManualTargetEffect>k__BackingField:
     rid: -2
   <OtherEffects>k__BackingField:

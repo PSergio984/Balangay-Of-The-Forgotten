@@ -12,11 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f203e740a37d6044b12d78636dde4c6, type: 3}
   m_Name: Volley
   m_EditorClassIdentifier: Assembly-CSharp::CardData
-  <Description>k__BackingField: Volley
-  <Information>k__BackingField: test
-  <Stamina>k__BackingField: 40
-  <Image>k__BackingField: {fileID: 21300000, guid: 85ff06e793e1a68439feda373a1a7b03, type: 3}
-  <RoleIcon>k__BackingField: {fileID: 21300000, guid: a51c82bdb4519d64db41247581f615d4, type: 3}
+  <Title>k__BackingField: VOLLEY SHOT
+  <Target>k__BackingField: 0
+  <Description>k__BackingField: Deals 200 damage to all enemies, 80% Hit Rate
+  <Art>k__BackingField: {fileID: 21300000, guid: f644e8b12e0c83a4bb721b7a70868645, type: 3}
+  <BackgroundArt>k__BackingField: {fileID: 21300000, guid: 01710033d50c1784caa1f6a8609cc128, type: 3}
+  <RoleData>k__BackingField: {fileID: 11400000, guid: 22c12e1b910d4314f914ae5367dc7d2e, type: 2}
   <ManualTargetEffect>k__BackingField:
     rid: -2
   <OtherEffects>k__BackingField:

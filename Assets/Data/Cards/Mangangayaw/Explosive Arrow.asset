@@ -12,11 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f203e740a37d6044b12d78636dde4c6, type: 3}
   m_Name: Explosive Arrow
   m_EditorClassIdentifier: Assembly-CSharp::CardData
-  <Description>k__BackingField: Explosive Arrow
-  <Information>k__BackingField: test
-  <Stamina>k__BackingField: 50
-  <Image>k__BackingField: {fileID: 21300000, guid: b7a713bd60f659543aa7700750989662, type: 3}
-  <RoleIcon>k__BackingField: {fileID: 21300000, guid: a51c82bdb4519d64db41247581f615d4, type: 3}
+  <Title>k__BackingField: EXPLOSIVE ARROW
+  <Target>k__BackingField: 4
+  <Description>k__BackingField: 'Deals 300 (+500% ATK), 50% hit, 30% chance to commit
+    Overexplosion: Deal 10% of damage dealt to all allies'
+  <Art>k__BackingField: {fileID: 21300000, guid: c9088d55835c11840aac8b9c38a21eca, type: 3}
+  <BackgroundArt>k__BackingField: {fileID: 21300000, guid: 14cdfad1f7a2de342834402204d74dd3, type: 3}
+  <RoleData>k__BackingField: {fileID: 11400000, guid: 22c12e1b910d4314f914ae5367dc7d2e, type: 2}
   <ManualTargetEffect>k__BackingField:
     rid: -2
   <OtherEffects>k__BackingField:

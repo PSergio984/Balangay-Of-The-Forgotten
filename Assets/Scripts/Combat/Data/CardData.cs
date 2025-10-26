@@ -50,39 +50,52 @@ public class CardData : ScriptableObject
 {
     [Title("Card Information", "Basic properties of this card", TitleAlignments.Centered)]
     [BoxGroup("Basic Info")]
-    /// <summary>
-    /// The name and description text displayed on the card
-    /// </summary>
-    /// <remarks>
-    /// This property holds the card's title and description that players see.
-    /// Set this in the Inspector to define what the card is called and what it does.
-    /// </remarks>
-    [field: SerializeField] 
-    [field: BoxGroup("Basic Info")]
-    [field: LabelText("Card Description")]
-    [field: MultiLineProperty(3)]
-    [field: Required("Card must have a description!")]
-    [field: ValidateInput("@!string.IsNullOrWhiteSpace($value)", "Description cannot be empty or whitespace")]
-    public string Description { get; private set; }
+
 
     /// <summary>
-    /// Additional information text displayed on the card
+    /// The title of the card
+    /// </summary>
+    /// <remarks>
+    /// This property holds the card's title that players see.
+    /// Set this in the Inspector to define the card's title text.
+    /// </remarks>
+    [field: SerializeField]
+    [field: BoxGroup("Basic Info")]
+    [field: LabelText("Card title")]
+    [field: MultiLineProperty(3)]
+    [field: Required("Card must have a title!")]
+    [field: ValidateInput("@!string.IsNullOrWhiteSpace($value)", "title cannot be empty or whitespace")]
+    public string Title { get; private set; }
+
+    /// <summary>
+    /// <summary>
+    /// The target mode of the card (choose what this card targets when played)
+    /// </summary>
+    /// <remarks>
+    /// Select from options: Area of Attack, Single Ally, All Allies, Self, Single Target.
+    /// </remarks>
+    [field: SerializeField]
+    [field: BoxGroup("Basic Info")]
+    [field: LabelText("Target Mode")]
+    [field: Required("Card must have a Target Mode!")]
+    [field: EnumToggleButtons] // Now shows "Area of Attack" instead of "AreaOfAttack"
+    public CardTargetMode Target { get; private set; }
+    /// <summary>
+    /// Additional Description text displayed on the card
+    /// <summary>
+    /// Description text displayed on the card
     /// </summary>
     /// <remarks>
     /// This property holds detailed information about the card's mechanics, lore, or usage tips.
-    /// This complements the Description field by providing extra context or flavor text.
     /// Set this in the Inspector to give players more details about the card.
     /// </remarks>
-    [field: SerializeField] 
+    [field: SerializeField]
     [field: BoxGroup("Basic Info")]
-    [field: LabelText("Card Information")]
+    [field: LabelText("Card Description")]
     [field: MultiLineProperty(3)]
-    [field: Required("Card must have information!")]
-    [field: ValidateInput("@!string.IsNullOrWhiteSpace($value)", "Information cannot be empty or whitespace")]
-    public string Information { get; private set; }
-
-    [HorizontalGroup("Basic Info/Stats", 0.7f)]
-    /// <summary>
+    [field: Required("Card must have Description!")]
+    [field: ValidateInput("@!string.IsNullOrWhiteSpace($value)", "Description cannot be empty or whitespace")]
+    public string Description { get; private set; }    /// <summary>
     /// The stamina cost required to play this card
     /// </summary>
     /// <remarks>
@@ -111,7 +124,7 @@ public class CardData : ScriptableObject
     [field: AssetsOnly]
     public Sprite Art { get; private set; }
 
-       /// <summary>
+    /// <summary>
     /// The background display image for the card
     /// </summary>
     /// <remarks>
@@ -140,9 +153,9 @@ public class CardData : ScriptableObject
     [Title("Card Effects", "Define what this card does when played", TitleAlignments.Centered)]
     [InfoBox("Manual Target Effect: Player chooses the target (like single-target damage)\n" +
              "Other Effects: Automatic targeting (like area damage, self-buffs)", InfoMessageType.Info)]
-    
+
     [InfoBox("@GetCardValidationMessage()", InfoMessageType.Warning, "HasCardValidationIssues")]
-    
+
     /// <summary>
     /// Single effect that requires manual target selection by the player
     /// </summary>
@@ -152,12 +165,12 @@ public class CardData : ScriptableObject
     /// Can be null if the card doesn't have any manual targeting effects.
     /// Set this in the Inspector for cards that need player target selection.
     /// </remarks>
-    [field: SerializeReference] 
+    [field: SerializeReference]
     [field: ShowInInspector]
     [field: LabelText("Main Effect (Manual Target)")]
     [field: InfoBox("This effect requires the player to choose a target", InfoMessageType.None, "@ManualTargetEffect != null")]
     public Effects ManualTargetEffect { get; private set; } = null;
-        
+
     /// <summary>
     /// List of effects that automatically select their own targets
     /// </summary>
@@ -169,30 +182,30 @@ public class CardData : ScriptableObject
     /// Set these in the Inspector for cards with automatic or multiple effects.
     /// </remarks>
     //can have 1 effect, where you pick a target, also can have multiple other effects  where target is selected auto
-    [field: SerializeField] 
+    [field: SerializeField]
     [field: LabelText("Secondary Effects (Auto-Target)")]
     [field: ListDrawerSettings(ShowIndexLabels = true, DraggableItems = true)]
     [field: ValidateInput("@ValidateOtherEffects()", "One or more auto-target effects have missing components")]
     [field: InfoBox("@GetOtherEffectsInfo()", InfoMessageType.Info, "@OtherEffects != null && OtherEffects.Count > 0")]
     public List<AutoTargetEffect> OtherEffects { get; private set; }
-    
+
     // Validation methods for better debugging
     private bool HasCardValidationIssues()
     {
         return ManualTargetEffect == null && (OtherEffects == null || OtherEffects.Count == 0);
     }
-    
+
     private string GetCardValidationMessage()
     {
         if (ManualTargetEffect == null && (OtherEffects == null || OtherEffects.Count == 0))
             return "⚠️ This card has no effects! Add either a Manual Target Effect or Other Effects.";
         return "";
     }
-    
+
     private bool ValidateOtherEffects()
     {
         if (OtherEffects == null) return true;
-        
+
         for (int i = 0; i < OtherEffects.Count; i++)
         {
             var effect = OtherEffects[i];
@@ -201,10 +214,46 @@ public class CardData : ScriptableObject
         }
         return true;
     }
-    
+
     private string GetOtherEffectsInfo()
     {
         if (OtherEffects == null || OtherEffects.Count == 0) return "";
         return $"💡 This card has {OtherEffects.Count} auto-target effect(s)";
     }
 }
+
+
+
+public enum CardTargetMode
+{
+    [LabelText("Area of Attack")]
+    AreaOfAttack,
+
+    [LabelText("Single Ally")]
+    SingleAlly,
+
+    [LabelText("All Allies")]
+    AllAllies,
+
+    [LabelText("Self")]
+    Self,
+
+    [LabelText("Single Target")]
+    SingleTarget,
+}
+
+    public static class CardTargetModeExtensions
+    {
+        public static string ToDisplayString(this CardTargetMode targetMode)
+        {
+            return targetMode switch
+            {
+                CardTargetMode.AreaOfAttack => "Area of Attack",
+                CardTargetMode.SingleAlly => "Single Ally", 
+                CardTargetMode.AllAllies => "All Allies",
+                CardTargetMode.Self => "Self",
+                CardTargetMode.SingleTarget => "Single Target",
+                _ => targetMode.ToString()
+            };
+        }
+    }

@@ -12,12 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1e86731d6fced05449d6c461c2d1a74a, type: 3}
   m_Name: Mandirigma
   m_EditorClassIdentifier: Assembly-CSharp::HeroData
-  <Image>k__BackingField: {fileID: 21300000, guid: 780b38776821cd7478e241926653375c, type: 3}
+  <Image>k__BackingField: {fileID: 21300000, guid: f57408739fac32547aaea38af8bff034, type: 3}
   <HeroName>k__BackingField: Mandirigma
   <Health>k__BackingField: 750
   <AttackPower>k__BackingField: 200
-  <AttackSpeed>k__BackingField: 40
-  <MagicPower>k__BackingField: 1
   <Defense>k__BackingField: 125
   <Deck>k__BackingField:
   - {fileID: 11400000, guid: 5efc5dbdf3e70f54388d290bb88aa14c, type: 2}
