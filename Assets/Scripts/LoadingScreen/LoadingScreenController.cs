@@ -12,7 +12,7 @@ public class LoadingScreenController : MonoBehaviour
     [Header("Video Settings")]
     [SerializeField] private VideoPlayer videoPlayer;
     [SerializeField] private int nextSceneIndex = 1;
-    [SerializeField] private string nextSceneName = "Main Menu"; // Alternative to scene index
+    [SerializeField] private string nextSceneName = "Core"; // Alternative to scene index
     
     [Header("Input Settings")]
     [SerializeField] private bool skipOnClick = true;

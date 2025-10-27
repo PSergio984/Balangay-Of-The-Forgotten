@@ -1,8 +1,7 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
-public class MapSelector : MonoBehaviour
+
+public class RewardsManager : MonoBehaviour
 {
-    [SerializeField] private int sceneIndex =2;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -12,12 +11,6 @@ public class MapSelector : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        
     }
-
-    public void ChangeScene(int sceneIndex)
-    {
-        SceneManager.LoadScene(sceneIndex);
-    }
-    
 }
