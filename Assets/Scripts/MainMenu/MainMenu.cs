@@ -52,16 +52,6 @@ using UnityEditor;
 /// </remarks>
 public class MainMenu : MonoBehaviour
 {
-    [SerializeField] private int SceneIndex = 1;
-    /// <summary>
-    /// Button that starts the game when clicked
-    /// </summary>
-    /// <remarks>
-    /// When players click this button, it loads the main game scene to begin playing.
-    /// Assign a UI Button component in the Inspector.
-    /// </remarks>
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    [SerializeField] private Button StartButton;
     
     /// <summary>
     /// Button that quits the game when clicked
@@ -72,7 +62,7 @@ public class MainMenu : MonoBehaviour
     /// Assign a UI Button component in the Inspector.
     /// </remarks>
     [SerializeField] private Button QuitButton;
-    
+
     /// <summary>
     /// Sets up button listeners when the menu loads
     /// </summary>
@@ -82,24 +72,21 @@ public class MainMenu : MonoBehaviour
     /// </remarks>
     void Start()
     {
-        // Add listener for the Start button to call the StartGame method when clicked
-        StartButton.onClick.AddListener(() => StartGame(SceneIndex));
         // Add listener for the Quit button to call the QuitGame method when clicked
         QuitButton.onClick.AddListener(QuitGame);
     }
 
-    /// <summary>
-    /// Loads the main game scene to start playing
-    /// </summary>
-    /// <remarks>
-    /// Called when the start button is clicked. Loads scene index 1 which should 
-    /// be the main game scene. Make sure scene 1 is added to build settings.
-    /// </remarks>
-    private void StartGame(int SceneIndex)
-    {
-       // Load scene index 1 (the main game scene)
-       SceneManager.LoadScene(SceneIndex);
+    public void StartSession()    {
+        SceneController.Instance
+            .NewTransition()
+            .Load(SceneDatabase.Slots.Session, SceneDatabase.Scenes.Session)
+            .Load(SceneDatabase.Slots.SessionContent, SceneDatabase.Scenes.MapSelection, setActive: true)
+            .Unload(SceneDatabase.Slots.Menu)
+            .WithOverlay()
+            .WithClearUnusedAssets()
+            .Perform();
     }
+    
 
     /// <summary>
     /// Quits the application or stops editor play mode
