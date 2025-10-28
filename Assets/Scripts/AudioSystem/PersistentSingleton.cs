@@ -44,8 +44,8 @@ namespace AudioSystem {
         
         /// <summary>
         /// Gets the single instance of this component.
-        /// If no instance exists, it will find one in the scene or create a new GameObject with the component.
-        /// This is how you access the singleton from anywhere in your code.
+        /// If no instance exists, it will find one in the scene or create a new GameObject with the component (play mode only).
+        /// Returns null in edit mode to prevent unintended GameObject creation.
         /// </summary>
         /// <returns>The singleton instance.</returns>
         /// <example>
