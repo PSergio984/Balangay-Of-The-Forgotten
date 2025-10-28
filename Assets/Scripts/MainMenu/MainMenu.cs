@@ -75,8 +75,22 @@ public class MainMenu : MonoBehaviour
         // Add listener for the Quit button to call the QuitGame method when clicked
         QuitButton.onClick.AddListener(QuitGame);
     }
-
-    public void StartSession()    {
+    /// <summary>
+    /// Initiates a new game session by transitioning from the menu to the session scenes
+    /// </summary>
+    /// <remarks>
+    /// Performs a complex scene transition that loads the session infrastructure and map selection,
+    /// unloads the menu, and applies transition effects. This should be called when the player
+    /// clicks the start button.
+    /// </remarks>
+    public void StartSession()
+    {
+        if (SceneController.Instance == null)
+        {
+            Debug.LogError("SceneController.Instance is null. Cannot start session.");
+            return;
+        }
+        
         SceneController.Instance
             .NewTransition()
             .Load(SceneDatabase.Slots.Session, SceneDatabase.Scenes.Session)
@@ -85,8 +99,7 @@ public class MainMenu : MonoBehaviour
             .WithOverlay()
             .WithClearUnusedAssets()
             .Perform();
-    }
-    
+    }    
 
     /// <summary>
     /// Quits the application or stops editor play mode

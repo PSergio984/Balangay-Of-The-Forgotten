@@ -62,7 +62,10 @@ public class CardViewCreator : Singleton<CardViewCreator>
     // Prefab reference for the card that will be instantiated
     [SerializeField] private CardView cardPrefab;
 
-    [SerializeField] SoundData cardSpawnSound;
+    [Header("🎵 Card Audio")]
+    [SerializeField] private SoundData cardSpawnSound;
+
+     SoundBuilder soundBuilder = SoundManager.Instance.CreateSoundBuilder();
 
     /// <summary>
     /// Creates a new card view with position, rotation, and smooth scaling animation
@@ -97,7 +100,7 @@ public class CardViewCreator : Singleton<CardViewCreator>
             .SetEase(Ease.OutBack)
             .OnComplete(() => cardView.UpdateOriginalPosition());
         
-        SoundManager.Instance.CreateSoundBuilder()
+        soundBuilder
             .WithPosition(position)
             .Play(cardSpawnSound);
         

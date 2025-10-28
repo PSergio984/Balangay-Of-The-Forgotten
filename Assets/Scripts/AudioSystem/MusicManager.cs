@@ -1,149 +1,242 @@
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Audio;
-namespace AudioSystem {
+using System.Collections;
+
+namespace AudioSystem
+{
     /// <summary>
-    /// Manages background music with smooth crossfading between tracks.
-    /// Handles a playlist queue and automatically plays the next track when one finishes.
-    /// Supports seamless transitions without awkward silence or abrupt cuts.
+    /// Professional music manager with smooth crossfading and proper resource management.
+    /// Optimized for card games and multi-scene architectures.
     /// </summary>
-    [RequireComponent(typeof(MusicManager))]
-    public class MusicManager : PersistentSingleton<MonoBehaviour> {
-        /// <summary>
-        /// How long (in seconds) it takes to fade from one track to another.
-        /// Shorter = snappier transitions, longer = smoother blending.
-        /// </summary>
-        const float crossFadeTime = 1.0f;
+    public class MusicManager : PersistentSingleton<MusicManager>
+    {
+        [Header("🎵 Audio Configuration")]
+        [SerializeField] private AudioMixerGroup musicMixerGroup;
+        [SerializeField] private int maxAudioSources = 2; // For crossfading
+        
+        [Header("🎚️ Fade Settings")]
+        [SerializeField] private float defaultFadeTime = 2f;
+        [SerializeField] private AnimationCurve fadeCurve = AnimationCurve.EaseInOut(0, 0, 1, 1);
+        
+        // Audio source pool for efficient memory management
+        private AudioSource[] audioSourcePool;
+        private int currentSourceIndex = 0;
+        private Coroutine currentFadeCoroutine;
+        
+        // Current state
+        private AudioClip currentClip;
+        private float currentVolume = 1f;
+        private bool isMusicPlaying = false;
+        
+        protected override void Awake()
+        {
+            base.Awake();
+            InitializeAudioSources();
+        }
         
         /// <summary>
-        /// Tracks the current fade progress. 0 = not fading, positive = actively fading.
+        /// Initialize audio source pool for efficient crossfading
         /// </summary>
-        float fading;
-        
-        /// <summary>
-        /// The AudioSource playing the current track (fading in or fully playing).
-        /// </summary>
-        AudioSource current;
-        
-        /// <summary>
-        /// The AudioSource playing the previous track (fading out).
-        /// Gets destroyed once the fade completes.
-        /// </summary>
-        AudioSource previous;
-        
-        /// <summary>
-        /// Queue of music tracks waiting to play.
-        /// Automatically plays the next track when the current one finishes.
-        /// </summary>
-        readonly Queue<AudioClip> playlist = new();
-        
-        /// <summary>
-        /// Music tracks to load into the playlist on Start.
-        /// Set this in the inspector to have music ready from the beginning.
-        /// </summary>
-        [SerializeField] List<AudioClip> initialPlaylist;
-        
-        /// <summary>
-        /// Which audio mixer group music should play through.
-        /// Use this to control music volume separately from sound effects.
-        /// </summary>
-        [SerializeField] AudioMixerGroup musicMixerGroup;
-        
-        void Start() {
-            if (initialPlaylist == null) return;
-            foreach (var clip in initialPlaylist) {
-                AddToPlaylist(clip);
-            }
-        }        
-        /// <summary>
-        /// Adds a music track to the end of the playlist queue.
-        /// If nothing is playing, starts playing immediately.
-        /// </summary>
-        /// <param name="clip">The audio clip to add to the playlist.</param>
-        public void AddToPlaylist(AudioClip clip) {
-            playlist.Enqueue(clip);
-            if (current == null && previous == null) {
-                PlayNextTrack();
+        private void InitializeAudioSources()
+        {
+            audioSourcePool = new AudioSource[maxAudioSources];
+            
+            for (int i = 0; i < maxAudioSources; i++)
+            {
+                GameObject sourceGO = new GameObject($"MusicSource_{i}");
+                sourceGO.transform.SetParent(transform);
+                
+                AudioSource source = sourceGO.AddComponent<AudioSource>();
+                source.outputAudioMixerGroup = musicMixerGroup;
+                source.loop = true;
+                source.playOnAwake = false;
+                source.volume = 0f;
+                
+                audioSourcePool[i] = source;
             }
         }
         
         /// <summary>
-        /// Removes all tracks from the playlist.
-        /// Doesn't stop the currently playing track.
+        /// Play music with smooth crossfade. Perfect for your scene transitions.
         /// </summary>
-        public void Clear() => playlist.Clear();
-        
-        /// <summary>
-        /// Plays the next track in the playlist queue.
-        /// Called automatically when a track finishes, or call manually to skip.
-        /// </summary>
-        public void PlayNextTrack() {
-            if (playlist.TryDequeue(out AudioClip nextTrack)) {
-                Play(nextTrack);
-            }
-        }
-        
-        /// <summary>
-        /// Plays a specific music track with crossfade from the current track.
-        /// If the same track is already playing, does nothing.
-        /// Old track fades out while new track fades in smoothly.
-        /// </summary>
-        /// <param name="clip">The music clip to play.</param>
-        public void Play(AudioClip clip) {
+        public void PlayMusic(SoundData musicData, float fadeTime = -1f)
+        {
+            if (musicData?.clip == null) return;
+            
+            float actualFadeTime = fadeTime > 0 ? fadeTime : defaultFadeTime;
+            
             // Don't restart the same track
-            if (current && current.clip == clip) return;
+            if (currentClip == musicData.clip && isMusicPlaying) return;
             
-            // Clean up any leftover previous track
-            if (previous) {
-                Destroy(previous);
-                previous = null;
+            if (currentFadeCoroutine != null)
+            {
+                StopCoroutine(currentFadeCoroutine);
             }
             
-            // Shift current to previous and create new current
-            previous = current;
-            current = gameObject.GetOrAdd<AudioSource>();
-            current.clip = clip;
-            current.outputAudioMixerGroup = musicMixerGroup;
-            current.loop = false; // Tracks play once, then playlist advances
-            current.volume = 0; // Start silent, will fade in
-            current.bypassListenerEffects = true;
-            current.Play();
-            
-            fading = 0.001f; // Start the crossfade
+            currentFadeCoroutine = StartCoroutine(CrossFadeToClip(musicData, actualFadeTime));
         }
         
-        void Update() {
-            HandleCrossFade();
+        /// <summary>
+        /// Stop music with smooth fade out
+        /// </summary>
+        public void StopMusic(float fadeTime = -1f)
+        {
+            if (!isMusicPlaying) return;
             
-            // Auto-advance playlist when track finishes
-            if (current && !current.isPlaying && playlist.Count > 0) {
-                PlayNextTrack();
+            float actualFadeTime = fadeTime > 0 ? fadeTime : defaultFadeTime;
+            
+            if (currentFadeCoroutine != null)
+            {
+                StopCoroutine(currentFadeCoroutine);
+            }
+            
+            currentFadeCoroutine = StartCoroutine(FadeOutMusic(actualFadeTime));
+        }
+        
+        /// <summary>
+        /// Professional crossfade implementation without volume dips
+        /// </summary>
+        private IEnumerator CrossFadeToClip(SoundData musicData, float fadeTime)
+        {
+            AudioSource oldSource = GetCurrentAudioSource();
+            AudioSource newSource = GetNextAudioSource();
+            
+            // Setup new source
+            newSource.clip = musicData.clip;
+            newSource.volume = 0f;
+            newSource.pitch = musicData.pitch;
+            newSource.Play();
+            
+            // Crossfade
+            float elapsedTime = 0f;
+            float oldStartVolume = oldSource ? oldSource.volume : 0f;
+            
+            while (elapsedTime < fadeTime)
+            {
+                elapsedTime += Time.deltaTime;
+                float progress = elapsedTime / fadeTime;
+                float curveValue = fadeCurve.Evaluate(progress);
+                
+                // Fade in new source
+                newSource.volume = curveValue * musicData.volume;
+                
+                // Fade out old source
+                if (oldSource != null)
+                {
+                    oldSource.volume = oldStartVolume * (1f - curveValue);
+                }
+                
+                yield return null;
+            }
+            
+            // Cleanup
+            if (oldSource != null)
+            {
+                oldSource.Stop();
+                oldSource.volume = 0f;
+            }
+            
+            newSource.volume = musicData.volume;
+            currentClip = musicData.clip;
+            currentVolume = musicData.volume;
+            isMusicPlaying = true;
+            currentSourceIndex = GetSourceIndex(newSource);
+            
+            currentFadeCoroutine = null;
+        }
+        
+        /// <summary>
+        /// Fade out current music
+        /// </summary>
+        private IEnumerator FadeOutMusic(float fadeTime)
+        {
+            AudioSource currentSource = GetCurrentAudioSource();
+            if (currentSource == null) yield break;
+            
+            float startVolume = currentSource.volume;
+            float elapsedTime = 0f;
+            
+            while (elapsedTime < fadeTime)
+            {
+                elapsedTime += Time.deltaTime;
+                float progress = elapsedTime / fadeTime;
+                currentSource.volume = startVolume * (1f - fadeCurve.Evaluate(progress));
+                yield return null;
+            }
+            
+            currentSource.Stop();
+            currentSource.volume = 0f;
+            isMusicPlaying = false;
+            currentClip = null;
+            
+            currentFadeCoroutine = null;
+        }
+        
+        /// <summary>
+        /// Get currently playing audio source
+        /// </summary>
+        private AudioSource GetCurrentAudioSource()
+        {
+            if (audioSourcePool == null || audioSourcePool.Length == 0) return null;
+            return audioSourcePool[currentSourceIndex];
+        }
+        
+        /// <summary>
+        /// Get next audio source for crossfading
+        /// </summary>
+        private AudioSource GetNextAudioSource()
+        {
+            int nextIndex = (currentSourceIndex + 1) % audioSourcePool.Length;
+            return audioSourcePool[nextIndex];
+        }
+        
+        /// <summary>
+        /// Get index of audio source in pool
+        /// </summary>
+        private int GetSourceIndex(AudioSource source)
+        {
+            for (int i = 0; i < audioSourcePool.Length; i++)
+            {
+                if (audioSourcePool[i] == source) return i;
+            }
+            return 0;
+        }
+        
+        // Public properties for external control
+        public bool IsPlaying => isMusicPlaying;
+        public AudioClip CurrentClip => currentClip;
+        public float Volume 
+        { 
+            get => currentVolume;
+            set 
+            {
+                currentVolume = value;
+                AudioSource current = GetCurrentAudioSource();
+                if (current != null) current.volume = value;
             }
         }
         
         /// <summary>
-        /// Handles the smooth volume crossfade between tracks.
-        /// Uses logarithmic fading for more natural-sounding transitions.
-        /// Cleans up the old track when fade completes.
+        /// Pause current music
         /// </summary>
-        void HandleCrossFade() {
-            if (fading <= 0f) return;
-            
-            fading += Time.deltaTime;
-            float fraction = Mathf.Clamp01(fading / crossFadeTime);
-            
-            // Logarithmic fade sounds more natural than linear
-            float logFraction = fraction.ToLogarithmicFraction();
-            
-            if (previous) previous.volume = 1.0f - logFraction; // Fade out
-            if (current) current.volume = logFraction; // Fade in
-            
-            if (fraction >= 1) {
-                fading = 0.0f;
-                if (previous) {
-                    Destroy(previous);
-                    previous = null;
-                }
+        public void Pause()
+        {
+            AudioSource current = GetCurrentAudioSource();
+            if (current != null && current.isPlaying)
+            {
+                current.Pause();
+            }
+        }
+        
+        /// <summary>
+        /// Resume paused music
+        /// </summary>
+        public void Resume()
+        {
+            AudioSource current = GetCurrentAudioSource();
+            if (current != null)
+            {
+                current.UnPause();
             }
         }
     }

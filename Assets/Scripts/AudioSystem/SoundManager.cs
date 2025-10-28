@@ -54,8 +54,9 @@ namespace AudioSystem {
         /// When this limit is reached, the oldest sound gets stopped.
         /// </summary>
         [SerializeField] int maxSoundInstances = 30;
-        
-        void Start() {
+
+        void Start()
+        {
             InitializePool();
         }
         
@@ -70,6 +71,15 @@ namespace AudioSystem {
         ///     .WithPosition(transform.position)
         ///     .WithVolume(0.8f)
         ///     .Play();
+        /// </example>
+        /// <example>
+        /// Cache SoundBuilder for performance
+        // SoundBuilder soundBuilder = SoundManager.Instance.CreateSoundBuilder();
+
+        //soundBuilder
+        //     .WithRandomPitch()
+        //     .WithPosition(transform.position)
+        //     .Play(soundData); 
         /// </example>
         public SoundBuilder CreateSoundBuilder() => new SoundBuilder(this);
         

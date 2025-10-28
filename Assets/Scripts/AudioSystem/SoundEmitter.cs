@@ -114,9 +114,14 @@ namespace AudioSystem {
             }
             
             audioSource.Stop();
-            SoundManager.Instance.ReturnToPool(this);
-        }
-        
+            
+            if (SoundManager.Instance != null) {
+                SoundManager.Instance.ReturnToPool(this);
+            }
+            
+            Data = null;
+            Node = null;
+        }        
         /// <summary>
         /// Adds a small random pitch variation to the current pitch.
         /// Makes repeated sounds feel less robotic and more natural.
