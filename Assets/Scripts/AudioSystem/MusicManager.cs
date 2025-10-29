@@ -67,12 +67,17 @@ namespace AudioSystem
             
             // Don't restart the same track
             if (currentClip == musicData.clip && isMusicPlaying) return;
-            
+
+            // Normalize and store the desired target volume for this track
+            float targetVolume = Mathf.Clamp(musicData.volume, 0f, 1f);
+            currentVolume = targetVolume;
+
             if (currentFadeCoroutine != null)
             {
-                StopCoroutine(currentFadeCoroutine);
+                // Gracefully cancel any in-progress fade and restore a consistent audio state
+                CancelCurrentFadeAndStabilize();
             }
-            
+
             currentFadeCoroutine = StartCoroutine(CrossFadeToClip(musicData, actualFadeTime));
         }
         
@@ -87,9 +92,10 @@ namespace AudioSystem
             
             if (currentFadeCoroutine != null)
             {
-                StopCoroutine(currentFadeCoroutine);
+                // Ensure no partial fades remain before starting fade out
+                CancelCurrentFadeAndStabilize();
             }
-            
+
             currentFadeCoroutine = StartCoroutine(FadeOutMusic(actualFadeTime));
         }
         
@@ -110,22 +116,23 @@ namespace AudioSystem
             // Crossfade
             float elapsedTime = 0f;
             float oldStartVolume = oldSource ? oldSource.volume : 0f;
-            
+            float targetVol = currentVolume; // read shared target volume so runtime volume changes affect fades
+
             while (elapsedTime < fadeTime)
             {
                 elapsedTime += Time.deltaTime;
                 float progress = elapsedTime / fadeTime;
                 float curveValue = fadeCurve.Evaluate(progress);
-                
-                // Fade in new source
-                newSource.volume = curveValue * musicData.volume;
-                
+
+                // Fade in new source (respecting the shared target volume)
+                newSource.volume = curveValue * targetVol;
+
                 // Fade out old source
                 if (oldSource != null)
                 {
                     oldSource.volume = oldStartVolume * (1f - curveValue);
                 }
-                
+
                 yield return null;
             }
             
@@ -136,9 +143,11 @@ namespace AudioSystem
                 oldSource.volume = 0f;
             }
             
-            newSource.volume = musicData.volume;
+            // Finalize volumes to the shared target
+            float finalTarget = currentVolume;
+            newSource.volume = finalTarget;
             currentClip = musicData.clip;
-            currentVolume = musicData.volume;
+            currentVolume = finalTarget;
             isMusicPlaying = true;
             currentSourceIndex = GetSourceIndex(newSource);
             
@@ -189,6 +198,86 @@ namespace AudioSystem
             int nextIndex = (currentSourceIndex + 1) % audioSourcePool.Length;
             return audioSourcePool[nextIndex];
         }
+
+        /// <summary>
+        /// Cancel any in-progress fade coroutine and restore a consistent audio state.
+        /// Ensures one source is the active source at full/target volume and others are stopped at 0.
+        /// </summary>
+        private void CancelCurrentFadeAndStabilize()
+        {
+            if (currentFadeCoroutine == null) return;
+
+            try
+            {
+                StopCoroutine(currentFadeCoroutine);
+            }
+            catch (System.Exception ex)
+            {
+                Debug.LogWarning($"Failed to stop coroutine: {ex.Message}");
+            }
+            currentFadeCoroutine = null;
+            if (audioSourcePool == null || audioSourcePool.Length == 0)
+            {
+                // Nothing to stabilize
+                currentClip = null;
+                isMusicPlaying = false;
+                return;
+            }
+
+            // Find the loudest source (best candidate to preserve)
+            float maxVol = -1f;
+            int maxIdx = -1;
+            for (int i = 0; i < audioSourcePool.Length; i++)
+            {
+                var s = audioSourcePool[i];
+                if (s == null) continue;
+                if (s.volume > maxVol)
+                {
+                    maxVol = s.volume;
+                    maxIdx = i;
+                }
+            }
+
+            if (maxIdx >= 0 && maxVol > 0.0001f)
+            {
+                // Use the loudest source as the active source
+                currentSourceIndex = maxIdx;
+                var active = audioSourcePool[maxIdx];
+                // If it has a clip, keep it as currentClip
+                currentClip = active.clip;
+                // Normalize its volume to the configured currentVolume or 1
+                currentVolume = Mathf.Approximately(currentVolume, 0f) ? active.volume : currentVolume;
+                active.volume = currentVolume;
+                if (!active.isPlaying) active.Play();
+
+                // Stop and zero other sources
+                for (int i = 0; i < audioSourcePool.Length; i++)
+                {
+                    if (i == maxIdx) continue;
+                    var s = audioSourcePool[i];
+                    if (s == null) continue;
+                    s.volume = 0f;
+                    if (s.isPlaying) s.Stop();
+                }
+
+                isMusicPlaying = true;
+            }
+            else
+            {
+                // No audible source: stop all and clear state
+                for (int i = 0; i < audioSourcePool.Length; i++)
+                {
+                    var s = audioSourcePool[i];
+                    if (s == null) continue;
+                    s.volume = 0f;
+                    if (s.isPlaying) s.Stop();
+                }
+
+                currentClip = null;
+                isMusicPlaying = false;
+                currentSourceIndex = 0;
+            }
+        }
         
         /// <summary>
         /// Get index of audio source in pool
@@ -210,9 +299,46 @@ namespace AudioSystem
             get => currentVolume;
             set 
             {
-                currentVolume = value;
-                AudioSource current = GetCurrentAudioSource();
-                if (current != null) current.volume = value;
+                // Clamp and store the desired target volume
+                float clamped = Mathf.Clamp(value, 0f, 1f);
+                currentVolume = clamped;
+
+                // Apply the change to all audio sources so active/fading sources stay in sync.
+                if (audioSourcePool == null) return;
+
+                // Find current max to preserve relative fade ratios when possible
+                float maxVol = 0f;
+                for (int i = 0; i < audioSourcePool.Length; i++)
+                {
+                    var s = audioSourcePool[i];
+                    if (s == null) continue;
+                    if (s.volume > maxVol) maxVol = s.volume;
+                }
+
+                if (maxVol > 0.0001f)
+                {
+                    float scale = clamped / maxVol;
+                    for (int i = 0; i < audioSourcePool.Length; i++)
+                    {
+                        var s = audioSourcePool[i];
+                        if (s == null) continue;
+                        s.volume = Mathf.Clamp01(s.volume * scale);
+                    }
+                }
+                else
+                {
+                    // No current audible source: apply to the primary source and zero others
+                    var current = GetCurrentAudioSource();
+                    for (int i = 0; i < audioSourcePool.Length; i++)
+                    {
+                        var s = audioSourcePool[i];
+                        if (s == null) continue;
+                        if (s == current)
+                            s.volume = clamped;
+                        else
+                            s.volume = 0f;
+                    }
+                }
             }
         }
         
@@ -225,6 +351,8 @@ namespace AudioSystem
             if (current != null && current.isPlaying)
             {
                 current.Pause();
+                // Reflect paused state in public flag
+                isMusicPlaying = false;
             }
         }
         
@@ -237,6 +365,8 @@ namespace AudioSystem
             if (current != null)
             {
                 current.UnPause();
+                // Reflect resumed state in public flag
+                isMusicPlaying = true;
             }
         }
     }
