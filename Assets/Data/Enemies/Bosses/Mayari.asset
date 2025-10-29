@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d6b46991f21540249a505cc6d07a919b, type: 3}
   m_Name: Mayari
   m_EditorClassIdentifier: Assembly-CSharp::EnemyData
-  <Image>k__BackingField: {fileID: 21300000, guid: d201257aada4f1b4486dcd2ec41fc81b, type: 3}
+  <Image>k__BackingField: {fileID: 21300000, guid: d90cb16502e3b8841a316d5a93cce724, type: 3}
   <EnemyName>k__BackingField: Mayari
   <Health>k__BackingField: 2100
   <AttackPower>k__BackingField: 300

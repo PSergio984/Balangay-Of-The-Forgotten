@@ -1,19 +1,10 @@
 fileFormatVersion: 2
-guid: d201257aada4f1b4486dcd2ec41fc81b
+guid: d90cb16502e3b8841a316d5a93cce724
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 3001005256555965000
-    second: Mayari_0
-  - first:
-      213: 7744061964198697673
-    second: Mayari_1
-  - first:
-      213: 8576375215459788422
-    second: Mayari_2
-  - first:
-      213: 6679916953589612381
-    second: Mayari_3
+      213: -5118758229556087636
+    second: Mayari64_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -60,9 +51,9 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 100
+  spritePixelsToUnits: 64
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
-  spriteGenerateFallbackPhysicsShape: 0
+  spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
   alphaIsTransparency: 1
   spriteTessellationDetail: -1
@@ -118,52 +109,17 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 4
-    buildTarget: WindowsStoreApps
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 1
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    ignorePlatformSupport: 0
-    androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Mayari_0
+      name: Mayari64_0
       rect:
         serializedVersion: 2
-        x: 59
-        y: 789
-        width: 12
-        height: 12
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 84a291e7166b5a920800000000000000
-      internalID: 3001005256555965000
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Mayari_1
-      rect:
-        serializedVersion: 2
-        x: 69
+        x: 2
         y: 0
-        width: 552
-        height: 931
+        width: 61
+        height: 94
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -172,52 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 9ca5dae935f687b60800000000000000
-      internalID: 7744061964198697673
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Mayari_2
-      rect:
-        serializedVersion: 2
-        x: 49
-        y: 639
-        width: 12
-        height: 12
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 686e1f1a1d7650770800000000000000
-      internalID: 8576375215459788422
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Mayari_3
-      rect:
-        serializedVersion: 2
-        x: 29
-        y: 619
-        width: 12
-        height: 12
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: d5f71dbd315d3bc50800000000000000
-      internalID: 6679916953589612381
+      spriteID: ca4b334b28486f8b0800000000000000
+      internalID: -5118758229556087636
       vertices: []
       indices: 
       edges: []
@@ -236,10 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Mayari_0: 3001005256555965000
-      Mayari_1: 7744061964198697673
-      Mayari_2: 8576375215459788422
-      Mayari_3: 6679916953589612381
+      Mayari64_0: -5118758229556087636
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

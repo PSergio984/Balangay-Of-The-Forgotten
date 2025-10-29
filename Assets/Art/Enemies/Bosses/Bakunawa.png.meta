@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 251d619571f7a0a4c991316c82f362ec
+guid: 89e3beee3f4fb7f469680a5618692d7d
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 7511935507092196789
-    second: Bakunawa_0
+      213: -3885699196112140927
+    second: Bakunawa64_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -51,9 +51,9 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 100
+  spritePixelsToUnits: 64
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
-  spriteGenerateFallbackPhysicsShape: 0
+  spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
   alphaIsTransparency: 1
   spriteTessellationDetail: -1
@@ -109,30 +109,17 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 4
-    buildTarget: WindowsStoreApps
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 1
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    ignorePlatformSupport: 0
-    androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Bakunawa_0
+      name: Bakunawa64_0
       rect:
         serializedVersion: 2
-        x: 89
-        y: 79
-        width: 542
-        height: 802
+        x: 8
+        y: 7
+        width: 56
+        height: 82
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -141,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 5bdcfd33b81cf3860800000000000000
-      internalID: 7511935507092196789
+      spriteID: 18507bf1b29331ac0800000000000000
+      internalID: -3885699196112140927
       vertices: []
       indices: 
       edges: []
@@ -161,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Bakunawa_0: 7511935507092196789
+      Bakunawa64_0: -3885699196112140927
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
