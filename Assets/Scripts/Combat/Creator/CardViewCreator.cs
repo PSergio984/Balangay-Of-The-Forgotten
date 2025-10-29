@@ -65,7 +65,18 @@ public class CardViewCreator : Singleton<CardViewCreator>
     [Header("🎵 Card Audio")]
     [SerializeField] private SoundData cardSpawnSound;
 
-     SoundBuilder soundBuilder = SoundManager.Instance.CreateSoundBuilder();
+    /// <summary>
+    /// Sound builder for playing card-related audio effects
+    /// </summary>
+    private SoundBuilder soundBuilder;
+
+
+     
+        private void Start()
+    {
+        // Cache the sound builder for playing sounds and performance
+        soundBuilder = SoundManager.Instance.CreateSoundBuilder();
+    }
 
     /// <summary>
     /// Creates a new card view with position, rotation, and smooth scaling animation
