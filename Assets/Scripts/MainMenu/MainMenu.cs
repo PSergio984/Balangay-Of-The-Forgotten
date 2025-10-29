@@ -1,6 +1,7 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using AudioSystem;
+
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -52,7 +53,7 @@ using UnityEditor;
 /// </remarks>
 public class MainMenu : MonoBehaviour
 {
-    
+
     /// <summary>
     /// Button that quits the game when clicked
     /// </summary>
@@ -62,6 +63,8 @@ public class MainMenu : MonoBehaviour
     /// Assign a UI Button component in the Inspector.
     /// </remarks>
     [SerializeField] private Button QuitButton;
+    [SerializeField] private SoundData mapSelectionMusic;
+    [SerializeField] private float MusicFadeTime = 2f;
 
     /// <summary>
     /// Sets up button listeners when the menu loads
@@ -72,9 +75,9 @@ public class MainMenu : MonoBehaviour
     /// </remarks>
     void Start()
     {
-        // Add listener for the Quit button to call the QuitGame method when clicked
         QuitButton.onClick.AddListener(QuitGame);
     }
+
     /// <summary>
     /// Initiates a new game session by transitioning from the menu to the session scenes
     /// </summary>
@@ -97,6 +100,7 @@ public class MainMenu : MonoBehaviour
             .Load(SceneDatabase.Slots.SessionContent, SceneDatabase.Scenes.MapSelection, setActive: true)
             .Unload(SceneDatabase.Slots.Menu)
             .WithOverlay()
+            .WithMusic(mapSelectionMusic, MusicFadeTime)
             .WithClearUnusedAssets()
             .Perform();
     }    

@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
+using AudioSystem;
 
 /* CARD SYSTEM DESIGN
  *
@@ -59,10 +60,28 @@ public class CardSystem : Singleton<CardSystem>
     private List<List<Card>> discardPiles = new();
     private List<List<Card>> hands = new();
 
+    [Header("🎵 Card Audio")]
+    [SerializeField] private SoundData cardDiscardSound;
+
     // Only for UI/display, not for logic
     private int activeHeroIndex = 0;
     public int ActiveHeroIndex => activeHeroIndex;
     public int HeroCount => drawPiles.Count;
+
+    private SoundBuilder soundBuilder;
+
+    private void Start()
+    {
+        // Cache the sound builder for playing sounds and performance
+        if (SoundManager.Instance != null)
+        {
+            soundBuilder = SoundManager.Instance.CreateSoundBuilder();
+        }
+        else
+        {
+            Debug.LogWarning("[CardSystem] SoundManager not available. Card sounds will be disabled.");
+        }
+    }
 
     // Set active hero for UI, but do NOT use for logic
     public void SetActiveHero(int heroIndex)
@@ -290,6 +309,9 @@ public class CardSystem : Singleton<CardSystem>
         yield return tween.WaitForCompletion();
         if (cardView != null && cardView.gameObject != null)
         {
+            soundBuilder
+            .Play(cardDiscardSound);
+            
             cardView.transform.DOKill();
             DOTween.Kill(cardView);
             Destroy(cardView.gameObject);

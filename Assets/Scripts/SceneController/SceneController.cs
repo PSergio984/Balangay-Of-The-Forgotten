@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using AudioSystem;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -108,9 +109,15 @@ public class SceneController : MonoBehaviour
     /// <param name="plan">The transition plan containing all load/unload instructions.</param>
     private IEnumerator ChangeSceneRoutine(SceneTransitionPlan plan)
     {
+        // CHANGE MUSIC IMMEDIATELY when transition starts
+        if (plan.TransitionMusic != null && MusicManager.Instance != null)
+        {
+            MusicManager.Instance.PlayMusic(plan.TransitionMusic, plan.MusicFadeTime);
+        }
+
         // Fade to black
         yield return loadingOverlay.FadeInBlack();
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(1f);
 
         // Unload old scenes
         foreach (var slotKey in plan.ScenesToUnload)
@@ -243,12 +250,16 @@ public class SceneController : MonoBehaviour
         /// Key = slot name, Value = scene name to load into that slot.
         /// </summary>
         public Dictionary<string, string> ScenesToLoad { get; } = new();
-        
+
         /// <summary>
         /// List of slots to unload before loading new scenes.
         /// </summary>
         public List<string> ScenesToUnload { get; } = new();
         
+        /// <summary>
+        /// Music to play during this transition (plays immediately when transition starts)
+        /// </summary>
+        public SoundData TransitionMusic { get; private set; }        
         /// <summary>
         /// Which scene should become the active scene (for lighting/physics).
         /// Empty string means don't change the active scene.
@@ -260,12 +271,17 @@ public class SceneController : MonoBehaviour
         /// Frees memory but adds a small delay.
         /// </summary>
         public bool ClearUnusedAssets { get; private set; } = false;
-        
+
         /// <summary>
         /// Whether to fade the screen in and out during transition.
         /// If false, transition happens instantly (but scenes still load properly).
         /// </summary>
         public bool Overlay { get; private set; } = false;
+        
+        /// <summary>
+        /// Duration of music fade in/out during transition.
+        /// </summary>
+        public float MusicFadeTime { get; private set; } = 2f;
 
         /// <summary>
         /// Adds a scene to load into a specific slot.
@@ -305,6 +321,16 @@ public class SceneController : MonoBehaviour
         public SceneTransitionPlan WithOverlay()
         {
             Overlay = true;
+            return this;
+        }
+
+        /// <summary>
+        /// Sets music with custom fade time
+        /// </summary>
+        public SceneTransitionPlan WithMusic(SoundData music, float fadeTime = 2f)
+        {
+            TransitionMusic = music;
+            MusicFadeTime = fadeTime;
             return this;
         }
 
