@@ -72,7 +72,7 @@ public class CardViewCreator : Singleton<CardViewCreator>
 
 
      
-        private void Start()
+    private void Start()
     {
         // Cache the sound builder for playing sounds and performance
         soundBuilder = SoundManager.Instance.CreateSoundBuilder();
