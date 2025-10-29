@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d6b46991f21540249a505cc6d07a919b, type: 3}
   m_Name: Bakunawa
   m_EditorClassIdentifier: Assembly-CSharp::EnemyData
-  <Image>k__BackingField: {fileID: 21300000, guid: 251d619571f7a0a4c991316c82f362ec, type: 3}
+  <Image>k__BackingField: {fileID: 21300000, guid: 89e3beee3f4fb7f469680a5618692d7d, type: 3}
   <EnemyName>k__BackingField: Bakunawa
   <Health>k__BackingField: 2000
   <AttackPower>k__BackingField: 40

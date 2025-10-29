@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d6b46991f21540249a505cc6d07a919b, type: 3}
   m_Name: Sirena
   m_EditorClassIdentifier: Assembly-CSharp::EnemyData
-  <Image>k__BackingField: {fileID: 21300000, guid: ca7645a415e2ba14381496d45592af4a, type: 3}
+  <Image>k__BackingField: {fileID: 21300000, guid: b185b1d27c19ef34e9ff29ee05989bfc, type: 3}
   <EnemyName>k__BackingField: Sirena
   <Health>k__BackingField: 2100
   <AttackPower>k__BackingField: 20

@@ -884,29 +884,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CardViewCreator
   cardPrefab: {fileID: 2311257804522615, guid: c0725b9c7a3f258489ba30beecbc1a43, type: 3}
-  cardSpawnSound:
-    clip: {fileID: 8300000, guid: 6a822a33d7ca17d4e9e905f9e3ec1186, type: 3}
-    mixerGroup: {fileID: -4118288942777852681, guid: 1d8e109cc8751d241b1a0f5629757c92, type: 2}
-    loop: 0
-    playOnAwake: 0
-    frequentSound: 0
-    mute: 0
-    bypassEffects: 0
-    bypassListenerEffects: 0
-    bypassReverbZones: 0
-    priority: 128
-    volume: 1
-    pitch: 1
-    panStereo: 0
-    spatialBlend: 0
-    reverbZoneMix: 1
-    dopplerLevel: 1
-    spread: 0
-    minDistance: 1
-    maxDistance: 500
-    ignoreListenerVolume: 0
-    ignoreListenerPause: 0
-    rolloffMode: 0
+  cardSpawnSound: {fileID: 11400000, guid: 7d961c988d7899b4190b9fe153c7475f, type: 2}
 --- !u!1 &368726116
 GameObject:
   m_ObjectHideFlags: 0
@@ -1166,7 +1144,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 21.599854, y: -17.599976}
+  m_AnchoredPosition: {x: 21.5, y: -17.5}
   m_SizeDelta: {x: 32, y: 32}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &460807401
@@ -2886,7 +2864,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 1.1999512, y: -3.4000244}
+  m_AnchoredPosition: {x: 1, y: -3.5}
   m_SizeDelta: {x: 51.86, y: 51.86}
   m_Pivot: {x: 0, y: 0}
 --- !u!114 &1623214355

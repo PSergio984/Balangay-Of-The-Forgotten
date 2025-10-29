@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 74aa2285aaf0dec40a10d3438e6cfb95
+guid: 1b3d8231b1949af489c01b1d5ad2e8c1
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 9039523554312656860
-    second: Bagani_0
+      213: -7613080903851761921
+    second: Bundok Pulag_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -53,7 +53,7 @@ TextureImporter:
   spritePivot: {x: 0.5, y: 0.5}
   spritePixelsToUnits: 100
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
-  spriteGenerateFallbackPhysicsShape: 1
+  spriteGenerateFallbackPhysicsShape: 0
   alphaUsage: 1
   alphaIsTransparency: 1
   spriteTessellationDetail: -1
@@ -109,30 +109,17 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 4
-    buildTarget: WindowsStoreApps
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 1
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    ignorePlatformSupport: 0
-    androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Bagani_0
+      name: Bundok Pulag_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 551
-        height: 631
+        width: 800
+        height: 800
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -141,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: cd7159977c6d27d70800000000000000
-      internalID: 9039523554312656860
+      spriteID: ffe1b97f047e85690800000000000000
+      internalID: -7613080903851761921
       vertices: []
       indices: 
       edges: []
@@ -161,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Bagani_0: 9039523554312656860
+      Bundok Pulag_0: -7613080903851761921
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
