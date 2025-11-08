@@ -101,51 +101,65 @@ public class SceneController : MonoBehaviour
         return StartCoroutine(ChangeSceneRoutine(plan));
     }
 
-    /// <summary>
-    /// The main coroutine that handles the scene transition workflow.
-    /// Steps: Fade in → Unload old scenes → Clean assets (optional) → Load new scenes → Fade out (optional).
-    /// Automatically sets the busy flag back to false when complete.
-    /// </summary>
-    /// <param name="plan">The transition plan containing all load/unload instructions.</param>
     private IEnumerator ChangeSceneRoutine(SceneTransitionPlan plan)
     {
-        // CHANGE MUSIC IMMEDIATELY when transition starts
+        Debug.Log($"[Frame {Time.frameCount}] ===== TRANSITION START =====");
+
+        // PHASE 1: Change music
         if (plan.TransitionMusic != null && MusicManager.Instance != null)
         {
+            Debug.Log($"[Frame {Time.frameCount}] PHASE 1: Starting music fade");
             MusicManager.Instance.PlayMusic(plan.TransitionMusic, plan.MusicFadeTime);
         }
 
+        // PHASE 2: Fade to black
         // Fade to black
-        yield return loadingOverlay.FadeInBlack();
-        yield return new WaitForSeconds(1f);
+        if(plan.Overlay && loadingOverlay != null)
+        {
+            Debug.Log($"[Frame {Time.frameCount}] PHASE 2: Starting fade to black");
+            yield return loadingOverlay.FadeInBlack();
+            yield return new WaitForSeconds(1f);
+        }
 
-        // Unload old scenes
+        // PHASE 3: Unload old scenes
+        Debug.Log($"[Frame {Time.frameCount}] PHASE 3: Unloading {plan.ScenesToUnload.Count} scenes");
         foreach (var slotKey in plan.ScenesToUnload)
         {
+            Debug.Log($"[Frame {Time.frameCount}] Unloading slot: {slotKey}");
             yield return UnloadSceneRoutine(slotKey);
         }
 
-        // Optional: Clean up memory
-        if (plan.ClearUnusedAssets) yield return CleanupUnusedAssetsRoutine();
+        // PHASE 4: Memory cleanup
+        if (plan.ClearUnusedAssets)
+        {
+            Debug.Log($"[Frame {Time.frameCount}] PHASE 4: Cleaning unused assets");
+            yield return CleanupUnusedAssetsRoutine();
+        }
 
-        // Load new scenes
+        // PHASE 5: Load new scenes
+        Debug.Log($"[Frame {Time.frameCount}] PHASE 5: Loading {plan.ScenesToLoad.Count} scenes");
         foreach (var kvp in plan.ScenesToLoad)
         {
-            // If slot already has a scene, unload it first
-            if (!loadedSceneBySlot.ContainsKey(kvp.Key))
+            Debug.Log($"[Frame {Time.frameCount}] Loading {kvp.Value} into slot {kvp.Key}");
+            if (loadedSceneBySlot.ContainsKey(kvp.Key))
             {
                 yield return UnloadSceneRoutine(kvp.Key);
             }
             yield return LoadAdditiveRoutine(kvp.Key, kvp.Value, plan.ActiveSceneName == kvp.Value);
         }
         
-        // Optional: Fade back to gameplay
-        if (plan.Overlay)
+        // PHASE 6: Fade from black
+        if (plan.Overlay && loadingOverlay != null)
         {
+            Debug.Log($"[Frame {Time.frameCount}] PHASE 6: Starting fade from black");
             yield return loadingOverlay.FadeOutBlack();
+            Debug.Log($"[Frame {Time.frameCount}] PHASE 6: Fade from black COMPLETE");
         }
+        
+        Debug.Log($"[Frame {Time.frameCount}] ===== TRANSITION COMPLETE =====");
         isBusy = false;
     }
+
 
     /// <summary>
     /// Loads a scene additively (on top of existing scenes) into a named slot.
