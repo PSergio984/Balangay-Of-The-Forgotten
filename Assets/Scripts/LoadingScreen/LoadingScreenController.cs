@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.Video;
 using UnityEngine.SceneManagement;
 using System.Collections;
+using AudioSystem;
 
 /// <summary>
 /// Professional video controller with robust error handling and smooth transitions
@@ -11,8 +12,6 @@ public class LoadingScreenController : MonoBehaviour
 {
     [Header("Video Settings")]
     [SerializeField] private VideoPlayer videoPlayer;
-    [SerializeField] private int nextSceneIndex = 1;
-    [SerializeField] private string nextSceneName = "Core"; // Alternative to scene index
     
     [Header("Input Settings")]
     [SerializeField] private bool skipOnClick = true;
@@ -20,9 +19,8 @@ public class LoadingScreenController : MonoBehaviour
     [SerializeField] private float minimumPlayTime = 1f; // Prevent accidental immediate skips
     
     [Header("Transition Settings")]
-    [SerializeField] private bool useSceneName = true; // Use scene name instead of index
-    [SerializeField] private float fadeOutDuration = 0.5f;
-    [SerializeField] private CanvasGroup fadeCanvasGroup; // Optional fade overlay
+    [SerializeField] private SoundData MenuMusic;
+    [SerializeField] private float MusicFadeTime = 2f;
     
     [Header("Debug")]
     [SerializeField] private bool showDebugLogs = true;
@@ -178,69 +176,13 @@ public class LoadingScreenController : MonoBehaviour
     /// </summary>
     private void LoadNextScene()
     {
-        if (fadeCanvasGroup != null && fadeOutDuration > 0)
-        {
-            StartCoroutine(FadeAndLoadScene());
-        }
-        else
-        {
-            LoadSceneImmediate();
-        }
-    }
-
-    /// <summary>
-    /// Fade out and load scene smoothly
-    /// </summary>
-    private IEnumerator FadeAndLoadScene()
-    {
-        float elapsed = 0f;
-        
-        while (elapsed < fadeOutDuration)
-        {
-            elapsed += Time.deltaTime;
-            if (fadeCanvasGroup != null)
-                fadeCanvasGroup.alpha = Mathf.Lerp(0f, 1f, elapsed / fadeOutDuration);
-            yield return null;
-        }
-        
-        LoadSceneImmediate();
-    }
-
-    /// <summary>
-    /// Load the scene immediately
-    /// </summary>
-    private void LoadSceneImmediate()
-    {
-        try
-        {
-            if (useSceneName && !string.IsNullOrEmpty(nextSceneName))
-            {
-                LogDebug($"Loading scene by name: {nextSceneName}");
-                SceneManager.LoadScene(nextSceneName);
-            }
-            else
-            {
-                LogDebug($"Loading scene by index: {nextSceneIndex}");
-                SceneManager.LoadScene(nextSceneIndex);
-            }
-        }
-        catch (System.Exception e)
-        {
-            LogError($"Failed to load scene: {e.Message}");
-        }
-    }
-
-    /// <summary>
-    /// Clean up when object is destroyed
-    /// </summary>
-    private void OnDestroy()
-    {
-        if (videoPlayer != null)
-        {
-            videoPlayer.loopPointReached -= OnVideoFinished;
-            videoPlayer.errorReceived -= OnVideoError;
-            videoPlayer.prepareCompleted -= OnVideoPrepared;
-        }
+        SceneController.Instance
+            .NewTransition()
+            .Load(SceneDatabase.Slots.Menu, SceneDatabase.Scenes.MainMenu, setActive: true)
+            .Unload(SceneDatabase.Slots.LoadingScreen)
+            .WithOverlay()
+            .WithMusic(MenuMusic, MusicFadeTime)
+            .Perform();
     }
 
     // Debug logging methods
