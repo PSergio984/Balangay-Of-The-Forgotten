@@ -278,10 +278,10 @@ public class CardView : MonoBehaviour
         DarkBorder.sprite = card.DarkBorder;
         LowerBorder.sprite = card.LowerBorder;
         // Store original scale for optimized hover animations
-    originalScale = transform.localScale;
-    originalRotation = transform.rotation;
-    // Position will be updated after hand positioning
-    originalsInitialized = true;
+        originalScale = transform.localScale;
+        originalRotation = transform.rotation;
+        // Position will be updated after hand positioning
+        originalsInitialized = true;
         
     }
     
