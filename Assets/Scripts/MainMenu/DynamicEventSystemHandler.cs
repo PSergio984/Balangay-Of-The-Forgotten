@@ -28,18 +28,13 @@ using AudioSystem;
 /// <para><strong>Why:</strong> Provides consistent visual/audio feedback across all menu screens for better UX</para>
 /// <para><strong>How:</strong> Listens to EventSystem selection events, scales selected UI, plays sounds, restores focus on input</para>
 /// </remarks>
-public class MenuEventSystemHandler : MonoBehaviour
+public class DynamicEventSystemHandler : MonoBehaviour
 {
     [Header("References")]
     /// <summary>
     /// List of all UI selectables in this menu (buttons, toggles, etc.)
     /// </summary>
     public List<Selectable> Selectables = new List<Selectable>();
-    
-    /// <summary>
-    /// First UI element to select when menu opens (starting focus)
-    /// </summary>
-    [SerializeField] protected Selectable _firstSelected;
 
     [Header("Controls")]
     /// <summary>
@@ -57,11 +52,6 @@ public class MenuEventSystemHandler : MonoBehaviour
     /// Duration in seconds for scale animation (default: 0.25s)
     /// </summary>
     [SerializeField] protected float _scaleDuration = 0.25f;
-    
-    /// <summary>
-    /// UI elements that should not animate on selection (e.g., small buttons)
-    /// </summary>
-    [SerializeField] protected List<GameObject> _animationExclusions = new List<GameObject>();
     
     /// <summary>
     /// Tracks the last selected UI element for focus restoration
@@ -99,13 +89,6 @@ public class MenuEventSystemHandler : MonoBehaviour
         {
             Debug.LogWarning("[MenuEventSystemHandler] SoundManager.Instance is null. SoundBuilder will not be initialized.");
         }
-
-        // Attach event triggers and cache original scales for each selectable
-        foreach (var selectable in Selectables)
-        {
-            AddSelectionListeners(selectable);
-            _scales.Add(selectable, selectable.transform.localScale);
-        }
     }
 
 
@@ -141,9 +124,9 @@ public class MenuEventSystemHandler : MonoBehaviour
         // Wait one frame to ensure EventSystem is fully initialized
         yield return null;
         // Safety checks to prevent NullReferenceExceptions
-        if (EventSystem.current == null || _firstSelected == null || _firstSelected.gameObject == null)
+        if (EventSystem.current == null || Selectables.Count == 0 || Selectables[0] == null)
             yield break;
-        EventSystem.current.SetSelectedGameObject(_firstSelected.gameObject);
+        EventSystem.current.SetSelectedGameObject(Selectables[0].gameObject);
     }
 
 
@@ -156,7 +139,6 @@ public class MenuEventSystemHandler : MonoBehaviour
         {
             _navigateReference.action.performed -= OnNavigate;
         }
-        // Note: DOTween.Kill() is called per-object in OnSelect/OnDeselect, no global cleanup needed
     }
     
     /// <summary>
@@ -209,7 +191,7 @@ public class MenuEventSystemHandler : MonoBehaviour
     /// Called when a UI element is selected - plays sound and scales up the element
     /// </summary>
     /// <param name="eventData">Event data containing the selected GameObject</param>
-    public void OnSelect(BaseEventData eventData)
+    public virtual void OnSelect(BaseEventData eventData)
     {
         // Play selection sound effect
         soundBuilder?.Play(_OnSelectSound);
@@ -224,10 +206,6 @@ public class MenuEventSystemHandler : MonoBehaviour
 
         // Track for focus restoration
         _lastSelected = sel;
-
-        // Skip animation if element is in exclusion list
-        if (_animationExclusions.Contains(eventData.selectedObject))
-            return;
 
         // Get original scale from cached dictionary (prevents scale compounding)
         Vector3 originalScale;
@@ -247,13 +225,9 @@ public class MenuEventSystemHandler : MonoBehaviour
     /// Called when a UI element is deselected - scales element back to original size
     /// </summary>
     /// <param name="eventData">Event data containing the deselected GameObject</param>
-    public void OnDeselect(BaseEventData eventData)
+    public virtual void OnDeselect(BaseEventData eventData)
     {
         if (eventData.selectedObject == null)
-            return;
-
-        // Skip animation if element is in exclusion list
-        if (_animationExclusions.Contains(eventData.selectedObject))
             return;
 
         Selectable sel = eventData.selectedObject.GetComponent<Selectable>();
@@ -275,7 +249,7 @@ public class MenuEventSystemHandler : MonoBehaviour
     /// Called when mouse enters a UI element - sets EventSystem selection for hybrid input support
     /// </summary>
     /// <param name="eventData">Pointer event data containing the hovered GameObject</param>
-    public void OnPointerEnter(BaseEventData eventData)
+    public virtual void OnPointerEnter(BaseEventData eventData)
     {
         PointerEventData pointerEventData = eventData as PointerEventData;
         if (pointerEventData != null)
@@ -302,7 +276,7 @@ public class MenuEventSystemHandler : MonoBehaviour
     /// Called when mouse exits a UI element - clears selected object reference
     /// </summary>
     /// <param name="eventData">Pointer event data</param>
-    public void OnPointerExit(BaseEventData eventData)
+    public virtual void OnPointerExit(BaseEventData eventData)
     {
         PointerEventData pointerEventData = eventData as PointerEventData;
         if (pointerEventData != null)
@@ -328,4 +302,26 @@ public class MenuEventSystemHandler : MonoBehaviour
             EventSystem.current.SetSelectedGameObject(_lastSelected.gameObject);
         }
     }
+
+    #region Helper methods
+    public void AddSelectable(Selectable selectable)
+    {
+        Selectables.Add(selectable);
+    }
+
+    public void InitSelectables()
+    {
+        foreach (var selectable in Selectables)
+        {
+            AddSelectionListeners(selectable);
+            _scales.TryAdd(selectable, selectable.transform.localScale);
+        }
+    }
+
+    public void SetFirstSelected()
+    {
+        StartCoroutine(SelectAfterDelay());
+    }
+
+    #endregion
 }
