@@ -31,11 +31,13 @@ public class MapSelectManager : MonoBehaviour
     /// Parent transform where map buttons will be spawned
     /// </summary>
     public Transform MapParent;
-    
+
     /// <summary>
     /// Prefab template for creating map button instances
     /// </summary>
     public GameObject MapButtonPrefab;
+
+    public LineRenderer linePrefab;
     
     /// <summary>
     /// UI text displaying the current area name (e.g., "Forest Region")
@@ -137,7 +139,7 @@ public class MapSelectManager : MonoBehaviour
             }
         }
     }
-    
+
     /// <summary>
     /// Instantiates and configures a MapButton for each map in CurrentArea
     /// </summary>
@@ -187,11 +189,28 @@ public class MapSelectManager : MonoBehaviour
             {
                 Debug.LogWarning($"[MapSelectManager] MapButton '{buttonGO.name}' is missing a Selectable component. Skipping AddSelectable.");
             }
+            if (i > 0)
+            {
+                LineRenderer line = Instantiate(linePrefab, MapParent);
+
+                line.transform.SetSiblingIndex(0);
+                LineRendererConnector lineConnector = line.GetComponent<LineRendererConnector>();
+
+                lineConnector.StartRectTrans = CurrentArea.Maps[i - 1].MapButtonObj.GetComponent<RectTransform>();
+                lineConnector.EndRectTrans = mapData.MapButtonObj.GetComponent<RectTransform>();
+                StartCoroutine(DelayedLineSetup(lineConnector));
+            }
         }
 
         MapParent.gameObject.SetActive(true);
         _eventSystemHandler.InitSelectables();
         _eventSystemHandler.SetFirstSelected();
-
     }
+    
+    private IEnumerator DelayedLineSetup(LineRendererConnector lineConnector)
+    {
+        yield return null;
+        lineConnector.UpdateLinePosition();
+    }
+    
 }
