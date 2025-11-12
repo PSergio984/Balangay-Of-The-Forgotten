@@ -83,8 +83,7 @@ public class MapSelectManager : MonoBehaviour
     private Dictionary<GameObject, Vector3> _buttonLocations = new Dictionary<GameObject, Vector3>();
 
     public GameObject PlayerObj { get; set; }
-    public bool _playerIsFacingRight;
-
+    private bool _playerIsFacingRight;
     /// <summary>
     /// Caches main camera reference on initialization
     /// </summary>
@@ -107,10 +106,25 @@ public class MapSelectManager : MonoBehaviour
     /// </remarks>
     private void Start()
     {
+
         // Validate all required inspector references before proceeding
         if (CurrentArea == null || AreaHeaderText == null || MapParent == null || MapButtonPrefab == null)
         {
             Debug.LogError("MapSelectManager: Required fields are not assigned in the Inspector");
+            return;
+        }
+
+        // Additional validation for player prefab and canvas rect
+        if (PlayerUIPrefab == null)
+        {
+            Debug.LogError("MapSelectManager: PlayerUIPrefab is not assigned in the Inspector. Disabling component.", this);
+            enabled = false;
+            return;
+        }
+        if (WorldSpaceCanvasRect == null)
+        {
+            Debug.LogError("MapSelectManager: WorldSpaceCanvasRect is not assigned in the Inspector. Disabling component.", this);
+            enabled = false;
             return;
         }
 
@@ -251,38 +265,38 @@ public class MapSelectManager : MonoBehaviour
             Selectable currentSelectable = currentButton.GetComponent<Selectable>();
             Navigation nav = new Navigation { mode = Navigation.Mode.Explicit };
 
-            //check if previous button exists
-            if (i > 0 && UnlockedLevelIDs.Contains(CurrentArea.Maps[i].MapId))
+            // Check if previous button exists and both current and previous maps are unlocked
+            if (i > 0 && UnlockedLevelIDs.Contains(CurrentArea.Maps[i].MapId) && UnlockedLevelIDs.Contains(CurrentArea.Maps[i - 1].MapId))
             {
                 GameObject prevButton = _buttonObjects[i - 1];
                 Vector3 prevPos = _buttonLocations[prevButton];
                 Vector3 dirToPrev = (prevPos - currentPos).normalized;
-
-                if (Vector3.Dot(dirToPrev, Vector3.right) > 0.7f)
-                    nav.selectOnRight = prevButton.GetComponent<Selectable>();
-                else if (Vector3.Dot(dirToPrev, Vector3.left) > 0.7f)
-                    nav.selectOnLeft = prevButton.GetComponent<Selectable>();
-                else if (Vector3.Dot(dirToPrev, Vector3.up) > 0.7f)
-                    nav.selectOnUp = prevButton.GetComponent<Selectable>();
-                else if (Vector3.Dot(dirToPrev, Vector3.down) > 0.7f)
-                    nav.selectOnDown = prevButton.GetComponent<Selectable>();
+                Selectable prevSelectable = prevButton.GetComponent<Selectable>();
+                if (prevSelectable != null)
+                {
+                    SetNavigationForDirection(ref nav, dirToPrev, prevSelectable);
+                }
+                else
+                {
+                    Debug.LogWarning($"[MapSelectManager] Previous button at index {i - 1} is missing a Selectable component. Navigation not set.");
+                }
             }
 
-            //check if future button exists
-            if (i < _buttonObjects.Count - 1 && UnlockedLevelIDs.Contains(CurrentArea.Maps[i + 1].MapId))
+            // Check if future button exists and both current and next maps are unlocked
+            if (i < _buttonObjects.Count - 1 && UnlockedLevelIDs.Contains(CurrentArea.Maps[i].MapId) && UnlockedLevelIDs.Contains(CurrentArea.Maps[i + 1].MapId))
             {
                 GameObject nextButton = _buttonObjects[i + 1];
                 Vector3 nextPos = _buttonLocations[nextButton];
                 Vector3 dirToNext = (nextPos - currentPos).normalized;
-
-                if (Vector3.Dot(dirToNext, Vector3.right) > 0.7f)
-                    nav.selectOnRight = nextButton.GetComponent<Selectable>();
-                else if (Vector3.Dot(dirToNext, Vector3.left) > 0.7f)
-                    nav.selectOnLeft = nextButton.GetComponent<Selectable>();
-                else if (Vector3.Dot(dirToNext, Vector3.up) > 0.7f)
-                    nav.selectOnUp = nextButton.GetComponent<Selectable>();
-                else if (Vector3.Dot(dirToNext, Vector3.down) > 0.7f)
-                    nav.selectOnDown = nextButton.GetComponent<Selectable>();
+                Selectable nextSelectable = nextButton.GetComponent<Selectable>();
+                if (nextSelectable != null)
+                {
+                    SetNavigationForDirection(ref nav, dirToNext, nextSelectable);
+                }
+                else
+                {
+                    Debug.LogWarning($"[MapSelectManager] Next button at index {i + 1} is missing a Selectable component. Navigation not set.");
+                }
             }
 
             currentSelectable.navigation = nav;
@@ -291,32 +305,92 @@ public class MapSelectManager : MonoBehaviour
 
     #endregion
 
+    /// <summary>
+    /// Sets the appropriate navigation property (right/left/up/down) on the Navigation struct based on the direction vector.
+    /// </summary>
+    /// <param name="nav">Navigation struct to modify (by ref).</param>
+    /// <param name="direction">Normalized direction vector from current to target.</param>
+    /// <param name="target">Selectable to assign to the correct direction.</param>
+    private void SetNavigationForDirection(ref Navigation nav, Vector3 direction, Selectable target)
+    {
+        if (Vector3.Dot(direction, Vector3.right) > 0.7f)
+            nav.selectOnRight = target;
+        else if (Vector3.Dot(direction, Vector3.left) > 0.7f)
+            nav.selectOnLeft = target;
+        else if (Vector3.Dot(direction, Vector3.up) > 0.7f)
+            nav.selectOnUp = target;
+        else if (Vector3.Dot(direction, Vector3.down) > 0.7f)
+            nav.selectOnDown = target;
+    } 
+
     #region Helper Methods
 
-    public void UnlockLevel(string levelID, MapButton mapButton)
+    /// <summary>
+    /// Unlocks a level and optionally updates button navigation.
+    /// </summary>
+    /// <param name="levelID">The level ID to unlock.</param>
+    /// <param name="mapButton">The MapButton to unlock.</param>
+    /// <param name="updateNavigation">If true, updates navigation after unlocking. Default is true.</param>
+    public void UnlockLevel(string levelID, MapButton mapButton, bool updateNavigation = true)
     {
         UnlockedLevelIDs.Add(levelID);
         mapButton.Unlock();
-        StartCoroutine(SetupButtonNavigation());
+        if (updateNavigation)
+        {
+            StartCoroutine(SetupButtonNavigation());
+        }
     }
 
     [ContextMenu("Unlock Level Two Example")]
     public void UnlockLevelTwoExample()
     {
-        MapButton mapButton = _buttonObjects[1].GetComponent<MapButton>();
+        if (_buttonObjects == null || _buttonObjects.Count <= 1)
+        {
+            Debug.LogWarning("[MapSelectManager] _buttonObjects is null or does not have enough elements for UnlockLevelTwoExample.");
+            return;
+        }
+        GameObject buttonObj = _buttonObjects[1];
+        if (buttonObj == null)
+        {
+            Debug.LogWarning("[MapSelectManager] _buttonObjects[1] is null in UnlockLevelTwoExample.");
+            return;
+        }
+        MapButton mapButton = buttonObj.GetComponent<MapButton>();
+        if (mapButton == null)
+        {
+            Debug.LogWarning("[MapSelectManager] MapButton component missing on _buttonObjects[1] in UnlockLevelTwoExample.");
+            return;
+        }
         string levelToUnlock = mapButton.MapData.MapId;
-        UnlockLevel(levelToUnlock, mapButton);
+        UnlockLevel(levelToUnlock, mapButton); // Single unlock, keep default updateNavigation = true
     }
 
     [ContextMenu("Unlock All Levels Example")]
     public void UnlockAllLevelsExample()
     {
+        if (_buttonObjects == null)
+        {
+            Debug.LogWarning("[MapSelectManager] _buttonObjects is null in UnlockAllLevelsExample.");
+            return;
+        }
         for (int i = 0; i < _buttonObjects.Count; i++)
         {
-            MapButton mapButton = _buttonObjects[i].GetComponent<MapButton>();
+            GameObject buttonObj = _buttonObjects[i];
+            if (buttonObj == null)
+            {
+                Debug.LogWarning($"[MapSelectManager] _buttonObjects[{i}] is null in UnlockAllLevelsExample. Skipping.");
+                continue;
+            }
+            MapButton mapButton = buttonObj.GetComponent<MapButton>();
+            if (mapButton == null)
+            {
+                Debug.LogWarning($"[MapSelectManager] MapButton component missing on _buttonObjects[{i}] in UnlockAllLevelsExample. Skipping.");
+                continue;
+            }
             string levelToUnlock = mapButton.MapData.MapId;
-            UnlockLevel(levelToUnlock, mapButton);
+            UnlockLevel(levelToUnlock, mapButton, false); // Batch unlock, don't update navigation yet
         }
+        StartCoroutine(SetupButtonNavigation()); // Update navigation once after all unlocks
     }
 
     #endregion
@@ -329,7 +403,7 @@ public class MapSelectManager : MonoBehaviour
         SpawnInPlayerRectTransform(screenSpaceButton, worldSpaceCanvas);
     }
 
-        private void SpawnInPlayerRectTransform(RectTransform screenSpaceUIObject, RectTransform worldSpaceUIObject)
+    private void SpawnInPlayerRectTransform(RectTransform screenSpaceUIObject, RectTransform worldSpaceUIObject)
     {
         _playerIsFacingRight = true;
         PlayerObj = Instantiate(PlayerUIPrefab, worldSpaceUIObject);

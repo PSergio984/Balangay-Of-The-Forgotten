@@ -10,15 +10,12 @@ public class ZigzagLayoutGroup : LayoutGroup
 
     public override void CalculateLayoutInputHorizontal()
     {
-        base.CalculateLayoutInputHorizontal();
+    base.CalculateLayoutInputHorizontal();
 
-        float width = rectTransform.rect.width;
-        float height = rectTransform.rect.height;
+    int colCount = columns;
+    float realWidth = (colCount * cellSize.x) + ((colCount - 1) * spacing.x) + padding.left + padding.right;
 
-        int rowCount = Mathf.CeilToInt(rectChildren.Count / (float)columns);
-        float realHeight = (rowCount * cellSize.y) + ((rowCount - 1) * spacing.y) + padding.top + padding.bottom;
-
-        SetLayoutInputForAxis(realHeight, realHeight, -1, 1);
+    SetLayoutInputForAxis(realWidth, realWidth, -1, 0);
     }
 
     public override void CalculateLayoutInputVertical()

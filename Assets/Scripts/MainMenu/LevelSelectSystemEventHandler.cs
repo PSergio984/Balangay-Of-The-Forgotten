@@ -40,14 +40,20 @@ public class LevelSelectSystemEventHandler : DynamicEventSystemHandler
         {
             if (_mapSelectManager != null && _mapSelectManager.LevelHeaderText != null)
             {
-                _mapSelectManager.LevelHeaderText.SetText(_mapButton.MapData.MapId);
+                if (_mapButton.MapData != null)
+                {
+                    _mapSelectManager.LevelHeaderText.SetText(_mapButton.MapData.MapId);
+                }
+                else
+                {
+                    _mapSelectManager.LevelHeaderText.SetText("Unknown");
+                }
                 RectTransform rectTrans = eventData.selectedObject.GetComponent<RectTransform>();
 
                 if (_initialMoveComplete)
                     _mapSelectManager.MovePlayerToButton(_mapSelectManager.PlayerObj, rectTrans, _mapSelectManager.WorldSpaceCanvasRect);
 
                 _initialMoveComplete = true;
-            
             }
 
             if (_selectableImage != null)
