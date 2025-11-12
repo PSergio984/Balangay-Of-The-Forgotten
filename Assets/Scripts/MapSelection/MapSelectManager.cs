@@ -46,11 +46,13 @@ public class MapSelectManager : MonoBehaviour
     /// UI text displaying level information (currently unused in Start())
     /// </summary>
     public TextMeshProUGUI LevelHeaderText;
-    
+
     /// <summary>
     /// ScriptableObject containing all maps and data for the current area
     /// </summary>
     public AreaData CurrentArea;
+
+    private LevelSelectSystemEventHandler _eventSystemHandler;
 
     /// <summary>
     /// Set of unlocked map IDs for quick lookup (e.g., "Forest_01", "Desert_Boss")
@@ -79,8 +81,13 @@ public class MapSelectManager : MonoBehaviour
     private void Awake()
     {
         _camera = Camera.main;
+        _eventSystemHandler = GetComponentInChildren<LevelSelectSystemEventHandler>(true);
+        
+        if (_eventSystemHandler == null)
+        {
+            Debug.LogError("MapSelectManager: LevelSelectEventSystemHandler component not found in children");
+        }
     }
-
 
     /// <summary>
     /// Initializes map selection screen - validates dependencies, loads area text, processes unlocks, creates buttons
@@ -159,8 +166,8 @@ public class MapSelectManager : MonoBehaviour
             buttonGO.name = mapData.MapId;
 
             // Configure MapButton component with map data and unlock state
-            MapButton levelButton = buttonGO.GetComponent<MapButton>();
-            if (levelButton == null)
+            MapButton mapButton = buttonGO.GetComponent<MapButton>();
+            if (mapButton == null)
             {
                 Debug.LogWarning($"[MapSelectManager] MapButton component missing on instantiated button '{buttonGO.name}' (Prefab: {MapButtonPrefab?.name ?? "null"}). Skipping Setup and MapButtonObj assignment.");
                 continue;
@@ -168,7 +175,23 @@ public class MapSelectManager : MonoBehaviour
 
             // Only set MapButtonObj if both buttonGO and levelButton are valid
             mapData.MapButtonObj = buttonGO;
-            levelButton.Setup(mapData, UnlockedLevelIDs.Contains(mapData.MapId));
+            mapButton.Setup(mapData, UnlockedLevelIDs.Contains(mapData.MapId));
+
+            //populate the selectables for the event system
+            Selectable sel = mapButton.GetComponent<Selectable>();
+            if (sel != null)
+            {
+                _eventSystemHandler.AddSelectable(sel);
+            }
+            else
+            {
+                Debug.LogWarning($"[MapSelectManager] MapButton '{buttonGO.name}' is missing a Selectable component. Skipping AddSelectable.");
+            }
         }
+
+        MapParent.gameObject.SetActive(true);
+        _eventSystemHandler.InitSelectables();
+        _eventSystemHandler.SetFirstSelected();
+
     }
 }
