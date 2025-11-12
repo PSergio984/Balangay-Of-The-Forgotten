@@ -8,7 +8,8 @@ using System.Collections;
 using AudioSystem;
 
 
-/*
+/* DYNAMIC EVENT SYSTEM HANDLER DOCUMENTATION
+ * 
  * Purpose: Manages UI navigation, selection animations, and sound feedback for menu systems
  * 
  * How it works:
@@ -76,7 +77,7 @@ public class DynamicEventSystemHandler : MonoBehaviour
 
 
     /// <summary>
-    /// Initializes sound system and attaches event listeners to all selectables
+    /// Initializes sound system for audio feedback
     /// </summary>
     public virtual void Awake()
     {
@@ -123,9 +124,11 @@ public class DynamicEventSystemHandler : MonoBehaviour
     {
         // Wait one frame to ensure EventSystem is fully initialized
         yield return null;
+        
         // Safety checks to prevent NullReferenceExceptions
         if (EventSystem.current == null || Selectables.Count == 0 || Selectables[0] == null)
             yield break;
+            
         EventSystem.current.SetSelectedGameObject(Selectables[0].gameObject);
     }
 
@@ -303,12 +306,24 @@ public class DynamicEventSystemHandler : MonoBehaviour
         }
     }
 
+
     #region Helper methods
+    
+    /// <summary>
+    /// Adds a selectable to the managed list
+    /// </summary>
+    /// <param name="selectable">Selectable UI element to add</param>
     public void AddSelectable(Selectable selectable)
     {
         Selectables.Add(selectable);
     }
 
+    /// <summary>
+    /// Initializes all selectables - attaches listeners and caches original scales
+    /// </summary>
+    /// <remarks>
+    /// <para><strong>When:</strong> Call after dynamically populating Selectables list (e.g., after spawning buttons)</para>
+    /// </remarks>
     public void InitSelectables()
     {
         foreach (var selectable in Selectables)
@@ -318,10 +333,16 @@ public class DynamicEventSystemHandler : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Selects the first UI element after one frame delay
+    /// </summary>
+    /// <remarks>
+    /// <para><strong>When:</strong> Call when menu becomes active to set initial controller focus</para>
+    /// </remarks>
     public void SetFirstSelected()
     {
         StartCoroutine(SelectAfterDelay());
     }
-
+    
     #endregion
 }
