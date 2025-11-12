@@ -8,89 +8,89 @@ using System.Collections;
 using AudioSystem;
 
 
-/*
- * Purpose: Manages UI navigation, selection animations, and sound feedback for menu systems
+/* MENU EVENT SYSTEM HANDLER
+ * 
+ * Purpose: Makes menu buttons feel alive with animations and sounds
  * 
  * How it works:
- * - Attaches EventTrigger components to selectables for hover/select detection
- * - Scales selected UI elements using DOTween for visual feedback
- * - Tracks last selected element to restore focus on navigation input
- * - Plays audio feedback on selection events
+ * - When you hover over or select a button, it grows bigger and plays a sound
+ * - Remembers which button you were on if you lose focus
+ * - Works with both controller and mouse
  * 
- * Integration: Base class for menu screens, handles controller + mouse navigation with animations
+ * Integration: Used as the base for all menu screens (pause menu, main menu, settings, etc.)
  */
 
 
 /// <summary>
-/// Handles UI selection events, animations, and audio feedback for menu navigation systems
+/// Handles button animations and sounds for menu screens
 /// </summary>
 /// <remarks>
-/// <para><strong>Why:</strong> Provides consistent visual/audio feedback across all menu screens for better UX</para>
-/// <para><strong>How:</strong> Listens to EventSystem selection events, scales selected UI, plays sounds, restores focus on input</para>
+/// <para><strong>Why:</strong> Makes menus feel responsive and professional (like AAA games)</para>
+/// <para><strong>How:</strong> Listens when buttons are selected, then plays sounds and growth animations</para>
 /// </remarks>
 public class MenuEventSystemHandler : MonoBehaviour
 {
     [Header("References")]
     /// <summary>
-    /// List of all UI selectables in this menu (buttons, toggles, etc.)
+    /// All the buttons/UI elements in this menu that can be selected
     /// </summary>
     public List<Selectable> Selectables = new List<Selectable>();
     
     /// <summary>
-    /// First UI element to select when menu opens (starting focus)
+    /// Which button should be selected first when the menu opens
     /// </summary>
     [SerializeField] protected Selectable _firstSelected;
 
     [Header("Controls")]
     /// <summary>
-    /// Input action for navigation (D-pad/arrow keys) - used to restore focus
+    /// Controller/keyboard input for navigating the menu (D-pad, arrow keys, joystick)
     /// </summary>
     [SerializeField] protected InputActionReference _navigateReference;
 
     [Header("Animations")]
     /// <summary>
-    /// Scale multiplier for selected elements (default: 1.1 = 110% size)
+    /// How much bigger selected buttons become (1.1 = 10% bigger)
     /// </summary>
     [SerializeField] protected float _selectedAnimationScale = 1.1f;
     
     /// <summary>
-    /// Duration in seconds for scale animation (default: 0.25s)
+    /// How fast the button grows/shrinks (in seconds)
     /// </summary>
     [SerializeField] protected float _scaleDuration = 0.25f;
     
     /// <summary>
-    /// UI elements that should not animate on selection (e.g., small buttons)
+    /// Buttons that should NOT animate (stay the same size when selected)
     /// </summary>
     [SerializeField] protected List<GameObject> _animationExclusions = new List<GameObject>();
     
     /// <summary>
-    /// Tracks the last selected UI element for focus restoration
+    /// The last button that was selected (used to restore focus if lost)
     /// </summary>
     [SerializeField] protected Selectable _lastSelected;
     
     [Header("Sounds")]
     /// <summary>
-    /// Audio clip to play when a UI element is selected
+    /// Sound effect to play when selecting a button
     /// </summary>
     [SerializeField] protected SoundData _OnSelectSound;
 
     /// <summary>
-    /// Maps each selectable to its original scale for animation reset
+    /// Remembers the original size of each button (so we can reset them correctly)
     /// </summary>
     protected Dictionary<Selectable, Vector3> _scales = new Dictionary<Selectable, Vector3>();
 
     /// <summary>
-    /// Sound builder for playing selection audio effects
+    /// Helper that plays sound effects
     /// </summary>
     private SoundBuilder soundBuilder;
 
 
     /// <summary>
-    /// Initializes sound system and attaches event listeners to all selectables
+    /// Runs when the menu is created - sets up sounds and button listeners
     /// </summary>
     public virtual void Awake()
     {
-        // Initialize sound builder for audio feedback
+        // Set up the sound system
         if (SoundManager.Instance != null)
         {
             soundBuilder = SoundManager.Instance.CreateSoundBuilder();
@@ -100,27 +100,30 @@ public class MenuEventSystemHandler : MonoBehaviour
             Debug.LogWarning("[MenuEventSystemHandler] SoundManager.Instance is null. SoundBuilder will not be initialized.");
         }
 
-        // Attach event triggers and cache original scales for each selectable
+        // For each button in the menu:
         foreach (var selectable in Selectables)
         {
+            // Attach listeners so we know when it's selected/deselected
             AddSelectionListeners(selectable);
+            
+            // Remember its original size
             _scales.Add(selectable, selectable.transform.localScale);
         }
     }
 
 
     /// <summary>
-    /// Subscribes to input events and resets all UI elements to original scale
+    /// Runs when the menu becomes active - sets up input and resets button sizes
     /// </summary>
     public virtual void OnEnable()
     {
-        // Subscribe to navigation input for focus restoration
+        // Start listening for controller/keyboard navigation input
         if (_navigateReference != null && _navigateReference.action != null)
         {
             _navigateReference.action.performed += OnNavigate;
         }
 
-        // Reset all selectables to original size (fixes scale issues from previous sessions)
+        // Reset all buttons to their original size (in case they were left scaled from before)
         for (int i = 0; i < Selectables.Count; i++)
         {
             if (Selectables[i] == null)
@@ -134,45 +137,49 @@ public class MenuEventSystemHandler : MonoBehaviour
     }
     
     /// <summary>
-    /// Waits one frame then selects the first UI element (ensures EventSystem is ready)
+    /// Waits a moment then selects the first button (gives Unity time to set up)
     /// </summary>
     protected virtual IEnumerator SelectAfterDelay()
     {
-        // Wait one frame to ensure EventSystem is fully initialized
+        // Wait one frame for Unity's EventSystem to fully wake up
         yield return null;
-        // Safety checks to prevent NullReferenceExceptions
+        
+        // Safety check - make sure everything exists before selecting
         if (EventSystem.current == null || _firstSelected == null || _firstSelected.gameObject == null)
             yield break;
+            
+        // Select the first button
         EventSystem.current.SetSelectedGameObject(_firstSelected.gameObject);
     }
 
 
     /// <summary>
-    /// Unsubscribes from input events on disable
+    /// Runs when the menu is closed - stops listening for input
     /// </summary>
     public virtual void OnDisable()
     {
+        // Stop listening for navigation input
         if (_navigateReference != null && _navigateReference.action != null)
         {
             _navigateReference.action.performed -= OnNavigate;
         }
-        // Note: DOTween.Kill() is called per-object in OnSelect/OnDeselect, no global cleanup needed
+        // Note: Button animations are cleaned up automatically by DOTween
     }
     
     /// <summary>
-    /// Attaches EventTrigger component with select/deselect/hover listeners to a UI selectable
+    /// Attaches event listeners to a button so we know when it's hovered/selected
     /// </summary>
-    /// <param name="selectable">The UI element to attach listeners to</param>
+    /// <param name="selectable">The button to add listeners to</param>
     protected virtual void AddSelectionListeners(Selectable selectable)
     {
-        // Get or create EventTrigger component
+        // Find or create the EventTrigger component (lets us detect events)
         EventTrigger trigger = selectable.gameObject.GetComponent<EventTrigger>();
         if (trigger == null)
         {
             trigger = selectable.gameObject.AddComponent<EventTrigger>();
         }
 
-        // Add SELECT event (controller/keyboard selection)
+        // Listen for SELECTION (controller/keyboard picks this button)
         EventTrigger.Entry SelectEntry = new EventTrigger.Entry
         {
             eventID = EventTriggerType.Select
@@ -180,7 +187,7 @@ public class MenuEventSystemHandler : MonoBehaviour
         SelectEntry.callback.AddListener(OnSelect);
         trigger.triggers.Add(SelectEntry);
 
-        // Add DESELECT event (when focus leaves element)
+        // Listen for DESELECTION (controller/keyboard moves away from this button)
         EventTrigger.Entry DeselectEntry = new EventTrigger.Entry
         {
             eventID = EventTriggerType.Deselect
@@ -188,7 +195,7 @@ public class MenuEventSystemHandler : MonoBehaviour
         DeselectEntry.callback.AddListener(OnDeselect);
         trigger.triggers.Add(DeselectEntry);
 
-        // Add POINTER ENTER event (mouse hover)
+        // Listen for MOUSE HOVER (mouse enters this button)
         EventTrigger.Entry PointerEnter = new EventTrigger.Entry
         {
             eventID = EventTriggerType.PointerEnter
@@ -196,7 +203,7 @@ public class MenuEventSystemHandler : MonoBehaviour
         PointerEnter.callback.AddListener(OnPointerEnter);
         trigger.triggers.Add(PointerEnter);
 
-        // Add POINTER EXIT event (mouse unhover)
+        // Listen for MOUSE EXIT (mouse leaves this button)
         EventTrigger.Entry PointerExit = new EventTrigger.Entry
         {
             eventID = EventTriggerType.PointerExit
@@ -206,53 +213,55 @@ public class MenuEventSystemHandler : MonoBehaviour
 
 
     /// <summary>
-    /// Called when a UI element is selected - plays sound and scales up the element
+    /// Runs when a button is selected - plays sound and grows the button
     /// </summary>
-    /// <param name="eventData">Event data containing the selected GameObject</param>
+    /// <param name="eventData">Info about which button was selected</param>
     public void OnSelect(BaseEventData eventData)
     {
-        // Play selection sound effect
+        // Play the selection sound
         soundBuilder?.Play(_OnSelectSound);
 
         if (eventData.selectedObject == null)
             return;
 
-        // Cache selectable component reference
+        // Get the button component
         Selectable sel = eventData.selectedObject.GetComponent<Selectable>();
         if (sel == null)
             return;
 
-        // Track for focus restoration
+        // Remember this button (in case we need to return to it later)
         _lastSelected = sel;
 
-        // Skip animation if element is in exclusion list
+        // If this button is in the "don't animate" list, skip the animation
         if (_animationExclusions.Contains(eventData.selectedObject))
             return;
 
-        // Get original scale from cached dictionary (prevents scale compounding)
+        // Look up the button's original size
         Vector3 originalScale;
         if (!_scales.TryGetValue(sel, out originalScale))
             originalScale = Vector3.one;
 
-        // Calculate target scale and animate
+        // Calculate new size (original × 1.1 = 10% bigger)
         Vector3 newScale = originalScale * _selectedAnimationScale;
         
-        // Kill existing tweens to prevent conflicts, then start new scale animation
+        // Stop any ongoing animations on this button
         DOTween.Kill(eventData.selectedObject.transform);
+        
+        // Smoothly grow the button to the new size
         eventData.selectedObject.transform.DOScale(newScale, _scaleDuration);
     }
 
 
     /// <summary>
-    /// Called when a UI element is deselected - scales element back to original size
+    /// Runs when a button is deselected - shrinks the button back to normal
     /// </summary>
-    /// <param name="eventData">Event data containing the deselected GameObject</param>
+    /// <param name="eventData">Info about which button was deselected</param>
     public void OnDeselect(BaseEventData eventData)
     {
         if (eventData.selectedObject == null)
             return;
 
-        // Skip animation if element is in exclusion list
+        // If this button doesn't animate, skip it
         if (_animationExclusions.Contains(eventData.selectedObject))
             return;
 
@@ -260,34 +269,40 @@ public class MenuEventSystemHandler : MonoBehaviour
         if (sel == null)
             return;
 
-        // Retrieve original scale from dictionary
+        // Look up the button's original size
         Vector3 targetScale;
         if (!_scales.TryGetValue(sel, out targetScale))
             targetScale = Vector3.one;
 
-        // Kill existing tweens and animate back to original scale
+        // Stop any ongoing animations
         DOTween.Kill(eventData.selectedObject.transform);
+        
+        // Smoothly shrink the button back to original size
         eventData.selectedObject.transform.DOScale(targetScale, _scaleDuration);
     }
 
 
     /// <summary>
-    /// Called when mouse enters a UI element - sets EventSystem selection for hybrid input support
+    /// Runs when mouse hovers over a button - selects that button
     /// </summary>
-    /// <param name="eventData">Pointer event data containing the hovered GameObject</param>
+    /// <param name="eventData">Info about where the mouse is</param>
+    /// <remarks>
+    /// <para><strong>Why:</strong> Allows mixing mouse and controller - hovering with mouse selects the button</para>
+    /// </remarks>
     public void OnPointerEnter(BaseEventData eventData)
     {
         PointerEventData pointerEventData = eventData as PointerEventData;
         if (pointerEventData != null)
         {
-            // Try to find Selectable component in parent first, then children
+            // Try to find a button in the parent objects
             Selectable sel = pointerEventData.pointerEnter.GetComponentInParent<Selectable>();
             if (sel == null)
             {
+                // If not in parent, try finding in child objects
                 sel = pointerEventData.pointerEnter.GetComponentInChildren<Selectable>();
             }
             
-            // Set EventSystem selection to enable hybrid mouse+controller navigation
+            // If we found a button, select it
             if (sel != null)
             {
                 if (EventSystem.current != null)
@@ -299,30 +314,30 @@ public class MenuEventSystemHandler : MonoBehaviour
     }
     
     /// <summary>
-    /// Called when mouse exits a UI element - clears selected object reference
+    /// Runs when mouse leaves a button - clears the selection
     /// </summary>
-    /// <param name="eventData">Pointer event data</param>
+    /// <param name="eventData">Info about where the mouse is</param>
     public void OnPointerExit(BaseEventData eventData)
     {
         PointerEventData pointerEventData = eventData as PointerEventData;
         if (pointerEventData != null)
         {
-            // Clear selection reference on mouse exit
+            // Clear the selected object when mouse leaves
             pointerEventData.selectedObject = null;
         }
     }
 
 
     /// <summary>
-    /// Called when navigation input is detected - restores focus to last selected element if nothing is selected
+    /// Runs when player uses controller/keyboard navigation - restores focus if lost
     /// </summary>
-    /// <param name="context">Input action callback context</param>
+    /// <param name="context">Info about the input event</param>
     /// <remarks>
-    /// <para><strong>Why:</strong> Prevents "lost focus" bug where controller navigation stops working after certain actions</para>
+    /// <para><strong>Why:</strong> Fixes the "lost controller focus" bug where navigation stops working</para>
     /// </remarks>
     protected virtual void OnNavigate(InputAction.CallbackContext context)
     {
-        // If no UI element is currently selected but we have a last selected reference, restore focus
+        // If nothing is selected but we remember a previously selected button, select it again
         if (EventSystem.current != null && EventSystem.current.currentSelectedGameObject == null && _lastSelected != null)
         {
             EventSystem.current.SetSelectedGameObject(_lastSelected.gameObject);
