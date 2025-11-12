@@ -189,6 +189,8 @@ public class MapSelectManager : MonoBehaviour
             {
                 Debug.LogWarning($"[MapSelectManager] MapButton '{buttonGO.name}' is missing a Selectable component. Skipping AddSelectable.");
             }
+
+            StartCoroutine(AddLocationAfterDelay(buttonGO, buttonRect));
             if (i > 0)
             {
                 LineRenderer line = Instantiate(linePrefab, MapParent);
@@ -202,15 +204,100 @@ public class MapSelectManager : MonoBehaviour
             }
         }
 
+        StartCoroutine(SetupButtonNavigation());
+
         MapParent.gameObject.SetActive(true);
         _eventSystemHandler.InitSelectables();
         _eventSystemHandler.SetFirstSelected();
     }
-    
+
     private IEnumerator DelayedLineSetup(LineRendererConnector lineConnector)
     {
         yield return null;
         lineConnector.UpdateLinePosition();
     }
-    
+
+    private IEnumerator AddLocationAfterDelay(GameObject buttonGo, RectTransform buttonRect)
+    {
+        yield return null;
+
+        Vector2 buttonScreenPoint = RectTransformUtility.WorldToScreenPoint(_camera, buttonRect.position);
+        Vector3 buttonWorldPos = _camera.ScreenToWorldPoint(new Vector3(buttonScreenPoint.x, buttonScreenPoint.y, _camera.nearClipPlane));
+        _buttonLocations.Add(buttonGo, buttonWorldPos);
+    }
+
+    #region Navigation
+
+    private IEnumerator SetupButtonNavigation()
+    {
+        yield return null;
+
+        for (int i = 0; i < _buttonObjects.Count; i++)
+        {
+            GameObject currentButton = _buttonObjects[i];
+            Vector3 currentPos = _buttonLocations[currentButton];
+            Selectable currentSelectable = currentButton.GetComponent<Selectable>();
+            Navigation nav = new Navigation { mode = Navigation.Mode.Explicit };
+
+            //check if previous button exists
+            if (i > 0 && UnlockedLevelIDs.Contains(CurrentArea.Maps[i].MapId))
+            {
+                GameObject prevButton = _buttonObjects[i - 1];
+                Vector3 prevPos = _buttonLocations[prevButton];
+                Vector3 dirToPrev = (prevPos - currentPos).normalized;
+
+                if (Vector3.Dot(dirToPrev, Vector3.right) > 0.7f)
+                    nav.selectOnRight = prevButton.GetComponent<Selectable>();
+                else if (Vector3.Dot(dirToPrev, Vector3.left) > 0.7f)
+                    nav.selectOnLeft = prevButton.GetComponent<Selectable>();
+                else if (Vector3.Dot(dirToPrev, Vector3.up) > 0.7f)
+                    nav.selectOnUp = prevButton.GetComponent<Selectable>();
+                else if (Vector3.Dot(dirToPrev, Vector3.down) > 0.7f)
+                    nav.selectOnDown = prevButton.GetComponent<Selectable>();
+            }
+
+            //check if future button exists
+            if (i < _buttonObjects.Count - 1 && UnlockedLevelIDs.Contains(CurrentArea.Maps[i + 1].MapId))
+            {
+                GameObject nextButton = _buttonObjects[i + 1];
+                Vector3 nextPos = _buttonLocations[nextButton];
+                Vector3 dirToNext = (nextPos - currentPos).normalized;
+
+                if (Vector3.Dot(dirToNext, Vector3.right) > 0.7f)
+                    nav.selectOnRight = nextButton.GetComponent<Selectable>();
+                else if (Vector3.Dot(dirToNext, Vector3.left) > 0.7f)
+                    nav.selectOnLeft = nextButton.GetComponent<Selectable>();
+                else if (Vector3.Dot(dirToNext, Vector3.up) > 0.7f)
+                    nav.selectOnUp = nextButton.GetComponent<Selectable>();
+                else if (Vector3.Dot(dirToNext, Vector3.down) > 0.7f)
+                    nav.selectOnDown = nextButton.GetComponent<Selectable>();
+            }
+
+            currentSelectable.navigation = nav;
+        }
+    }
+
+    #endregion
+
+    #region Helper Methods
+
+    public void UnlockLevel(string levelID, MapButton mapButton)
+    {
+        UnlockedLevelIDs.Add(levelID);
+        mapButton.Unlock();
+        StartCoroutine(SetupButtonNavigation());
+    }
+
+    [ContextMenu("Unlock Level Two Example")]
+    public void UnlockLevelTwoExample()
+    {
+        MapButton mapButton = _buttonObjects[1].GetComponent<MapButton>();
+        string levelToUnlock = mapButton.MapData.MapId;
+        UnlockLevel(levelToUnlock, mapButton);
+    }
+
+    #endregion
+
+
+
 }
