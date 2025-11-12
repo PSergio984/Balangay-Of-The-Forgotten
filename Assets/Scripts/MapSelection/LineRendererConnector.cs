@@ -10,11 +10,25 @@ public class LineRendererConnector : MonoBehaviour
     private void Awake()
     {
         _lineRenderer = GetComponent<LineRenderer>();
-        _camera = Camera.main;
-    }
+        if (_lineRenderer == null)
+        {
+            Debug.LogError("LineRenderer component not found on " + gameObject.name);
+        }
 
+        _camera = Camera.main;
+        if (_camera == null)
+        {
+            Debug.LogError("Main camera not found. Ensure a camera is tagged as MainCamera.");
+        }
+    }
     public void UpdateLinePosition()
     {
+        if (StartRectTrans == null || EndRectTrans == null)
+        {
+            Debug.LogWarning($"[LineRendererConnector] StartRectTrans or EndRectTrans is null on {gameObject.name}. Line will not be updated.");
+            return;
+        }
+
         Vector3 startWorldPos = GetWorldPosition(StartRectTrans);
         Vector3 endWorldPos = GetWorldPosition(EndRectTrans);
 
