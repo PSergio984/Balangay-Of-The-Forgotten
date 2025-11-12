@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections;
 using UnityEngine.UI;
 using TMPro;
+using DG.Tweening;
 
 
 /* MAP SELECT MANAGER DOCUMENTATION
@@ -38,12 +39,12 @@ public class MapSelectManager : MonoBehaviour
     public GameObject MapButtonPrefab;
 
     public LineRenderer linePrefab;
-    
+
     /// <summary>
     /// UI text displaying the current area name (e.g., "Forest Region")
     /// </summary>
     public TextMeshProUGUI AreaHeaderText;
-    
+
     /// <summary>
     /// UI text displaying level information (currently unused in Start())
     /// </summary>
@@ -54,13 +55,18 @@ public class MapSelectManager : MonoBehaviour
     /// </summary>
     public AreaData CurrentArea;
 
+    [Header("Player References")]
+    public GameObject PlayerUIPrefab;
+    public RectTransform WorldSpaceCanvasRect;
+    public Vector2 PlayerPositionOffsetPerLevel = new Vector2(9.92f, -9.5f);
+
     private LevelSelectSystemEventHandler _eventSystemHandler;
 
     /// <summary>
     /// Set of unlocked map IDs for quick lookup (e.g., "Forest_01", "Desert_Boss")
     /// </summary>
     public HashSet<string> UnlockedLevelIDs = new HashSet<string>();
-    
+
     /// <summary>
     /// Cached reference to main camera (currently unused)
     /// </summary>
@@ -70,12 +76,14 @@ public class MapSelectManager : MonoBehaviour
     /// List of instantiated map button GameObjects for tracking and cleanup
     /// </summary>
     private List<GameObject> _buttonObjects = new List<GameObject>();
-    
+
     /// <summary>
     /// Maps button GameObjects to their world positions (currently unused)
     /// </summary>
     private Dictionary<GameObject, Vector3> _buttonLocations = new Dictionary<GameObject, Vector3>();
 
+    public GameObject PlayerObj { get; set; }
+    public bool _playerIsFacingRight;
 
     /// <summary>
     /// Caches main camera reference on initialization
@@ -84,7 +92,7 @@ public class MapSelectManager : MonoBehaviour
     {
         _camera = Camera.main;
         _eventSystemHandler = GetComponentInChildren<LevelSelectSystemEventHandler>(true);
-        
+
         if (_eventSystemHandler == null)
         {
             Debug.LogError("MapSelectManager: LevelSelectEventSystemHandler component not found in children");
@@ -110,7 +118,7 @@ public class MapSelectManager : MonoBehaviour
         LoadUnlockedLevels();
         CreateMapButtons();
     }
-    
+
     /// <summary>
     /// Sets the area header text from CurrentArea data
     /// </summary>
@@ -118,7 +126,7 @@ public class MapSelectManager : MonoBehaviour
     {
         AreaHeaderText.SetText(CurrentArea.AreaName);
     }
-    
+
     /// <summary>
     /// Populates UnlockedLevelIDs with all maps that are unlocked by default
     /// </summary>
@@ -201,6 +209,10 @@ public class MapSelectManager : MonoBehaviour
                 lineConnector.StartRectTrans = CurrentArea.Maps[i - 1].MapButtonObj.GetComponent<RectTransform>();
                 lineConnector.EndRectTrans = mapData.MapButtonObj.GetComponent<RectTransform>();
                 StartCoroutine(DelayedLineSetup(lineConnector));
+            }
+            else
+            {
+                StartCoroutine(SpawnPlayerAfterDelay(buttonRect, WorldSpaceCanvasRect));
             }
         }
 
@@ -296,8 +308,85 @@ public class MapSelectManager : MonoBehaviour
         UnlockLevel(levelToUnlock, mapButton);
     }
 
+    [ContextMenu("Unlock All Levels Example")]
+    public void UnlockAllLevelsExample()
+    {
+        for (int i = 0; i < _buttonObjects.Count; i++)
+        {
+            MapButton mapButton = _buttonObjects[i].GetComponent<MapButton>();
+            string levelToUnlock = mapButton.MapData.MapId;
+            UnlockLevel(levelToUnlock, mapButton);
+        }
+    }
+
     #endregion
 
+    #region Player
+
+    private IEnumerator SpawnPlayerAfterDelay(RectTransform screenSpaceButton, RectTransform worldSpaceCanvas)
+    {
+        yield return null;
+        SpawnInPlayerRectTransform(screenSpaceButton, worldSpaceCanvas);
+    }
+
+        private void SpawnInPlayerRectTransform(RectTransform screenSpaceUIObject, RectTransform worldSpaceUIObject)
+    {
+        _playerIsFacingRight = true;
+        PlayerObj = Instantiate(PlayerUIPrefab, worldSpaceUIObject);
+
+        Vector2 screenPosition = RectTransformUtility.WorldToScreenPoint(_camera, screenSpaceUIObject.position);
+        Vector3 worldPosition = _camera.ScreenToWorldPoint(new Vector3(screenPosition.x, screenPosition.y, _camera.nearClipPlane));
+        worldPosition.z = worldSpaceUIObject.position.z;
+
+        Vector3 offsetPosition = worldPosition + (Vector3)PlayerPositionOffsetPerLevel;
+
+        PlayerObj.transform.position = offsetPosition;
+
+        if (_buttonObjects.Count > 1)
+        {
+            Vector2 secondScreenPoint = RectTransformUtility.WorldToScreenPoint(_camera, _buttonObjects[1].GetComponent<RectTransform>().position);
+            Vector3 secondWorldPoint = _camera.ScreenToWorldPoint(new Vector3(secondScreenPoint.x, secondScreenPoint.y, _camera.nearClipPlane));
+            secondWorldPoint.z = worldSpaceUIObject.position.z;
+
+            CheckForRightOrLeftTurn(PlayerObj, ref _playerIsFacingRight, secondWorldPoint);
+        }
+
+    }
+
+    private void CheckForRightOrLeftTurn(GameObject player, ref bool isFacingRight, Vector3 targetWorldPosition)
+    {
+        if (isFacingRight)
+        {
+            if (targetWorldPosition.x < player.transform.position.x)
+            {
+                player.transform.Rotate(0f, 180f, 0f);
+                isFacingRight = false;
+            }
+        }
+        else
+        {
+            if (targetWorldPosition.x > player.transform.position.x)
+            {
+                player.transform.Rotate(0f, -180f, 0f);
+                isFacingRight = true;
+            }
+        }
+    }
+
+    public void MovePlayerToButton(GameObject playerUI, RectTransform targetButton, RectTransform worldSpaceUIObject)
+    {
+        Vector2 screenPoint = RectTransformUtility.WorldToScreenPoint(_camera, targetButton.position);
+        Vector3 worldPosition = _camera.ScreenToWorldPoint(new Vector3(screenPoint.x, screenPoint.y, _camera.nearClipPlane));
+        worldPosition.z = worldSpaceUIObject.position.z;
+
+        Vector3 endPosition = worldPosition + (Vector3)PlayerPositionOffsetPerLevel;
+
+        CheckForRightOrLeftTurn(playerUI, ref _playerIsFacingRight, worldPosition);
+
+        playerUI.transform.DOMove(endPosition, 0.11f);
+    }
+
+    #endregion
 
 
 }

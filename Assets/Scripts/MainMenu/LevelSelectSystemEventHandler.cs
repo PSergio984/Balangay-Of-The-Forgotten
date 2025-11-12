@@ -3,7 +3,12 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 public class LevelSelectSystemEventHandler : DynamicEventSystemHandler
 {
+    private Image _selectableImage;
+    private MapButton _mapButton;
+
     private MapSelectManager _mapSelectManager;
+
+    private bool _initialMoveComplete;
 
     protected void Awake()
     {
@@ -28,18 +33,26 @@ public class LevelSelectSystemEventHandler : DynamicEventSystemHandler
     {
         base.OnSelect(eventData);
 
-        var image = eventData.selectedObject != null ? eventData.selectedObject.GetComponent<Image>() : null;
-        var mapButton = eventData.selectedObject != null ? eventData.selectedObject.GetComponent<MapButton>() : null;
-        if (mapButton != null)
+        _selectableImage = eventData.selectedObject != null ? eventData.selectedObject.GetComponent<Image>() : null;
+        _mapButton = eventData.selectedObject != null ? eventData.selectedObject.GetComponent<MapButton>() : null;
+
+        if (_mapButton != null)
         {
             if (_mapSelectManager != null && _mapSelectManager.LevelHeaderText != null)
             {
-                _mapSelectManager.LevelHeaderText.SetText(mapButton.MapData.MapId);
+                _mapSelectManager.LevelHeaderText.SetText(_mapButton.MapData.MapId);
+                RectTransform rectTrans = eventData.selectedObject.GetComponent<RectTransform>();
+
+                if (_initialMoveComplete)
+                    _mapSelectManager.MovePlayerToButton(_mapSelectManager.PlayerObj, rectTrans, _mapSelectManager.WorldSpaceCanvasRect);
+
+                _initialMoveComplete = true;
+            
             }
 
-            if (image != null)
+            if (_selectableImage != null)
             {
-                image.color = Color.red;
+                _selectableImage.color = Color.red;
             }
         }
     }
@@ -47,17 +60,16 @@ public class LevelSelectSystemEventHandler : DynamicEventSystemHandler
     public override void OnDeselect(BaseEventData eventData)
     {
         base.OnDeselect(eventData);
-        var image = eventData.selectedObject != null ? eventData.selectedObject.GetComponent<Image>() : null;
-        var mapButton = eventData.selectedObject != null ? eventData.selectedObject.GetComponent<MapButton>() : null;
-        if (mapButton != null)
+
+        if (_mapButton != null)
         {
             if (_mapSelectManager != null && _mapSelectManager.LevelHeaderText != null)
             {
                 _mapSelectManager.LevelHeaderText.SetText("");
             }
-            if (image != null)
+            if (_selectableImage != null)
             {
-                image.color = mapButton.ReturnColor;
+                _selectableImage.color = _mapButton.ReturnColor;
             }
         }
     }
