@@ -1,6 +1,7 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using AudioSystem;
+
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -52,17 +53,7 @@ using UnityEditor;
 /// </remarks>
 public class MainMenu : MonoBehaviour
 {
-    [SerializeField] private int SceneIndex = 1;
-    /// <summary>
-    /// Button that starts the game when clicked
-    /// </summary>
-    /// <remarks>
-    /// When players click this button, it loads the main game scene to begin playing.
-    /// Assign a UI Button component in the Inspector.
-    /// </remarks>
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    [SerializeField] private Button StartButton;
-    
+
     /// <summary>
     /// Button that quits the game when clicked
     /// </summary>
@@ -72,7 +63,9 @@ public class MainMenu : MonoBehaviour
     /// Assign a UI Button component in the Inspector.
     /// </remarks>
     [SerializeField] private Button QuitButton;
-    
+    [SerializeField] private SoundData mapSelectionMusic;
+    [SerializeField] private float MusicFadeTime = 2f;
+
     /// <summary>
     /// Sets up button listeners when the menu loads
     /// </summary>
@@ -82,23 +75,32 @@ public class MainMenu : MonoBehaviour
     /// </remarks>
     void Start()
     {
-        // Add listener for the Start button to call the StartGame method when clicked
-        StartButton.onClick.AddListener(() => StartGame(SceneIndex));
-        // Add listener for the Quit button to call the QuitGame method when clicked
         QuitButton.onClick.AddListener(QuitGame);
     }
 
     /// <summary>
-    /// Loads the main game scene to start playing
+    /// Initiates a new game session by transitioning from the menu to the session scenes
     /// </summary>
     /// <remarks>
-    /// Called when the start button is clicked. Loads scene index 1 which should 
-    /// be the main game scene. Make sure scene 1 is added to build settings.
+    /// Performs a complex scene transition that loads the session infrastructure and map selection,
+    /// unloads the menu, and applies transition effects. This should be called when the player
+    /// clicks the start button.
     /// </remarks>
-    private void StartGame(int SceneIndex)
+    public void StartSession()
     {
-       // Load scene index 1 (the main game scene)
-       SceneManager.LoadScene(SceneIndex);
+        if (SceneController.Instance == null)
+        {
+            Debug.LogError("SceneController.Instance is null. Cannot start session.");
+            return;
+        }
+        
+        SceneController.Instance
+            .NewTransition()
+            .Unload(SceneDatabase.Slots.Menu)
+            .Load(SceneDatabase.Slots.SessionContent, SceneDatabase.Scenes.MapSelection, setActive: true)
+            .WithOverlay()
+            .WithMusic(mapSelectionMusic, MusicFadeTime)
+            .Perform();
     }
 
     /// <summary>

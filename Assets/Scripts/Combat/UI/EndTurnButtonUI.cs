@@ -1,5 +1,5 @@
 using UnityEngine;
-
+using AudioSystem;
 /* END TURN BUTTON UI DOCUMENTATION
  *
  * Purpose: Button that lets players end their current hero's turn and cycle through the party, then start the enemy turn
@@ -51,8 +51,13 @@ public class EndTurnButtonUI : MonoBehaviour
     /// enemy phase. This is how players pass control to the enemies when they're 
     /// finished with their turn.
     /// </remarks>
+    
+    [SerializeField] private SoundData mapSelectionMusic;
+    [SerializeField] private float MusicFadeTime = 2f;
+
     public void OnClick()
     {
+        Debug.Log("[EndTurnButtonUI] End Turn button clicked.");
         int heroCount = CurrentHeroUtil.GetHeroCount();
         int currentHeroIndex = CurrentHeroUtil.CurrentHeroIndex;
         Debug.Log($"[EndTurnButtonUI] CurrentHeroIndex: {currentHeroIndex} / {heroCount - 1}");
@@ -77,5 +82,17 @@ public class EndTurnButtonUI : MonoBehaviour
                 ActionSystem.Instance.Perform(new DrawCardsGA(5));
             }
         });
+    }
+
+    public void goBackToMainMenu()
+    {
+        SceneController.Instance
+            .NewTransition()
+            .Load(SceneDatabase.Slots.SessionContent, SceneDatabase.Scenes.MapSelection, setActive: true)
+            .Unload(SceneDatabase.Scenes.Combat)
+            .WithOverlay()
+            .WithMusic(mapSelectionMusic, MusicFadeTime)
+            .WithClearUnusedAssets()
+            .Perform();
     }
 }

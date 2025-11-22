@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d6b46991f21540249a505cc6d07a919b, type: 3}
   m_Name: Tiyanak
   m_EditorClassIdentifier: Assembly-CSharp::EnemyData
-  <Image>k__BackingField: {fileID: 21300000, guid: 46964833e2efc8e4485aa37657abb90d, type: 3}
+  <Image>k__BackingField: {fileID: 21300000, guid: 119de94fdf78fb14b84b1541f879092e, type: 3}
   <EnemyName>k__BackingField: Tiyanak
   <Health>k__BackingField: 2150
   <AttackPower>k__BackingField: 33

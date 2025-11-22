@@ -1,4 +1,5 @@
-using System;
+
+using AudioSystem;
 using DG.Tweening;
 using UnityEngine;
 
@@ -61,6 +62,22 @@ public class CardViewCreator : Singleton<CardViewCreator>
     // Prefab reference for the card that will be instantiated
     [SerializeField] private CardView cardPrefab;
 
+    [Header("🎵 Card Audio")]
+    [SerializeField] private SoundData cardSpawnSound;
+
+    /// <summary>
+    /// Sound builder for playing card-related audio effects
+    /// </summary>
+    private SoundBuilder soundBuilder;
+
+
+     
+    private void Start()
+    {
+        // Cache the sound builder for playing sounds and performance
+        soundBuilder = SoundManager.Instance.CreateSoundBuilder();
+    }
+
     /// <summary>
     /// Creates a new card view with position, rotation, and smooth scaling animation
     /// </summary>
@@ -87,12 +104,16 @@ public class CardViewCreator : Singleton<CardViewCreator>
         
         // Set the initial scale to zero to prepare for animation
         cardView.transform.localScale = Vector3.zero;
-        
+
         // Animate the card scaling from zero to full size with a bounce effect over 0.5 seconds
         // When animation completes, update the original scale for hover system
         cardView.transform.DOScale(Vector3.one, 0.5f)
             .SetEase(Ease.OutBack)
             .OnComplete(() => cardView.UpdateOriginalPosition());
+        
+        soundBuilder
+            .WithPosition(position)
+            .Play(cardSpawnSound);
         
         // Return the created and animated card view
         return cardView;
