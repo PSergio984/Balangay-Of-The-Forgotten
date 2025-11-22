@@ -7,11 +7,26 @@ namespace AudioSystem {
     /// Inherit from this to make any MonoBehaviour persistent and globally accessible.
     /// </summary>
     /// <typeparam name="T">The type of component this singleton manages (usually your own class).</typeparam>
+    /// <remarks>
+    /// <para><strong>⚠️ CRITICAL SETUP REQUIREMENT:</strong></para>
+    /// <para>PersistentSingletons MUST be on their own dedicated GameObject, NOT attached to:</para>
+    /// <list type="bullet">
+    /// <item>Cameras (will move camera to DontDestroyOnLoad, breaking scene cameras)</item>
+    /// <item>Lights (will persist lights across scenes incorrectly)</item>
+    /// <item>EventSystems (will cause UI input issues across scenes)</item>
+    /// <item>Any other scene-critical components</item>
+    /// </list>
+    /// <para>The singleton will automatically unparent itself and move to DontDestroyOnLoad,
+    /// which will affect ALL components on the same GameObject!</para>
+    /// </remarks>
     /// <example>
+    /// // ✅ CORRECT: SoundManager on its own GameObject
     /// public class SoundManager : PersistentSingleton&lt;SoundManager&gt; {
     ///     // Your code here
     /// }
     /// // Access from anywhere: SoundManager.Instance.PlaySound();
+    /// 
+    /// // ❌ WRONG: Don't attach to Camera, Light, or other scene objects!
     /// </example>
     public class PersistentSingleton<T> : MonoBehaviour where T : Component {
         
@@ -93,8 +108,22 @@ namespace AudioSystem {
             // Don't run in edit mode
             if (!Application.isPlaying) return;
             
-            // Unparent if needed to survive parent destruction
+            // Safety check: Prevent unparenting if this GameObject has critical scene components
+            // like Camera, Light, or EventSystem that should stay with their scene
             if (AutoUnparentOnAwake) {
+                // Check if this GameObject has components that should remain in their scene
+                bool hasCriticalComponents = GetComponent<Camera>() != null 
+                    || GetComponent<Light>() != null 
+                    || GetComponent<UnityEngine.EventSystems.EventSystem>() != null;
+                
+                if (hasCriticalComponents) {
+                    Debug.LogError($"[PersistentSingleton] {typeof(T).Name} is attached to a GameObject with critical scene components (Camera/Light/EventSystem). " +
+                                   $"PersistentSingletons should be on their own dedicated GameObjects to prevent unintended scene destruction. " +
+                                   $"Please move {typeof(T).Name} to a separate GameObject.", this);
+                    // Don't unparent or persist this GameObject
+                    return;
+                }
+                
                 transform.SetParent(null);
             }
             

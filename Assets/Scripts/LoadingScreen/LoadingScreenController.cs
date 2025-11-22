@@ -175,11 +175,10 @@ public class LoadingScreenController : MonoBehaviour
     /// Load the next scene with optional fade transition
     /// </summary>
     private void LoadNextScene()
-    {
-        SceneController.Instance
+    {        SceneController.Instance
             .NewTransition()
-            .Load(SceneDatabase.Slots.Menu, SceneDatabase.Scenes.MainMenu, setActive: true)
             .Unload(SceneDatabase.Slots.LoadingScreen)
+            .Load(SceneDatabase.Slots.Menu, SceneDatabase.Scenes.MainMenu, setActive: true) 
             .WithOverlay()
             .WithMusic(MenuMusic, MusicFadeTime)
             .Perform();

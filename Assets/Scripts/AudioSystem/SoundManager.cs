@@ -55,6 +55,23 @@ namespace AudioSystem {
         /// </summary>
         [SerializeField] int maxSoundInstances = 30;
 
+        /// <summary>
+        /// Initializes the SoundManager singleton and validates setup
+        /// </summary>
+        protected override void Awake()
+        {
+            // Validate that SoundManager is not attached to critical scene components
+            if (GetComponent<Camera>() != null || GetComponent<Light>() != null)
+            {
+                Debug.LogError("[SoundManager] SoundManager should NOT be attached to Camera or Light GameObjects! " +
+                               "This will cause the camera/light to be moved to DontDestroyOnLoad and break scene functionality. " +
+                               "Please create a dedicated GameObject for SoundManager.", this);
+            }
+            
+            // Call base to initialize singleton behavior
+            base.Awake();
+        }
+
         void Start()
         {
             InitializePool();

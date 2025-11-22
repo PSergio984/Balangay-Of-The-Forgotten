@@ -116,13 +116,77 @@ public class MapSelectManager : MonoBehaviour
 
 
     /// <summary>
+    /// Validates camera reference and re-finds if destroyed during scene transitions
+    /// </summary>
+    /// <returns>True if camera is valid, false otherwise</returns>
+    private bool ValidateCamera()
+    {
+        // Check if camera reference is null or destroyed
+        if (_camera == null || !_camera)
+        {
+            Debug.LogWarning("[MapSelectManager] Camera reference lost, searching for camera in MapSelection scene...", this);
+            
+            // Strategy 1: Try to find main camera first
+            _camera = Camera.main;
+            if (_camera == null)
+            {
+                // Strategy 2: Find any camera in the active scene
+                Camera[] allCameras = FindObjectsByType<Camera>(FindObjectsSortMode.None);
+                foreach (Camera cam in allCameras)
+                {
+                    // Prefer cameras in this scene (MapSelection)
+                    if (cam.gameObject.scene == gameObject.scene)
+                    {
+                        _camera = cam;
+                        Debug.LogWarning($"[MapSelectManager] Found camera '{cam.name}' in MapSelection scene.", this);
+                        break;
+                    }
+                }
+                
+                // Strategy 3: If still not found, use any camera
+                if (_camera == null && allCameras.Length > 0)
+                {
+                    _camera = allCameras[0];
+                    Debug.LogWarning($"[MapSelectManager] Using camera '{_camera.name}' from another scene as fallback.", this);
+                }
+                
+                if (_camera == null)
+                {
+                    Debug.LogError("[MapSelectManager] No camera found in any scene! MapSelection camera may have been destroyed. Check your scene setup.", this);
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+
+    /// <summary>
     /// Caches camera and event handler references on initialization
     /// </summary>
     private void Awake()
     {
         _camera = Camera.main;
-        _eventSystemHandler = GetComponentInChildren<LevelSelectSystemEventHandler>(true);
+        if (_camera == null)
+        {
+            // Try to find any camera in the scene
+            _camera = FindFirstObjectByType<Camera>();
+            if (_camera != null)
+            {
+                Debug.LogWarning("[MapSelectManager] No camera tagged as MainCamera found. Using first available camera: " + _camera.name, this);
+            }
+            else
+            {
+                Debug.LogError("[MapSelectManager] No camera found in the scene! UI/world position calculations will fail.", this);
+                // Optionally, create a new camera at runtime:
+                // GameObject camObj = new GameObject("AutoCreatedCamera");
+                // _camera = camObj.AddComponent<Camera>();
+                // camObj.tag = "MainCamera";
+                // Debug.LogWarning("[MapSelectManager] Created a new camera at runtime.", this);
+            }
+        }
 
+        _eventSystemHandler = GetComponentInChildren<LevelSelectSystemEventHandler>(true);
         if (_eventSystemHandler == null)
         {
             Debug.LogError("MapSelectManager: LevelSelectEventSystemHandler component not found in children");
@@ -155,6 +219,14 @@ public class MapSelectManager : MonoBehaviour
         if (WorldSpaceCanvasRect == null)
         {
             Debug.LogError("MapSelectManager: WorldSpaceCanvasRect is not assigned in the Inspector. Disabling component.", this);
+            enabled = false;
+            return;
+        }
+
+        // Validate camera before proceeding
+        if (!ValidateCamera())
+        {
+            Debug.LogError("[MapSelectManager] Cannot initialize - no camera available. Make sure MapSelection scene has a camera.", this);
             enabled = false;
             return;
         }
@@ -213,6 +285,13 @@ public class MapSelectManager : MonoBehaviour
             // Instantiate button prefab under MapParent
             GameObject buttonGO = Instantiate(MapButtonPrefab, MapParent);
             _buttonObjects.Add(buttonGO);
+
+            // Set the button's sprite to the map's thumbnail
+            var image = buttonGO.GetComponent<UnityEngine.UI.Image>();
+            if (image != null && mapData.MapThumbnail != null)
+            {
+                image.sprite = mapData.MapThumbnail;
+            }
 
             RectTransform buttonRect = buttonGO.GetComponent<RectTransform>();
 
@@ -287,6 +366,12 @@ public class MapSelectManager : MonoBehaviour
     private IEnumerator AddLocationAfterDelay(GameObject buttonGo, RectTransform buttonRect)
     {
         yield return null; // Wait for layout calculation
+
+        if (!ValidateCamera())
+        {
+            Debug.LogError("[MapSelectManager] Cannot cache button location - camera is invalid.", this);
+            yield break;
+        }
 
         Vector2 buttonScreenPoint = RectTransformUtility.WorldToScreenPoint(_camera, buttonRect.position);
         Vector3 buttonWorldPos = _camera.ScreenToWorldPoint(new Vector3(buttonScreenPoint.x, buttonScreenPoint.y, _camera.nearClipPlane));
@@ -490,6 +575,12 @@ public class MapSelectManager : MonoBehaviour
     /// <param name="worldSpaceUIObject">World-space canvas RectTransform for parenting</param>
     private void SpawnInPlayerRectTransform(RectTransform screenSpaceUIObject, RectTransform worldSpaceUIObject)
     {
+        if (!ValidateCamera())
+        {
+            Debug.LogError("[MapSelectManager] Cannot spawn player marker - camera is invalid.", this);
+            return;
+        }
+
         _playerIsFacingRight = true;
         PlayerObj = Instantiate(PlayerUIPrefab, worldSpaceUIObject);
 
@@ -554,6 +645,12 @@ public class MapSelectManager : MonoBehaviour
     /// </remarks>
     public void MovePlayerToButton(GameObject playerUI, RectTransform targetButton, RectTransform worldSpaceUIObject)
     {
+        if (!ValidateCamera())
+        {
+            Debug.LogError("[MapSelectManager] Cannot move player marker - camera is invalid.", this);
+            return;
+        }
+
         // Convert target button position to world-space
         Vector2 screenPoint = RectTransformUtility.WorldToScreenPoint(_camera, targetButton.position);
         Vector3 worldPosition = _camera.ScreenToWorldPoint(new Vector3(screenPoint.x, screenPoint.y, _camera.nearClipPlane));
