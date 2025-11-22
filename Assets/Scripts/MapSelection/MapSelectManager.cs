@@ -582,7 +582,10 @@ public class MapSelectManager : MonoBehaviour
         }
 
         _playerIsFacingRight = true;
+
         PlayerObj = Instantiate(PlayerUIPrefab, worldSpaceUIObject);
+        // Ensure player marker is rendered on top
+        PlayerObj.transform.SetAsLastSibling();
 
         // Convert screen-space UI position to world-space
         Vector2 screenPosition = RectTransformUtility.WorldToScreenPoint(_camera, screenSpaceUIObject.position);
