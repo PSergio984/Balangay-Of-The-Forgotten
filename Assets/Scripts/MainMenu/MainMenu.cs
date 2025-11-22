@@ -96,14 +96,12 @@ public class MainMenu : MonoBehaviour
         
         SceneController.Instance
             .NewTransition()
-            .Load(SceneDatabase.Slots.Session, SceneDatabase.Scenes.Session)
-            .Load(SceneDatabase.Slots.SessionContent, SceneDatabase.Scenes.MapSelection, setActive: true)
             .Unload(SceneDatabase.Slots.Menu)
+            .Load(SceneDatabase.Slots.SessionContent, SceneDatabase.Scenes.MapSelection, setActive: true)
             .WithOverlay()
             .WithMusic(mapSelectionMusic, MusicFadeTime)
-            .WithClearUnusedAssets()
             .Perform();
-    }    
+    }
 
     /// <summary>
     /// Quits the application or stops editor play mode

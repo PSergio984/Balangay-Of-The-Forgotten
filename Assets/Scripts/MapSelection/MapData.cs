@@ -50,7 +50,12 @@ public class MapData : ScriptableObject
     /// <summary>
     /// Visual preview image shown in map selection screen
     /// </summary>
-    [SerializeField] private Sprite MapThumbnail;
+    [SerializeField] private Sprite mapThumbnail;
+
+    /// <summary>
+    /// Visual preview image shown in map selection screen (public getter)
+    /// </summary>
+    public Sprite MapThumbnail => mapThumbnail;
     
     /// <summary>
     /// Runtime reference to the UI button representing this map (set by map selection manager)

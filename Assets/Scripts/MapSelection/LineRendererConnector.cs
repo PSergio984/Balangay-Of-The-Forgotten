@@ -45,6 +45,52 @@ public class LineRendererConnector : MonoBehaviour
 
 
     /// <summary>
+    /// Validates camera reference and re-finds if destroyed during scene transitions
+    /// </summary>
+    /// <returns>True if camera is valid, false otherwise</returns>
+    private bool ValidateCamera()
+    {
+        // Check if camera reference is null or destroyed
+        if (_camera == null || !_camera)
+        {
+            Debug.LogWarning($"[LineRendererConnector] Camera reference lost on {gameObject.name}, searching for camera...", this);
+            
+            // Try to find main camera first
+            _camera = Camera.main;
+            if (_camera == null)
+            {
+                // Find any camera in the active scene
+                Camera[] allCameras = FindObjectsByType<Camera>(FindObjectsSortMode.None);
+                foreach (Camera cam in allCameras)
+                {
+                    // Prefer cameras in this scene
+                    if (cam.gameObject.scene == gameObject.scene)
+                    {
+                        _camera = cam;
+                        Debug.LogWarning($"[LineRendererConnector] Found camera '{cam.name}' in scene.", this);
+                        break;
+                    }
+                }
+                
+                // Use any camera as fallback
+                if (_camera == null && allCameras.Length > 0)
+                {
+                    _camera = allCameras[0];
+                    Debug.LogWarning($"[LineRendererConnector] Using camera '{_camera.name}' from another scene as fallback.", this);
+                }
+                
+                if (_camera == null)
+                {
+                    Debug.LogError($"[LineRendererConnector] No camera found in any scene! Line rendering will fail on {gameObject.name}.", this);
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+
+    /// <summary>
     /// Runs when the script first loads - finds the LineRenderer and camera
     /// </summary>
     private void Awake()
@@ -56,12 +102,8 @@ public class LineRendererConnector : MonoBehaviour
             Debug.LogError("LineRenderer component not found on " + gameObject.name);
         }
 
-        // Find the main camera in the scene
-        _camera = Camera.main;
-        if (_camera == null)
-        {
-            Debug.LogError("Main camera not found. Ensure a camera is tagged as MainCamera.");
-        }
+        // Initial camera setup
+        ValidateCamera();
     }
     
     /// <summary>
@@ -76,6 +118,13 @@ public class LineRendererConnector : MonoBehaviour
         if (StartRectTrans == null || EndRectTrans == null)
         {
             Debug.LogWarning($"[LineRendererConnector] StartRectTrans or EndRectTrans is null on {gameObject.name}. Line will not be updated.");
+            return;
+        }
+
+        // Validate camera before attempting to use it
+        if (!ValidateCamera())
+        {
+            Debug.LogError($"[LineRendererConnector] Cannot update line position - no valid camera available on {gameObject.name}.", this);
             return;
         }
 

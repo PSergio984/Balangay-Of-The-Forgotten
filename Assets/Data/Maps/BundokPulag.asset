@@ -18,4 +18,4 @@ MonoBehaviour:
     m_SceneAsset: {fileID: 102900000, guid: 8c9cfa26abfee488c85f1582747f6a02, type: 3}
     m_SceneName: Combat
   MapName: Bundok Pulag
-  MapThumbnail: {fileID: 21300000, guid: 1b3d8231b1949af489c01b1d5ad2e8c1, type: 3}
+  mapThumbnail: {fileID: -7613080903851761921, guid: 9bf2ffaf7441a784e8b40f0b89df4a45, type: 3}

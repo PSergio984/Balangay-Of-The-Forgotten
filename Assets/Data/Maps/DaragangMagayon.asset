@@ -18,4 +18,4 @@ MonoBehaviour:
     m_SceneAsset: {fileID: 102900000, guid: 8c9cfa26abfee488c85f1582747f6a02, type: 3}
     m_SceneName: Combat
   MapName: Daragang Magayon
-  MapThumbnail: {fileID: 3565510675042240949, guid: a71dad2e0698e7842a59baa69a36f278, type: 3}
+  mapThumbnail: {fileID: 3565510675042240949, guid: a71dad2e0698e7842a59baa69a36f278, type: 3}

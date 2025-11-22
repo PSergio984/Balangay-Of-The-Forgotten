@@ -49,7 +49,7 @@ public class LevelSelectSystemEventHandler : DynamicEventSystemHandler
     /// <summary>
     /// Runs when this script first loads - finds the MapSelectManager
     /// </summary>
-    protected void Awake()
+    public override void Awake()
     {
         // Call the parent class Awake first (sets up sounds and stuff)
         base.Awake();
