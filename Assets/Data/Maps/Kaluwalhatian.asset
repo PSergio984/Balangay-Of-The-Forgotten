@@ -19,3 +19,7 @@ MonoBehaviour:
     m_SceneName: Combat
   MapName: Kaluwalhatian
   mapThumbnail: {fileID: -9042554937068598716, guid: acf12fa79a0782446894d284de8c685a, type: 3}
+  enemyDatas:
+  - {fileID: 11400000, guid: 395769dfc1dec934fb85f4cabbcf55cc, type: 2}
+  - {fileID: 11400000, guid: 81ff8d327f4eeab49806f93b816055a9, type: 2}
+  combatBackgroundSprite: {fileID: 21300000, guid: fbc8e2f266821164c97b5424c591813a, type: 3}

@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 
 /*
@@ -9,8 +10,10 @@ using UnityEngine;
  * - Stores all data for a single map (ID, scene, visuals, unlock state)
  * - Created as asset files in the project (right-click → Map Selection/Map Data)
  * - Referenced by MapButton to display and load the correct map
+ * - Contains combat-specific data (enemies, background) for dynamic level setup
  * 
- * Integration: Used by map selection system to configure each playable map
+ * Integration: Used by map selection system to configure each playable map,
+ *              and by MatchSetupSystem to set up combat based on selected level
  */
 
 /// <summary>
@@ -56,6 +59,43 @@ public class MapData : ScriptableObject
     /// Visual preview image shown in map selection screen (public getter)
     /// </summary>
     public Sprite MapThumbnail => mapThumbnail;
+    
+    
+    [Header("Combat Setup")]
+    
+    /// <summary>
+    /// List of enemies that will spawn when this map is loaded in combat
+    /// </summary>
+    /// <remarks>
+    /// <para><strong>Why:</strong> Each map can have different enemy configurations</para>
+    /// <para><strong>How:</strong> Assign EnemyData assets in Inspector for this level's enemies</para>
+    /// </remarks>
+    [Tooltip("Enemies that will appear in combat for this level")]
+    [SerializeField] private List<EnemyData> enemyDatas = new List<EnemyData>();
+    
+    /// <summary>
+    /// Public getter for the enemy data list used by MatchSetupSystem (read-only view)
+    /// </summary>
+    /// <remarks>
+    /// <para><strong>Why:</strong> Returns read-only view to prevent external mutation of internal state</para>
+    /// </remarks>
+    public IReadOnlyList<EnemyData> EnemyDatas => enemyDatas;
+    
+    /// <summary>
+    /// Background sprite displayed in the combat scene for this map
+    /// </summary>
+    /// <remarks>
+    /// <para><strong>Why:</strong> Each map should have a unique visual environment</para>
+    /// <para><strong>How:</strong> Assign a background sprite in Inspector, MatchSetupSystem applies it</para>
+    /// </remarks>
+    [Tooltip("Background image shown during combat for this level")]
+    [SerializeField] private Sprite combatBackgroundSprite;
+    
+    /// <summary>
+    /// Public getter for combat background sprite used by MatchSetupSystem
+    /// </summary>
+    public Sprite CombatBackgroundSprite => combatBackgroundSprite;
+    
     
     /// <summary>
     /// Runtime reference to the UI button representing this map (set by map selection manager)

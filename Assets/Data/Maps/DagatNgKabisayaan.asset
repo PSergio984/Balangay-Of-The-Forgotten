@@ -19,3 +19,7 @@ MonoBehaviour:
     m_SceneName: Combat
   MapName: Dagat Ng Kabisayaan
   mapThumbnail: {fileID: 3934874985737040794, guid: 817b41b3ac0cd10428748b1a5b0e2948, type: 3}
+  enemyDatas:
+  - {fileID: 11400000, guid: bcd9445ea2359f846823d38c5dcabb1c, type: 2}
+  - {fileID: 11400000, guid: 47ba028629da84246952941a644ef81e, type: 2}
+  combatBackgroundSprite: {fileID: 21300000, guid: efb64386644b82148b9aa1cf49541a65, type: 3}

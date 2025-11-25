@@ -578,9 +578,11 @@ MonoBehaviour:
   - {fileID: 11400000, guid: a83a06f715f5393469e0ec728b3268bd, type: 2}
   - {fileID: 11400000, guid: 00604324e0069ad408f4fd447ca991d4, type: 2}
   - {fileID: 11400000, guid: f22d3d7dafeec894e8377b3099e8cda6, type: 2}
-  enemyDatas:
-  - {fileID: 11400000, guid: 2e357dbd3dbadc848a8449ee7b5ea48e, type: 2}
   perkData: {fileID: 11400000, guid: fd4f31f9e5198d040aa58d94ad128b49, type: 2}
+  levelTransitionData: {fileID: 11400000, guid: 40f29500fc925b041ac5652ac0fb1995, type: 2}
+  combatBackgroundRenderer: {fileID: 584423950}
+  fallbackEnemyDatas:
+  - {fileID: 11400000, guid: bcd9445ea2359f846823d38c5dcabb1c, type: 2}
 --- !u!1 &160960753
 GameObject:
   m_ObjectHideFlags: 0

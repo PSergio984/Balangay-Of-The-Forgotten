@@ -19,3 +19,7 @@ MonoBehaviour:
     m_SceneName: Combat
   MapName: Bundok Pulag
   mapThumbnail: {fileID: -7613080903851761921, guid: 9bf2ffaf7441a784e8b40f0b89df4a45, type: 3}
+  enemyDatas:
+  - {fileID: 11400000, guid: f17decc971290bf4fa570e0dcebe4813, type: 2}
+  - {fileID: 11400000, guid: 1e20db64a7c97d7479846606d26413bd, type: 2}
+  combatBackgroundSprite: {fileID: 21300000, guid: eb03cee68e8134e4ba4a0b408e2b1f70, type: 3}

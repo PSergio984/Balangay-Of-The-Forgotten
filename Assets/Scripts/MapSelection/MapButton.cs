@@ -54,6 +54,11 @@ public class MapButton : MonoBehaviour
     public Color ReturnColor { get; set; }
 
     /// <summary>
+    /// Tracks if LoadMap listener is already registered to prevent duplicate registrations
+    /// </summary>
+    private bool _isLoadMapListenerRegistered;
+
+    /// <summary>
     /// The background music to play when entering this map's combat
     /// </summary>
     [SerializeField] private SoundData CombatMusic;
@@ -62,6 +67,17 @@ public class MapButton : MonoBehaviour
     /// How long the music takes to fade in (in seconds, default is 2 seconds)
     /// </summary>
     [SerializeField] private float MusicFadeTime = 2f;
+
+    /// <summary>
+    /// Reference to the level transition data ScriptableObject for passing data between scenes
+    /// </summary>
+    /// <remarks>
+    /// <para><strong>Why:</strong> Stores selected MapData before scene load so combat can read it</para>
+    /// <para><strong>How:</strong> Assign the same LevelTransitionData asset used by MatchSetupSystem</para>
+    /// </remarks>
+    [Header("Scene Transition")]
+    [Tooltip("Assign the LevelTransitionData asset - this passes map data to the combat scene")]
+    [SerializeField] private LevelTransitionData levelTransitionData;
 
 
     /// <summary>
@@ -90,6 +106,14 @@ public class MapButton : MonoBehaviour
             return;
         }
         
+        // Validate serialized text field
+        if (_mapNameText == null)
+        {
+            Debug.LogError($"[MapButton] _mapNameText not assigned on {gameObject.name}. Disabling script.");
+            enabled = false;
+            return;
+        }
+        
         // Start with gray color (locked state)
         ReturnColor = Color.gray;
     }
@@ -105,6 +129,11 @@ public class MapButton : MonoBehaviour
     /// </remarks>
     public void Setup(MapData map, bool isUnlocked)
     {
+        if (map == null)
+        {
+            Debug.LogError($"[MapButton] Setup called with null MapData on {gameObject.name}. Button will not be configured.", this);
+            return;
+        }
         // Store the map information
         MapData = map;
         
@@ -117,7 +146,7 @@ public class MapButton : MonoBehaviour
         if (isUnlocked)
         {
             // Map is unlocked - make it white and clickable
-            _MapButton.onClick.AddListener(LoadMap);
+            RegisterLoadMapListener();
             ReturnColor = Color.white;
             _MapImage.color = ReturnColor;
         }
@@ -141,12 +170,25 @@ public class MapButton : MonoBehaviour
         // Make the button clickable
         _MapButton.interactable = true;
         
-        // Add the click action (load the map when clicked)
-        _MapButton.onClick.AddListener(LoadMap);
+        // Add the click action (load the map when clicked) - guarded to prevent duplicates
+        RegisterLoadMapListener();
         
         // Change color to white (unlocked look)
         ReturnColor = Color.white;
         _MapImage.color = ReturnColor;
+    }
+    
+    
+    /// <summary>
+    /// Registers the LoadMap listener only once to prevent duplicate click handlers
+    /// </summary>
+    private void RegisterLoadMapListener()
+    {
+        if (_isLoadMapListenerRegistered)
+            return;
+            
+        _MapButton.onClick.AddListener(LoadMap);
+        _isLoadMapListenerRegistered = true;
     }
     
     /// <summary>
@@ -154,10 +196,23 @@ public class MapButton : MonoBehaviour
     /// </summary>
     /// <remarks>
     /// <para><strong>When:</strong> Called when player clicks this button</para>
-    /// <para><strong>What happens:</strong> Closes map select screen → Shows loading overlay → Loads combat → Fades in music</para>
+    /// <para><strong>What happens:</strong> Stores MapData → Closes map select → Shows loading overlay → Loads combat → Fades in music</para>
     /// </remarks>
     public void LoadMap()
     {
+        // Store the selected map data for the combat scene to read
+        if (levelTransitionData == null)
+        {
+            Debug.LogWarning($"[MapButton] LevelTransitionData not assigned on {gameObject.name}. Combat scene won't receive map data.");
+            return;
+        }
+        if (MapData == null)
+        {
+            Debug.LogWarning($"[MapButton] MapData is null on {gameObject.name}. Scene transition aborted to prevent invalid combat setup.");
+            return;
+        }
+        levelTransitionData.SelectedMapData = MapData;
+
         // Use SceneController to smoothly transition to combat
         SceneController.Instance
             .NewTransition()                                                                      // Start a new scene transition

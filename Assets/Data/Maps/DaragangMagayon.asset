@@ -19,3 +19,7 @@ MonoBehaviour:
     m_SceneName: Combat
   MapName: Daragang Magayon
   mapThumbnail: {fileID: 3565510675042240949, guid: a71dad2e0698e7842a59baa69a36f278, type: 3}
+  enemyDatas:
+  - {fileID: 11400000, guid: a7649951d27a5f24ca254cadfc31a4e0, type: 2}
+  - {fileID: 11400000, guid: 2e357dbd3dbadc848a8449ee7b5ea48e, type: 2}
+  combatBackgroundSprite: {fileID: 21300000, guid: fcdb44c1a791cd84ebc004f1eea2617a, type: 3}

@@ -137,6 +137,7 @@ MonoBehaviour:
   _mapNameText: {fileID: 604073414794844956}
   CombatMusic: {fileID: 11400000, guid: 7cbadd84d5c2adf46aa45f94dc9e18ee, type: 2}
   MusicFadeTime: 2
+  levelTransitionData: {fileID: 11400000, guid: 40f29500fc925b041ac5652ac0fb1995, type: 2}
 --- !u!1 &6321497213231596310
 GameObject:
   m_ObjectHideFlags: 0
