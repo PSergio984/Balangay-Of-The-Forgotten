@@ -22,4 +22,4 @@ MonoBehaviour:
   enemyDatas:
   - {fileID: 11400000, guid: bcd9445ea2359f846823d38c5dcabb1c, type: 2}
   - {fileID: 11400000, guid: 47ba028629da84246952941a644ef81e, type: 2}
-  combatBackgroundSprite: {fileID: 21300000, guid: efb64386644b82148b9aa1cf49541a65, type: 3}
+  combatBackgroundSprite: {fileID: 21300000, guid: 15d14152b19e7644393e7f33044de1ed, type: 3}

@@ -77,7 +77,7 @@ public class MapButton : MonoBehaviour
     /// </remarks>
     [Header("Scene Transition")]
     [Tooltip("Assign the LevelTransitionData asset - this passes map data to the combat scene")]
-    [SerializeField] private LevelTransitionData levelTransitionData;
+    [SerializeField] public LevelTransitionData levelTransitionData;
 
 
     /// <summary>

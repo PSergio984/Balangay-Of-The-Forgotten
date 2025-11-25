@@ -1317,6 +1317,7 @@ MonoBehaviour:
   CombatMusic: {fileID: 11400000, guid: 7cbadd84d5c2adf46aa45f94dc9e18ee, type: 2}
   MenuMusic: {fileID: 11400000, guid: 87acbe88cf96e8b40b3c362aec96e7cb, type: 2}
   MusicFadeTime: 2
+  levelTransitionData: {fileID: 11400000, guid: 40f29500fc925b041ac5652ac0fb1995, type: 2}
 --- !u!1 &1423969356
 GameObject:
   m_ObjectHideFlags: 0
