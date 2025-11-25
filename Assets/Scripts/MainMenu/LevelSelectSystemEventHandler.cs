@@ -14,12 +14,13 @@ using UnityEngine.UI;
  * 
  * FOCUS PERSISTENCE SYSTEM:
  * - When clicking non-map UI elements (like Start Test button), the selected map button
- *   ACTIVELY RESTORES its EventSystem focus via a coroutine
+ *   PRESERVES its visual state by NOT calling base.OnDeselect()
  * - This ensures:
- *   1. Visual state (red color, scale) is preserved
- *   2. LevelTransitionData.SelectedMapData remains valid for StartCombat
+ *   1. Visual state (red color, scale) is preserved (no scale animation runs)
+ *   2. LevelTransitionData.SelectedMapData remains valid for StartCombat (set in OnSelect)
  *   3. Header text showing the level name stays visible
- * - Only resets when navigating to another map button (normal map-to-map navigation)
+ * - Only resets visual state when navigating to another MapButton (map-to-map navigation)
+ * - Key insight: base.OnDeselect() triggers DOTween scale animation, so we skip it entirely
  * 
  * Integration: Works with MapSelectManager to create an interactive level select screen
  */
@@ -80,6 +81,7 @@ public class LevelSelectSystemEventHandler : DynamicEventSystemHandler
     /// </summary>
     public override void OnPointerEnter(BaseEventData eventData)
     {
+        Debug.Log($"[LevelSelectSystemEventHandler] OnPointerEnter - eventData.selectedObject: {eventData.selectedObject?.name}, currentSelectedGameObject: {EventSystem.current?.currentSelectedGameObject?.name}", this);
         // Empty on purpose - we don't want mouse hover to do anything special
     }
 
@@ -87,9 +89,16 @@ public class LevelSelectSystemEventHandler : DynamicEventSystemHandler
     /// <summary>
     /// Runs when mouse leaves a button - disabled here to prevent unwanted behavior
     /// </summary>
+    /// <remarks>
+    /// <para><strong>Critical for focus persistence:</strong> The base class OnPointerExit clears
+    /// the selectedObject reference, which causes EventSystem to deselect. By overriding and doing
+    /// NOTHING, we prevent the selection from being cleared when clicking anywhere.</para>
+    /// </remarks>
     public override void OnPointerExit(BaseEventData eventData)
     {
-        // Empty on purpose - we don't want mouse leaving to do anything special
+        Debug.Log($"[LevelSelectSystemEventHandler] OnPointerExit CALLED - eventData.selectedObject: {eventData.selectedObject?.name}, currentSelectedGameObject: {EventSystem.current?.currentSelectedGameObject?.name}", this);
+        // DO NOTHING - prevent base class from clearing selectedObject
+        // This is critical for maintaining map button selection when clicking non-map UI
     }
 
 
@@ -184,24 +193,27 @@ public class LevelSelectSystemEventHandler : DynamicEventSystemHandler
     /// <param name="eventData">Info about which button was deselected</param>
     /// <remarks>
     /// <para><strong>Focus Persistence:</strong> Only resets visual state when navigating to another MapButton.
-    /// If focus moves to a non-map UI element (like Start Test button), we ACTIVELY RESTORE
-    /// focus back to the map button. This ensures the map button stays selected in the EventSystem,
-    /// maintains all visual state, and keeps LevelTransitionData valid for StartCombat.</para>
+    /// If focus moves to a non-map UI element (like Start Test button), we preserve the visual state
+    /// and do NOT call base.OnDeselect to prevent scale animation from running.</para>
     /// </remarks>
     public override void OnDeselect(BaseEventData eventData)
     {
-        // If we have a valid MapButton
+        Debug.Log($"[LevelSelectSystemEventHandler] OnDeselect CALLED - _mapButton: {_mapButton?.gameObject?.name}, eventData.selectedObject: {eventData.selectedObject?.name}, currentSelected: {EventSystem.current?.currentSelectedGameObject?.name}", this);
+        
+        // If we have a valid MapButton that's being deselected
         if (_mapButton != null)
         {
-            // Check if the new selection is also a MapButton
-            // If not, we want to restore focus back to the current map button
+            // IMPORTANT: Check the NEW selection (where focus is going)
+            // currentSelectedGameObject is ALREADY the new selection by the time OnDeselect fires
             GameObject newSelection = EventSystem.current != null ? EventSystem.current.currentSelectedGameObject : null;
             MapButton newMapButton = newSelection != null ? newSelection.GetComponent<MapButton>() : null;
             
+            Debug.Log($"[LevelSelectSystemEventHandler] OnDeselect - newSelection: {newSelection?.name}, is MapButton: {newMapButton != null}", this);
+            
             // Only reset visual state when navigating from one MapButton to another MapButton
-            // This preserves the "selected map" appearance when clicking non-map UI elements
-            if (newMapButton != null)
+            if (newMapButton != null && newMapButton != _mapButton)
             {
+                Debug.Log($"[LevelSelectSystemEventHandler] OnDeselect - Map-to-Map navigation detected, resetting visual state", this);
                 // Call base to handle scale animation back to normal
                 base.OnDeselect(eventData);
                 
@@ -217,55 +229,22 @@ public class LevelSelectSystemEventHandler : DynamicEventSystemHandler
                     _selectableImage.color = _mapButton.ReturnColor;
                 }
             }
+            // If newMapButton is null OR it's the SAME button being reselected
+            // DO NOT reset visual state - preserve everything
             else
             {
-                // FOCUS PERSISTENCE: User clicked a non-map UI element (like Start Test)
-                // We need to ACTIVELY RESTORE focus back to the map button
-                // This keeps the EventSystem selection on the map button, preserving:
-                // 1. Visual state (red color, scale)
-                // 2. LevelTransitionData.SelectedMapData validity
-                // 3. Header text
+                Debug.Log($"[LevelSelectSystemEventHandler] OnDeselect - Non-map UI or null selection, PRESERVING visual state for {_mapButton.gameObject.name}", this);
                 
-                // Use a coroutine to restore focus after the current frame
-                // This prevents fighting with the EventSystem during the same event
-                StartCoroutine(RestoreFocusToMapButton());
+                // DO NOT call base.OnDeselect() - prevents scale animation from running
+                // The visual state (scale, color) is preserved by not doing anything
+                // The LevelTransitionData.SelectedMapData remains valid (set in OnSelect)
             }
         }
         else
         {
+            Debug.Log($"[LevelSelectSystemEventHandler] OnDeselect - Not a MapButton, calling base.OnDeselect", this);
             // Not a map button, do normal deselection
             base.OnDeselect(eventData);
         }
     }
-
-
-    /// <summary>
-    /// Restores EventSystem focus back to the currently tracked map button.
-    /// Called when focus moves to a non-map UI element to maintain map selection.
-    /// </summary>
-    /// <remarks>
-    /// <para><strong>Why coroutine:</strong> We need to wait one frame to prevent fighting with
-    /// the EventSystem during the same event cycle. Setting selection immediately during OnDeselect
-    /// can cause race conditions.</para>
-    /// <para><strong>What it does:</strong> Waits until end of frame, then sets EventSystem selection
-    /// back to the map button's GameObject. This triggers OnSelect again, reinforcing all visual state.</para>
-    /// </remarks>
-    private System.Collections.IEnumerator RestoreFocusToMapButton()
-    {
-        // Wait until the end of the current frame to avoid EventSystem conflicts
-        yield return new WaitForEndOfFrame();
-        
-        // Double-check references are still valid (button might have been destroyed)
-        if (_mapButton != null && _mapButton.gameObject != null && EventSystem.current != null)
-        {
-            Debug.Log($"[LevelSelectSystemEventHandler] Restoring focus to MapButton: {_mapButton.gameObject.name}", this);
-            // Restore EventSystem selection to the map button
-            EventSystem.current.SetSelectedGameObject(_mapButton.gameObject);
-        }
-        else
-        {
-            Debug.LogWarning("[LevelSelectSystemEventHandler] Cannot restore focus - MapButton or EventSystem is null", this);
-        }
-    }
-
 }
