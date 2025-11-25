@@ -834,7 +834,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8c5eb665ede3b4646a9628cc0e8a1144, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VideoController
-  useWebGLVideoPlayer: 0
+  useWebGLVideoPlayer: 1
   pcVideoPlayer: {fileID: 1963860633}
   webglVideoPlayer: {fileID: 1675973925}
   pcVideoRoot: {fileID: 1963860631}

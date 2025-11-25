@@ -70,6 +70,24 @@ public class LoadingScreenController : MonoBehaviour
         HandleInput();
     }
 
+    void OnDestroy()
+    {
+        // Unsubscribe PC VideoPlayer events
+        if (pcVideoPlayer != null)
+        {
+            pcVideoPlayer.loopPointReached -= OnVideoFinished;
+            pcVideoPlayer.errorReceived -= OnVideoError;
+            pcVideoPlayer.prepareCompleted -= OnVideoPrepared;
+        }
+        // Unsubscribe WebGL VideoPlayer events
+        if (webglVideoPlayer != null)
+        {
+            webglVideoPlayer.loopPointReached -= OnVideoFinished;
+            webglVideoPlayer.errorReceived -= OnVideoError;
+            webglVideoPlayer.prepareCompleted -= OnVideoPrepared;
+        }
+    }
+
     /// <summary>
     /// Initialize video player with proper error handling
     /// </summary>
