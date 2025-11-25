@@ -1,6 +1,5 @@
 using UnityEngine;
 using UnityEngine.Video;
-using UnityEngine.SceneManagement;
 using System.Collections;
 using AudioSystem;
 
@@ -21,6 +20,8 @@ public class LoadingScreenController : MonoBehaviour
     [Header("Transition Settings")]
     [SerializeField] private SoundData MenuMusic;
     [SerializeField] private float MusicFadeTime = 2f;
+
+    [SerializeField] private string VideoName;
     
     [Header("Debug")]
     [SerializeField] private bool showDebugLogs = true;
@@ -169,6 +170,17 @@ public class LoadingScreenController : MonoBehaviour
         }
         
         LoadNextScene();
+    }
+
+    public void PlayVideoWeb(){
+        VideoPlayer vp = GetComponent<VideoPlayer>();
+        if (vp != null)
+        {
+            string videoPath = System.IO.Path.Combine(Application.streamingAssetsPath, VideoName);
+            Debug.Log(videoPath);
+            vp.url = videoPath;
+            vp.Play();
+        }
     }
 
     /// <summary>
