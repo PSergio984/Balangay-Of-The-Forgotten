@@ -10,8 +10,9 @@ using AudioSystem;
 public class LoadingScreenController : MonoBehaviour
 {
     [Header("Playback Mode")]
-    [Tooltip("If true, use URL/StreamingAssets for video playback (WebGL/experimental). If false, use native VideoClip (PC/Android).")]
-    [SerializeField] private bool useWebGLVideoPlayer = false;
+    [Tooltip("If true, use URL/StreamingAssets for video playback (WebGL/experimental). If false, use native VideoClip (PC/Android). Automatically set at runtime.")]
+    private bool useWebGLVideoPlayer = false;
+
     [Header("Video Settings")]
     [Tooltip("VideoPlayer for PC/Standalone/Android builds")]
     [SerializeField] private VideoPlayer pcVideoPlayer;
@@ -45,7 +46,13 @@ public class LoadingScreenController : MonoBehaviour
     private bool canSkip = false;
     private float videoStartTime;
 
-
+     void Awake()
+    {
+#if UNITY_WEBGL
+    useWebGLVideoPlayer = true;
+#endif
+    }
+    
     void Start()
     {
         // Enable only the relevant video root
@@ -258,14 +265,15 @@ public class LoadingScreenController : MonoBehaviour
         webglVideoPlayer.playOnAwake = false;
         webglVideoPlayer.isLooping = false;
 
-        // Set the video URL (StreamingAssets or web URL)
-        string basePath = Application.streamingAssetsPath;
-        // Remove trailing slash if present
-        if (!string.IsNullOrEmpty(basePath) && (basePath.EndsWith("/") || basePath.EndsWith("\\")))
-        {
-            basePath = basePath.TrimEnd('/', '\\');
-        }
-        string videoPath = basePath + "/" + VideoName;
+        // Robust, platform-specific path handling for video URL
+    #if UNITY_WEBGL
+        // For WebGL, Application.streamingAssetsPath is a URL; just append the file name
+        string videoPath = $"{Application.streamingAssetsPath}/{VideoName}";
+        // No need to trim slashes; Unity handles this for WebGL.
+    #else
+        // For file system platforms, use Path.Combine for safety
+        string videoPath = System.IO.Path.Combine(Application.streamingAssetsPath, VideoName);
+    #endif
         LogDebug($"[WebGLVideo] Using video URL: {videoPath}");
         webglVideoPlayer.url = videoPath;
 
