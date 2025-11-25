@@ -9,8 +9,19 @@ using AudioSystem;
 /// </summary>
 public class LoadingScreenController : MonoBehaviour
 {
+    [Header("Playback Mode")]
+    [Tooltip("If true, use URL/StreamingAssets for video playback (WebGL/experimental). If false, use native VideoClip (PC/Android).")]
+    [SerializeField] private bool useWebGLVideoPlayer = false;
     [Header("Video Settings")]
-    [SerializeField] private VideoPlayer videoPlayer;
+    [Tooltip("VideoPlayer for PC/Standalone/Android builds")]
+    [SerializeField] private VideoPlayer pcVideoPlayer;
+    [Tooltip("VideoPlayer for WebGL builds")]
+    [SerializeField] private VideoPlayer webglVideoPlayer;
+    [Header("Video Object Roots")]
+    [Tooltip("Root GameObject for all PC video objects (e.g., VideoPlayer, mesh, UI)")]
+    [SerializeField] private GameObject pcVideoRoot;
+    [Tooltip("Root GameObject for all WebGL video objects (e.g., VideoPlayer, mesh, UI)")]
+    [SerializeField] private GameObject webglVideoRoot;
     
     [Header("Input Settings")]
     [SerializeField] private bool skipOnClick = true;
@@ -22,19 +33,36 @@ public class LoadingScreenController : MonoBehaviour
     [SerializeField] private float MusicFadeTime = 2f;
 
     [SerializeField] private string VideoName;
-    
+
+
+
     [Header("Debug")]
     [SerializeField] private bool showDebugLogs = true;
-    
+
     // Private variables
     private bool videoStarted = false;
     private bool videoFinished = false;
     private bool canSkip = false;
     private float videoStartTime;
 
+
     void Start()
     {
-        InitializeVideo();
+        // Enable only the relevant video root
+        if (pcVideoRoot != null) pcVideoRoot.SetActive(!useWebGLVideoPlayer);
+        if (webglVideoRoot != null) webglVideoRoot.SetActive(useWebGLVideoPlayer);
+
+        // Branch video playback method based on the selected mode
+        if (useWebGLVideoPlayer)
+        {
+            // Use URL/StreamingAssets-based playback (intended for WebGL or testing)
+            InitializeWebGLVideo();
+        }
+        else
+        {
+            // Use native VideoClip-based playback (PC/Android)
+            InitializeVideo();
+        }
     }
     
     void Update()
@@ -47,30 +75,30 @@ public class LoadingScreenController : MonoBehaviour
     /// </summary>
     private void InitializeVideo()
     {
-        if (videoPlayer == null)
+        if (pcVideoPlayer == null)
         {
-            LogError("VideoPlayer component not assigned!");
+            LogError("PC VideoPlayer component not assigned!");
             LoadNextScene();
             return;
         }
 
         // Set up video events
-        videoPlayer.loopPointReached += OnVideoFinished;
-        videoPlayer.errorReceived += OnVideoError;
-        videoPlayer.prepareCompleted += OnVideoPrepared;
-        
+        pcVideoPlayer.loopPointReached += OnVideoFinished;
+        pcVideoPlayer.errorReceived += OnVideoError;
+        pcVideoPlayer.prepareCompleted += OnVideoPrepared;
+
         // Configure video player
-        videoPlayer.playOnAwake = false;
-        videoPlayer.isLooping = false;
-        
+        pcVideoPlayer.source = VideoSource.VideoClip;
+        pcVideoPlayer.playOnAwake = false;
+        pcVideoPlayer.isLooping = false;
         // Prepare and play
-        if (videoPlayer.clip != null || !string.IsNullOrEmpty(videoPlayer.url))
+        if (pcVideoPlayer.clip != null)
         {
-            videoPlayer.Prepare();
+            pcVideoPlayer.Prepare();
         }
         else
         {
-            LogError("No video clip or URL assigned to VideoPlayer!");
+            LogError("No VideoClip assigned to PC VideoPlayer!");
             LoadNextScene();
         }
     }
@@ -116,10 +144,16 @@ public class LoadingScreenController : MonoBehaviour
     private void OnVideoPrepared(VideoPlayer vp)
     {
         LogDebug("Video prepared, starting playback");
-        videoPlayer.Play();
+        if (useWebGLVideoPlayer)
+        {
+            if (webglVideoPlayer != null) webglVideoPlayer.Play();
+        }
+        else
+        {
+            if (pcVideoPlayer != null) pcVideoPlayer.Play();
+        }
         videoStarted = true;
         videoStartTime = Time.time;
-        
         // Allow skipping after minimum time
         StartCoroutine(EnableSkipAfterDelay());
     }
@@ -164,22 +198,68 @@ public class LoadingScreenController : MonoBehaviour
         
         videoFinished = true;
         
-        if (videoPlayer != null && videoPlayer.isPlaying)
+        if (useWebGLVideoPlayer)
         {
-            videoPlayer.Stop();
+            if (webglVideoPlayer != null && webglVideoPlayer.isPlaying)
+                webglVideoPlayer.Stop();
+        }
+        else
+        {
+            if (pcVideoPlayer != null && pcVideoPlayer.isPlaying)
+                pcVideoPlayer.Stop();
         }
         
         LoadNextScene();
     }
 
     public void PlayVideoWeb(){
-        VideoPlayer vp = GetComponent<VideoPlayer>();
-        if (vp != null)
+        // This method is now called automatically if useWebGLVideoPlayer is true
+        // Kept for compatibility/testing
+        InitializeWebGLVideo();
+    }
+
+    /// <summary>
+    /// Initialize URL/StreamingAssets-based video playback (WebGL/experimental)
+    /// </summary>
+    private void InitializeWebGLVideo()
+    {
+        Debug.Log("Initializing WebGL Video Player");
+        if (webglVideoPlayer == null)
         {
-            string videoPath = System.IO.Path.Combine(Application.streamingAssetsPath, VideoName);
-            Debug.Log(videoPath);
-            vp.url = videoPath;
-            vp.Play();
+            LogError("WebGL VideoPlayer component not assigned!");
+            LoadNextScene();
+            return;
+        }
+
+        // Set up video events
+        webglVideoPlayer.loopPointReached += OnVideoFinished;
+        webglVideoPlayer.errorReceived += OnVideoError;
+        webglVideoPlayer.prepareCompleted += OnVideoPrepared;
+
+        // Configure video player
+        webglVideoPlayer.playOnAwake = false;
+        webglVideoPlayer.isLooping = false;
+
+        // Set the video URL (StreamingAssets or web URL)
+        string basePath = Application.streamingAssetsPath;
+        // Remove trailing slash if present
+        if (!string.IsNullOrEmpty(basePath) && (basePath.EndsWith("/") || basePath.EndsWith("\\")))
+        {
+            basePath = basePath.TrimEnd('/', '\\');
+        }
+        string videoPath = basePath + "/" + VideoName;
+        LogDebug($"[WebGLVideo] Using video URL: {videoPath}");
+        webglVideoPlayer.url = videoPath;
+
+        // Prepare and play
+        if (!string.IsNullOrEmpty(webglVideoPlayer.url))
+        {
+            webglVideoPlayer.Prepare();
+        }
+        else
+        {
+            LogError("No video URL assigned to WebGL VideoPlayer!");
+            LoadNextScene();
         }
     }
 
@@ -209,9 +289,27 @@ public class LoadingScreenController : MonoBehaviour
     }
 
     // Public methods for external control
-    public bool IsVideoPlaying => videoPlayer != null && videoPlayer.isPlaying;
+    public bool IsVideoPlaying
+    {
+        get
+        {
+            if (useWebGLVideoPlayer)
+                return webglVideoPlayer != null && webglVideoPlayer.isPlaying;
+            else
+                return pcVideoPlayer != null && pcVideoPlayer.isPlaying;
+        }
+    }
     public bool IsVideoFinished => videoFinished;
-    public float VideoProgress => 
-        videoPlayer != null && videoPlayer.length > 0 && !double.IsNaN(videoPlayer.length) 
-            ? Mathf.Clamp01((float)(videoPlayer.time / videoPlayer.length))
-            : 0f;}
+    public float VideoProgress
+    {
+        get
+        {
+            if (useWebGLVideoPlayer && webglVideoPlayer != null && webglVideoPlayer.length > 0 && !double.IsNaN(webglVideoPlayer.length))
+                return Mathf.Clamp01((float)(webglVideoPlayer.time / webglVideoPlayer.length));
+            else if (!useWebGLVideoPlayer && pcVideoPlayer != null && pcVideoPlayer.length > 0 && !double.IsNaN(pcVideoPlayer.length))
+                return Mathf.Clamp01((float)(pcVideoPlayer.time / pcVideoPlayer.length));
+            else
+                return 0f;
+        }
+    }
+}
