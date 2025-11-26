@@ -125,10 +125,13 @@ public class MatchSetupSystem : MonoBehaviour
             enemiesToSpawn = new List<EnemyData>();
         }
 
-        // --- Setup combat background before spawning enemies ---
-        // TODO: Ensure the combat background is set before spawning enemies.
-        // If a CombatBackgroundSystem exists, call its Setup here, e.g.:
-        // CombatBackgroundSystem.Instance.Setup(selectedMapData);
+       
+        // Set the combat background from selected level (if available)
+        if (combatBackgroundRenderer != null && selectedMapData != null && selectedMapData.CombatBackgroundSprite != null)
+        {
+            combatBackgroundRenderer.sprite = selectedMapData.CombatBackgroundSprite;
+            Debug.Log($"[MatchSetupSystem] Set combat background from level: {selectedMapData.MapId}");
+        }
 
         // Spawn all enemies for this battle
         EnemySystem.Instance.Setup(enemiesToSpawn);

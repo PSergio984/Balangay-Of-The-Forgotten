@@ -24,3 +24,4 @@ MonoBehaviour:
   - {fileID: 11400000, guid: abaa3b2c8fadd0040a92239afd42fd4f, type: 2}
   - {fileID: 11400000, guid: abaa3b2c8fadd0040a92239afd42fd4f, type: 2}
   - {fileID: 11400000, guid: abaa3b2c8fadd0040a92239afd42fd4f, type: 2}
+  CombatMusic: {fileID: 11400000, guid: 7fe6dd087456f5949ad88a1ae5c9cd5c, type: 2}
