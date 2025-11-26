@@ -6,7 +6,7 @@ using DG.Tweening;
 using UnityEngine.InputSystem;
 using System.Collections;
 using AudioSystem;
-
+using AudioSystem;
 
 /* MENU EVENT SYSTEM HANDLER
  * 
@@ -68,11 +68,13 @@ public class MenuEventSystemHandler : MonoBehaviour
     /// </summary>
     [SerializeField] protected Selectable _lastSelected;
     
+      
     [Header("Sounds")]
     /// <summary>
-    /// Sound effect to play when selecting a button
+    /// Audio clip to play when a UI element is selected
     /// </summary>
     [SerializeField] protected SoundData _OnSelectSound;
+
 
     /// <summary>
     /// Remembers the original size of each button (so we can reset them correctly)
