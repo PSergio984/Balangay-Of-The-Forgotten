@@ -86,35 +86,60 @@ public class DealDamageEffect : Effects
     /// Uses the provided targets list instead of hardcoded enemy targeting, making it flexible for 
     /// both card effects (target all enemies) and perk effects (target specific characters).
     /// Includes caster parameter so the perk system can track who is dealing damage.
+    /// 
+    /// UPDATED: Now uses refactored DamageCalculator methods (IsHit, IsCriticalHit, GetCriticalMultiplier,
+    /// CalculateSkillPower, CalculateFinalDamage) for improved clarity and consistency.
     /// </remarks>
     public override GameAction GetGameAction(List<CombatantView> targets, CombatantView caster)
     {
-        float coefficient = caster is EnemyView ? 1.5f : 1.0f;
-        float critMultiplier = 1.0f;
-
-        bool hit = DamageCalculator.CalculateAccuracy(accuracy);
+        // Step 1: Check if attack hits using refactored method
+        bool hit = DamageCalculator.IsHit(accuracy);
         if (!hit)
         {
+            Debug.Log($"[DealDamageEffect] Attack MISSED! Returning 0 damage.");
             return new DealDamageGA(0, targets, caster);
         }
 
-        bool isCrit = DamageCalculator.CalculateCrit(critChance);
-        if (isCrit)
+        // Step 2: Calculate skill power using refactored method
+        float skillPower = DamageCalculator.CalculateSkillPower(
+            baseDamage, 
+            AttackAmp, 
+            MagicAmp, 
+            caster.AttackPower, 
+            caster.MagicPower
+        );
+
+        // Step 3: Determine coefficient based on attacker type
+        float coefficient = caster is EnemyView ? 1.5f : 1.0f;
+
+        // Step 4: Check for critical hit and get multiplier using refactored methods
+        bool isCrit = DamageCalculator.IsCriticalHit(critChance);
+        float critMultiplier = isCrit ? DamageCalculator.GetCriticalMultiplier(caster is HeroView) : 1.0f;
+
+        // Step 5: Get target's defense (apply defense ignore if specified)
+        float targetDefense = 0f;
+        if (targets.Count > 0 && targets[0] != null)
         {
-            critMultiplier = caster is HeroView ? 1.5f : caster is EnemyView ? 1.2f : 1.0f;
+            targetDefense = targets[0].Defense;
+            
+            // Apply defense ignore if this attack has defense penetration
+            if (defenseIgnore > 0f)
+            {
+                targetDefense = DamageCalculator.ApplyDefenseIgnore(targetDefense, defenseIgnore);
+            }
         }
 
-        float defTarget = 0f;
-        if (targets.Count > 0)
-        {
-            defTarget = targets[0].Defense;
-        }
+        // Step 6: Calculate final damage using refactored method
+        // damageAmplification is 1.0 (no additional buffs at this stage)
+        int finalDamage = DamageCalculator.CalculateFinalDamage(
+            skillPower, 
+            1.0f, // damageAmplification (buffs would be applied here)
+            coefficient, 
+            targetDefense, 
+            critMultiplier
+        );
 
-        // New damage formula: baseDamage + (AttackAmp * caster.AttackPower) + (MagicAmp * caster.MagicPower)
-        float skillPower = baseDamage + (AttackAmp * caster.AttackPower) + (MagicAmp * caster.MagicPower);
-
-        // Use target's defense directly, ignore defFinal calculation
-        int finalDamage = DamageCalculator.CalculateDamage(skillPower, 1f, coefficient, defTarget, critMultiplier);
+        Debug.Log($"[DealDamageEffect] Final damage calculated: {finalDamage} (SkillPower={skillPower}, Coeff={coefficient}, Def={targetDefense}, Crit={critMultiplier})");
 
         return new DealDamageGA(finalDamage, targets, caster);
     }
