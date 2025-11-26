@@ -33,6 +33,10 @@ public class LoadingScreenController : MonoBehaviour
     [SerializeField] private SoundData MenuMusic;
     [SerializeField] private float MusicFadeTime = 2f;
 
+    /// <summary>
+    /// The filename of the video to play, located in the StreamingAssets folder (e.g., "Rp_Visuals_Splash.mp4").
+    /// </summary>
+    [Tooltip("Filename of the video in StreamingAssets (e.g., 'Rp_Visuals_Splash.mp4')")]
     [SerializeField] private string VideoName;
 
 
@@ -265,15 +269,25 @@ public class LoadingScreenController : MonoBehaviour
         webglVideoPlayer.playOnAwake = false;
         webglVideoPlayer.isLooping = false;
 
+
+        // IMPORTANT: Validate VideoName before constructing the path.
+        // If VideoName is null or empty, log an error and skip video loading to prevent invalid path issues.
+        if (string.IsNullOrEmpty(VideoName))
+        {
+            LogError("VideoName is not set! Cannot construct video path.");
+            LoadNextScene();
+            return;
+        }
+
         // Robust, platform-specific path handling for video URL
-    #if UNITY_WEBGL
+#if UNITY_WEBGL
         // For WebGL, Application.streamingAssetsPath is a URL; just append the file name
         string videoPath = $"{Application.streamingAssetsPath}/{VideoName}";
         // No need to trim slashes; Unity handles this for WebGL.
-    #else
+#else
         // For file system platforms, use Path.Combine for safety
         string videoPath = System.IO.Path.Combine(Application.streamingAssetsPath, VideoName);
-    #endif
+#endif
         LogDebug($"[WebGLVideo] Using video URL: {videoPath}");
         webglVideoPlayer.url = videoPath;
 
@@ -319,10 +333,10 @@ public class LoadingScreenController : MonoBehaviour
     {
         get
         {
-            if (useWebGLVideoPlayer)
-                return webglVideoPlayer != null && webglVideoPlayer.isPlaying;
-            else
-                return pcVideoPlayer != null && pcVideoPlayer.isPlaying;
+            // Use a ternary operator for clarity: check the correct VideoPlayer based on platform mode.
+            return useWebGLVideoPlayer
+                ? webglVideoPlayer != null && webglVideoPlayer.isPlaying
+                : pcVideoPlayer != null && pcVideoPlayer.isPlaying;
         }
     }
     public bool IsVideoFinished => videoFinished;

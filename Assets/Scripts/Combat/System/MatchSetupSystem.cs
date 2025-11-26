@@ -171,8 +171,12 @@ public class MatchSetupSystem : MonoBehaviour
         if (levelTransitionData != null && levelTransitionData.HasValidData())
         {
             Debug.Log($"[MatchSetupSystem] Using enemies from selected level: {levelTransitionData.SelectedMapData.MapId}");
-            // Create a new list from the read-only collection to pass to EnemySystem
-            return new List<EnemyData>(levelTransitionData.SelectedMapData.EnemyDatas);
+            // IMPORTANT: After reading, clear the data to prevent stale state in Editor play sessions.
+            // See LevelTransitionData docs: ScriptableObjects persist values after exiting Play mode.
+            // This avoids accidental carryover of data between test runs.
+            var enemies = new List<EnemyData>(levelTransitionData.SelectedMapData.EnemyDatas);
+            levelTransitionData.Clear();
+            return enemies;
         }
         
         // Fallback to Inspector-assigned enemies (for direct scene testing)

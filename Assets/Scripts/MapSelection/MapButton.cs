@@ -180,15 +180,30 @@ public class MapButton : MonoBehaviour
     
     
     /// <summary>
-    /// Registers the LoadMap listener only once to prevent duplicate click handlers
+    /// Registers the LoadMap listener only once to prevent duplicate click handlers.
+    /// <para><strong>Memory Safety:</strong> Always unsubscribe in OnDisable to prevent memory leaks (Unity best practice).</para>
     /// </summary>
     private void RegisterLoadMapListener()
     {
         if (_isLoadMapListenerRegistered)
             return;
-            
+
         _MapButton.onClick.AddListener(LoadMap);
         _isLoadMapListenerRegistered = true;
+    }
+
+    /// <summary>
+    /// Unsubscribes the LoadMap listener from the button to prevent memory leaks.
+    /// Called automatically by Unity when the object is disabled or destroyed.
+    /// </summary>
+    private void OnDisable()
+    {
+        // Unity best practice: Always remove listeners to avoid memory leaks or duplicate calls.
+        if (_isLoadMapListenerRegistered && _MapButton != null)
+        {
+            _MapButton.onClick.RemoveListener(LoadMap);
+            _isLoadMapListenerRegistered = false;
+        }
     }
     
     /// <summary>
