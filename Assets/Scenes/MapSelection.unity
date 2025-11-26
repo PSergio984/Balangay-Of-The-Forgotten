@@ -1490,6 +1490,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1661160582}
   - component: {fileID: 1661160583}
+  - component: {fileID: 1661160584}
   m_Layer: 5
   m_Name: MapSelect
   m_TagString: Untagged
@@ -1542,6 +1543,20 @@ MonoBehaviour:
   PlayerUIPrefab: {fileID: 2935311778109961401, guid: ce3de87ca2d874f418a70a6f512c4020, type: 3}
   WorldSpaceCanvasRect: {fileID: 1786923812}
   PlayerPositionOffsetPerLevel: {x: 0, y: 0}
+--- !u!114 &1661160584
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1661160581}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6e7ec413523ec5c4f9dcef47b4ffee5f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SecretCodeListener
+  mapSelectManager: {fileID: 1661160583}
+  secretCode: janrel
 --- !u!1 &1755786784
 GameObject:
   m_ObjectHideFlags: 0

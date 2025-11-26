@@ -252,7 +252,10 @@ public class MapSelectManager : MonoBehaviour
     private void LoadUnlockedLevels()
     {
         if (CurrentArea.Maps == null) 
+        {
             Debug.LogError("[MapSelectManager] CurrentArea.Maps is null!");
+            return;
+        }
 
         foreach (var map in CurrentArea.Maps)
         {
@@ -262,7 +265,6 @@ public class MapSelectManager : MonoBehaviour
             }
         }
     }
-
 
     /// <summary>
     /// Instantiates MapButton prefabs, configures unlock states, generates LineRenderers, spawns player marker
@@ -522,7 +524,7 @@ public class MapSelectManager : MonoBehaviour
     /// [Debug Method] Unlocks all map buttons via context menu (optimized batch unlock)
     /// </summary>
     [ContextMenu("Unlock All Levels Example")]
-    public void UnlockAllLevelsExample()
+    public void UnlockAllLevels()
     {
         if (_buttonObjects == null)
         {

@@ -582,7 +582,7 @@ MonoBehaviour:
   levelTransitionData: {fileID: 11400000, guid: 40f29500fc925b041ac5652ac0fb1995, type: 2}
   combatBackgroundRenderer: {fileID: 584423950}
   fallbackEnemyDatas:
-  - {fileID: 11400000, guid: bcd9445ea2359f846823d38c5dcabb1c, type: 2}
+  - {fileID: 11400000, guid: 81ff8d327f4eeab49806f93b816055a9, type: 2}
 --- !u!1 &160960753
 GameObject:
   m_ObjectHideFlags: 0

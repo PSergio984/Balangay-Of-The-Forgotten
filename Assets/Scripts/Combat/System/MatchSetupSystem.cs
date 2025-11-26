@@ -127,11 +127,43 @@ public class MatchSetupSystem : MonoBehaviour
             return;
         }
 
-        // Get enemy data from selected level, or use fallback for direct scene testing
-        List<EnemyData> enemiesToSpawn = GetEnemyData();
+        // Cache selected map data before clearing LevelTransitionData
+        MapData selectedMapData = null;
+        if (levelTransitionData != null && levelTransitionData.HasValidData())
+        {
+            selectedMapData = levelTransitionData.SelectedMapData;
+        }
+
+        // Use selectedMapData for enemy and background setup
+        List<EnemyData> enemiesToSpawn = null;
+        if (selectedMapData != null && selectedMapData.EnemyDatas != null && selectedMapData.EnemyDatas.Count > 0)
+        {
+            Debug.Log($"[MatchSetupSystem] Using enemies from selected level: {selectedMapData.MapId}");
+            enemiesToSpawn = new List<EnemyData>(selectedMapData.EnemyDatas);
+        }
+        else if (fallbackEnemyDatas != null && fallbackEnemyDatas.Count > 0)
+        {
+            Debug.Log("[MatchSetupSystem] No level selected - using fallback enemy data for testing");
+            enemiesToSpawn = fallbackEnemyDatas;
+        }
+        else
+        {
+            Debug.LogWarning("[MatchSetupSystem] No enemy data available! Check LevelTransitionData or fallback enemies.");
+            enemiesToSpawn = new List<EnemyData>();
+        }
 
         // Set the combat background from selected level (if available)
-        SetupCombatBackground();
+        if (combatBackgroundRenderer != null && selectedMapData != null && selectedMapData.CombatBackgroundSprite != null)
+        {
+            combatBackgroundRenderer.sprite = selectedMapData.CombatBackgroundSprite;
+            Debug.Log($"[MatchSetupSystem] Set combat background from level: {selectedMapData.MapId}");
+        }
+
+        // Now clear LevelTransitionData to avoid stale state
+        if (levelTransitionData != null)
+        {
+            levelTransitionData.Clear();
+        }
 
         // Create all hero characters using the assigned hero data list (multi-hero/party support)
         HeroSystem.Instance.Setup(heroDatas);
@@ -141,7 +173,6 @@ public class MatchSetupSystem : MonoBehaviour
 
         // Prepare the card system with all hero decks (multi-hero support)
         CardSystem.Instance.Setup(heroDatas);
-
 
         // Give the player a starting perk - shows how any system can add perks
         if (perkData == null)
@@ -159,57 +190,9 @@ public class MatchSetupSystem : MonoBehaviour
         // Execute the draw cards action to give the first hero their starting hand
         ActionSystem.Instance.Perform(drawCardsGA);
     }
-    
-    
-    /// <summary>
-    /// Gets the enemy data list from selected level or falls back to Inspector values
-    /// </summary>
-    /// <returns>List of EnemyData to spawn for this battle</returns>
-    private List<EnemyData> GetEnemyData()
-    {
-        // Check if we have valid level transition data with enemies
-        if (levelTransitionData != null && levelTransitionData.HasValidData())
-        {
-            Debug.Log($"[MatchSetupSystem] Using enemies from selected level: {levelTransitionData.SelectedMapData.MapId}");
-            // IMPORTANT: After reading, clear the data to prevent stale state in Editor play sessions.
-            // See LevelTransitionData docs: ScriptableObjects persist values after exiting Play mode.
-            // This avoids accidental carryover of data between test runs.
-            var enemies = new List<EnemyData>(levelTransitionData.SelectedMapData.EnemyDatas);
-            levelTransitionData.Clear();
-            return enemies;
-        }
-        
-        // Fallback to Inspector-assigned enemies (for direct scene testing)
-        if (fallbackEnemyDatas != null && fallbackEnemyDatas.Count > 0)
-        {
-            Debug.Log("[MatchSetupSystem] No level selected - using fallback enemy data for testing");
-            return fallbackEnemyDatas;
-        }
-        
-        // No enemies available at all
-        Debug.LogWarning("[MatchSetupSystem] No enemy data available! Check LevelTransitionData or fallback enemies.");
-        return new List<EnemyData>();
-    }
-    
-    
-    /// <summary>
-    /// Sets the combat background sprite from the selected level
-    /// </summary>
-    private void SetupCombatBackground()
-    {
-        // Skip if no background image assigned
-        if (combatBackgroundRenderer == null)
-        {
-            return;
-        }
-        
-        // Check if we have valid level transition data with a background sprite
-        if (levelTransitionData != null && 
-            levelTransitionData.SelectedMapData != null && 
-            levelTransitionData.SelectedMapData.CombatBackgroundSprite != null)
-        {
-            combatBackgroundRenderer.sprite = levelTransitionData.SelectedMapData.CombatBackgroundSprite;
-            Debug.Log($"[MatchSetupSystem] Set combat background from level: {levelTransitionData.SelectedMapData.MapId}");
-        }
-    }
 }
+    
+   
+    
+    
+
