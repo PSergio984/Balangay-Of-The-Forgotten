@@ -13,12 +13,12 @@ MonoBehaviour:
   m_Name: Claw Latch
   m_EditorClassIdentifier: Assembly-CSharp::EnemyMoveData
   <Description>k__BackingField: Claw Latch
-  <Information>k__BackingField: Claw Latch
+  <Information>k__BackingField: "\u2022\tDeals 1.2 x MAG to one enemy"
   <ManualTargetEffect>k__BackingField:
     rid: -2
   <OtherEffects>k__BackingField:
   - <targetMode>k__BackingField:
-      rid: 8634069544632844536
+      rid: 1437264605691248882
     <effects>k__BackingField:
       rid: 8634069544632844532
   references:
@@ -26,15 +26,16 @@ MonoBehaviour:
     RefIds:
     - rid: -2
       type: {class: , ns: , asm: }
+    - rid: 1437264605691248882
+      type: {class: RandomTargetTM, ns: , asm: Assembly-CSharp}
+      data: 
     - rid: 8634069544632844532
       type: {class: DealDamageEffect, ns: , asm: Assembly-CSharp}
       data:
         baseDamage: 0
+        damageAmplification: 1
         accuracy: 1
         critChance: 0
         defenseIgnore: 0
-        AttackAmp: 1
+        AttackAmp: 0
         MagicAmp: 1.2
-    - rid: 8634069544632844536
-      type: {class: AllHeroesTM, ns: , asm: Assembly-CSharp}
-      data: 

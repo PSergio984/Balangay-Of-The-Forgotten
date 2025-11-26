@@ -10,23 +10,25 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f63fd39cb4db76b4292a781834573221, type: 3}
-  m_Name: Moonlight Hymn
+  m_Name: "Sky\u2019s Wrath"
   m_EditorClassIdentifier: Assembly-CSharp::EnemyMoveData
-  <Description>k__BackingField: Moonlight Hymn
-  <Information>k__BackingField: "\u2022\tDeals 1.6 x MAG to all enemies"
+  <Description>k__BackingField: "Sky\u2019s Wrath "
+  <Information>k__BackingField: "\u2022\tDives from above with cosmic force\r\n\u2022\tDeals
+    180% ATK to one target\r\n\u2022\tIf the target is defeated, it heals itself
+    20% of its max HP\r\n"
   <ManualTargetEffect>k__BackingField:
     rid: -2
   <OtherEffects>k__BackingField:
   - <targetMode>k__BackingField:
-      rid: 8634069544632844533
+      rid: 1437264605691248881
     <effects>k__BackingField:
-      rid: 8634069544632844532
+      rid: 1437264605691248861
   references:
     version: 2
     RefIds:
     - rid: -2
       type: {class: , ns: , asm: }
-    - rid: 8634069544632844532
+    - rid: 1437264605691248861
       type: {class: DealDamageEffect, ns: , asm: Assembly-CSharp}
       data:
         baseDamage: 0
@@ -34,8 +36,8 @@ MonoBehaviour:
         accuracy: 1
         critChance: 0
         defenseIgnore: 0
-        AttackAmp: 0
-        MagicAmp: 1.6
-    - rid: 8634069544632844533
-      type: {class: AllHeroesTM, ns: , asm: Assembly-CSharp}
+        AttackAmp: 1.8
+        MagicAmp: 1.25
+    - rid: 1437264605691248881
+      type: {class: RandomTargetTM, ns: , asm: Assembly-CSharp}
       data: 

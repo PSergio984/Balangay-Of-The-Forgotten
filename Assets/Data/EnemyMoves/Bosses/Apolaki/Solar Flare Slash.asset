@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Solar Flare Slash
   m_EditorClassIdentifier: Assembly-CSharp::EnemyMoveData
   <Description>k__BackingField: Solar Flare Slash
-  <Information>k__BackingField: Solar Flare Slash
+  <Information>k__BackingField: Deals 175% ATK to enemy, + 55% CRIT Rate
   <ManualTargetEffect>k__BackingField:
     rid: -2
   <OtherEffects>k__BackingField:
@@ -37,4 +37,4 @@ MonoBehaviour:
         critChance: 0.55
         defenseIgnore: 0
         AttackAmp: 1.75
-        MagicAmp: 1
+        MagicAmp: 0

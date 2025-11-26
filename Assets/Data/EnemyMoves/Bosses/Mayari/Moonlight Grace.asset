@@ -10,23 +10,23 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f63fd39cb4db76b4292a781834573221, type: 3}
-  m_Name: Moonlight Hymn
+  m_Name: Moonlight Grace
   m_EditorClassIdentifier: Assembly-CSharp::EnemyMoveData
-  <Description>k__BackingField: Moonlight Hymn
-  <Information>k__BackingField: "\u2022\tDeals 1.6 x MAG to all enemies"
+  <Description>k__BackingField: 'Moonlight Grace '
+  <Information>k__BackingField: "\u2022\tHeal herself with a total of 25% max HP."
   <ManualTargetEffect>k__BackingField:
     rid: -2
   <OtherEffects>k__BackingField:
   - <targetMode>k__BackingField:
-      rid: 8634069544632844533
+      rid: 1437264605691248874
     <effects>k__BackingField:
-      rid: 8634069544632844532
+      rid: 1437264605691248861
   references:
     version: 2
     RefIds:
     - rid: -2
       type: {class: , ns: , asm: }
-    - rid: 8634069544632844532
+    - rid: 1437264605691248861
       type: {class: DealDamageEffect, ns: , asm: Assembly-CSharp}
       data:
         baseDamage: 0
@@ -34,8 +34,8 @@ MonoBehaviour:
         accuracy: 1
         critChance: 0
         defenseIgnore: 0
-        AttackAmp: 0
-        MagicAmp: 1.6
-    - rid: 8634069544632844533
+        AttackAmp: 1.05
+        MagicAmp: 0
+    - rid: 1437264605691248874
       type: {class: AllHeroesTM, ns: , asm: Assembly-CSharp}
       data: 

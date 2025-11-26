@@ -10,23 +10,25 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f63fd39cb4db76b4292a781834573221, type: 3}
-  m_Name: Moonlight Hymn
+  m_Name: Lunar Devour
   m_EditorClassIdentifier: Assembly-CSharp::EnemyMoveData
-  <Description>k__BackingField: Moonlight Hymn
-  <Information>k__BackingField: "\u2022\tDeals 1.6 x MAG to all enemies"
+  <Description>k__BackingField: 'Lunar Devour '
+  <Information>k__BackingField: "\u2022\tDeal 80% MAG to all enemies.\r\n\u2022\tEach
+    target that are hit by this gets inflicted by Devoured: for 2 turns, takes DMG
+    equal to 20% of MAG (fixed at 60HP).\r\n"
   <ManualTargetEffect>k__BackingField:
     rid: -2
   <OtherEffects>k__BackingField:
   - <targetMode>k__BackingField:
-      rid: 8634069544632844533
+      rid: 1437264605691248873
     <effects>k__BackingField:
-      rid: 8634069544632844532
+      rid: 1437264605691248861
   references:
     version: 2
     RefIds:
     - rid: -2
       type: {class: , ns: , asm: }
-    - rid: 8634069544632844532
+    - rid: 1437264605691248861
       type: {class: DealDamageEffect, ns: , asm: Assembly-CSharp}
       data:
         baseDamage: 0
@@ -35,7 +37,7 @@ MonoBehaviour:
         critChance: 0
         defenseIgnore: 0
         AttackAmp: 0
-        MagicAmp: 1.6
-    - rid: 8634069544632844533
+        MagicAmp: 0.8
+    - rid: 1437264605691248873
       type: {class: AllHeroesTM, ns: , asm: Assembly-CSharp}
       data: 

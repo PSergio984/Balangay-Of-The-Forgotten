@@ -13,12 +13,12 @@ MonoBehaviour:
   m_Name: Forest Wrath
   m_EditorClassIdentifier: Assembly-CSharp::EnemyMoveData
   <Description>k__BackingField: Forest Wrath
-  <Information>k__BackingField: Forest Wrath
+  <Information>k__BackingField: "\u2022\tDeals 1.6 x ATK to all enemies"
   <ManualTargetEffect>k__BackingField:
     rid: -2
   <OtherEffects>k__BackingField:
   - <targetMode>k__BackingField:
-      rid: 8634069544632844531
+      rid: 1437264605691248885
     <effects>k__BackingField:
       rid: 8634069544632844532
   references:
@@ -26,15 +26,16 @@ MonoBehaviour:
     RefIds:
     - rid: -2
       type: {class: , ns: , asm: }
-    - rid: 8634069544632844531
-      type: {class: RandomTargetTM, ns: , asm: Assembly-CSharp}
+    - rid: 1437264605691248885
+      type: {class: AllHeroesTM, ns: , asm: Assembly-CSharp}
       data: 
     - rid: 8634069544632844532
       type: {class: DealDamageEffect, ns: , asm: Assembly-CSharp}
       data:
         baseDamage: 0
+        damageAmplification: 1
         accuracy: 1
         critChance: 0
         defenseIgnore: 0
         AttackAmp: 1.6
-        MagicAmp: 1
+        MagicAmp: 0

@@ -51,6 +51,10 @@ public class DealDamageEffect : Effects
         /// </summary>
         [SerializeField] private float baseDamage = 0f;
         /// <summary>
+        /// Damage amplification multiplier (1.0 = 100%, 1.2 = +20% damage, etc.). Set in Inspector.
+        /// </summary>
+        [SerializeField] private float damageAmplification = 1.0f; // Multiplier for skills like Sunburst Nova
+        /// <summary>
         /// Chance to hit (0-1, e.g. 1 = 100% hit, 0.8 = 80% hit). Set in Inspector.
         /// </summary>
         [SerializeField] private float accuracy = 1f; // 1 = 100% hit
@@ -129,11 +133,12 @@ public class DealDamageEffect : Effects
             }
         }
 
+
         // Step 6: Calculate final damage using refactored method
-        // damageAmplification is 1.0 (no additional buffs at this stage)
+        
         int finalDamage = DamageCalculator.CalculateFinalDamage(
             skillPower, 
-            1.0f, // damageAmplification (buffs would be applied here)
+            damageAmplification,
             coefficient, 
             targetDefense, 
             critMultiplier
