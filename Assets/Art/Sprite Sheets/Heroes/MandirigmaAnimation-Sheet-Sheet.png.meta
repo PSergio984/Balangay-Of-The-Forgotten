@@ -1,0 +1,754 @@
+fileFormatVersion: 2
+guid: 8d6688e308b0bd146b4dce7501ba7c6e
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -9176946617161677928
+    second: MandirigmaAnimation-Sheet-Sheet_0
+  - first:
+      213: 2257203746058067431
+    second: MandirigmaAnimation-Sheet-Sheet_1
+  - first:
+      213: -8764709683661762564
+    second: MandirigmaAnimation-Sheet-Sheet_2
+  - first:
+      213: -349855964559472808
+    second: MandirigmaAnimation-Sheet-Sheet_3
+  - first:
+      213: 2539506621414442682
+    second: MandirigmaAnimation-Sheet-Sheet_4
+  - first:
+      213: 3161122555901727031
+    second: MandirigmaAnimation-Sheet-Sheet_5
+  - first:
+      213: 6136533547962622685
+    second: MandirigmaAnimation-Sheet-Sheet_6
+  - first:
+      213: -2088573572882872636
+    second: MandirigmaAnimation-Sheet-Sheet_7
+  - first:
+      213: 3873915093962379648
+    second: MandirigmaAnimation-Sheet-Sheet_8
+  - first:
+      213: -154684645918589312
+    second: MandirigmaAnimation-Sheet-Sheet_9
+  - first:
+      213: 2755893085798666569
+    second: MandirigmaAnimation-Sheet-Sheet_10
+  - first:
+      213: 8254133383173212528
+    second: MandirigmaAnimation-Sheet-Sheet_11
+  - first:
+      213: 8955811493862221309
+    second: MandirigmaAnimation-Sheet-Sheet_12
+  - first:
+      213: 3443607017631020083
+    second: MandirigmaAnimation-Sheet-Sheet_13
+  - first:
+      213: 6926384456113573296
+    second: MandirigmaAnimation-Sheet-Sheet_14
+  - first:
+      213: 650861112657189781
+    second: MandirigmaAnimation-Sheet-Sheet_15
+  - first:
+      213: 3188403058746057306
+    second: MandirigmaAnimation-Sheet-Sheet_16
+  - first:
+      213: -9072957020476876482
+    second: MandirigmaAnimation-Sheet-Sheet_17
+  - first:
+      213: 6460838201020854476
+    second: MandirigmaAnimation-Sheet-Sheet_18
+  - first:
+      213: 7888069239322250821
+    second: MandirigmaAnimation-Sheet-Sheet_19
+  - first:
+      213: 1354084804156356723
+    second: MandirigmaAnimation-Sheet-Sheet_20
+  - first:
+      213: -3717038797378931186
+    second: MandirigmaAnimation-Sheet-Sheet_21
+  - first:
+      213: -2541114033327131480
+    second: MandirigmaAnimation-Sheet-Sheet_22
+  - first:
+      213: -2381567666703303595
+    second: MandirigmaAnimation-Sheet-Sheet_23
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: MandirigmaAnimation-Sheet-Sheet_0
+      rect:
+        serializedVersion: 2
+        x: 13
+        y: 2
+        width: 46
+        height: 69
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8930b595cafe4a080800000000000000
+      internalID: -9176946617161677928
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MandirigmaAnimation-Sheet-Sheet_1
+      rect:
+        serializedVersion: 2
+        x: 93
+        y: 2
+        width: 46
+        height: 69
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7edd87d09d2335f10800000000000000
+      internalID: 2257203746058067431
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MandirigmaAnimation-Sheet-Sheet_2
+      rect:
+        serializedVersion: 2
+        x: 173
+        y: 2
+        width: 46
+        height: 69
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cff0ae9eafe7d5680800000000000000
+      internalID: -8764709683661762564
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MandirigmaAnimation-Sheet-Sheet_3
+      rect:
+        serializedVersion: 2
+        x: 253
+        y: 2
+        width: 46
+        height: 69
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 85781e59adf052bf0800000000000000
+      internalID: -349855964559472808
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MandirigmaAnimation-Sheet-Sheet_4
+      rect:
+        serializedVersion: 2
+        x: 331
+        y: 2
+        width: 48
+        height: 69
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ab6092a31d32e3320800000000000000
+      internalID: 2539506621414442682
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MandirigmaAnimation-Sheet-Sheet_5
+      rect:
+        serializedVersion: 2
+        x: 413
+        y: 2
+        width: 46
+        height: 69
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7315ffb57309edb20800000000000000
+      internalID: 3161122555901727031
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MandirigmaAnimation-Sheet-Sheet_6
+      rect:
+        serializedVersion: 2
+        x: 493
+        y: 2
+        width: 46
+        height: 68
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: dd26496cfb8592550800000000000000
+      internalID: 6136533547962622685
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MandirigmaAnimation-Sheet-Sheet_7
+      rect:
+        serializedVersion: 2
+        x: 573
+        y: 2
+        width: 46
+        height: 68
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4c64c05b665e303e0800000000000000
+      internalID: -2088573572882872636
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MandirigmaAnimation-Sheet-Sheet_8
+      rect:
+        serializedVersion: 2
+        x: 653
+        y: 2
+        width: 46
+        height: 67
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 081d6a9c049e2c530800000000000000
+      internalID: 3873915093962379648
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MandirigmaAnimation-Sheet-Sheet_9
+      rect:
+        serializedVersion: 2
+        x: 733
+        y: 2
+        width: 46
+        height: 67
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 08eb0d352237addf0800000000000000
+      internalID: -154684645918589312
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MandirigmaAnimation-Sheet-Sheet_10
+      rect:
+        serializedVersion: 2
+        x: 813
+        y: 2
+        width: 46
+        height: 68
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9411cf10926ee3620800000000000000
+      internalID: 2755893085798666569
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MandirigmaAnimation-Sheet-Sheet_11
+      rect:
+        serializedVersion: 2
+        x: 892
+        y: 2
+        width: 47
+        height: 69
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0798bb864929c8270800000000000000
+      internalID: 8254133383173212528
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MandirigmaAnimation-Sheet-Sheet_12
+      rect:
+        serializedVersion: 2
+        x: 973
+        y: 2
+        width: 46
+        height: 69
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: df5a40f8a1f694c70800000000000000
+      internalID: 8955811493862221309
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MandirigmaAnimation-Sheet-Sheet_13
+      rect:
+        serializedVersion: 2
+        x: 1053
+        y: 2
+        width: 46
+        height: 69
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 33470f766562acf20800000000000000
+      internalID: 3443607017631020083
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MandirigmaAnimation-Sheet-Sheet_14
+      rect:
+        serializedVersion: 2
+        x: 1133
+        y: 2
+        width: 46
+        height: 69
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0bdcf6c17f57f1060800000000000000
+      internalID: 6926384456113573296
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MandirigmaAnimation-Sheet-Sheet_15
+      rect:
+        serializedVersion: 2
+        x: 1213
+        y: 2
+        width: 46
+        height: 69
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 59b1c0acbb2580900800000000000000
+      internalID: 650861112657189781
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MandirigmaAnimation-Sheet-Sheet_16
+      rect:
+        serializedVersion: 2
+        x: 1291
+        y: 2
+        width: 48
+        height: 69
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a52e35560bb7f3c20800000000000000
+      internalID: 3188403058746057306
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MandirigmaAnimation-Sheet-Sheet_17
+      rect:
+        serializedVersion: 2
+        x: 1373
+        y: 2
+        width: 46
+        height: 69
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e39d61419a1661280800000000000000
+      internalID: -9072957020476876482
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MandirigmaAnimation-Sheet-Sheet_18
+      rect:
+        serializedVersion: 2
+        x: 1453
+        y: 2
+        width: 46
+        height: 68
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cc03f13ec1289a950800000000000000
+      internalID: 6460838201020854476
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MandirigmaAnimation-Sheet-Sheet_19
+      rect:
+        serializedVersion: 2
+        x: 1533
+        y: 2
+        width: 46
+        height: 68
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 54e0d7d2e2d087d60800000000000000
+      internalID: 7888069239322250821
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MandirigmaAnimation-Sheet-Sheet_20
+      rect:
+        serializedVersion: 2
+        x: 1613
+        y: 2
+        width: 46
+        height: 67
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3787e7384fcaac210800000000000000
+      internalID: 1354084804156356723
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MandirigmaAnimation-Sheet-Sheet_21
+      rect:
+        serializedVersion: 2
+        x: 1693
+        y: 2
+        width: 46
+        height: 67
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e0632e158ec6a6cc0800000000000000
+      internalID: -3717038797378931186
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MandirigmaAnimation-Sheet-Sheet_22
+      rect:
+        serializedVersion: 2
+        x: 1773
+        y: 2
+        width: 46
+        height: 68
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8a4b6c500462cbcd0800000000000000
+      internalID: -2541114033327131480
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MandirigmaAnimation-Sheet-Sheet_23
+      rect:
+        serializedVersion: 2
+        x: 1852
+        y: 2
+        width: 47
+        height: 69
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 55cf79143d8f2fed0800000000000000
+      internalID: -2381567666703303595
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      MandirigmaAnimation-Sheet-Sheet_0: -9176946617161677928
+      MandirigmaAnimation-Sheet-Sheet_1: 2257203746058067431
+      MandirigmaAnimation-Sheet-Sheet_10: 2755893085798666569
+      MandirigmaAnimation-Sheet-Sheet_11: 8254133383173212528
+      MandirigmaAnimation-Sheet-Sheet_12: 8955811493862221309
+      MandirigmaAnimation-Sheet-Sheet_13: 3443607017631020083
+      MandirigmaAnimation-Sheet-Sheet_14: 6926384456113573296
+      MandirigmaAnimation-Sheet-Sheet_15: 650861112657189781
+      MandirigmaAnimation-Sheet-Sheet_16: 3188403058746057306
+      MandirigmaAnimation-Sheet-Sheet_17: -9072957020476876482
+      MandirigmaAnimation-Sheet-Sheet_18: 6460838201020854476
+      MandirigmaAnimation-Sheet-Sheet_19: 7888069239322250821
+      MandirigmaAnimation-Sheet-Sheet_2: -8764709683661762564
+      MandirigmaAnimation-Sheet-Sheet_20: 1354084804156356723
+      MandirigmaAnimation-Sheet-Sheet_21: -3717038797378931186
+      MandirigmaAnimation-Sheet-Sheet_22: -2541114033327131480
+      MandirigmaAnimation-Sheet-Sheet_23: -2381567666703303595
+      MandirigmaAnimation-Sheet-Sheet_3: -349855964559472808
+      MandirigmaAnimation-Sheet-Sheet_4: 2539506621414442682
+      MandirigmaAnimation-Sheet-Sheet_5: 3161122555901727031
+      MandirigmaAnimation-Sheet-Sheet_6: 6136533547962622685
+      MandirigmaAnimation-Sheet-Sheet_7: -2088573572882872636
+      MandirigmaAnimation-Sheet-Sheet_8: 3873915093962379648
+      MandirigmaAnimation-Sheet-Sheet_9: -154684645918589312
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
