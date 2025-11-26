@@ -2,6 +2,7 @@ using UnityEngine;
 using Sirenix.OdinInspector;
 using System.Collections.Generic;
 using System.Linq;
+using AudioSystem;
 
 [CreateAssetMenu(menuName = "Data/Enemy")]
 public class EnemyData : ScriptableObject
@@ -62,6 +63,10 @@ public class EnemyData : ScriptableObject
     [field: ListDrawerSettings(ShowIndexLabels = true, DraggableItems = true, ShowPaging = true, NumberOfItemsPerPage = 8)]
     [field: ValidateInput("@ValidateMoveset()", "Moveset has issues that need to be fixed")]
     public List<EnemyMoveData> Moveset { get; private set; }
+
+    [Header("Music")]
+    [Tooltip("Music to play when this enemy appears in combat.")]
+    public AudioSystem.SoundData CombatMusic;
 
      private bool ValidateMoveset()
     {

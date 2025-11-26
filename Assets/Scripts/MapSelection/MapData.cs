@@ -101,4 +101,11 @@ public class MapData : ScriptableObject
     /// Runtime reference to the UI button representing this map (set by map selection manager)
     /// </summary>
     public GameObject MapButtonObj { get; set; }
+
+    [Header("Music")]
+    /// <summary>
+    /// Music to play for this map if no enemy-specific music is set.
+    /// </summary>
+    [Tooltip("Music to play for this map if no enemy-specific music is set.")]
+    public AudioSystem.SoundData MapMusic;
 }

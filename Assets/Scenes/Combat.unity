@@ -3568,7 +3568,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::AudioSystem.MusicManager
   AutoUnparentOnAwake: 1
   musicMixerGroup: {fileID: 4271439559464837993, guid: 1d8e109cc8751d241b1a0f5629757c92, type: 2}
-  maxAudioSources: 2
+  maxAudioSources: 3
   defaultFadeTime: 2
   fadeCurve:
     serializedVersion: 2

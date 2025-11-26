@@ -220,9 +220,7 @@ public class MenuEventSystemHandler : MonoBehaviour
     /// <param name="eventData">Info about which button was selected</param>
     public void OnSelect(BaseEventData eventData)
     {
-        // Play the selection sound
-        soundBuilder?.Play(_OnSelectSound);
-
+        soundBuilder?.WithRandomPitch()?.Play(_OnSelectSound);
         if (eventData.selectedObject == null)
             return;
 

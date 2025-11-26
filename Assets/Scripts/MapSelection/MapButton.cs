@@ -216,24 +216,52 @@ public class MapButton : MonoBehaviour
     public void LoadMap()
     {
         // Store the selected map data for the combat scene to read
+        // --- Music Selection for Scene Transition ---
         if (levelTransitionData == null)
         {
-            Debug.LogWarning($"[MapButton] LevelTransitionData not assigned on {gameObject.name}. Combat scene won't receive map data.");
+            Debug.LogError("[MapButton] LevelTransitionData not assigned. Cannot load map.", this);
             return;
         }
         if (MapData == null)
         {
-            Debug.LogWarning($"[MapButton] MapData is null on {gameObject.name}. Scene transition aborted to prevent invalid combat setup.");
+            Debug.LogError("[MapButton] MapData not assigned. Cannot load map.", this);
             return;
         }
+
+        // Store selected map in transition data
         levelTransitionData.SelectedMapData = MapData;
 
-        // Use SceneController to smoothly transition to combat
-        SceneController.Instance
+        // Select music: first enemy with CombatMusic, else MapMusic
+        SoundData selectedMusic = null;
+        if (MapData.EnemyDatas != null)
+        {
+            foreach (var enemy in MapData.EnemyDatas)
+            {
+                if (enemy != null && enemy.CombatMusic != null)
+                {
+                    selectedMusic = enemy.CombatMusic;
+                    break;
+                }
+            }
+        }
+        if (selectedMusic == null && MapData.MapMusic != null)
+        {
+            selectedMusic = MapData.MapMusic;
+        }
+
+
+        // Use SceneController to smoothly transition to combat, using selectedMusic
+        var transition = SceneController.Instance
             .NewTransition()                                                                      // Start a new scene transition
             .Unload(SceneDatabase.Slots.SessionContent)                                          // Close the current map select screen
-            .Load(SceneDatabase.Slots.SessionContent, SceneDatabase.Scenes.Combat, setActive: true) // Open the combat scene
-            .WithMusic(CombatMusic, MusicFadeTime)                                               // Start playing combat music (fades in over 2 seconds)
+            .Load(SceneDatabase.Slots.SessionContent, SceneDatabase.Scenes.Combat, setActive: true); // Open the combat scene
+
+        // Only add music if selectedMusic is not null
+        if (selectedMusic != null)
+        {
+            transition = transition.WithMusic(selectedMusic, MusicFadeTime); // Start playing selected combat music
+        }
+        transition
             .WithOverlay()                                                                        // Show a loading screen overlay
             .Perform();                                                                           // Actually do all the above actions
     }

@@ -1,26 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-/* MATCH SETUP SYSTEM DOCUMENTATION
- * 
- * How it works:
- * - Sets up the hero with their stats and deck
- * - Creates all the enemies for this fight (dynamically from selected level or fallback)
- * - Sets the combat background based on selected level
- * - Prepares the card system with the hero's deck
- * - Gives player starting perks for this battle
- * - Draws the starting hand of cards for the player
- * 
- * Design reasoning:
- * - Single place to initialize everything prevents setup order problems
- * - Adding perk here shows how any system can give perks to the player
- * - Simple setup process makes it easy to add new initialization steps
- * - Everything happens in Start() so all systems are ready before gameplay begins
- * - Supports both dynamic level data (from level select) and fallback Inspector values
- * 
- * Integration: First system to run, works with all other combat systems including PerkSystem
- *              Reads from LevelTransitionData to get selected level's enemies and background
- */
+
 
 /// <summary>
 /// System that gets everything ready when a battle starts
@@ -120,56 +101,42 @@ public class MatchSetupSystem : MonoBehaviour
     /// </remarks>
     private void Start()
     {
-        // Validate hero data before proceeding
-        if (heroDatas == null || heroDatas.Count == 0)
-        {
-            Debug.LogError("[MatchSetupSystem] No hero data assigned! Please assign at least one HeroData asset in the Inspector.", this);
-            return;
-        }
 
-        // Cache selected map data before clearing LevelTransitionData
+
+        // --- Setup variables at top for use throughout method ---
         MapData selectedMapData = null;
-        if (levelTransitionData != null && levelTransitionData.HasValidData())
-        {
-            selectedMapData = levelTransitionData.SelectedMapData;
-        }
-
-        // Use selectedMapData for enemy and background setup
         List<EnemyData> enemiesToSpawn = null;
-        if (selectedMapData != null && selectedMapData.EnemyDatas != null && selectedMapData.EnemyDatas.Count > 0)
-        {
-            Debug.Log($"[MatchSetupSystem] Using enemies from selected level: {selectedMapData.MapId}");
-            enemiesToSpawn = new List<EnemyData>(selectedMapData.EnemyDatas);
+
+        // Determine selected map and enemy list
+        if (levelTransitionData != null && levelTransitionData.HasValidData()) {
+            selectedMapData = levelTransitionData.SelectedMapData;
+            if (selectedMapData != null && selectedMapData.EnemyDatas != null && selectedMapData.EnemyDatas.Count > 0) {
+                Debug.Log($"[MatchSetupSystem] Using enemies from selected level: {selectedMapData.MapId}");
+                enemiesToSpawn = new List<EnemyData>(selectedMapData.EnemyDatas);
+            }
         }
-        else if (fallbackEnemyDatas != null && fallbackEnemyDatas.Count > 0)
-        {
+        if (enemiesToSpawn == null && fallbackEnemyDatas != null && fallbackEnemyDatas.Count > 0) {
             Debug.Log("[MatchSetupSystem] No level selected - using fallback enemy data for testing");
             enemiesToSpawn = fallbackEnemyDatas;
         }
-        else
-        {
+
+        if (enemiesToSpawn == null) {
             Debug.LogWarning("[MatchSetupSystem] No enemy data available! Check LevelTransitionData or fallback enemies.");
             enemiesToSpawn = new List<EnemyData>();
         }
 
-        // Set the combat background from selected level (if available)
-        if (combatBackgroundRenderer != null && selectedMapData != null && selectedMapData.CombatBackgroundSprite != null)
-        {
-            combatBackgroundRenderer.sprite = selectedMapData.CombatBackgroundSprite;
-            Debug.Log($"[MatchSetupSystem] Set combat background from level: {selectedMapData.MapId}");
-        }
+        // --- Setup combat background before spawning enemies ---
+        // TODO: Ensure the combat background is set before spawning enemies.
+        // If a CombatBackgroundSystem exists, call its Setup here, e.g.:
+        // CombatBackgroundSystem.Instance.Setup(selectedMapData);
 
-        // Now clear LevelTransitionData to avoid stale state
-        if (levelTransitionData != null)
-        {
-            levelTransitionData.Clear();
-        }
-
-        // Create all hero characters using the assigned hero data list (multi-hero/party support)
-        HeroSystem.Instance.Setup(heroDatas);
-
-        // Create all enemy characters using the level-specific or fallback enemy data
+        // Spawn all enemies for this battle
         EnemySystem.Instance.Setup(enemiesToSpawn);
+
+
+        // Spawn all hero entities first (multi-hero support)
+        // This ensures heroes exist before cards are set up
+        HeroSystem.Instance.Setup(heroDatas);
 
         // Prepare the card system with all hero decks (multi-hero support)
         CardSystem.Instance.Setup(heroDatas);
@@ -189,10 +156,12 @@ public class MatchSetupSystem : MonoBehaviour
 
         // Execute the draw cards action to give the first hero their starting hand
         ActionSystem.Instance.Perform(drawCardsGA);
+
     }
+
 }
-    
-   
-    
-    
+
+
+
+
 
