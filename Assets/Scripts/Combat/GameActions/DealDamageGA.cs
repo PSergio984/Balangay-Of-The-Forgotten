@@ -47,13 +47,25 @@ using UnityEngine;
 public class DealDamageGA : GameAction, IHaveCaster
 {
     /// <summary>
-    /// Starting damage amount before any changes or calculations
+    /// Starting damage amount before any changes or calculations (uniform damage)
     /// </summary>
     /// <remarks>
     /// Raw damage number that gets handled by DamageSystem.
     /// Things like armor, buffs, or resistances get applied when processing.
+    /// Used when all targets take the same damage amount.
     /// </remarks>
     public float Amount { get; set; }
+    
+    /// <summary>
+    /// Optional per-target damage amounts (for defense-based calculations)
+    /// </summary>
+    /// <remarks>
+    /// When set, each target receives their corresponding damage value from this list.
+    /// This allows proper per-target defense calculations in AoE attacks.
+    /// If null, falls back to Amount for uniform damage across all targets.
+    /// List indices must match Targets list indices.
+    /// </remarks>
+    public List<float> PerTargetDamages { get; set; }
     
     /// <summary>
     /// Who will receive the damage
@@ -75,15 +87,16 @@ public class DealDamageGA : GameAction, IHaveCaster
     public CombatantView Caster { get; set; }
 
     /// <summary>
-    /// Creates damage action with safe copy of targets and caster tracking
+    /// Creates damage action with uniform damage for all targets
     /// </summary>
-    /// <param name="amount">Starting damage before changes</param>
+    /// <param name="amount">Starting damage before changes (applied to all targets)</param>
     /// <param name="targets">Characters who will get hurt</param>
     /// <param name="caster">Who is responsible for this damage</param>
     /// <remarks>
     /// Safe copy prevents outside changes to the list from messing up planned actions.
     /// Caster parameter enables perk system to know who caused the damage.
     /// Important for keeping the action system working properly where planned actions can't be changed.
+    /// Use this constructor when all targets should take the same damage amount.
     /// </remarks>
     public DealDamageGA(float amount, List<CombatantView> targets, CombatantView caster)
     {
@@ -92,5 +105,39 @@ public class DealDamageGA : GameAction, IHaveCaster
         Targets = new(targets);
         // Store who is causing this damage for perk system
         Caster = caster;
+        // PerTargetDamages is null, so DamageSystem will use Amount for all targets
+        PerTargetDamages = null;
+    }
+    
+    /// <summary>
+    /// Creates damage action with per-target damage amounts (for defense-based calculations)
+    /// </summary>
+    /// <param name="perTargetDamages">Individual damage amounts for each target</param>
+    /// <param name="targets">Characters who will get hurt (must match perTargetDamages count)</param>
+    /// <param name="caster">Who is responsible for this damage</param>
+    /// <remarks>
+    /// Use this constructor when each target should take different damage based on their defense.
+    /// The perTargetDamages list must have the same count as targets list.
+    /// Each index in perTargetDamages corresponds to the same index in targets.
+    /// DamageSystem will apply the specific damage value to each target.
+    /// </remarks>
+    public DealDamageGA(List<float> perTargetDamages, List<CombatantView> targets, CombatantView caster)
+    {
+        // Validate parameters before making safe copies
+        if (perTargetDamages == null)
+            throw new System.ArgumentNullException(nameof(perTargetDamages), "perTargetDamages cannot be null (DealDamageGA constructor)");
+        if (targets == null)
+            throw new System.ArgumentNullException(nameof(targets), "targets cannot be null (DealDamageGA constructor)");
+        if (perTargetDamages.Count != targets.Count)
+            throw new System.ArgumentException($"perTargetDamages.Count (={perTargetDamages.Count}) must match targets.Count (={targets.Count}) in DealDamageGA constructor", nameof(perTargetDamages));
+
+        // Store per-target damages for processing
+        PerTargetDamages = new(perTargetDamages);
+        // Safe copy prevents outside changes to planned action
+        Targets = new(targets);
+        // Store who is causing this damage for perk system
+        Caster = caster;
+        // Amount is not used when PerTargetDamages is set; set to float.NaN as a sentinel value to indicate unused
+        Amount = float.NaN;
     }
 }

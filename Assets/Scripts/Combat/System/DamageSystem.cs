@@ -92,21 +92,33 @@ public class DamageSystem : MonoBehaviour
     /// This is the main method that processes damage. It goes through each target,
     /// reduces their health, and shows a visual effect. Waits between targets so
     /// players can see each hit clearly instead of everything happening at once.
+    /// 
+    /// UPDATED: Now supports per-target damage calculation. If PerTargetDamages is set,
+    /// each target receives their specific damage amount. Otherwise, uses Amount for all targets.
     /// </remarks>
     // The main method that processes damage actions and applies damage to targets
     private IEnumerator DealDamagePerformer(DealDamageGA dealDamageGA)
     {
+        // Check if per-target damage is specified (for defense-based AoE calculations)
+        // Only use per-target damages if the list is non-null and has enough entries for all targets
+        bool hasPerTargetDamages = dealDamageGA.PerTargetDamages != null && dealDamageGA.PerTargetDamages.Count == dealDamageGA.Targets.Count;
+        
         // Loop through every target that should receive damage
-        foreach (var target in dealDamageGA.Targets)
+        for (int i = 0; i < dealDamageGA.Targets.Count; i++)
         {
+            var target = dealDamageGA.Targets[i];
+            
             // Check if target still exists (might have been destroyed by previous damage)
             if (target == null)
             {
                 continue; // Skip this target and move to the next one
             }
 
+            // Determine damage amount: use per-target if available, otherwise uniform amount
+            float damageAmount = (hasPerTargetDamages) ? dealDamageGA.PerTargetDamages[i] : dealDamageGA.Amount;
+            
             // Apply the damage amount to this target (reduces their health)
-            target.Damage((int)dealDamageGA.Amount);
+            target.Damage(Mathf.RoundToInt(damageAmount));
 
             // Check if target still exists after taking damage (safety check)
             if (target != null)
@@ -122,14 +134,10 @@ public class DamageSystem : MonoBehaviour
             // Wait 0.15 seconds before damaging the next target (for visual timing)
             yield return new WaitForSeconds(0.15f);
             
-            /// <summary>
-            /// Check if the target died from the damage and handle death
-            /// </summary>
-            /// <remarks>
-            /// After dealing damage, check if the target's health reached zero or below.
-            /// If it's an enemy that died, create a KillEnemyGA action to remove them.
-            /// Hero death handling is planned for future implementation.
-            /// </remarks>
+            // Check if the target died from the damage and handle death
+            // After dealing damage, check if the target's health reached zero or below.
+            // If it's an enemy that died, create a KillEnemyGA action to remove them.
+            // Hero death handling is planned for future implementation.
             // Check if the target still exists and died from the damage
             if(target != null && target.CurrentHealth <= 0)
                 {

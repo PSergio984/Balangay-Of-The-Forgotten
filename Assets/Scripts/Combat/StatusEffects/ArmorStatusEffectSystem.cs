@@ -63,35 +63,70 @@ public class ArmorStatusEffectSystem : MonoBehaviour
     /// 3. Remove armor stacks that were used to absorb damage
     /// 
     /// This approach keeps armor logic separate from the core damage system.
+    /// 
+    /// UPDATED: Now handles both uniform damage (Amount) and per-target damage (PerTargetDamages).
+    /// When per-target damage is used, each target's armor is applied to their specific damage value.
     /// </remarks>
     private void OnDamageAboutToBeDealt(DealDamageGA damageAction)
     {
+        // Check if per-target damage is being used
+        // Only treat per-target damages as valid if non-null, non-empty, and count matches targets
+        bool hasPerTargetDamages = false;
+        if (damageAction.PerTargetDamages != null && damageAction.PerTargetDamages.Count > 0)
+        {
+            if (damageAction.PerTargetDamages.Count == damageAction.Targets.Count)
+            {
+                hasPerTargetDamages = true;
+            }
+            else
+            {
+                Debug.LogWarning($"[ArmorStatusEffectSystem] PerTargetDamages.Count (={damageAction.PerTargetDamages.Count}) does not match Targets.Count (={damageAction.Targets.Count}); falling back to uniform damage.");
+                hasPerTargetDamages = false;
+            }
+        }
+        
+        // Capture the original uniform amount once, if needed
+        float originalAmount = damageAction.Amount;
+
         // Check each target for armor and modify damage accordingly
         for (int i = 0; i < damageAction.Targets.Count; i++)
         {
             var target = damageAction.Targets[i];
             int armorStacks = target.GetStatusEffectStacks(StatusEffectType.ARMOR);
-            
+
             // Only process if target has armor
             if (armorStacks > 0)
             {
-                int remainingDamage = (int)damageAction.Amount;
-                
+                // Get the damage amount for this specific target
+                float remainingDamage = hasPerTargetDamages ? damageAction.PerTargetDamages[i] : originalAmount;
+
                 // Armor completely absorbs the damage
                 if (armorStacks >= remainingDamage)
                 {
                     // Remove armor stacks equal to damage absorbed
-                    target.RemoveStatusEffect(StatusEffectType.ARMOR, remainingDamage);
+                    target.RemoveStatusEffect(StatusEffectType.ARMOR, Mathf.RoundToInt(remainingDamage));
                     // Set damage to zero since armor absorbed it all
-                    damageAction.Amount = 0;
+                    if (hasPerTargetDamages)
+                    {
+                        damageAction.PerTargetDamages[i] = 0f;
+                    }
+                    else
+                    {
+                        // For uniform damage, if armor fully absorbs the damage, set Amount to 0.
+                        // This ensures correct armor behavior for single-target attacks.
+                        damageAction.Amount = 0f;
+                    }
                 }
                 // Armor partially absorbs damage
                 else
                 {
                     // Remove all armor stacks
                     target.RemoveStatusEffect(StatusEffectType.ARMOR, armorStacks);
-                    // Reduce damage by armor amount
-                    damageAction.Amount -= armorStacks;
+                    if (hasPerTargetDamages)
+                    {
+                        damageAction.PerTargetDamages[i] -= armorStacks;
+                    }
+                    // else: do not modify damageAction.Amount (each target applies armor independently)
                 }
             }
         }

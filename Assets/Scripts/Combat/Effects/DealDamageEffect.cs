@@ -120,32 +120,42 @@ public class DealDamageEffect : Effects
         bool isCrit = DamageCalculator.IsCriticalHit(critChance);
         float critMultiplier = isCrit ? DamageCalculator.GetCriticalMultiplier(caster is HeroView) : 1.0f;
 
-        // Step 5: Get target's defense (apply defense ignore if specified)
-        float targetDefense = 0f;
-        if (targets.Count > 0 && targets[0] != null)
+        // Step 5 & 6: Calculate per-target final damage using each target's defense
+        // This ensures AoE attacks correctly account for each target's individual defense value
+        // Build filtered lists of valid targets and their corresponding damages
+        List<CombatantView> filteredTargets = new List<CombatantView>(targets.Count);
+        List<float> filteredDamages = new List<float>(targets.Count);
+        for (int i = 0; i < targets.Count; i++)
         {
-            targetDefense = targets[0].Defense;
-            
-            // Apply defense ignore if this attack has defense penetration
+            var target = targets[i];
+            if (target == null)
+            {
+                continue; // Skip null targets entirely
+            }
+
+            // Apply defense ignore if specified
+            float targetDefense = target.Defense;
             if (defenseIgnore > 0f)
             {
                 targetDefense = DamageCalculator.ApplyDefenseIgnore(targetDefense, defenseIgnore);
             }
+
+            // Calculate final damage for this specific target
+            float finalDamage = DamageCalculator.CalculateFinalDamage(
+                skillPower,
+                damageAmplification,
+                coefficient,
+                targetDefense,
+                critMultiplier
+            );
+
+            Debug.Log($"[DealDamageEffect] Final damage for target {i}: {finalDamage} (SkillPower={skillPower}, Coeff={coefficient}, Def={targetDefense}, Crit={critMultiplier})");
+            filteredTargets.Add(target);
+            filteredDamages.Add(finalDamage);
         }
 
-
-        // Step 6: Calculate final damage using refactored method
-        
-        int finalDamage = DamageCalculator.CalculateFinalDamage(
-            skillPower, 
-            damageAmplification,
-            coefficient, 
-            targetDefense, 
-            critMultiplier
-        );
-
-        Debug.Log($"[DealDamageEffect] Final damage calculated: {finalDamage} (SkillPower={skillPower}, Coeff={coefficient}, Def={targetDefense}, Crit={critMultiplier})");
-
-        return new DealDamageGA(finalDamage, targets, caster);
+        // Use the per-target damage constructor to properly apply defense-based calculations
+        // Only valid (non-null) targets and their damages are included
+        return new DealDamageGA(filteredDamages, filteredTargets, caster);
     }
 }
