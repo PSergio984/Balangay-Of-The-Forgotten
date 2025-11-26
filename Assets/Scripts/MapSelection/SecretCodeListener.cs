@@ -17,10 +17,9 @@ public class SecretCodeListener : MonoBehaviour
     private float _resetTime = 2f; // seconds to reset buffer if typing is too slow
     private float _lastInputTime = 0f;
 
-    private Coroutine _inputCoroutine;
-
     private void Awake()
     {
+        Debug.Log("[SecretCodeListener] Awake called");
         // Validate required reference and disable if missing
         if (mapSelectManager == null)
         {
@@ -29,54 +28,34 @@ public class SecretCodeListener : MonoBehaviour
         }
     }
 
-    private void OnEnable()
+    private void Update()
     {
-        if (_inputCoroutine == null)
-            _inputCoroutine = StartCoroutine(InputPollingCoroutine());
-    }
+        if (string.IsNullOrEmpty(secretCode) || mapSelectManager == null)
+            return;
 
-    private void OnDisable()
-    {
-        if (_inputCoroutine != null)
+        foreach (char c in Input.inputString)
         {
-            StopCoroutine(_inputCoroutine);
-            _inputCoroutine = null;
-        }
-    }
+            Debug.Log($"[SecretCodeListener] Key pressed: {c}");
+            if (Time.time - _lastInputTime > _resetTime)
+                _inputBuffer = "";
+            _lastInputTime = Time.time;
 
-    /// <summary>
-    /// Polls for input at a reduced frequency to minimize overhead.
-    /// </summary>
-    private IEnumerator InputPollingCoroutine()
-    {
-        const float pollInterval = 0.07f; // ~14x/sec, fast enough for typing
-        while (true)
-        {
-            if (!string.IsNullOrEmpty(secretCode) && mapSelectManager != null)
+            // Only accept letters, ignore others
+            if (char.IsLetter(c))
             {
-                foreach (char c in Input.inputString)
+                _inputBuffer += char.ToLowerInvariant(c);
+                Debug.Log($"[SecretCodeListener] Buffer: {_inputBuffer}");
+                if (_inputBuffer.Length > secretCode.Length)
                 {
-                    if (Time.time - _lastInputTime > _resetTime)
-                        _inputBuffer = "";
-                    _lastInputTime = Time.time;
-
-                    // Only accept letters, ignore others
-                    if (char.IsLetter(c))
-                    {
-                        _inputBuffer += char.ToLowerInvariant(c);
-                        if (_inputBuffer.Length > secretCode.Length)
-                        {
-                            _inputBuffer = _inputBuffer.Substring(_inputBuffer.Length - secretCode.Length);
-                        }                        if (_inputBuffer == secretCode.ToLowerInvariant())
-                        {
-                            Debug.Log("[SecretCodeListener] Secret code entered! Unlocking all levels.");
-                            mapSelectManager.UnlockAllLevels();
-                            _inputBuffer = "";
-                        }
-                    }
+                    _inputBuffer = _inputBuffer.Substring(_inputBuffer.Length - secretCode.Length);
+                }
+                if (_inputBuffer == secretCode.ToLowerInvariant())
+                {
+                    Debug.Log("[SecretCodeListener] Secret code entered! Unlocking all levels.");
+                    mapSelectManager.UnlockAllLevelsExample();
+                    _inputBuffer = "";
                 }
             }
-            yield return new WaitForSeconds(pollInterval);
         }
     }
 }

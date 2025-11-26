@@ -524,7 +524,7 @@ public class MapSelectManager : MonoBehaviour
     /// [Debug Method] Unlocks all map buttons via context menu (optimized batch unlock)
     /// </summary>
     [ContextMenu("Unlock All Levels Example")]
-    public void UnlockAllLevels()
+    public void UnlockAllLevelsExample()
     {
         if (_buttonObjects == null)
         {
