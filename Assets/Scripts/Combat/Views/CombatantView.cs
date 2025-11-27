@@ -106,6 +106,16 @@ public class CombatantView : MonoBehaviour
     private Dictionary<StatusEffectType, int> statusEffects = new();
 
     /// <summary>
+    /// Animation controller that manages animation state transitions for this combatant
+    /// </summary>
+    /// <remarks>
+    /// Handles all animation triggers and state changes during combat.
+    /// If not assigned, animations will not play but combat will still function.
+    /// Assign in Inspector or will attempt to find automatically in Awake.
+    /// </remarks>
+    [SerializeField] private CombatantAnimationController animationController;
+
+    /// <summary>
     /// Visual component that displays the character's sprite/image
     /// </summary>
     /// <remarks>
@@ -149,6 +159,22 @@ public class CombatantView : MonoBehaviour
         /// The magic power stat of this combatant (used for magic skills)
         /// </summary>
         public float MagicPower { get; protected set; }
+
+    /// <summary>
+    /// Validates and caches component references
+    /// </summary>
+    /// <remarks>
+    /// Called automatically by Unity when component initializes.
+    /// Finds animation controller if not assigned in Inspector.
+    /// </remarks>
+    protected virtual void Awake()
+    {
+        // Try to find animation controller if not assigned
+        if (animationController == null)
+        {
+            animationController = GetComponent<CombatantAnimationController>();
+        }
+    }
 
     /// <summary>
     /// Sets up the basic properties of this combatant
@@ -213,6 +239,12 @@ public class CombatantView : MonoBehaviour
         if (CurrentHealth < 0)
         {
             CurrentHealth = 0;
+        }
+
+        // Play hit animation if animation controller exists
+        if (animationController != null)
+        {
+            animationController.PlayHit();
         }
 
         // Play a screen shake animation when taking damage (0.2 seconds, 0.5 intensity)
@@ -288,5 +320,37 @@ public class CombatantView : MonoBehaviour
         // Return current stacks or 0 if effect not present
         if (statusEffects.ContainsKey(type)) return statusEffects[type];
         else return 0;
+    }
+
+    /// <summary>
+    /// Triggers an animation state for this combatant
+    /// </summary>
+    /// <param name="state">The animation state to play</param>
+    /// <remarks>
+    /// <para><strong>Use case:</strong> External systems (cards, abilities, AI) can trigger animations</para>
+    /// <para><strong>Example:</strong> <c>heroView.PlayAnimation(CombatantAnimState.Attack);</c></para>
+    /// <para><strong>Safety:</strong> Safe to call even if animation controller is missing</para>
+    /// </remarks>
+    public void PlayAnimation(CombatantAnimState state)
+    {
+        if (animationController != null)
+        {
+            animationController.SetState(state);
+        }
+    }
+
+    /// <summary>
+    /// Returns to idle animation state
+    /// </summary>
+    /// <remarks>
+    /// Call when character finishes an action and should return to default state.
+    /// Safe to call even if animation controller is missing.
+    /// </remarks>
+    public void PlayIdleAnimation()
+    {
+        if (animationController != null)
+        {
+            animationController.PlayIdle();
+        }
     }
 }

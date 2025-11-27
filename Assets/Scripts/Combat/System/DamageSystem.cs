@@ -141,6 +141,9 @@ public class DamageSystem : MonoBehaviour
             // Check if the target still exists and died from the damage
             if(target != null && target.CurrentHealth <= 0)
                 {
+                // Play death animation before processing death
+                target.PlayAnimation(CombatantAnimState.Dead);
+                
                 // If the target is an enemy that died, create a kill enemy action
                 if (target is EnemyView enemyView)
                 {
