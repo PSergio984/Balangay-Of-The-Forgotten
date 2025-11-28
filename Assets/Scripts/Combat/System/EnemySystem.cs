@@ -7,20 +7,20 @@ using UnityEngine;
 using Random = UnityEngine.Random;
 
 /* ENEMY SYSTEM DOCUMENTATION
- * 
+ *
  * How it works:
  * - Spawns enemies on the board at the start of combat
  * - Makes all enemies attack during their turn with proper caster tracking
  * - Handles enemy attack animations and damage creation
- * - Creates AttackHeroGA actions that support perk reactive targeting
- * 
+ * - Uses PerformEffectGA actions for enemy attacks and effects, supporting perk reactive targeting
+ *
  * Design reasoning:
- * - AttackHeroGA actions implement IHaveCaster so perks can target attackers
- * - DealDamageGA actions include caster info for perk system integration
+ * - PerformEffectGA actions now carry caster information for perk system integration
+ * - Caster tracking is attached to PerformEffectGA, allowing perks to react to the correct enemy
  * - Same enemy attack flow works with both normal combat and perk reactions
  * - Clean separation between animation and damage creation
- * 
- * Integration: Works with EnemyBoardView for display, supports perk system through caster tracking
+ *
+ * Integration: Works with EnemyBoardView for display, supports perk system through caster tracking in PerformEffectGA
  */
 
 /// <summary>
@@ -28,28 +28,29 @@ using Random = UnityEngine.Random;
 /// </summary>
 /// <remarks>
 /// <para><strong>Purpose:</strong> Acts as the brain that controls what enemies do during combat</para>
-/// 
-/// <para><strong>What it does:</strong> This system is like the AI controller for all enemies. 
-/// It spawns enemies at the start of combat, decides when they attack, and handles 
-/// their attack animations. When it's the enemies' turn, this system makes each 
-/// enemy attack the player with cool animations. The key feature for the perk system 
-/// is that it creates actions with proper caster tracking.</para>
-/// 
-/// <para><strong>Perk system integration:</strong> When enemies attack, this system creates 
-/// AttackHeroGA actions that implement IHaveCaster. This lets perks know which enemy 
-/// attacked and can target that specific enemy with reactive effects like counter-attacks 
-/// or damage reflection.</para>
-/// 
+///
+/// <para><strong>What it does:</strong> This system is like the AI controller for all enemies.
+/// It spawns enemies at the start of combat, decides when they attack, and handles
+/// their attack animations. When it's the enemies' turn, this system makes each
+/// enemy attack the player with proper caster tracking. The key feature for the perk system
+/// is that it creates PerformEffectGA actions with caster information, enabling perks to react
+/// to the correct enemy attacker.</para>
+///
+/// <para><strong>Perk system integration:</strong> When enemies attack, this system creates
+/// PerformEffectGA actions that include caster info (the attacking enemy). This lets perks know
+/// which enemy attacked and can target that specific enemy with reactive effects like counter-attacks
+/// or damage reflection. Caster tracking is now handled via PerformEffectGA, not AttackHeroGA or IHaveCaster.</para>
+///
 /// <para><strong>How it works:</strong></para>
 /// <list type="bullet">
 /// <item>Combat starts and enemies get spawned on the board</item>
 /// <item>Player finishes their turn and enemy turn begins</item>
-/// <item>System creates AttackHeroGA actions with caster info for each enemy</item>
+/// <item>System creates PerformEffectGA actions with caster info for each enemy attack or effect</item>
 /// <item>Enemies animate forward, deal damage with caster tracking, then move back</item>
-/// <item>Perks can react to attacks and target the attacking enemy</item>
+/// <item>Perks can react to PerformEffectGA actions and target the correct attacking enemy</item>
 /// </list>
-/// 
-/// <para><strong>Works with:</strong> EnemyBoardView for visuals, perk system for reactive targeting</para>
+///
+/// <para><strong>Works with:</strong> EnemyBoardView for visuals, perk system for reactive targeting via PerformEffectGA</para>
 /// </remarks>
 // This system manages all enemy behavior, turns, and combat actions in the card game
 // It's like the "AI controller" that handles what enemies do during their turn
@@ -137,18 +138,26 @@ public class EnemySystem : Singleton<EnemySystem>
     /// </remarks>
     public void Setup(List<EnemyData> enemyDatas)
     {
+        // Defensive: Guard against null enemyDatas
+        if (enemyDatas == null)
+        {
+            Debug.LogWarning("[EnemySystem.Setup] Called with null enemyDatas parameter. Aborting setup. Expected a non-null List<EnemyData>.");
+            enemyQueue.Clear();
+            return;
+        }
+
         // Clear any previous queue data (in case of battle restart)
         enemyQueue.Clear();
-        
+
         // Queue all enemies for sequential spawning
         foreach (var enemyData in enemyDatas)
         {
             enemyQueue.Enqueue(enemyData);
         }
-        
+
         // Log the setup
         Debug.Log($"[EnemySystem] Queued {enemyQueue.Count} enemies for sequential spawning");
-        
+
         // Spawn the first enemy to start combat
         SpawnNextEnemy();
     }
@@ -302,7 +311,14 @@ public class EnemySystem : Singleton<EnemySystem>
         // Animate the enemy moving back to original position - moves right 1 unit in 0.25 seconds
         attacker.transform.DOMoveX(attacker.transform.position.x + 1f, 0.25f);
         // Create a damage action with caster tracking for perk system
-        DealDamageGA dealDamageGA = new(attacker.AttackPower, new() { HeroSystem.Instance.HeroViews[Random.Range(0, 4)] }, attackHeroGA.Caster);
+        var heroViews = HeroSystem.Instance.HeroViews;
+        if (heroViews == null || heroViews.Count == 0)
+        {
+            Debug.LogWarning("[EnemySystem] No heroes available to target for damage.");
+            yield break;
+        }
+        int randomIndex = Random.Range(0, heroViews.Count);
+        DealDamageGA dealDamageGA = new(attacker.AttackPower, new() { heroViews[randomIndex] }, attackHeroGA.Caster);
         // Add the damage action to the queue to actually hurt the hero
         ActionSystem.Instance.AddReaction(dealDamageGA);
     }

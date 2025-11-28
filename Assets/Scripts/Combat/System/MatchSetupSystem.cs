@@ -40,7 +40,6 @@ public class MatchSetupSystem : MonoBehaviour
    /// This contains all the data needed to create the hero for this battle.
    /// Includes things like max health, starting deck, and other stats.
    /// Assign a HeroData asset in the Inspector.
-   /// </remarks>
    [SerializeField] private List<HeroData> heroDatas;
    
    /// <summary>

@@ -198,6 +198,12 @@ public class EnemyBoardView : MonoBehaviour
     /// </remarks>
     public IEnumerator RemoveEnemy(EnemyView enemyView)
     {
+        // Defensive: Guard against null enemyView
+        if (enemyView == null)
+        {
+            Debug.LogWarning("[EnemyBoardView.RemoveEnemy] Called with null enemyView. Aborting removal.");
+            yield break;
+        }
         // Remove the enemy from our active enemies list
         EnemyViews.Remove(enemyView);
         // Create a scaling animation that shrinks the enemy to zero size over 0.25 seconds
