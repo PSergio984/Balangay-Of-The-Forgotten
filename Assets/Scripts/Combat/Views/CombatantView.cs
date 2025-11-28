@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using DG.Tweening; // Import DOTween library for smooth animations
 using TMPro; // Import TextMeshPro for UI text components
-using UnityEngine; // Import Unity engine functionality
-
+using UnityEngine;
+using UnityEngine.UI; // Import Unity engine functionality
 /* COMBATANT VIEW DOCUMENTATION
  * 
  * Purpose: Base class for all characters that can fight (heroes, enemies, etc.)
@@ -144,6 +144,11 @@ public class CombatantView : MonoBehaviour
     /// </remarks>
     // The current health points this combatant has remaining
     public int CurrentHealth { get; private set; }
+
+    public Slider sliderHealth;
+
+    public Gradient gradientHealth;
+    public Image fillHealth;
     
         /// <summary>
         /// The defense stat of this combatant (used in damage reduction)
@@ -169,7 +174,7 @@ public class CombatantView : MonoBehaviour
     /// </remarks>
     protected virtual void Awake()
     {
-        // Always assign the animation controller from the component on this GameObject
+        // Eagerly assign the animation controller from the component on this GameObject
         animationController = GetComponent<CombatantAnimationController>();
     }
     // Expose animationController to subclasses (e.g., HeroView)
@@ -177,8 +182,7 @@ public class CombatantView : MonoBehaviour
     {
         get
         {
-            if (animationController == null)
-                animationController = GetComponent<CombatantAnimationController>();
+            // Eager initialization: animationController is assigned in Awake
             return animationController;
         }
     }
@@ -208,21 +212,31 @@ public class CombatantView : MonoBehaviour
         MagicText.text = $"MP: {MagicPower}";
         AttackText.text = $"ATK: {AttackPower}";
         DefenseText.text = $"DEF: {Defense}";
-        UpdateHealthText();
+        if (sliderHealth != null)
+        {
+            sliderHealth.maxValue = MaxHealth;
+            sliderHealth.value = CurrentHealth;
+            if (fillHealth != null)
+            {
+                fillHealth.color = gradientHealth.Evaluate(1f);
+            }
+        }
+        healthText.text = CurrentHealth + "/" + MaxHealth;
     }
 
-    /// <summary>
-    /// Updates the health text UI to reflect the current health value
-    /// </summary>
-    /// <remarks>
-    /// Called whenever health changes to keep the display accurate.
-    /// Shows health in format "HP: X" for clear readability.
-    /// </remarks>
-    // Updates the health text UI to reflect the current health value
-    private void UpdateHealthText()
+
+    
+    private void UpdateHealth()
     {
-        // Display current health in format "HP: X"
-        healthText.text = "HP: " + CurrentHealth;
+        if (sliderHealth != null)
+        {
+            sliderHealth.value = CurrentHealth;
+            if (fillHealth != null)
+            {
+                fillHealth.color = gradientHealth.Evaluate(sliderHealth.normalizedValue);
+            }
+        }
+        healthText.text = CurrentHealth + "/" + MaxHealth;
     }
 
     /// <summary>
@@ -259,7 +273,7 @@ public class CombatantView : MonoBehaviour
         transform.DOShakePosition(0.2f, 0.5f);
         
         // Update the health display to show the new health value
-        UpdateHealthText();
+        UpdateHealth();
     }
 
     /// <summary>
