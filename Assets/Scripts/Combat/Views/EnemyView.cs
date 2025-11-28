@@ -60,7 +60,50 @@ public class EnemyView : CombatantView
     public void Setup(EnemyData enemyData)
     {
         Data = enemyData;
-        // Set up the base combatant properties using explicit values
-        SetupBase(enemyData.Health, enemyData.Image, enemyData.EnemyName, enemyData.MagicPower, enemyData.AttackPower, enemyData.Defense);
+        // Set up the base combatant properties without UI (UI assigned later in AssignHealthBar)
+        SetupBaseWithoutUI(enemyData.Health, enemyData.Image, enemyData.EnemyName, enemyData.MagicPower, enemyData.AttackPower, enemyData.Defense);
+    }
+
+    /// <summary>
+    /// Assigns the health bar UI components from the scene to this enemy.
+    /// </summary>
+    /// <param name="healthBarSlider">The Slider UI element to use for this enemy's health bar.</param>
+    /// <param name="healthBarFill">The Image component for health bar fill color.</param>
+    /// <param name="healthBarText">The Text component displaying health values.</param>
+    /// <param name="nameText">The Text component displaying the enemy name.</param>
+    /// <remarks>
+    /// <para><strong>Why separate from prefab:</strong> Enemies use static scene-based health bars</para>
+    /// <para><strong>When called:</strong> After Setup() in EnemyBoardView.AddEnemy()</para>
+    /// <para><strong>What it does:</strong> Links all health bar UI to this enemy and updates values</para>
+    /// </remarks>
+    public void AssignHealthBar(UnityEngine.UI.Slider healthBarSlider, UnityEngine.UI.Image healthBarFill, TMPro.TMP_Text healthBarText, TMPro.TMP_Text nameText)
+    {
+        // Assign all health bar components
+        this.sliderHealth = healthBarSlider;
+        this.fillHealth = healthBarFill;
+        this.healthText = healthBarText;
+        this.NameText = nameText;
+        
+        // Update all components immediately with current values
+        if (sliderHealth != null)
+        {
+            sliderHealth.maxValue = MaxHealth;
+            sliderHealth.value = CurrentHealth;
+        }
+        
+        if (fillHealth != null && gradientHealth != null)
+        {
+            fillHealth.color = gradientHealth.Evaluate(1f);
+        }
+        
+        if (healthText != null)
+        {
+            healthText.text = CurrentHealth + "/" + MaxHealth;
+        }
+        
+        if (NameText != null && Data != null)
+        {
+            NameText.text = Data.EnemyName;
+        }
     }
 }

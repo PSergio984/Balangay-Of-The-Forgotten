@@ -46,14 +46,46 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bae3637a5b2f3974cb217b2d7fd150d3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyView
-  healthText: {fileID: 665737449356856293}
-  NameText: {fileID: 7095701912609365837}
+  healthText: {fileID: 0}
+  NameText: {fileID: 0}
   MagicText: {fileID: 3213796671783217888}
   AttackText: {fileID: 8837352646586927322}
   DefenseText: {fileID: 3758721879891298662}
   statusEffectsUI: {fileID: 1411210944844214674}
   animationController: {fileID: 0}
   spriteRenderer: {fileID: 5524720702786943516}
+  sliderHealth: {fileID: 0}
+  gradientHealth:
+    serializedVersion: 2
+    key0: {r: 1, g: 0, b: 0, a: 1}
+    key1: {r: 0.96142673, g: 1, b: 0, a: 1}
+    key2: {r: 0.4980392, g: 1, b: 0, a: 1}
+    key3: {r: 0, g: 0, b: 0, a: 0}
+    key4: {r: 0, g: 0, b: 0, a: 0}
+    key5: {r: 0, g: 0, b: 0, a: 0}
+    key6: {r: 0, g: 0, b: 0, a: 0}
+    key7: {r: 0, g: 0, b: 0, a: 0}
+    ctime0: 17733
+    ctime1: 44333
+    ctime2: 65535
+    ctime3: 0
+    ctime4: 0
+    ctime5: 0
+    ctime6: 0
+    ctime7: 0
+    atime0: 0
+    atime1: 964
+    atime2: 65535
+    atime3: 0
+    atime4: 0
+    atime5: 0
+    atime6: 0
+    atime7: 0
+    m_Mode: 1
+    m_ColorSpace: 0
+    m_NumColorKeys: 3
+    m_NumAlphaKeys: 3
+  fillHealth: {fileID: 0}
 --- !u!65 &7659909115800132482
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -390,24 +422,15 @@ PrefabInstance:
     m_RemovedComponents:
     - {fileID: 958857201098263625, guid: abfc41d4823e2cf41a3f50f9396393e8, type: 3}
     - {fileID: 8505300037229697935, guid: abfc41d4823e2cf41a3f50f9396393e8, type: 3}
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 100800984224794815, guid: abfc41d4823e2cf41a3f50f9396393e8, type: 3}
+    - {fileID: 1269998689760036276, guid: abfc41d4823e2cf41a3f50f9396393e8, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 818333407956166932, guid: abfc41d4823e2cf41a3f50f9396393e8, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1275713360536843645}
   m_SourcePrefab: {fileID: 100100000, guid: abfc41d4823e2cf41a3f50f9396393e8, type: 3}
---- !u!114 &665737449356856293 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 1150663488593146572, guid: abfc41d4823e2cf41a3f50f9396393e8, type: 3}
-  m_PrefabInstance: {fileID: 489439863637817641}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
 --- !u!1 &977733088782307389 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 818333407956166932, guid: abfc41d4823e2cf41a3f50f9396393e8, type: 3}
@@ -474,17 +497,6 @@ SpriteRenderer:
   m_CorrespondingSourceObject: {fileID: 5359590059526882101, guid: abfc41d4823e2cf41a3f50f9396393e8, type: 3}
   m_PrefabInstance: {fileID: 489439863637817641}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &7095701912609365837 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7255907841476142692, guid: abfc41d4823e2cf41a3f50f9396393e8, type: 3}
-  m_PrefabInstance: {fileID: 489439863637817641}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
 --- !u!224 &8127243894924347057 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 8503662190939717528, guid: abfc41d4823e2cf41a3f50f9396393e8, type: 3}

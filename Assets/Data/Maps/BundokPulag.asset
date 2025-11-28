@@ -23,3 +23,4 @@ MonoBehaviour:
   - {fileID: 11400000, guid: f17decc971290bf4fa570e0dcebe4813, type: 2}
   - {fileID: 11400000, guid: 1e20db64a7c97d7479846606d26413bd, type: 2}
   combatBackgroundSprite: {fileID: 21300000, guid: 767cff4404a464f409c78932a84d872f, type: 3}
+  MapMusic: {fileID: 0}

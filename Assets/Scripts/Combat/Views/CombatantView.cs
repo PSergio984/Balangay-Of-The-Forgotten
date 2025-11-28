@@ -19,21 +19,6 @@ using UnityEngine.UI; // Import Unity engine functionality
 /// <summary>
 /// Base class for any character that can participate in combat
 /// </summary>
-/// <remarks>
-/// <para><strong>Purpose:</strong> Foundation for all fighting characters in the game</para>
-/// 
-/// <para><strong>What it does:</strong> This is the base class that both heroes and enemies 
-/// inherit from. It handles all the common stuff that any fighting character needs: 
-/// health tracking, taking damage, showing their appearance, and displaying their name. 
-/// When any character gets hurt, this handles the visual effects and health updates.</para>
-/// 
-/// <para><strong>How it works:</strong></para>
-/// <list type="bullet">
-/// <item>Sets up character with health, image, and name</item>
-/// <item>Tracks current and maximum health</item>
-/// <item>Handles damage with visual feedback (screen shake)</item>
-/// <item>Updates health display automatically</item>
-/// <item>Prevents health from going below zero</item>
 /// </list>
 /// 
 /// <para><strong>Features:</strong></para>
@@ -58,9 +43,11 @@ public class CombatantView : MonoBehaviour
     /// <remarks>
     /// Shows the character's health in format "HP: X" so players can see 
     /// how much health each character has remaining.
+    /// For enemies: assigned at runtime from scene health bar.
+    /// For heroes: assigned in prefab.
     /// </remarks>
     // UI text component that displays the current health points
-    [SerializeField] private TMP_Text healthText;
+    [SerializeField] protected TMP_Text healthText;
 
     /// <summary>
     /// UI text component that shows the character's name
@@ -68,9 +55,11 @@ public class CombatantView : MonoBehaviour
     /// <remarks>
     /// Displays the character's name so players can identify who is who.
     /// Helps distinguish between different enemies or characters.
+    /// For enemies: assigned at runtime from scene health bar.
+    /// For heroes: assigned in prefab.
     /// </remarks>
     // UI text component that shows the character's name
-    [SerializeField] private TMP_Text NameText;
+    [SerializeField] protected TMP_Text NameText;
     
 
     /// <summary>
@@ -145,10 +134,28 @@ public class CombatantView : MonoBehaviour
     // The current health points this combatant has remaining
     public int CurrentHealth { get; private set; }
 
-    public Slider sliderHealth;
+    /// <summary>
+    /// UI Slider component for health bar visualization
+    /// </summary>
+    /// <remarks>
+    /// For enemies: assigned at runtime from scene health bar.
+    /// For heroes: assigned in prefab.
+    /// </remarks>
+    [SerializeField] protected Slider sliderHealth;
 
-    public Gradient gradientHealth;
-    public Image fillHealth;
+    /// <summary>
+    /// Gradient for health bar color (green to red)
+    /// </summary>
+    [SerializeField] protected Gradient gradientHealth;
+    
+    /// <summary>
+    /// Fill image for health bar color
+    /// </summary>
+    /// <remarks>
+    /// For enemies: assigned at runtime from scene health bar.
+    /// For heroes: assigned in prefab.
+    /// </remarks>
+    [SerializeField] protected Image fillHealth;
     
         /// <summary>
         /// The defense stat of this combatant (used in damage reduction)
@@ -188,7 +195,7 @@ public class CombatantView : MonoBehaviour
     }
 
     /// <summary>
-    /// Sets up the basic properties of this combatant
+    /// Sets up the basic properties of this combatant (for heroes with prefab UI)
     /// </summary>
     /// <param name="health">Starting health value (becomes both current and max health)</param>
     /// <param name="image">Sprite image to display for this character</param>
@@ -197,10 +204,9 @@ public class CombatantView : MonoBehaviour
     /// <param name="attackPower">Attack power stat</param>
     /// <param name="defense">Defense stat</param>
     /// <remarks>
-    /// Called by child classes (HeroView, EnemyView) to initialize the character.
-    /// Sets up health, appearance, and name, then updates the health display.
+    /// Called by HeroView to initialize with all UI components assigned in prefab.
+    /// For enemies, use SetupBaseWithoutUI instead since UI is assigned at runtime.
     /// </remarks>
-    // Sets up the basic properties of this combatant (health, appearance, name, stats)
     protected void SetupBase(int health, Sprite image, string name, float magicPower, float attackPower, float defense)
     {
         MaxHealth = CurrentHealth = health;
@@ -224,8 +230,30 @@ public class CombatantView : MonoBehaviour
         healthText.text = CurrentHealth + "/" + MaxHealth;
     }
 
+    /// <summary>
+    /// Sets up the basic properties of this combatant without requiring UI (for enemies)
+    /// </summary>
+    /// <param name="health">Starting health value (becomes both current and max health)</param>
+    /// <param name="image">Sprite image to display for this character</param>
+    /// <param name="name">Name to display for this character (cached for later UI assignment)</param>
+    /// <param name="magicPower">Magic power stat</param>
+    /// <param name="attackPower">Attack power stat</param>
+    /// <param name="defense">Defense stat</param>
+    /// <remarks>
+    /// Called by EnemyView to initialize stats and sprite without requiring UI components.
+    /// UI components (health bar, name text, etc.) are assigned later via AssignHealthBar.
+    /// </remarks>
+    protected void SetupBaseWithoutUI(int health, Sprite image, string name, float magicPower, float attackPower, float defense)
+    {
+        MaxHealth = CurrentHealth = health;
+        MagicPower = magicPower;
+        AttackPower = attackPower;
+        Defense = defense;
+        if (spriteRenderer != null && image != null)
+            spriteRenderer.sprite = image;
+        // Name is stored but not assigned to UI - will be set later in AssignHealthBar
+    }
 
-    
     private void UpdateHealth()
     {
         if (sliderHealth != null)
