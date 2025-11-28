@@ -109,11 +109,37 @@ public class CombatantAnimationController : MonoBehaviour
         {
             animator = GetComponent<Animator>();
         }
-        
+
         // Validate animator presence for debugging
         if (animator == null)
         {
             Debug.LogWarning($"[CombatantAnimationController] No Animator found on {gameObject.name}. Animations will not play.", this);
+        }
+    }
+
+    /// <summary>
+    /// Assigns a new AnimatorOverrideController instance to the Animator at runtime.
+    /// </summary>
+    /// <param name="overrideController">The override controller to assign (from HeroData)</param>
+    public void SetAnimatorOverride(AnimatorOverrideController overrideController)
+    {
+        if (animator != null && overrideController != null)
+        {
+            animator.runtimeAnimatorController = overrideController;
+            Debug.Log($"[CombatantAnimationController] AnimatorOverrideController set at runtime: {overrideController.name} (Base: {overrideController.runtimeAnimatorController?.name})", animator);
+            // Force rebind to ensure Animator uses the new override controller
+            animator.Rebind();
+        }
+        else
+        {
+            if (animator == null)
+            {
+                Debug.LogWarning($"[CombatantAnimationController] Cannot assign override: Animator reference is null on {gameObject.name}", this);
+            }
+            if (overrideController == null)
+            {
+                Debug.LogWarning($"[CombatantAnimationController] Cannot assign override: OverrideController is null on {gameObject.name}", this);
+            }
         }
     }
     

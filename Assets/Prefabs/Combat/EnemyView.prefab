@@ -52,6 +52,7 @@ MonoBehaviour:
   AttackText: {fileID: 3848101438153677802}
   DefenseText: {fileID: 777288451606613235}
   statusEffectsUI: {fileID: 1411210944844214674}
+  animationController: {fileID: 0}
   spriteRenderer: {fileID: 5524720702786943516}
 --- !u!65 &7659909115800132482
 BoxCollider:
@@ -124,7 +125,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 591286565303798011, guid: abfc41d4823e2cf41a3f50f9396393e8, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0.02
+      value: 0.020000458
       objectReference: {fileID: 0}
     - target: {fileID: 591286565303798011, guid: abfc41d4823e2cf41a3f50f9396393e8, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -387,8 +388,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9541d86e2fd84c1d9990edf0852d74ab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshPro
---- !u!4 &8127243894924347057 stripped
-Transform:
+--- !u!224 &8127243894924347057 stripped
+RectTransform:
   m_CorrespondingSourceObject: {fileID: 8503662190939717528, guid: abfc41d4823e2cf41a3f50f9396393e8, type: 3}
   m_PrefabInstance: {fileID: 489439863637817641}
   m_PrefabAsset: {fileID: 0}

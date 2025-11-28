@@ -49,8 +49,13 @@ public class HeroData : ScriptableObject
     [field: ValidateInput("@Defense > 0", "Defense must be greater than 0")]
     public float Defense { get; private set; }
     
+    [Title("Animation", "Animation controller for this hero", TitleAlignments.Centered)]
+    [field: SerializeField]
+    [field: LabelText("Animator Override Controller")]
+    [field: AssetsOnly]
+    public AnimatorOverrideController AnimatorOverride { get; private set; }
+
     [Title("Hero Deck", "Cards available to this hero", TitleAlignments.Centered)]
-    
     [field: SerializeField]
     [field: LabelText("Starting Deck")]
     [field: Required("Hero needs a deck!")]

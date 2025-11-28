@@ -17,6 +17,7 @@ MonoBehaviour:
   <Health>k__BackingField: 750
   <AttackPower>k__BackingField: 200
   <Defense>k__BackingField: 125
+  <AnimatorOverride>k__BackingField: {fileID: 22100000, guid: 42db0f552efe2fe43ab1371ee3fdd04f, type: 2}
   <Deck>k__BackingField:
   - {fileID: 11400000, guid: 5efc5dbdf3e70f54388d290bb88aa14c, type: 2}
   - {fileID: 11400000, guid: 6b054a64db2681b469a97659f722185d, type: 2}

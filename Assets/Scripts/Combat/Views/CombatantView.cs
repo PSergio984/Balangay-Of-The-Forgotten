@@ -113,7 +113,7 @@ public class CombatantView : MonoBehaviour
     /// If not assigned, animations will not play but combat will still function.
     /// Assign in Inspector or will attempt to find automatically in Awake.
     /// </remarks>
-    [SerializeField] private CombatantAnimationController animationController;
+    [SerializeField] protected CombatantAnimationController animationController;
 
     /// <summary>
     /// Visual component that displays the character's sprite/image
@@ -169,10 +169,17 @@ public class CombatantView : MonoBehaviour
     /// </remarks>
     protected virtual void Awake()
     {
-        // Try to find animation controller if not assigned
-        if (animationController == null)
+        // Always assign the animation controller from the component on this GameObject
+        animationController = GetComponent<CombatantAnimationController>();
+    }
+    // Expose animationController to subclasses (e.g., HeroView)
+    protected CombatantAnimationController AnimationController
+    {
+        get
         {
-            animationController = GetComponent<CombatantAnimationController>();
+            if (animationController == null)
+                animationController = GetComponent<CombatantAnimationController>();
+            return animationController;
         }
     }
 

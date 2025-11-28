@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 7836871753176773751}
   - component: {fileID: 1247206982686742041}
   - component: {fileID: -4528005571670633682}
+  - component: {fileID: 3098995843340714068}
   m_Layer: 7
   m_Name: HeroView
   m_TagString: Untagged
@@ -52,7 +53,7 @@ MonoBehaviour:
   AttackText: {fileID: 6955594597374322694}
   DefenseText: {fileID: 6857139501811646239}
   statusEffectsUI: {fileID: 5077156918235726462}
-  animationController: {fileID: 0}
+  animationController: {fileID: 3098995843340714068}
   spriteRenderer: {fileID: 1822778642561894896}
 --- !u!65 &-4528005571670633682
 BoxCollider:
@@ -75,6 +76,19 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &3098995843340714068
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3833778510174320965}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 175257b41776b2841baf45dce741c6e4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CombatantAnimationController
+  animator: {fileID: 6430400549177935358}
 --- !u!1001 &5992841156654959301
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -89,11 +103,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 591286565303798011, guid: abfc41d4823e2cf41a3f50f9396393e8, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -0.03
+      value: -0.02999878
       objectReference: {fileID: 0}
     - target: {fileID: 591286565303798011, guid: abfc41d4823e2cf41a3f50f9396393e8, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -0.84
+      value: -0.84000015
       objectReference: {fileID: 0}
     - target: {fileID: 900519335096749585, guid: abfc41d4823e2cf41a3f50f9396393e8, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
@@ -326,7 +340,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 3284066645139058842, guid: abfc41d4823e2cf41a3f50f9396393e8, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6430400549177935358}
   m_SourcePrefab: {fileID: 100100000, guid: abfc41d4823e2cf41a3f50f9396393e8, type: 3}
 --- !u!114 &570034148899041392 stripped
 MonoBehaviour:
@@ -344,8 +361,8 @@ SpriteRenderer:
   m_CorrespondingSourceObject: {fileID: 5359590059526882101, guid: abfc41d4823e2cf41a3f50f9396393e8, type: 3}
   m_PrefabInstance: {fileID: 5992841156654959301}
   m_PrefabAsset: {fileID: 0}
---- !u!4 &2677894596413044061 stripped
-Transform:
+--- !u!224 &2677894596413044061 stripped
+RectTransform:
   m_CorrespondingSourceObject: {fileID: 8503662190939717528, guid: abfc41d4823e2cf41a3f50f9396393e8, type: 3}
   m_PrefabInstance: {fileID: 5992841156654959301}
   m_PrefabAsset: {fileID: 0}
@@ -404,3 +421,30 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9541d86e2fd84c1d9990edf0852d74ab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshPro
+--- !u!1 &9131470942759451231 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3284066645139058842, guid: abfc41d4823e2cf41a3f50f9396393e8, type: 3}
+  m_PrefabInstance: {fileID: 5992841156654959301}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &6430400549177935358
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9131470942759451231}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: eb526f05f63d8b84a98125979989d8d5, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
