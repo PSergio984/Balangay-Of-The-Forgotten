@@ -35,11 +35,16 @@ public class HeroData : ScriptableObject
     [HorizontalGroup("Combat Stats")]
     [field: SerializeField]
     [field: LabelText("Attack Power (ATK)")]
-    [field: Range(1, 400)]
-    [field: ValidateInput("@AttackPower > 0", "Attack Power must be greater than 0")]
+    [field: Range(0, 400)]
+    [field: ValidateInput("@AttackPower >= 0", "Attack Power can't be negative")]
     public float AttackPower { get; private set; }
     
-
+    
+    [HorizontalGroup("Combat Stats")]
+    [field: SerializeField]
+    [field: LabelText("Magic Power (MAG)")]
+    [field: Range(0, 400)]
+    [field: ValidateInput("@MagicPower >= 0", "Magic Power can't be negative")]
     public float MagicPower { get; private set; }
     
     [HorizontalGroup("Defense Stats")]

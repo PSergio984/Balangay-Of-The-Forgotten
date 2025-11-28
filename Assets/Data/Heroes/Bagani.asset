@@ -16,6 +16,7 @@ MonoBehaviour:
   <HeroName>k__BackingField: Bagani
   <Health>k__BackingField: 1000
   <AttackPower>k__BackingField: 75
+  <MagicPower>k__BackingField: 0
   <Defense>k__BackingField: 200
   <AnimatorOverride>k__BackingField: {fileID: 22100000, guid: b4a84f4b7a9043044bbd84d1133f6bd2, type: 2}
   <Deck>k__BackingField:

@@ -16,6 +16,7 @@ MonoBehaviour:
   <HeroName>k__BackingField: Mandirigma
   <Health>k__BackingField: 750
   <AttackPower>k__BackingField: 200
+  <MagicPower>k__BackingField: 0
   <Defense>k__BackingField: 125
   <AnimatorOverride>k__BackingField: {fileID: 22100000, guid: 42db0f552efe2fe43ab1371ee3fdd04f, type: 2}
   <Deck>k__BackingField:

@@ -209,7 +209,7 @@ public class CombatantView : MonoBehaviour
         Defense = defense;
         spriteRenderer.sprite = image;
         NameText.text = name;
-        MagicText.text = $"MP: {MagicPower}";
+        MagicText.text = $"MAG: {MagicPower}";
         AttackText.text = $"ATK: {AttackPower}";
         DefenseText.text = $"DEF: {Defense}";
         if (sliderHealth != null)

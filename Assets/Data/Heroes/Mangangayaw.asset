@@ -16,6 +16,7 @@ MonoBehaviour:
   <HeroName>k__BackingField: Mangangayaw
   <Health>k__BackingField: 600
   <AttackPower>k__BackingField: 45
+  <MagicPower>k__BackingField: 0
   <Defense>k__BackingField: 80
   <AnimatorOverride>k__BackingField: {fileID: 22100000, guid: 27e6ad057bdfd654e90b5ae625d25d57, type: 2}
   <Deck>k__BackingField:
