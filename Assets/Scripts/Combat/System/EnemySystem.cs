@@ -53,6 +53,7 @@ using Random = UnityEngine.Random;
 /// </remarks>
 // This system manages all enemy behavior, turns, and combat actions in the card game
 // It's like the "AI controller" that handles what enemies do during their turn
+// SEQUENTIAL SPAWNING: Enemies spawn one at a time. When one dies, the next is spawned.
 public class EnemySystem : Singleton<EnemySystem>
 {
     /// <summary>
@@ -64,6 +65,21 @@ public class EnemySystem : Singleton<EnemySystem>
     /// Gets the list from EnemyBoardView to maintain single source of truth.
     /// </remarks>
     public List<EnemyView> EnemyViews { get => enemyBoardView.EnemyViews; }
+    
+    /// <summary>
+    /// Queue of enemies waiting to be spawned sequentially
+    /// </summary>
+    /// <remarks>
+    /// Enemies spawn one at a time. When the current enemy is defeated,
+    /// the next enemy from this queue is spawned automatically.
+    /// </remarks>
+    private Queue<EnemyData> enemyQueue = new Queue<EnemyData>();
+    
+    /// <summary>
+    /// Checks if there are more enemies waiting to spawn
+    /// </summary>
+    public bool HasRemainingEnemies => enemyQueue.Count > 0;
+    
     /// <summary>
     /// The visual board where enemies appear and are displayed to players
     /// </summary>
@@ -111,22 +127,78 @@ public class EnemySystem : Singleton<EnemySystem>
     // This class will manage enemy behavior and actions
 
     /// <summary>
-    /// Creates and displays all enemies at the start of combat
+    /// Initializes the enemy queue and spawns the first enemy for sequential combat
     /// </summary>
-    /// <param name="enemyDatas">List of enemy information to create enemies from</param>
+    /// <param name="enemyDatas">List of enemy information in order of appearance</param>
     /// <remarks>
-    /// This method takes enemy data and creates actual enemy characters on the board.
-    /// Like spawning the enemy team that the player will fight against.
+    /// SEQUENTIAL SPAWNING: This method queues all enemies but only spawns the first one.
+    /// When the first enemy is defeated, the next will spawn automatically via KillEnemyPerformer.
+    /// This creates a wave-based combat experience where players face enemies one at a time.
     /// </remarks>
-    // Sets up all enemies at the start of the match - like spawning the enemy team
     public void Setup(List<EnemyData> enemyDatas)
     {
-        // Loop through each enemy data (stats, name, image, etc.)
+        // Clear any previous queue data (in case of battle restart)
+        enemyQueue.Clear();
+        
+        // Queue all enemies for sequential spawning
         foreach (var enemyData in enemyDatas)
         {
-            // Create and display the enemy on the game board
-            enemyBoardView.AddEnemy(enemyData);
+            enemyQueue.Enqueue(enemyData);
         }
+        
+        // Log the setup
+        Debug.Log($"[EnemySystem] Queued {enemyQueue.Count} enemies for sequential spawning");
+        
+        // Spawn the first enemy to start combat
+        SpawnNextEnemy();
+    }
+    
+    /// <summary>
+    /// Spawns the next enemy from the queue, or triggers victory if none remain
+    /// </summary>
+    /// <remarks>
+    /// SEQUENTIAL SPAWNING: This method is called initially and after each enemy defeat.
+    /// If enemies remain in the queue, spawns the next one.
+    /// If the queue is empty, all enemies are defeated and victory is triggered.
+    /// </remarks>
+    private void SpawnNextEnemy()
+    {
+        // Check if there are more enemies to spawn
+        if (enemyQueue.Count > 0)
+        {
+            // Dequeue the next enemy
+            EnemyData nextEnemyData = enemyQueue.Dequeue();
+            
+            // Spawn the enemy on the board
+            enemyBoardView.AddEnemy(nextEnemyData);
+            
+            Debug.Log($"[EnemySystem] Spawned enemy: {nextEnemyData.EnemyName}. {enemyQueue.Count} enemies remaining.");
+        }
+        else
+        {
+            // No more enemies - trigger victory
+            Debug.Log("[EnemySystem] All enemies defeated! Victory!");
+            TriggerVictory();
+        }
+    }
+    
+    /// <summary>
+    /// Handles victory condition when all enemies are defeated
+    /// </summary>
+    /// <remarks>
+    /// Called automatically when the last enemy is defeated and the queue is empty.
+    /// Currently logs victory. In the future, this should trigger victory screen,
+    /// rewards, scene transition, etc.
+    /// </remarks>
+    private void TriggerVictory()
+    {
+        // TODO: Implement victory screen, rewards, scene transition
+        // For now, just log the victory
+        Debug.Log("[EnemySystem] ===== VICTORY =====");
+        Debug.Log("[EnemySystem] All enemies have been defeated!");
+        
+        // Placeholder: You can add victory UI, rewards, etc. here
+        // Example: VictorySystem.Instance.ShowVictoryScreen();
     }
 
     /// <summary>
@@ -236,18 +308,26 @@ public class EnemySystem : Singleton<EnemySystem>
     }
     
     /// <summary>
-    /// Handles the death sequence when an enemy is killed
+    /// Handles the death sequence when an enemy is killed, then spawns the next enemy
     /// </summary>
     /// <param name="killEnemyGA">The kill action containing which enemy to remove</param>
     /// <returns>Waits for the removal animation to complete</returns>
     /// <remarks>
-    /// This method processes enemy deaths by calling the board view's removal method.
-    /// The enemy gets removed with a nice scaling animation before being destroyed.
-    /// Keeps the battlefield clean by removing defeated enemies.
+    /// SEQUENTIAL SPAWNING: This method processes enemy deaths and triggers the next spawn.
+    /// 1. Removes the defeated enemy with animation
+    /// 2. Waits for removal to complete
+    /// 3. Spawns the next enemy from the queue (or triggers victory if none remain)
+    /// This creates smooth transitions between enemies in wave-based combat.
     /// </remarks>
     private IEnumerator KillEnemyPerformer(KillEnemyGA killEnemyGA)
     {
         // Use the board view to remove the enemy with animation
         yield return enemyBoardView.RemoveEnemy(killEnemyGA.EnemyView);
+        
+        // Wait a brief moment for visual clarity before spawning next enemy
+        yield return new WaitForSeconds(0.5f);
+        
+        // Spawn the next enemy or trigger victory
+        SpawnNextEnemy();
     }
 }

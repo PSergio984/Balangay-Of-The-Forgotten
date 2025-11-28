@@ -33,7 +33,8 @@ MonoBehaviour:
     - rid: 8634069063776600071
       type: {class: DealDamageEffect, ns: , asm: Assembly-CSharp}
       data:
-        baseDamage: 0
+        baseDamage: 5000
+        damageAmplification: 1
         accuracy: 0.4
         critChance: 0
         defenseIgnore: 0

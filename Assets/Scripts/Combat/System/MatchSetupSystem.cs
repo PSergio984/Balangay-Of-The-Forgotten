@@ -133,7 +133,8 @@ public class MatchSetupSystem : MonoBehaviour
             Debug.Log($"[MatchSetupSystem] Set combat background from level: {selectedMapData.MapId}");
         }
 
-        // Spawn all enemies for this battle
+        // Initialize sequential enemy spawning (only spawns first enemy, rest spawn on defeat)
+        // SEQUENTIAL MODE: Enemies appear one at a time. When defeated, the next spawns automatically.
         EnemySystem.Instance.Setup(enemiesToSpawn);
 
 

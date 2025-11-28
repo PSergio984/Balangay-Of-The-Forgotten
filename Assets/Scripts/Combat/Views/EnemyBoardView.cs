@@ -6,48 +6,54 @@ using DG.Tweening;
 
 /* ENEMY BOARD VIEW DOCUMENTATION
  * 
- * Purpose: Manages where enemies appear on the battlefield
+ * Purpose: Manages where enemies appear on the battlefield (SEQUENTIAL SPAWNING MODE)
  * 
  * How it works:
- * - Has predefined slots where enemies can be placed
- * - Creates and positions enemy views in the correct spots
- * - Keeps track of all enemies currently on the board
- * - Works like a grid system for enemy placement
- * - Assigns health bar UI sliders to each enemy at runtime
+ * - SEQUENTIAL MODE: Only one enemy exists at a time, always in slot 0
+ * - Creates and positions each enemy view in the same slot position
+ * - Reuses slot 0 and health bar UI for each sequential enemy
+ * - Tracks the single active enemy on the board
+ * - Assigns health bar UI from slot 0 to each enemy at runtime
  * 
- * Integration: Used by EnemySystem to organize enemy placement, works with EnemyViewCreator
+ * Sequential Spawning Flow:
+ * 1. Enemy 1 spawns in slot 0 with slot 0 health bar
+ * 2. Player defeats Enemy 1
+ * 3. Enemy 1 is removed from slot 0
+ * 4. Enemy 2 spawns in slot 0 with slot 0 health bar (reused)
+ * 5. Repeat until all enemies defeated
+ * 
+ * Integration: Used by EnemySystem to organize sequential enemy placement, works with EnemyViewCreator
  */
 
 /// <summary>
-/// Manages the placement and organization of enemies on the battlefield
+/// Manages the placement and organization of enemies on the battlefield (SEQUENTIAL MODE)
 /// </summary>
 /// <remarks>
-/// <para><strong>Purpose:</strong> Controls where enemies appear and how they're arranged on screen</para>
+/// <para><strong>Purpose:</strong> Controls where enemies appear in sequential wave-based combat</para>
 /// 
-/// <para><strong>What it does:</strong> This is like the battlefield manager for enemies. 
-/// It has predefined slots (positions) where enemies can be placed, and when new enemies 
-/// are added to the battle, it puts them in the next available slot. It keeps everything 
-/// organized so enemies don't overlap and appear in the right positions. Additionally,
-/// it manages the assignment of health bar UI sliders to each enemy at runtime.</para>
+/// <para><strong>SEQUENTIAL SPAWNING MODE:</strong> This system now operates in sequential mode where 
+/// only ONE enemy exists at a time. Each enemy spawns in the same slot (slot 0) and reuses 
+/// the same health bar UI. When one enemy is defeated, the next enemy spawns in the same position 
+/// with the same UI elements, creating a wave-based combat experience.</para>
 /// 
 /// <para><strong>How it works:</strong></para>
 /// <list type="bullet">
-/// <item>Has a list of Transform slots (positions) for enemy placement</item>
-/// <item>Has a list of UI Slider components for enemy health bars</item>
-/// <item>When adding an enemy, uses the next available slot and health bar</item>
-/// <item>Creates the enemy view at the slot's position and rotation</item>
-/// <item>Assigns the corresponding health bar to the enemy at runtime</item>
-/// <item>Parents the enemy to the slot for organization</item>
-/// <item>Keeps a list of all active enemies for easy access</item>
+/// <item>Always uses slot 0 (the first slot) for enemy placement</item>
+/// <item>Always uses health bar UI components from index 0</item>
+/// <item>When adding an enemy, places it in slot 0 regardless of previous enemies</item>
+/// <item>Reuses the same UI elements (slider, fill, text) for each sequential enemy</item>
+/// <item>Only tracks one active enemy at a time in the EnemyViews list</item>
+/// <item>Creates smooth wave-based combat flow</item>
 /// </list>
 /// 
-/// <para><strong>Example:</strong> If you have 3 enemy slots and 3 health bars, enemies will 
-/// appear in slot 1 with health bar 1, slot 2 with health bar 2, and slot 3 with health bar 3.</para>
+/// <para><strong>Example:</strong> You have 3 enemies in the queue. Enemy 1 spawns in slot 0 with 
+/// health bar 0. After defeat, Enemy 2 spawns in slot 0 with health bar 0 (same UI reused). 
+/// After defeat, Enemy 3 spawns in slot 0 with health bar 0 (same UI reused again).</para>
 /// 
-/// <para><strong>Works with:</strong> EnemySystem for enemy management, EnemyViewCreator for spawning</para>
+/// <para><strong>Works with:</strong> EnemySystem for sequential enemy management, EnemyViewCreator for spawning</para>
 /// 
-/// <para><strong>How to use:</strong> Set up Transform slots and health bar Sliders in Inspector, 
-/// EnemySystem calls AddEnemy() which automatically handles health bar assignment</para>
+/// <para><strong>How to use:</strong> Set up at least one Transform slot and one set of health bar UI 
+/// components in Inspector. EnemySystem will automatically spawn enemies sequentially using slot 0.</para>
 /// </remarks>
 public class EnemyBoardView : MonoBehaviour
 {
@@ -112,35 +118,34 @@ public class EnemyBoardView : MonoBehaviour
     public List<EnemyView> EnemyViews { get; private set; } = new();
 
     /// <summary>
-    /// Adds a new enemy to the battlefield in the next available slot
+    /// Adds a new enemy to the battlefield in slot 0 (sequential spawning mode)
     /// </summary>
     /// <param name="enemyData">Data containing enemy stats, appearance, and behavior</param>
     /// <remarks>
-    /// <para><strong>What it does:</strong> Creates a new enemy view using the EnemyViewCreator, 
-    /// positions it in the next available slot, assigns the corresponding health bar UI, 
-    /// and adds it to the list of active enemies.</para>
+    /// <para><strong>SEQUENTIAL SPAWNING MODE:</strong> This method always uses slot 0 (the first slot)
+    /// for enemy placement. Since only one enemy exists at a time in sequential mode, we always reuse
+    /// the same slot and health bar UI for each new enemy.</para>
     /// 
-    /// <para><strong>Runtime Health Bar Assignment:</strong> After creating the enemy, this method 
-    /// automatically calls AssignHealthBar() to link the UI slider to the enemy. This ensures 
-    /// the health bar displays correctly immediately after the enemy spawns.</para>
+    /// <para><strong>Runtime Health Bar Assignment:</strong> Always assigns health bar components from index 0
+    /// since we're in single-enemy mode. The UI is reused for each sequential enemy.</para>
     /// 
     /// <para><strong>Validation:</strong> Includes safety checks to handle missing health bars 
     /// gracefully with debug warnings while allowing combat to continue.</para>
     /// </remarks>
     public void AddEnemy(EnemyData enemyData)
     {
-        // Calculate the index for the next enemy position
-        int enemyIndex = EnemyViews.Count;
+        // SEQUENTIAL SPAWNING: Always use slot 0 since only one enemy exists at a time
+        const int SLOT_INDEX = 0;
         
-        // Validate that we have an available slot
-        if (enemyIndex >= slots.Count)
+        // Validate that slot 0 exists
+        if (slots == null || slots.Count == 0)
         {
-            Debug.LogError($"[EnemyBoardView] Cannot add enemy: no available slots! Current enemies: {enemyIndex}, Available slots: {slots.Count}");
+            Debug.LogError($"[EnemyBoardView] Cannot add enemy: no slots configured! Assign enemy slots in Inspector.");
             return;
         }
         
-        // Get the next available slot based on how many enemies we already have
-        Transform slot = slots[enemyIndex];
+        // Get slot 0 (the primary enemy slot for sequential spawning)
+        Transform slot = slots[SLOT_INDEX];
         
         // Create a new enemy view at the slot's position and rotation
         EnemyView enemyView = EnemyViewCreator.Instance.CreateEnemyView(enemyData, slot.position, slot.rotation);
@@ -148,36 +153,35 @@ public class EnemyBoardView : MonoBehaviour
         // Make the enemy a child of the slot for organization
         enemyView.transform.parent = slot;
         
-        // Add the new enemy to our list of active enemies
+        // Add the new enemy to our list of active enemies (should only have 1 in sequential mode)
         EnemyViews.Add(enemyView);
         
-        // --- RUNTIME HEALTH BAR ASSIGNMENT ---
-        // Assign all health bar UI components to this enemy at runtime
-        // This happens AFTER Setup() is called, so MaxHealth and CurrentHealth are already initialized
-        if (healthBarSliders != null && enemyIndex < healthBarSliders.Count &&
-            healthBarFills != null && enemyIndex < healthBarFills.Count &&
-            healthBarTexts != null && enemyIndex < healthBarTexts.Count &&
-            nameTexts != null && enemyIndex < nameTexts.Count)
+        // --- RUNTIME HEALTH BAR ASSIGNMENT (SEQUENTIAL MODE) ---
+        // Assign health bar UI components from index 0 (reused for each sequential enemy)
+        if (healthBarSliders != null && SLOT_INDEX < healthBarSliders.Count &&
+            healthBarFills != null && SLOT_INDEX < healthBarFills.Count &&
+            healthBarTexts != null && SLOT_INDEX < healthBarTexts.Count &&
+            nameTexts != null && SLOT_INDEX < nameTexts.Count)
         {
-            Slider healthBarSlider = healthBarSliders[enemyIndex];
-            Image healthBarFill = healthBarFills[enemyIndex];
-            TMPro.TMP_Text healthBarText = healthBarTexts[enemyIndex];
-            TMPro.TMP_Text nameText = nameTexts[enemyIndex];
+            Slider healthBarSlider = healthBarSliders[SLOT_INDEX];
+            Image healthBarFill = healthBarFills[SLOT_INDEX];
+            TMPro.TMP_Text healthBarText = healthBarTexts[SLOT_INDEX];
+            TMPro.TMP_Text nameText = nameTexts[SLOT_INDEX];
             
             if (healthBarSlider != null && healthBarFill != null && healthBarText != null && nameText != null)
             {
                 // Assign all health bar components to the enemy view
                 enemyView.AssignHealthBar(healthBarSlider, healthBarFill, healthBarText, nameText);
-                Debug.Log($"[EnemyBoardView] Assigned health bar components {enemyIndex} to enemy '{enemyData.EnemyName}'");
+                Debug.Log($"[EnemyBoardView] Assigned health bar components (slot {SLOT_INDEX}) to enemy '{enemyData.EnemyName}'");
             }
             else
             {
-                Debug.LogWarning($"[EnemyBoardView] One or more health bar components at index {enemyIndex} are null! Enemy '{enemyData.EnemyName}' will not have a complete health bar.");
+                Debug.LogWarning($"[EnemyBoardView] One or more health bar components at slot {SLOT_INDEX} are null! Enemy '{enemyData.EnemyName}' will not have a complete health bar.");
             }
         }
         else
         {
-            Debug.LogWarning($"[EnemyBoardView] Not enough health bar components for enemy at index {enemyIndex}. Assign health bar sliders, fills, texts, and name texts in Inspector or enemy '{enemyData.EnemyName}' will not display health.");
+            Debug.LogWarning($"[EnemyBoardView] Health bar components not configured for slot {SLOT_INDEX}. Assign health bar sliders, fills, texts, and name texts in Inspector or enemy '{enemyData.EnemyName}' will not display health.");
         }
     }
     
