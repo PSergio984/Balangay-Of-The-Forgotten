@@ -101,7 +101,18 @@ public class DealDamageEffect : Effects
         if (!hit)
         {
             Debug.Log($"[DealDamageEffect] Attack MISSED! Returning 0 damage.");
-            return new DealDamageGA(0, targets, caster);
+            // Filter out null targets for consistency
+            List<CombatantView> filteredMissTargets = new List<CombatantView>(targets.Count);
+            for (int i = 0; i < targets.Count; i++)
+            {
+                var target = targets[i];
+                if (target == null)
+                    continue;
+                filteredMissTargets.Add(target);
+                // Show miss popup for each valid target
+                DamagePopUp.Create(target.transform.position, 0, false, true);
+            }
+            return new DealDamageGA(0, filteredMissTargets, caster);
         }
 
         // Step 2: Calculate skill power using refactored method

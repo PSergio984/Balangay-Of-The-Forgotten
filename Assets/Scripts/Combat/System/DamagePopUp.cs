@@ -15,14 +15,16 @@ public class DamagePopUp : MonoBehaviour
         // Instantiate at target position first
         GameObject damagePopUpObj = Instantiate(GameAssets.i.pfDamagePopup, position, Quaternion.identity);
         DamagePopUp damagePopUp = damagePopUpObj.GetComponent<DamagePopUp>();
-        
-        if (damagePopUp != null)
+        if (damagePopUp == null)
         {
-            // Apply horizontal and vertical offset after instantiation
-            Vector3 offset = new Vector3(damagePopUp.spawnOffsetX, damagePopUp.spawnOffsetY, 0f);
-            damagePopUpObj.transform.position = position + offset;
-            damagePopUp.Setup(popUpAmount, isCrit, isMiss);
+            Debug.LogWarning("[DamagePopUp] Instantiated prefab is missing the DamagePopUp component. Destroying orphaned GameObject.");
+            Destroy(damagePopUpObj);
+            return null;
         }
+        // Apply horizontal and vertical offset after instantiation
+        Vector3 offset = new Vector3(damagePopUp.spawnOffsetX, damagePopUp.spawnOffsetY, 0f);
+        damagePopUpObj.transform.position = position + offset;
+        damagePopUp.Setup(popUpAmount, isCrit, isMiss);
         return damagePopUp;
     }
 

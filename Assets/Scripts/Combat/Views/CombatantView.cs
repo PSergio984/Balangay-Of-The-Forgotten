@@ -252,7 +252,6 @@ public class CombatantView : MonoBehaviour
         Defense = defense;
         if (spriteRenderer != null && image != null)
             spriteRenderer.sprite = image;
-        // Name is stored but not assigned to UI - will be set later in AssignHealthBar
     }
 
     private void UpdateHealth()
