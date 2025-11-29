@@ -19,6 +19,10 @@ MonoBehaviour:
   <MagicPower>k__BackingField: 0
   <Defense>k__BackingField: 80
   <AnimatorOverride>k__BackingField: {fileID: 22100000, guid: 27e6ad057bdfd654e90b5ae625d25d57, type: 2}
+  <BuildPresets>k__BackingField:
+  - {fileID: 11400000, guid: 818a4ddc9d0ec87439d439ffbcaaa6de, type: 2}
+  - {fileID: 11400000, guid: 7ba081303bba19b4db47a1e330fee984, type: 2}
+  - {fileID: 11400000, guid: 383b426c8b12c444ba46f756401c4a3e, type: 2}
   <Deck>k__BackingField:
   - {fileID: 11400000, guid: 16e7b9915493a294e9423ea47041a4c8, type: 2}
   - {fileID: 11400000, guid: d5e2ad42e7307d74590f2aa418fc078d, type: 2}

@@ -2,6 +2,14 @@
 
 This guide shows how to structure your UI for the new 4-slot character preset selection system.
 
+## ⚠️ Critical: Fixed Stats Architecture
+
+**IMPORTANT:** Build presets use **FIXED stats** that completely **override** hero base stats.
+
+- UI should display the preset's exact stats (e.g., HP: 650), not "Base + Modifier"
+- When showing preset details, use `SelectedPreset.Health`, NOT `Hero.Health + Preset.HealthModifier`
+- All stat displays must reference the preset's final values
+
 ---
 
 ## Required UI Structure

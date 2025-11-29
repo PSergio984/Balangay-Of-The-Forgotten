@@ -2,6 +2,14 @@
 
 # Character Preset System - Setup & Testing Guide
 
+## ⚠️ Critical: Fixed Stats Architecture
+
+**IMPORTANT:** Build presets use **FIXED stats** that completely **override** hero base stats (NOT additive modifiers).
+
+- When you create a preset, you set the exact final stats (e.g., HP=650, ATK=85)
+- Hero base stats are only used as templates for creating presets
+- In combat, only the preset's stats are used - hero base stats are ignored
+
 ## ✅ Implementation Complete
 
 The dynamic character preset selection system has been successfully implemented! Here's what was created:
@@ -157,10 +165,13 @@ private void Start()
 
 private void SpawnHeroFromSlot(CharacterSlotData slot, int spawnIndex)
 {
+   // CRITICAL: GetFinalStats returns preset's FIXED stats (overrides hero base stats)
    var (health, attack, magic, defense) = slot.GetFinalStats();
    Debug.Log($"[MatchSetupSystem] Spawning {slot.Hero.HeroName} with {slot.SelectedPreset.PresetName}");
-   Debug.Log($"  Stats: HP={health}, ATK={attack}, MAG={magic}, DEF={defense}");
-   // TODO: Instantiate hero prefab, apply stats, assign deck, set position by spawnIndex
+   Debug.Log($"  Final Stats (from preset): HP={health}, ATK={attack}, MAG={magic}, DEF={defense}");
+   // TODO: Instantiate hero prefab, apply preset stats (health, attack, magic, defense)
+   // DO NOT use slot.Hero.Health, slot.Hero.AttackPower, etc. - those are ignored!
+   // Assign deck from slot.Hero.Deck, set position by spawnIndex
 }
 ```
 

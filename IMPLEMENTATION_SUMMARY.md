@@ -1,8 +1,28 @@
 # Character Preset Selection System - Implementation Summary (Slot-Based, 4 Fixed Slots)
 
+> **📘 Canonical Model:** Build presets use **FIXED stats** that completely **OVERRIDE** hero base stats (NOT additive modifiers). Hero base stats serve as templates only; when a preset is selected, only the preset's stats are used in combat.
+
 ## ✅ Implementation Complete
 
 The slot-based character preset selection system is now implemented for the Balangay turn-based combat game.
+
+## ⚠️ Critical Design Decision: Fixed Stats Architecture
+
+**Build presets use FIXED stats that completely OVERRIDE hero base stats (NOT additive modifiers).**
+
+### Why Fixed Stats:
+
+- **Clarity:** Each preset shows exact final stats - no mental math
+- **Balance:** Designers control precise values without cascading effects
+- **Simplicity:** No edge cases with negative modifiers or stat floors
+- **Artist Intent:** Preset sprites show exact stats matching combat values
+
+### Testing Requirements:
+
+- Verify all stat displays show preset values (not base + modifier)
+- Test that combat uses preset stats exclusively (hero base stats ignored)
+- Validate stat balance across all hero+preset combinations
+- Ensure preset sprites match the actual stat values
 
 ---
 
@@ -10,21 +30,21 @@ The slot-based character preset selection system is now implemented for the Bala
 
 ### Core Data Classes
 
-| File                           | Location                             | Purpose                                                                  |
-| ------------------------------ | ------------------------------------ | ------------------------------------------------------------------------ |
-| `CharacterBuildPreset.cs`      | `Assets/Scripts/Combat/Data/`        | ScriptableObject for build variants (sprite, name, stat modifiers)       |
-| `CharacterSlotData.cs`         | `Assets/Scripts/CharacterSelection/` | Tracks slot selection (Hero, Preset, SlotIndex)                          |
-| `CharacterTransitionData.cs`   | `Assets/Scripts/SceneController/`    | ScriptableObject mailbox for passing CharacterSlotData[4] between scenes |
-| `HeroData.cs`                  | `Assets/Scripts/Combat/Data/`        | ScriptableObject for hero base stats, now with BuildPresets list         |
-| `CharacterSelectionManager.cs` | `Assets/Scripts/CharacterSelection/` | Manages card generation, slot selection, and transition data             |
+| File                           | Location                             | Purpose                                                                                             |
+| ------------------------------ | ------------------------------------ | --------------------------------------------------------------------------------------------------- |
+| `CharacterBuildPreset.cs`      | `Assets/Scripts/Combat/Data/`        | ScriptableObject for build variants (sprite, name, FIXED stat values that override hero base stats) |
+| `CharacterSlotData.cs`         | `Assets/Scripts/CharacterSelection/` | Tracks slot selection (Hero, Preset, SlotIndex)                                                     |
+| `CharacterTransitionData.cs`   | `Assets/Scripts/SceneController/`    | ScriptableObject mailbox for passing CharacterSlotData[4] between scenes                            |
+| `HeroData.cs`                  | `Assets/Scripts/Combat/Data/`        | ScriptableObject for hero base stats, now with BuildPresets list                                    |
+| `CharacterSelectionManager.cs` | `Assets/Scripts/CharacterSelection/` | Manages card generation, slot selection, and transition data                                        |
 
 ### UI and Integration Scripts
 
-| File                   | Purpose                                                                                               |
-| ---------------------- | ----------------------------------------------------------------------------------------------------- |
-| `MainSelectionUI.cs`   | Handles 4 slot UI, preset selection, and saving to CharacterTransitionData                            |
-| `PresetSelectionUI.cs` | Shows 3 preset options for a hero, notifies MainSelectionUI                                           |
-| `MatchSetupSystem.cs`  | Reads CharacterTransitionData.CharacterSlots[], spawns heroes in slot order, applies preset modifiers |
+| File                   | Purpose                                                                                                                            |
+| ---------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
+| `MainSelectionUI.cs`   | Handles 4 slot UI, preset selection, and saving to CharacterTransitionData                                                         |
+| `PresetSelectionUI.cs` | Shows 3 preset options for a hero, notifies MainSelectionUI                                                                        |
+| `MatchSetupSystem.cs`  | Reads CharacterTransitionData.CharacterSlots[], spawns heroes in slot order, uses preset's FIXED stats (overrides hero base stats) |
 
 ---
 
@@ -61,11 +81,11 @@ The slot-based character preset selection system is now implemented for the Bala
 │                        COMBAT SCENE                         │
 ├──────────────────────────────────────────────────────────────┤
 │                                                              │
-│  ┌──────────────────────────────────────────────────────┐    │
+│  ┌──────────────────────────────────────────────────────────┐    │
 │  │          MatchSetupSystem                            │    │
 │  │  - Reads CharacterSlots[]                            │    │
 │  │  - Spawns heroes in slot order                       │    │
-│  │  - Applies preset modifiers                          │    │
+│  │  - Uses preset FIXED stats (overrides hero base)    │    │
 │  └──────────────────────────────────────────────────────┘    │
 │                                                              │
 └──────────────────────────────────────────────────────────────┘
@@ -86,7 +106,7 @@ The slot-based character preset selection system is now implemented for the Bala
 ## 🚀 Quick Start (Summary)
 
 1. Create 12 preset sprites (4 heroes × 3 presets)
-2. Create 12 CharacterBuildPreset assets (assign sprite, name, stat modifiers)
+2. Create 12 CharacterBuildPreset assets (assign sprite, name, FIXED stat values)
 3. Create 4 HeroData assets (each with BuildPresets list)
 4. Create 1 CharacterTransitionData asset
 5. Build MainSelectionCanvas and PresetSelectionCanvas as per CORRECTED_ARCHITECTURE.md (**see CORRECTED_ARCHITECTURE.md before following UI steps**)
@@ -110,7 +130,7 @@ The slot-based character preset selection system is now implemented for the Bala
 ### Combat Scene
 
 - [ ] Heroes from all filled slots spawn in combat
-- [ ] Heroes have correct stats from HeroData and preset modifiers
+- [ ] Heroes have correct stats from preset FIXED values (NOT hero base stats)
 - [ ] Heroes have correct decks
 - [ ] Heroes have correct animations
 - [ ] Console shows hero spawn messages
@@ -227,7 +247,7 @@ foreach (var slot in transitionData.CharacterSlots)
 {
 	if (slot != null && slot.Hero != null && slot.SelectedPreset != null)
 	{
-		// Apply preset modifiers to hero's base stats
+		// GetFinalStats returns preset's FIXED stats (overrides hero base stats)
 		var (finalHealth, finalAttack, finalMagic, finalDefense) = slot.GetFinalStats();
 		SpawnHeroWithStats(slot.Hero, finalHealth, finalAttack, finalMagic, finalDefense);
 	}

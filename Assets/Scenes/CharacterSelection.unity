@@ -238,6 +238,7 @@ MonoBehaviour:
   hoveredCard: {fileID: 0}
   slotPrefab: {fileID: 3655645598659960977, guid: e26e123df0b787c4182caebfe5b86dbd, type: 3}
   cardsToSpawn: 4
+  autoSpawnOnStart: 1
   characterCards: []
   tweenCardReturn: 1
 --- !u!1 &505382869
@@ -848,7 +849,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1755868717
 RectTransform:
   m_ObjectHideFlags: 0

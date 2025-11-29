@@ -2,6 +2,14 @@
 
 This is the absolute minimum to get the new 4-slot character preset selection system working.
 
+## ⚠️ Critical: Fixed Stats Architecture
+
+**Build presets use FIXED stats (not modifiers):**
+
+- When creating presets, set exact final stat values (e.g., Health=650, not +50)
+- Hero base stats are ignored when a preset is selected
+- In combat, only preset stats are used
+
 ---
 
 ## ⏱️ Step 1: Create Core Assets (2 minutes)
@@ -15,7 +23,8 @@ For each hero you want to test:
 3. Name: e.g., `TestWarrior_GlassCannon`
 4. Assign a test sprite (can be any image for now)
 5. Set PresetName (e.g., "Glass Cannon Set")
-6. Set stat modifiers (can leave at 0 for testing)
+6. Set FIXED stat values (NOT modifiers): Health=650, AttackPower=85, etc.
+   (These are the exact stats that will be used in combat)
 
 Repeat for at least 1 hero with 1-3 presets.
 

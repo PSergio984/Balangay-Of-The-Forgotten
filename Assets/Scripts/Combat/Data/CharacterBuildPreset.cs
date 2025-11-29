@@ -2,20 +2,20 @@ using UnityEngine;
 using Sirenix.OdinInspector;
 
 /* CHARACTER BUILD PRESET
- * 
+ *
  * Purpose: Defines a specific build/loadout for a hero (Glass Cannon, Berserker, Bruiser, etc.)
- * 
+ *
  * How it works:
  * - Each hero has multiple build presets (3 shown in selection UI)
  * - Each preset has its own sprite with baked-in stats/name
- * - Preset applies stat modifiers to base hero stats
+ * - Preset defines fixed stats (overrides hero base stats)
  * - Selected preset gets passed to combat along with HeroData
- * 
+ *
  * Integration: Referenced by HeroData, selected in PresetSelectionUI, passed via CharacterTransitionData
  */
 
 /// <summary>
-/// Defines a character build preset with visual sprite and stat modifiers
+/// Defines a character build preset with visual sprite and fixed stats (overrides hero base stats)
 /// </summary>
 [CreateAssetMenu(fileName = "CharacterBuildPreset", menuName = "Data/Character Build Preset")]
 public class CharacterBuildPreset : ScriptableObject
@@ -37,32 +37,32 @@ public class CharacterBuildPreset : ScriptableObject
     [field: InfoBox("Examples: 'Glass Cannon Set', 'Berserker Set', 'Bruiser Set'")]
     public string PresetName { get; private set; }
     
-    [Title("Stat Modifiers", "Applied to base hero stats", TitleAlignments.Centered)]
-    
+    [Title("Preset Stats", "These values override the hero's base stats when this preset is selected", TitleAlignments.Centered)]
+
     [HorizontalGroup("Health")]
     [field: SerializeField]
-    [field: LabelText("Health Modifier")]
-    [field: Range(-50, 100)]
-    [field: InfoBox("Final HP: Base + HealthModifier (actual value depends on assigned hero)", InfoMessageType.None)]
-    public int HealthModifier { get; private set; }
-    
+    [field: LabelText("Health (Override)")]
+    [field: Range(50, 2000)]
+    [field: InfoBox("Final HP: This value will override the hero's base Health when this preset is selected.", InfoMessageType.None)]
+    public int Health { get; private set; }
+
     [HorizontalGroup("Attack")]
     [field: SerializeField]
-    [field: LabelText("Attack Modifier")]
-    [field: Range(-50f, 100f)]
-    public float AttackModifier { get; private set; }
-    
+    [field: LabelText("Attack Power (Override)")]
+    [field: Range(0, 400)]
+    public float AttackPower { get; private set; }
+
     [HorizontalGroup("Magic")]
     [field: SerializeField]
-    [field: LabelText("Magic Modifier")]
-    [field: Range(-50f, 100f)]
-    public float MagicModifier { get; private set; }
-    
+    [field: LabelText("Magic Power (Override)")]
+    [field: Range(0, 400)]
+    public float MagicPower { get; private set; }
+
     [HorizontalGroup("Defense")]
     [field: SerializeField]
-    [field: LabelText("Defense Modifier")]
-    [field: Range(-50f, 100f)]
-    public float DefenseModifier { get; private set; }
+    [field: LabelText("Defense (Override)")]
+    [field: Range(1, 400)]
+    public float Defense { get; private set; }
     
     [Title("Build Description")]
     
@@ -73,14 +73,10 @@ public class CharacterBuildPreset : ScriptableObject
     public string Description { get; private set; }
     
     /// <summary>
-    /// Applies this preset's modifiers to base stats
+    /// Returns the fixed stats for this preset (overrides hero base stats)
     /// </summary>
-    public (int health, float attack, float magic, float defense) ApplyModifiers(int baseHealth, float baseAttack, float baseMagic, float baseDefense)
+    public (int health, float attack, float magic, float defense) GetPresetStats()
     {
-        int health = Mathf.Max(0, baseHealth + HealthModifier);
-        float attack = Mathf.Max(0.0f, baseAttack + AttackModifier);
-        float magic = Mathf.Max(0.0f, baseMagic + MagicModifier);
-        float defense = Mathf.Max(0.0f, baseDefense + DefenseModifier);
-        return (health, attack, magic, defense);
+        return (Health, AttackPower, MagicPower, Defense);
     }
 }

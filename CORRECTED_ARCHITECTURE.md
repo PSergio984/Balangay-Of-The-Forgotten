@@ -8,6 +8,24 @@ This system allows players to select 4 character slots, each mapped to a specifi
 
 > **Implemented:** Only Option A (fixed slot mapping) is supported. Each slot is hard-mapped to a hero. Player-selectable hero assignment (Option B) is not implemented in this branch. See the "Critical Design Decisions" section for details.
 
+### ⚠️ Critical Design Decision: Fixed Stats vs Modifiers
+
+**IMPORTANT:** Build presets provide **FIXED stats** that completely **override** hero base stats (not additive modifiers).
+
+**Why Fixed Stats:**
+
+- **Clarity:** Each preset shows exact final stats - no mental math needed
+- **Balance:** Designers control precise stat values per build without cascading effects
+- **Simplicity:** No edge cases with negative modifiers, stat floors, or multiplication orders
+- **Artist Intent:** Preset sprites show exact stats, which match the actual values used in combat
+
+**Implications:**
+
+- Hero base stats (`HeroData.Health`, etc.) are only used as defaults/templates
+- When a preset is selected, **only the preset's stats** are used in combat
+- UI must display preset stats, not "base + modifier"
+- All combat calculations use `CharacterSlotData.GetFinalStats()` which returns preset stats directly
+
 ---
 
 ## Visual Flow
@@ -69,24 +87,27 @@ This system allows players to select 4 character slots, each mapped to a specifi
 ```csharp
 using UnityEngine;
 
+/// <summary>
+/// Build preset with FIXED stats (overrides hero base stats completely)
+/// </summary>
 public class CharacterBuildPreset : ScriptableObject
 {
     public Sprite PresetSprite; // Sprite with baked-in name + stats
     public string PresetName;   // e.g., "Glass Cannon Set"
-    public int HealthModifier;
-    public int AttackModifier;
-    public int MagicModifier;
-    public int DefenseModifier;
+
+    // These are FIXED stat values, not modifiers
+    public int Health;          // Final HP for this build (e.g., 650)
+    public float AttackPower;   // Final ATK for this build (e.g., 85)
+    public float MagicPower;    // Final MAG for this build (e.g., 45)
+    public float Defense;       // Final DEF for this build (e.g., 10)
 
     /// <summary>
-    /// (No-op) Stat combination is handled by CharacterSlotData.GetFinalStats.
-    /// This method is intentionally left empty. To get the final stats, use:
-    ///   slot.GetFinalStats() // sums hero base stats + preset modifiers
-    /// Calculation order: final = hero base + preset modifier (no mutation)
+    /// Returns the fixed stats for this preset (overrides hero base stats completely).
+    /// Design: These are NOT modifiers. These ARE the final stat values.
     /// </summary>
-    public void ApplyModifiers(HeroData hero)
+    public (int health, float attack, float magic, float defense) GetPresetStats()
     {
-        // No-op: see CharacterSlotData.GetFinalStats for stat calculation logic
+        return (Health, AttackPower, MagicPower, Defense);
     }
 }
 ```
@@ -112,6 +133,9 @@ public class HeroData : ScriptableObject
 ### 3. CharacterSlotData (Class)
 
 ```csharp
+/// <summary>
+/// Tracks slot selection. IMPORTANT: GetFinalStats returns preset's FIXED stats (not base + modifier).
+/// </summary>
 public class CharacterSlotData
 {
     public HeroData Hero { get; set; }
@@ -120,6 +144,8 @@ public class CharacterSlotData
 
     public CharacterSlotData(int slotIndex)
     {
+        if (slotIndex < 0 || slotIndex > 3)
+            throw new ArgumentOutOfRangeException(nameof(slotIndex));
         SlotIndex = slotIndex;
         Hero = null;
         SelectedPreset = null;
@@ -127,22 +153,18 @@ public class CharacterSlotData
 
     public bool IsComplete => Hero != null && SelectedPreset != null;
 
-    public (int health, float attack, float magic, float defense) GetFinalStats()
+    /// <summary>
+    /// Returns the FIXED stats from the selected preset (overrides hero base stats).
+    /// Design: Preset stats completely replace hero base stats.
+    /// </summary>
+    public (int Health, float Attack, float Magic, float Defense) GetFinalStats()
     {
-        if (Hero == null)
-            return (0, 0, 0, 0);
-        int health = Hero.BaseHealth;
-        float attack = Hero.BaseAttack;
-        float magic = Hero.BaseMagic;
-        float defense = Hero.BaseDefense;
-        if (SelectedPreset != null)
-        {
-            health += SelectedPreset.HealthModifier;
-            attack += SelectedPreset.AttackModifier;
-            magic += SelectedPreset.MagicModifier;
-            defense += SelectedPreset.DefenseModifier;
-        }
-        return (health, attack, magic, defense);
+        if (Hero == null || SelectedPreset == null)
+            return (Health: 0, Attack: 0, Magic: 0, Defense: 0);
+
+        // Preset provides fixed stats (not modifiers) - hero base stats are ignored
+        var (health, attack, magic, defense) = SelectedPreset.GetPresetStats();
+        return (Health: health, Attack: attack, Magic: magic, Defense: defense);
     }
 }
 ```
@@ -227,8 +249,9 @@ public class CharacterTransitionData : ScriptableObject
 // Modified to:
 - Read CharacterSlots[] from CharacterTransitionData
 - Spawn heroes in slot order (0, 1, 2, 3)
-- Apply preset modifiers to base stats
+- Use preset's FIXED stats (via slot.GetFinalStats()) - hero base stats are NOT used
 - Attack order follows slot order
+// CRITICAL: Do NOT reference hero.BaseHealth, etc. Always use slot.GetFinalStats()
 ```
 
 ---
@@ -247,10 +270,16 @@ For each hero (Mandirigma, Manggagayaw, Bagani, Babaylan):
    - Assets/Data/Presets/Mandirigma_Berserker.asset
    - Assets/Data/Presets/Mandirigma_Bruiser.asset
 
-2. For each preset, set:
+2. For each preset, set FIXED stat values (NOT modifiers):
    - PresetSprite: Assign the sprite containing character + build info + stats
    - PresetName: "Glass Cannon Set", etc.
-   - Stat Modifiers: +50 ATK, -100 HP, etc.
+   - Health: 650 (FIXED value, not +/- modifier)
+   - AttackPower: 85 (FIXED value)
+   - MagicPower: 45 (FIXED value)
+   - Defense: 10 (FIXED value)
+
+IMPORTANT: These are the EXACT stats that will be used in combat.
+The sprite should show these same values for consistency.
 ```
 
 #### 2. Update Hero Data Assets
@@ -258,7 +287,10 @@ For each hero (Mandirigma, Manggagayaw, Bagani, Babaylan):
 ```
 For each HeroData asset:
 1. Add the 3 build presets to BuildPresets list
-2. Verify base stats are set correctly
+2. Set base stats (Health, AttackPower, etc.) - these are used as templates only
+
+NOTE: Hero base stats are NOT used when a preset is selected.
+They serve as reference/default values for designers creating presets.
 ```
 
 #### 3. Create CharacterTransitionData Asset
@@ -540,17 +572,18 @@ private void Start()
 
 private void SpawnHeroFromSlot(CharacterSlotData slot, int spawnIndex)
 {
-    // Get final stats with preset modifiers
+    // CRITICAL: GetFinalStats returns preset's FIXED stats (not base + modifier)
     var (health, attack, magic, defense) = slot.GetFinalStats();
 
     Debug.Log($"[MatchSetupSystem] Spawning {slot.Hero.HeroName} with {slot.SelectedPreset.PresetName}");
-    Debug.Log($"  Stats: HP={health}, ATK={attack}, MAG={magic}, DEF={defense}");
+    Debug.Log($"  Final Stats (from preset): HP={health}, ATK={attack}, MAG={magic}, DEF={defense}");
 
     // TODO: Your existing hero spawning logic
     // - Instantiate hero prefab
-    // - Apply modified stats
+    // - Apply preset stats (health, attack, magic, defense) - DO NOT use slot.Hero.Health, etc.
     // - Set position based on spawnIndex
     // - Assign deck from slot.Hero.Deck
+    // - Assign animator from slot.Hero.AnimatorOverride
 }
 ```
 

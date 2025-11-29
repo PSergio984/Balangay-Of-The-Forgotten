@@ -9,7 +9,13 @@ using System;
  * - Each of the 4 slots has its own CharacterSlotData
  * - Slot order determines spawn/attack order in combat
  * - Stores both the hero and their selected build preset
+ * - IMPORTANT: Selected preset provides FIXED stats that completely override hero base stats
  * - Gets passed to MatchSetupSystem for spawning
+ * 
+ * Design Decision: Presets use fixed stats (not modifiers) for:
+ *   - Clarity: Each preset shows exact final stats, no mental math required
+ *   - Balance: Designers control exact stat values per build
+ *   - Simplicity: No edge cases with negative modifiers or stat floors
  * 
  * Integration: Created by main selection UI, stored in CharacterTransitionData, read by MatchSetupSystem
  */
@@ -67,20 +73,19 @@ public class CharacterSlotData
     }
     
     /// <summary>
-    /// Gets the final stats after applying preset modifiers
+    /// Gets the final stats from the selected preset (overrides hero base stats completely).
+    /// Returns a named tuple for IntelliSense support.
+    /// Design: Presets provide fixed stats, not modifiers. Hero base stats are ignored when preset is selected.
     /// </summary>
-    public (int health, float attack, float magic, float defense) GetFinalStats()
+    public (int Health, float Attack, float Magic, float Defense) GetFinalStats()
     {
         if (Hero == null || SelectedPreset == null)
         {
-            return (0, 0, 0, 0);
+            return (Health: 0, Attack: 0, Magic: 0, Defense: 0);
         }
-        
-        return SelectedPreset.ApplyModifiers(
-            Hero.Health,
-            Hero.AttackPower,
-            Hero.MagicPower,
-            Hero.Defense
-        );
+
+        // Preset now provides fixed stats (overrides hero base stats)
+        var (health, attack, magic, defense) = SelectedPreset.GetPresetStats();
+        return (Health: health, Attack: attack, Magic: magic, Defense: defense);
     }
 }

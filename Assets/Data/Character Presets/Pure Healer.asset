@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9081873033961a4479294312f055a96f, type: 3}
+  m_Name: Pure Healer
+  m_EditorClassIdentifier: Assembly-CSharp::CharacterBuildPreset
+  <PresetSprite>k__BackingField: {fileID: 21300000, guid: 4342daa8a84a2e843a1dc25a06f2b341, type: 3}
+  <PresetName>k__BackingField: Pure Healer
+  <Health>k__BackingField: 500
+  <AttackPower>k__BackingField: 220
+  <MagicPower>k__BackingField: 0
+  <Defense>k__BackingField: 70
+  <Description>k__BackingField: 
