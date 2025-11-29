@@ -171,6 +171,7 @@ public class CombatantView : MonoBehaviour
         /// The magic power stat of this combatant (used for magic skills)
         /// </summary>
         public float MagicPower { get; protected set; }
+        
 
     /// <summary>
     /// Validates and caches component references

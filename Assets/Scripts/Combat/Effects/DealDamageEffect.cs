@@ -152,6 +152,7 @@ public class DealDamageEffect : Effects
             Debug.Log($"[DealDamageEffect] Final damage for target {i}: {finalDamage} (SkillPower={skillPower}, Coeff={coefficient}, Def={targetDefense}, Crit={critMultiplier})");
             filteredTargets.Add(target);
             filteredDamages.Add(finalDamage);
+            DamagePopUp.Create(target.transform.position, Mathf.RoundToInt(finalDamage), isCrit, !hit);
         }
 
         // Use the per-target damage constructor to properly apply defense-based calculations
