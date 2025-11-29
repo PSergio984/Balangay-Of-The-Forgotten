@@ -107,8 +107,6 @@ public class DamageSystem : MonoBehaviour
         for (int i = 0; i < dealDamageGA.Targets.Count; i++)
         {
             var target = dealDamageGA.Targets[i];
-            
-            // Check if target still exists (might have been destroyed by previous damage)
             if (target == null)
             {
                 continue; // Skip this target and move to the next one
@@ -116,34 +114,37 @@ public class DamageSystem : MonoBehaviour
 
             // Determine damage amount: use per-target if available, otherwise uniform amount
             float damageAmount = (hasPerTargetDamages) ? dealDamageGA.PerTargetDamages[i] : dealDamageGA.Amount;
-            
+
+            // Find the sprite renderer to get the correct visual position
+            SpriteRenderer spriteRenderer = target.GetComponentInChildren<SpriteRenderer>();
+            Vector3 popupPosition = spriteRenderer != null ? spriteRenderer.transform.position : target.transform.position;
+
+            // Determine if this was a miss or crit (by convention: if damageAmount == 0, it's a miss)
+            bool isMiss = damageAmount == 0f;
+            // If DealDamageGA has a crit info, you can extend this logic; for now, assume no crit info, so always false
+            bool isCrit = false;
+            // Show the popup before applying damage for immediate feedback
+            DamagePopUp.Create(popupPosition, Mathf.RoundToInt(damageAmount), isCrit, isMiss);
+
             // Apply the damage amount to this target (reduces their health)
             target.Damage(Mathf.RoundToInt(damageAmount));
 
             // Check if target still exists after taking damage (safety check)
             if (target != null)
             {
-                // Find the sprite renderer to get the correct visual position
-                SpriteRenderer spriteRenderer = target.GetComponentInChildren<SpriteRenderer>();
-                Vector3 vfxPosition = spriteRenderer != null ? spriteRenderer.transform.position : target.transform.position;
-
                 // Spawn a visual effect at the sprite's position to show damage was dealt
-                Instantiate(damageVFX, vfxPosition, Quaternion.identity);
+                Instantiate(damageVFX, popupPosition, Quaternion.identity);
             }
-            
+
             // Wait 0.15 seconds before damaging the next target (for visual timing)
             yield return new WaitForSeconds(0.15f);
-            
+
             // Check if the target died from the damage and handle death
-            // After dealing damage, check if the target's health reached zero or below.
-            // If it's an enemy that died, create a KillEnemyGA action to remove them.
-            // Hero death handling is planned for future implementation.
-            // Check if the target still exists and died from the damage
             if(target != null && target.CurrentHealth <= 0)
-                {
+            {
                 // Play death animation before processing death
                 target.PlayAnimation(CombatantAnimState.Dead);
-                
+
                 // If the target is an enemy that died, create a kill enemy action
                 if (target is EnemyView enemyView)
                 {
@@ -157,7 +158,7 @@ public class DamageSystem : MonoBehaviour
                     //nothing here for now
                     //handles heroes death        
                 }
-                }
+            }
         }
         // Wait one frame before continuing (required for coroutines)
         yield return null;

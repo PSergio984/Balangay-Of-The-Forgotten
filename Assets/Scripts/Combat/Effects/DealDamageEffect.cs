@@ -109,8 +109,7 @@ public class DealDamageEffect : Effects
                 if (target == null)
                     continue;
                 filteredMissTargets.Add(target);
-                // Show miss popup for each valid target
-                DamagePopUp.Create(target.transform.position, 0, false, true);
+                // DamagePopUp will be created in DamageSystem per target
             }
             return new DealDamageGA(0, filteredMissTargets, caster);
         }
@@ -163,7 +162,7 @@ public class DealDamageEffect : Effects
             Debug.Log($"[DealDamageEffect] Final damage for target {i}: {finalDamage} (SkillPower={skillPower}, Coeff={coefficient}, Def={targetDefense}, Crit={critMultiplier})");
             filteredTargets.Add(target);
             filteredDamages.Add(finalDamage);
-            DamagePopUp.Create(target.transform.position, Mathf.RoundToInt(finalDamage), isCrit, !hit);
+            // DamagePopUp will be created in DamageSystem per target
         }
 
         // Use the per-target damage constructor to properly apply defense-based calculations
