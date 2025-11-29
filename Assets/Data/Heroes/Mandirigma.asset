@@ -20,6 +20,8 @@ MonoBehaviour:
   <Defense>k__BackingField: 125
   <AnimatorOverride>k__BackingField: {fileID: 22100000, guid: 42db0f552efe2fe43ab1371ee3fdd04f, type: 2}
   <Deck>k__BackingField:
+  - {fileID: 11400000, guid: 8b5d7a1c6cdfa0446a52eea399fc2ab1, type: 2}
+  - {fileID: 11400000, guid: 84fb868badf54b64a82197a7933dc990, type: 2}
   - {fileID: 11400000, guid: 5efc5dbdf3e70f54388d290bb88aa14c, type: 2}
   - {fileID: 11400000, guid: 6b054a64db2681b469a97659f722185d, type: 2}
   - {fileID: 11400000, guid: b7132fd677565c5478e40a6fd9c24b10, type: 2}
