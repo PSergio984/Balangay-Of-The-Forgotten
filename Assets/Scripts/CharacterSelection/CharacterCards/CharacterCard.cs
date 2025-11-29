@@ -49,7 +49,7 @@ public class CharacterCard : MonoBehaviour, IDragHandler, IBeginDragHandler, IEn
         if (!instantiateVisual)
             return;
 
-        visualHandler = FindObjectOfType<VisualCharacterCardsHandler>();
+        visualHandler = FindAnyObjectByType<VisualCharacterCardsHandler>();
         CharacterCardVisual = Instantiate(CharacterCardVisualPrefab, visualHandler ? visualHandler.transform : canvas.transform).GetComponent<CharacterCardVisual>();
         CharacterCardVisual.Initialize(this);
     }
