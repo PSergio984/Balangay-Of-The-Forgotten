@@ -62,36 +62,33 @@ public class DamagePopUp : MonoBehaviour
         {
             textMesh.text = "MISS";
             textColor = Color.gray;
-            return;
         }
-        if (isCrit)
+        else if (isCrit)
         {
+            textMesh.text = popUpAmount.ToString();
             textColor = Color.red;
         }
-
         else
         {
+            textMesh.text = popUpAmount.ToString();
             textColor = Color.white;
         }
 
-        textMesh.text = popUpAmount.ToString();
         textMesh.color = textColor;
 
         disappearTimer = DISAPPEAR_TIMER_MAX;
 
         sortingOrder++;
-        // Set Canvas sorting order for popup stacking
         if (canvas != null)
         {
             canvas.overrideSorting = true;
             canvas.sortingOrder = sortingOrder;
         }
 
-        // Vertical-only movement with configurable speed (no diagonal drift)
         moveVector = Vector3.up * moveSpeed;
-        // Reset scale to initial value at setup
         transform.localScale = initialScale;
     }
+
 
 
 
