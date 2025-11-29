@@ -26,6 +26,9 @@ public class CharacterCard : MonoBehaviour, IDragHandler, IBeginDragHandler, IEn
     [Header("Visual")]
     [SerializeField] private GameObject CharacterCardVisualPrefab;
     [HideInInspector] public CharacterCardVisual CharacterCardVisual;
+    
+    [Header("Data Binding")]
+    [HideInInspector] public HeroData BoundHeroData;
 
     [Header("States")]
     public bool isHovering;
@@ -52,6 +55,35 @@ public class CharacterCard : MonoBehaviour, IDragHandler, IBeginDragHandler, IEn
         visualHandler = FindAnyObjectByType<VisualCharacterCardsHandler>();
         CharacterCardVisual = Instantiate(CharacterCardVisualPrefab, visualHandler ? visualHandler.transform : canvas.transform).GetComponent<CharacterCardVisual>();
         CharacterCardVisual.Initialize(this);
+
+        // If BoundHeroData was set before Start, update the visual
+        if (BoundHeroData != null)
+        {
+            CharacterCardVisual.UpdateCharacterData(BoundHeroData);
+        }
+    }
+    
+    /// <summary>
+    /// Initializes this card with hero data for display and selection
+    /// </summary>
+    /// <param name="heroData">The hero data to bind to this card</param>
+    /// <remarks>
+    /// Called by CharacterSelectionManager when dynamically spawning cards.
+    /// Updates the visual representation to show character information.
+    /// </remarks>
+    public void Initialize(HeroData heroData)
+    {
+        if (heroData == null)
+        {
+            Debug.LogError("[CharacterCard] Initialize called with null heroData.");
+            return;
+        }
+        BoundHeroData = heroData;
+        // Update visual representation if already created
+        if (CharacterCardVisual != null)
+        {
+            CharacterCardVisual.UpdateCharacterData(BoundHeroData);
+        }
     }
 
     void Update()

@@ -66,6 +66,7 @@ MonoBehaviour:
   selectionOffset: 25
   CharacterCardVisualPrefab: {fileID: 7310339964073049012, guid: e3ddcc5c2eee70541ac49a157e83de5e, type: 3}
   CharacterCardVisual: {fileID: 0}
+  BoundHeroData: {fileID: 0}
   isHovering: 0
   isDragging: 0
   wasDragged: 0

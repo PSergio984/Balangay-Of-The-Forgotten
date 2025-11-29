@@ -27,6 +27,11 @@ public class CharacterCardVisual : MonoBehaviour
     [SerializeField] private Transform shakeParent;
     [SerializeField] private Transform tiltParent;
     [SerializeField] private Image cardImage;
+    
+    [Header("Character Data Display")]
+    [SerializeField] private Image characterPortrait;
+    [SerializeField] private TMPro.TMP_Text characterNameText;
+    [SerializeField] private TMPro.TMP_Text healthText;
 
     [Header("Follow Parameters")]
     [SerializeField] private float followSpeed = 30;
@@ -94,6 +99,38 @@ public class CharacterCardVisual : MonoBehaviour
     public void UpdateIndex(int length)
     {
         transform.SetSiblingIndex(parentCard.transform.parent.GetSiblingIndex());
+    }
+    
+    /// <summary>
+    /// Updates the visual display to show character-specific data
+    /// </summary>
+    /// <param name="heroData">The hero data to display</param>
+    /// <remarks>
+    /// Called when a card is bound to specific character data.
+    /// Updates portrait, name, and stats display.
+    /// </remarks>
+    public void UpdateCharacterData(HeroData heroData)
+    {
+        if (heroData == null) return;
+        
+        // Update character portrait
+        if (characterPortrait != null && heroData.Image != null)
+        {
+            characterPortrait.sprite = heroData.Image;
+        }
+        
+        // Update character name
+            if (characterNameText != null && heroData != null)
+            {
+                string safeName = string.IsNullOrWhiteSpace(heroData.HeroName) ? "Unknown" : heroData.HeroName.Trim();
+                characterNameText.text = safeName;
+            }
+        
+        // Update health display
+        if (healthText != null)
+        {
+            healthText.text = $"HP: {heroData.Health}";
+        }
     }
 
     void Update()

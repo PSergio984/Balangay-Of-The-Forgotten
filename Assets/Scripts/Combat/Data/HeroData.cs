@@ -60,6 +60,16 @@ public class HeroData : ScriptableObject
     [field: AssetsOnly]
     public AnimatorOverrideController AnimatorOverride { get; private set; }
 
+    [Title("Build Presets", "Available build variants for this hero", TitleAlignments.Centered)]
+    [field: SerializeField]
+    [field: LabelText("Available Build Presets")]
+    [field: Required("Hero needs at least one build preset!")]
+    [field: AssetsOnly]
+    [field: ListDrawerSettings(ShowIndexLabels = true, DraggableItems = false, NumberOfItemsPerPage = 3)]
+    [field: InfoBox("Typically 3 presets: Glass Cannon, Berserker, Bruiser, etc.\nEach preset has its own sprite with baked-in stats/name display.")]
+    [field: ValidateInput("@ValidatePresets()", "Must have at least 1 preset, recommended 3")]
+    public List<CharacterBuildPreset> BuildPresets { get; private set; }
+
     [Title("Hero Deck", "Cards available to this hero", TitleAlignments.Centered)]
     [field: SerializeField]
     [field: LabelText("Starting Deck")]
@@ -78,6 +88,16 @@ public class HeroData : ScriptableObject
         
         // Check for reasonable deck size
         if (Deck.Count < 5 || Deck.Count > 50) return false;
+        
+        return true;
+    }
+    
+    private bool ValidatePresets()
+    {
+        if (BuildPresets == null || BuildPresets.Count == 0) return false;
+        
+        // Check for null presets
+        if (BuildPresets.Any(preset => preset == null)) return false;
         
         return true;
     }

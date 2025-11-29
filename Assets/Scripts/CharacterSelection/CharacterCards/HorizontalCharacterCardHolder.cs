@@ -6,16 +6,26 @@ using UnityEngine;
 using DG.Tweening;
 using System.Linq;
 
+
+/// <summary>
+/// BREAKING CHANGE (vNEXT):
+/// - HorizontalCharacterCardHolder now supports multi-card spawning (cardsToSpawn, default 7).
+/// - Legacy prefabs/scenes that expect a single slot must set cardsToSpawn=1 and autoSpawnOnStart=true to preserve old behavior.
+/// - autoSpawnOnStart now defaults to false for safety; set to true only if you want automatic card spawning on Start.
+/// - If using CharacterSelectionManager for dynamic card generation, leave autoSpawnOnStart as false.
+/// </summary>
 public class HorizontalCharacterCardHolder : MonoBehaviour
 {
-
     [SerializeField] private CharacterCard selectedCard;
     [SerializeReference] private CharacterCard hoveredCard;
     [SerializeField] private GameObject slotPrefab;
     private RectTransform rect;
-
     [Header("Spawn Settings")]
+    [Tooltip("Number of cards to spawn if autoSpawnOnStart is true. Default is 7. Set to 1 for legacy single-slot behavior. (See migration note at top of script.)")]
     [SerializeField] private int cardsToSpawn = 7;
+    [Tooltip("If true, will spawn cards on Start (legacy: set true for old behavior). If using CharacterSelectionManager for dynamic generation, leave false. (See migration note at top of script.)")]
+    [SerializeField] private bool autoSpawnOnStart = false;
+
     public List<CharacterCard> characterCards;
 
     bool isCrossing = false;
@@ -23,9 +33,19 @@ public class HorizontalCharacterCardHolder : MonoBehaviour
 
     void Start()
     {
-        for (int i = 0; i < cardsToSpawn; i++)
+
+        // Only auto-spawn if enabled (for backward compatibility)
+        if (autoSpawnOnStart)
         {
-            Instantiate(slotPrefab, transform);
+            if (slotPrefab == null)
+            {
+                Debug.LogWarning($"[HorizontalCharacterCardHolder] slotPrefab is not assigned on GameObject '{gameObject.name}'. Skipping card spawn.", this);
+                return;
+            }
+            for (int i = 0; i < cardsToSpawn; i++)
+            {
+                Instantiate(slotPrefab, transform);
+            }
         }
 
         rect = GetComponent<RectTransform>();

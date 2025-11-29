@@ -390,6 +390,9 @@ MonoBehaviour:
   shakeParent: {fileID: 3449025543118524474}
   tiltParent: {fileID: 5862976466474931636}
   cardImage: {fileID: 7697484841366769644}
+  characterPortrait: {fileID: 7697484841366769644}
+  characterNameText: {fileID: 0}
+  healthText: {fileID: 0}
   followSpeed: 25
   rotationAmount: 70
   rotationSpeed: 50
