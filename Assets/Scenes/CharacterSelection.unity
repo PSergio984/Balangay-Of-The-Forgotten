@@ -153,10 +153,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 2074635280}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0}
-  m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 46, y: 583}
-  m_SizeDelta: {x: 1024, y: 256}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 1842.67, y: 931.5}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &352296882
 CanvasRenderer:
@@ -237,7 +237,7 @@ MonoBehaviour:
   selectedCard: {fileID: 0}
   hoveredCard: {fileID: 0}
   slotPrefab: {fileID: 3655645598659960977, guid: e26e123df0b787c4182caebfe5b86dbd, type: 3}
-  cardsToSpawn: 7
+  cardsToSpawn: 4
   characterCards: []
   tweenCardReturn: 1
 --- !u!1 &505382869
@@ -322,7 +322,7 @@ Transform:
   m_GameObject: {fileID: 505382869}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2.926653, y: 0.18348384, z: -31.51421}
+  m_LocalPosition: {x: 0, y: 0, z: -31.51421}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -461,7 +461,7 @@ Transform:
   m_GameObject: {fileID: 519420028}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2.926653, y: 0.18348384, z: -31.51421}
+  m_LocalPosition: {x: 0, y: 0, z: -31.51421}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -607,7 +607,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 102, y: 0}
   m_SizeDelta: {x: 6109.82, y: 243.03}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &544559085
