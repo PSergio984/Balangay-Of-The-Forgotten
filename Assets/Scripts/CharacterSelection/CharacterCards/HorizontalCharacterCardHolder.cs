@@ -60,6 +60,14 @@ public class HorizontalCharacterCardHolder : MonoBehaviour
             characterCard.BeginDragEvent.AddListener(BeginDrag);
             characterCard.EndDragEvent.AddListener(EndDrag);
             characterCard.name = characterCardCount.ToString();
+            
+            // Initialize slot assignment if parent has CharacterSlot component
+            CharacterSlot parentSlot = characterCard.transform.parent?.GetComponent<CharacterSlot>();
+            if (parentSlot != null)
+            {
+                parentSlot.AssignCard(characterCard);
+            }
+            
             characterCardCount++;
         }
 
@@ -162,9 +170,33 @@ public class HorizontalCharacterCardHolder : MonoBehaviour
         Transform focusedParent = selectedCard.transform.parent;
         Transform crossedParent = characterCards[index].transform.parent;
 
+        // Get the slot components (if they exist)
+        CharacterSlot focusedSlot = focusedParent.GetComponent<CharacterSlot>();
+        CharacterSlot crossedSlot = crossedParent.GetComponent<CharacterSlot>();
+
+        // Update slot assignments before swapping parents
+        if (focusedSlot != null)
+        {
+            focusedSlot.RemoveCard();
+        }
+        if (crossedSlot != null)
+        {
+            crossedSlot.RemoveCard();
+        }
+
         characterCards[index].transform.SetParent(focusedParent);
         characterCards[index].transform.localPosition = characterCards[index].selected ? new Vector3(0, characterCards[index].selectionOffset, 0) : Vector3.zero;
         selectedCard.transform.SetParent(crossedParent);
+
+        // Update slot assignments after swapping
+        if (focusedSlot != null)
+        {
+            focusedSlot.AssignCard(characterCards[index]);
+        }
+        if (crossedSlot != null)
+        {
+            crossedSlot.AssignCard(selectedCard);
+        }
 
         isCrossing = false;
 

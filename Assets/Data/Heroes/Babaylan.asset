@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Babaylan
   m_EditorClassIdentifier: Assembly-CSharp::HeroData
   <Image>k__BackingField: {fileID: 21300000, guid: e3d885e1e0de56e468c1205c6be12b98, type: 3}
+  <RoleCard>k__BackingField: {fileID: 21300000, guid: 9573ed6f825d3ee47a4e5f0f1b1d5724, type: 3}
   <HeroName>k__BackingField: Babaylan
   <Health>k__BackingField: 125
   <AttackPower>k__BackingField: 0

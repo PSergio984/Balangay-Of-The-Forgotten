@@ -28,18 +28,16 @@ public class CardPresetManager : MonoBehaviour
     [Tooltip("If true, clicking a card opens preset selection. If false, only manual ShowPresetSelection calls work.")]
     [SerializeField] private bool enableCardClickToOpenPresets = true;
     
+    // Removed auto-wiring from Start. Now must be called after cards are generated.
     void Start()
     {
-        if (autoWireCards)
-        {
-            WireUpExistingCards();
-        }
+        // Intentionally left blank. Call WireUpExistingCards() from CharacterSelectionManager after card generation.
     }
     
     /// <summary>
     /// Automatically wires up all existing character cards to open preset selection on click
     /// </summary>
-    private void WireUpExistingCards()
+    public void WireUpExistingCards()
     {
         if (cardHolder == null)
         {

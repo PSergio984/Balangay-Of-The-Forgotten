@@ -73,6 +73,7 @@ public class CharacterCard : MonoBehaviour, IDragHandler, IBeginDragHandler, IEn
     /// <remarks>
     /// Called by CharacterSelectionManager when dynamically spawning cards.
     /// Updates the visual representation to show character information.
+    /// Sets the card's base image sprite to the hero's sprite for static display.
     /// </remarks>
     public void Initialize(HeroData heroData)
     {
@@ -82,6 +83,36 @@ public class CharacterCard : MonoBehaviour, IDragHandler, IBeginDragHandler, IEn
             return;
         }
         BoundHeroData = heroData;
+        
+        // Ensure imageComponent is retrieved (in case Initialize is called before Start)
+        if (imageComponent == null)
+        {
+            imageComponent = GetComponent<Image>();
+        }
+        
+        // Update card base image with role card sprite (default card with no stats)
+        if (imageComponent != null)
+        {
+            if (heroData.RoleCard != null)
+            {
+                Debug.Log($"[CharacterCard] Setting RoleCard sprite for hero '{heroData.HeroName}'.");
+                // Display role card sprite (base card without stat values)
+                imageComponent.sprite = heroData.RoleCard;
+                // No preset selected yet
+                SelectedPreset = null;
+            }
+            else if (heroData.Image != null)
+            {
+                // Fallback to hero portrait if no role card available
+                imageComponent.sprite = heroData.Image;
+                Debug.LogWarning($"[CharacterCard] HeroData '{heroData.HeroName}' has no RoleCard sprite! Using hero portrait as fallback.");
+            }
+            else
+            {
+                Debug.LogWarning($"[CharacterCard] HeroData '{heroData.HeroName}' has no RoleCard or Image sprite assigned!");
+            }
+        }
+        
         // Update visual representation if already created
         if (CharacterCardVisual != null)
         {

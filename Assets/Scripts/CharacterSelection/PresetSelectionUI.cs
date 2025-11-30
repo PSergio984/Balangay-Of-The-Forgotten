@@ -197,8 +197,16 @@ public class PresetSelectionUI : MonoBehaviour
     private void UpdateCardVisual()
     {
         if (currentCard == null || currentCard.CharacterCardVisual == null) return;
+        
         // Update card to show preset info
         currentCard.CharacterCardVisual.UpdatePresetData(currentCard.SelectedPreset);
+        
+        // Update the slot's build text (if card is in a slot)
+        CharacterSlot parentSlot = currentCard.transform.parent?.GetComponent<CharacterSlot>();
+        if (parentSlot != null)
+        {
+            parentSlot.UpdateBuildText();
+        }
     }
     
     /// <summary>

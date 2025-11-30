@@ -16,6 +16,15 @@ public class HeroData : ScriptableObject
     [field: AssetsOnly]
     public Sprite Image { get; private set; }
     
+    [HorizontalGroup("Basic Info", 0.3f)]
+    [field: SerializeField]
+    [field: PreviewField(100)]
+    [field: LabelText("Role Card (Base)")]
+    [field: Required("Hero needs a role card sprite!")]
+    [field: AssetsOnly]
+    [field: InfoBox("This is the default card sprite shown before any preset is selected.\nShould show the character without stat values.")]
+    public Sprite RoleCard { get; private set; }
+    
     [VerticalGroup("Basic Info/Details")]
     [field: SerializeField]
     [field: LabelText("Hero Name")]

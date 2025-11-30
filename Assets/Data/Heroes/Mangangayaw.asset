@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Mangangayaw
   m_EditorClassIdentifier: Assembly-CSharp::HeroData
   <Image>k__BackingField: {fileID: 21300000, guid: 939c3cdf06eb5c74d83e61a6c2d06b64, type: 3}
+  <RoleCard>k__BackingField: {fileID: 21300000, guid: 9a0cd5ac2f18bf84fafe2449373867ea, type: 3}
   <HeroName>k__BackingField: Mangangayaw
   <Health>k__BackingField: 600
   <AttackPower>k__BackingField: 45

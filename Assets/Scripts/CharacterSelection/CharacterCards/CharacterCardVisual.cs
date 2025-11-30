@@ -32,9 +32,7 @@ public class CharacterCardVisual : MonoBehaviour
     
     [Header("Character Data Display")]
     [SerializeField] private Image characterPortrait;
-    [SerializeField] private TMPro.TMP_Text characterNameText;
-    [SerializeField] private TMPro.TMP_Text healthText;
-    [SerializeField] private TMPro.TMP_Text buildPresetText; // Shows current build preset name
+    // Note: buildPresetText removed - now handled by CharacterSlot component (fixed under slot, not moving with card)
 
     [Header("Follow Parameters")]
     [SerializeField] private float followSpeed = 30;
@@ -116,22 +114,16 @@ public class CharacterCardVisual : MonoBehaviour
     {
         if (heroData == null) return;
         currentHeroData = heroData;
-        // Update character portrait
+        
+        // Update character portrait (optional - may be static sprite in prefab)
         if (characterPortrait != null && heroData.Image != null)
         {
             characterPortrait.sprite = heroData.Image;
         }
-        // Update character name
-        if (characterNameText != null && heroData != null)
-        {
-            string safeName = string.IsNullOrWhiteSpace(heroData.HeroName) ? "Unknown" : heroData.HeroName.Trim();
-            characterNameText.text = safeName;
-        }
-        // Update health display
-        if (healthText != null)
-        {
-            healthText.text = $"HP: {heroData.Health}";
-        }
+        
+
+        // Always update preset display to show "No Build" initially
+        UpdatePresetData(null);
     }
     
     /// <summary>
@@ -140,48 +132,48 @@ public class CharacterCardVisual : MonoBehaviour
     /// <param name="preset">The build preset to display (or null to clear)</param>
     /// <remarks>
     /// Called when player selects a build preset for this character.
-    /// Shows preset name and updates stats to show FIXED preset values (overrides hero base stats).
+    /// Updates card sprite to show preset card (with baked-in stats) or role card (no stats).
+    /// Note: Build text is now handled by CharacterSlot component, not here.
     /// </remarks>
     public void UpdatePresetData(CharacterBuildPreset preset)
     {
         if (preset == null)
         {
-            // Clear preset info
-            if (buildPresetText != null)
-                buildPresetText.text = "No Build";
-            // Restore health from last HeroData if available
-            if (healthText != null)
+            // Reset to role card sprite (base card with no stats)
+            if (parentCard != null && parentCard.BoundHeroData != null)
             {
-                if (currentHeroData != null)
+                if (cardImage != null)
                 {
-                    healthText.text = $"HP: {currentHeroData.Health}";
-                }
-                else
-                {
-                    healthText.text = "HP: --";
-                    Debug.LogWarning("[CharacterCardVisual] UpdatePresetData called with null currentHeroData; cannot display base health.", this);
+                    if (parentCard.BoundHeroData.RoleCard != null)
+                    {
+                        // Reset to role card (default state)
+                        cardImage.sprite = parentCard.BoundHeroData.RoleCard;
+                        Debug.Log($"[CharacterCardVisual] Setting RoleCard sprite for hero '{parentCard.BoundHeroData.HeroName}'.");
+                    }
+                    else if (parentCard.BoundHeroData.Image != null)
+                    {
+                        // Fallback to hero portrait
+                        cardImage.sprite = parentCard.BoundHeroData.Image;
+                        Debug.Log($"[CharacterCardVisual] Setting hero portrait sprite for hero '{parentCard.BoundHeroData.HeroName}' as fallback.");
+                    }
                 }
             }
+
             return;
         }
-        // Update preset name display
-        if (buildPresetText != null)
+        
+        // Update card sprite to show the selected preset's card sprite (with baked-in stats)
+        if (parentCard != null && preset.PresetSprite != null)
         {
-            string safeName = preset.PresetName != null ? preset.PresetName.Trim() : null;
-            string presetName = string.IsNullOrWhiteSpace(safeName) ? "Unnamed Build" : safeName;
-            buildPresetText.text = presetName;
+            Image cardImage = parentCard.GetComponent<Image>();
+            if (cardImage != null)
+            {
+                cardImage.sprite = preset.PresetSprite;
+            }
         }
         
-        // Update stats to show FIXED preset values (not base + modifier)
-        if (healthText != null)
-        {
-            healthText.text = $"HP: {preset.Health}";
-        }
-        
-        // Note: If you add more stat displays (ATK, DEF, etc.), update them here
-        // Example:
-        // if (attackText != null) attackText.text = $"ATK: {preset.AttackPower}";
-        // if (defenseText != null) defenseText.text = $"DEF: {preset.Defense}";
+        // Note: "Current Build" text is now handled by CharacterSlot component
+        // The slot's build text will automatically update when preset changes via CharacterSlot.OnCardPresetChanged
     }
 
     void Update()

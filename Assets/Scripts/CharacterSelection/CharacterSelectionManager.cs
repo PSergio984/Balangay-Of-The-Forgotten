@@ -84,6 +84,9 @@ public class CharacterSelectionManager : MonoBehaviour
         
         // Generate character cards
         GenerateCharacterCards();
+
+        // After cards are generated, wire up preset manager (fixes timing issue)
+        // (Removed: WireUpExistingCards is now only called after cardHolder.characterCards is populated in RefreshCardHolder)
     }
     
     /// <summary>
@@ -205,12 +208,12 @@ public class CharacterSelectionManager : MonoBehaviour
     private IEnumerator RefreshCardHolder()
     {
         yield return new WaitForEndOfFrame();
-        
+
         // Update card holder's internal list
         if (cardHolder != null)
         {
             cardHolder.characterCards = cardSpawnParent.GetComponentsInChildren<CharacterCard>().ToList();
-            
+
             // Update visual indexes
             for (int i = 0; i < cardHolder.characterCards.Count; i++)
             {
@@ -220,6 +223,12 @@ public class CharacterSelectionManager : MonoBehaviour
                     card.CharacterCardVisual.UpdateIndex(i);
                 }
             }
+        }
+
+        // Now that the cardHolder list is up-to-date, wire up preset manager
+        if (cardPresetManager != null)
+        {
+            cardPresetManager.WireUpExistingCards();
         }
     }
     
