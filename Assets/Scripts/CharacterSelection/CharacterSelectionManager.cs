@@ -82,6 +82,17 @@ public class CharacterSelectionManager : MonoBehaviour
         // Initialize UI
         UpdateSelectionUI();
         
+        // Subscribe to preset selection changes
+        if (cardPresetManager != null)
+        {
+            Debug.Log("[CharacterSelectionManager] Subscribing to PresetSelectionChanged event");
+            cardPresetManager.PresetSelectionChanged += UpdateSelectionUI;
+        }
+        else
+        {
+            Debug.LogError("[CharacterSelectionManager] cardPresetManager is NULL! Cannot subscribe to event!");
+        }
+        
         // Generate character cards
         GenerateCharacterCards();
 
@@ -291,22 +302,45 @@ public class CharacterSelectionManager : MonoBehaviour
     /// </summary>
     private void UpdateSelectionUI()
     {
-        // Count how many cards have presets selected
+        Debug.Log($"[CharacterSelectionManager] UpdateSelectionUI called");
+        Debug.Log($"[CharacterSelectionManager] spawnedCards.Count: {spawnedCards.Count}");
+        
+        // Debug: Log each card's preset status
+        for (int i = 0; i < spawnedCards.Count; i++)
+        {
+            var card = spawnedCards[i];
+            if (card != null)
+            {
+                Debug.Log($"[CharacterSelectionManager] Card {i}: {card.BoundHeroData?.HeroName ?? "NULL"}, Preset: {card.SelectedPreset?.PresetName ?? "NULL"}");
+            }
+            else
+            {
+                Debug.Log($"[CharacterSelectionManager] Card {i}: NULL CARD");
+            }
+        }
+        
+        // Count how many cards have presets selected (ALL cards, not just selected heroes)
         int presetsSelected = 0;
         if (cardPresetManager != null)
         {
             presetsSelected = spawnedCards.Count(card => card != null && card.SelectedPreset != null);
+            Debug.Log($"[CharacterSelectionManager] Presets counted: {presetsSelected}");
+        }
+        else
+        {
+            Debug.LogWarning($"[CharacterSelectionManager] cardPresetManager is NULL!");
         }
         
-        // Update preset count text
+        // Update preset count text using presetsSelected (counts ALL cards with presets)
         if (selectionCountText != null)
         {
-            int presetCount = selectedHeroes.Count(hero => {
-                var card = spawnedCards.FirstOrDefault(c => c.BoundHeroData == hero);
-                return card != null && card.SelectedPreset != null;
-            });
             int totalPresets = availableHeroes != null ? availableHeroes.Count : 0;
-            selectionCountText.text = $"Presets Selected: {presetCount}/{totalPresets}";
+            selectionCountText.text = $"Presets Selected: {presetsSelected}/{totalPresets}";
+            Debug.Log($"[CharacterSelectionManager] Updated UI text: 'Presets Selected: {presetsSelected}/{totalPresets}'");
+        }
+        else
+        {
+            Debug.LogWarning($"[CharacterSelectionManager] selectionCountText is NULL!");
         }
         
         // Enable/disable confirm button based on preset selection
@@ -440,6 +474,12 @@ public class CharacterSelectionManager : MonoBehaviour
             {
                 card.SelectEvent.RemoveListener(OnCardSelectionChanged);
             }
+        }
+        
+        // Unsubscribe from preset selection changes
+        if (cardPresetManager != null)
+        {
+            cardPresetManager.PresetSelectionChanged -= UpdateSelectionUI;
         }
     }
 }

@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 // Ensure CharacterBuildPreset is visible
@@ -257,22 +258,40 @@ public class PresetSelectionUI : MonoBehaviour
         CharacterBuildPreset preset = currentHero.BuildPresets[currentlyHighlightedPresetIndex];
         if (preset != null && currentCard != null)
         {
+            Debug.Log($"[PresetSelectionUI] BEFORE save - Card: {currentCard.BoundHeroData?.HeroName}, Current preset: {currentCard.SelectedPreset?.PresetName ?? "NULL"}");
+            
             // Save preset to card
             currentCard.SelectedPreset = preset;
+            
+            Debug.Log($"[PresetSelectionUI] AFTER save - Card: {currentCard.BoundHeroData?.HeroName}, New preset: {currentCard.SelectedPreset?.PresetName ?? "NULL"}");
 
             // Update the card visual
             UpdateCardVisual();
 
-            Debug.Log($"[PresetSelectionUI] Saved preset '{preset.PresetName}' for card");
-
-            // Notify manager that a preset was selected
-            if (cardPresetManager != null)
+            // Clear card states to prevent visual glitches (spinning/hovering)
+            if (currentCard != null)
             {
-                cardPresetManager.NotifyPresetSelectionChanged();
+                currentCard.Deselect();
+                currentCard.isHovering = false;
+                currentCard.selected = false;
             }
 
-            // Close the UI after saving
-            Hide();
+            Debug.Log($"[PresetSelectionUI] Saved preset '{preset.PresetName}' for card '{currentCard.BoundHeroData?.HeroName}'");
+
+            // Notify manager that a preset was selected (MUST be before Hide)
+            if (cardPresetManager != null)
+            {
+                Debug.Log($"[PresetSelectionUI] Notifying CardPresetManager of preset change");
+                cardPresetManager.NotifyPresetSelectionChanged();
+                Debug.Log($"[PresetSelectionUI] Event notification sent");
+            }
+            else
+            {
+                Debug.LogError($"[PresetSelectionUI] cardPresetManager is NULL! Please assign CardPresetManager in Inspector. Event will NOT fire!", this);
+            }
+
+            // Close the UI after saving (delay slightly to ensure event processing)
+            StartCoroutine(HideAfterFrame());
         }
     }
     
@@ -281,8 +300,25 @@ public class PresetSelectionUI : MonoBehaviour
     /// </summary>
     private void OnBackClicked()
     {
+        // Clear card states to prevent visual glitches (spinning/hovering)
+        if (currentCard != null)
+        {
+            currentCard.Deselect();
+            currentCard.isHovering = false;
+            currentCard.selected = false;
+        }
+        
         // Reset highlighted index without saving
         currentlyHighlightedPresetIndex = -1;
+        Hide();
+    }
+    
+    /// <summary>
+    /// Hides the preset selection UI after one frame to ensure event propagation
+    /// </summary>
+    private IEnumerator HideAfterFrame()
+    {
+        yield return null; // Wait one frame for event to propagate
         Hide();
     }
     

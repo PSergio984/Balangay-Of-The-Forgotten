@@ -117,7 +117,10 @@ public class CardPresetManager : MonoBehaviour
     /// </summary>
     public void NotifyPresetSelectionChanged()
     {
+        int subscriberCount = PresetSelectionChanged?.GetInvocationList().Length ?? 0;
+        Debug.Log($"[CardPresetManager] NotifyPresetSelectionChanged called - Subscriber count: {subscriberCount}");
         PresetSelectionChanged?.Invoke();
+        Debug.Log($"[CardPresetManager] PresetSelectionChanged event invoked");
     }
     
     /// <summary>

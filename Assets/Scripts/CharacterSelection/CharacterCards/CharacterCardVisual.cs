@@ -163,13 +163,18 @@ public class CharacterCardVisual : MonoBehaviour
         }
         
         // Update card sprite to show the selected preset's card sprite (with baked-in stats)
-        if (parentCard != null && preset.PresetSprite != null)
+        // NOTE: cardImage should be assigned in Inspector to the Image component on THIS GameObject (CharacterCardVisual)
+        if (cardImage != null && preset.PresetSprite != null)
         {
-            cardImage = parentCard.GetComponent<Image>();
-            if (cardImage != null)
-            {
-                cardImage.sprite = preset.PresetSprite;
-            }
+            cardImage.sprite = preset.PresetSprite;
+            Debug.Log($"[CharacterCardVisual] Updated card sprite to preset '{preset.PresetName}' for hero '{parentCard?.BoundHeroData?.HeroName}'");
+        }
+        else
+        {
+            if (cardImage == null)
+                Debug.LogError($"[CharacterCardVisual] cardImage is NULL! Please assign the Image component in Inspector.", this);
+            if (preset.PresetSprite == null)
+                Debug.LogError($"[CharacterCardVisual] PresetSprite is NULL for preset '{preset.PresetName}'!", this);
         }
         
         // Note: "Current Build" text is now handled by CharacterSlot component
