@@ -301,14 +301,18 @@ public class CharacterSelectionManager : MonoBehaviour
         // Update preset count text
         if (selectionCountText != null)
         {
-            selectionCountText.text = $"Presets Selected: {presetsSelected}/4";
+            int presetCount = selectedHeroes.Count(hero => {
+                var card = spawnedCards.FirstOrDefault(c => c.BoundHeroData == hero);
+                return card != null && card.SelectedPreset != null;
+            });
+            int totalPresets = availableHeroes != null ? availableHeroes.Count : 0;
+            selectionCountText.text = $"Presets Selected: {presetCount}/{totalPresets}";
         }
         
         // Enable/disable confirm button based on preset selection
         if (confirmButton != null)
         {
-            bool allPresetsSelected = (cardPresetManager != null && cardPresetManager.AreAllPresetsSelected());
-            confirmButton.interactable = allPresetsSelected;
+            confirmButton.interactable = IsValidSelection();
         }
     }
     
@@ -337,6 +341,12 @@ public class CharacterSelectionManager : MonoBehaviour
             return;
         }
         
+        if (!IsValidSelection())
+        {
+            Debug.LogWarning("Cannot confirm: Not all selected heroes have presets or incorrect number selected.");
+            return;
+        }
+
         // Write selected heroes to slot-based CharacterTransitionData
         if (transitionData.CharacterSlots == null || transitionData.CharacterSlots.Length != maxSelections)
             transitionData.CharacterSlots = new CharacterSlotData[maxSelections];
@@ -364,6 +374,22 @@ public class CharacterSelectionManager : MonoBehaviour
 
         // Load combat scene
         StartCoroutine(LoadCombatScene());
+    }
+
+    /// <summary>
+    /// Returns true if the selection is valid: selectedHeroes.Count is within min/max and all selected heroes have a spawned card with a non-null SelectedPreset.
+    /// </summary>
+    private bool IsValidSelection()
+    {
+        if (selectedHeroes.Count < minSelections || selectedHeroes.Count > maxSelections)
+            return false;
+        foreach (var hero in selectedHeroes)
+        {
+            var card = spawnedCards.FirstOrDefault(c => c.BoundHeroData == hero);
+            if (card == null || card.SelectedPreset == null)
+                return false;
+        }
+        return true;
     }
     
     /// <summary>
@@ -403,7 +429,6 @@ public class CharacterSelectionManager : MonoBehaviour
         
         UpdateSelectionUI();
         
-        Debug.Log("[CharacterSelectionManager] Selection cancelled");
     }
     
     private void OnDestroy()

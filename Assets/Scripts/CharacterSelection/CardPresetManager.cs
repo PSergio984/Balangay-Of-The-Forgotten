@@ -18,6 +18,8 @@ using System.Collections.Generic;
 /// </summary>
 public class CardPresetManager : MonoBehaviour
 {
+    // Event raised whenever a preset selection changes
+    public event System.Action PresetSelectionChanged;
     [Header("References")]
     [SerializeField] private HorizontalCharacterCardHolder cardHolder;
     [SerializeField] private PresetSelectionUI presetSelectionUI;
@@ -107,7 +109,15 @@ public class CardPresetManager : MonoBehaviour
             return;
         }
         
-        presetSelectionUI.ShowForCard(card);
+		presetSelectionUI.ShowForCard(card);
+        }
+
+    /// <summary>
+    /// Call this when a preset is actually selected/confirmed by the user
+    /// </summary>
+    public void NotifyPresetSelectionChanged()
+    {
+        PresetSelectionChanged?.Invoke();
     }
     
     /// <summary>

@@ -23,6 +23,8 @@ using System;
 /// </summary>
 public class PresetSelectionUI : MonoBehaviour
 {
+    [Header("Preset Manager Reference")]
+    [SerializeField] private CardPresetManager cardPresetManager;
     private const int MAX_PRESETS = 3;
     // Store delegates for safe removal
     private UnityEngine.Events.UnityAction[] presetButtonDelegates = new UnityEngine.Events.UnityAction[MAX_PRESETS];
@@ -251,18 +253,24 @@ public class PresetSelectionUI : MonoBehaviour
     {
         if (currentHero == null || currentHero.BuildPresets == null) return;
         if (currentlyHighlightedPresetIndex < 0 || currentlyHighlightedPresetIndex >= currentHero.BuildPresets.Count) return;
-        
+
         CharacterBuildPreset preset = currentHero.BuildPresets[currentlyHighlightedPresetIndex];
         if (preset != null && currentCard != null)
         {
             // Save preset to card
             currentCard.SelectedPreset = preset;
-            
+
             // Update the card visual
             UpdateCardVisual();
-            
+
             Debug.Log($"[PresetSelectionUI] Saved preset '{preset.PresetName}' for card");
-            
+
+            // Notify manager that a preset was selected
+            if (cardPresetManager != null)
+            {
+                cardPresetManager.NotifyPresetSelectionChanged();
+            }
+
             // Close the UI after saving
             Hide();
         }

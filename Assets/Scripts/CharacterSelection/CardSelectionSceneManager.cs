@@ -44,18 +44,30 @@ public class CardSelectionSceneManager : MonoBehaviour
         {
             startCombatButton.onClick.AddListener(OnStartCombatClicked);
         }
-        
+
         // Initial feedback
         UpdateFeedback("Select a build preset for each of the 4 characters");
-        
-        // Update button state every frame
+
+        // Subscribe to preset selection changes
+        if (cardPresetManager != null)
+        {
+            cardPresetManager.PresetSelectionChanged += UpdateButtonState;
+        }
+
+        // Initialize button state
         UpdateButtonState();
     }
-    
-    private void Update()
+
+    void OnDestroy()
     {
-        // Continuously check if all presets are selected to enable/disable button
-        UpdateButtonState();
+        if (startCombatButton != null)
+        {
+            startCombatButton.onClick.RemoveListener(OnStartCombatClicked);
+        }
+        if (cardPresetManager != null)
+        {
+            cardPresetManager.PresetSelectionChanged -= UpdateButtonState;
+        }
     }
     
     private void UpdateButtonState()
@@ -63,12 +75,16 @@ public class CardSelectionSceneManager : MonoBehaviour
         if (startCombatButton == null || cardPresetManager == null)
             return;
             
-        bool allPresetsSelected = cardPresetManager.AreAllPresetsSelected();
+        bool allPresetsSelected = cardPresetManager != null && cardPresetManager.AreAllPresetsSelected();
         startCombatButton.interactable = allPresetsSelected;
         
         if (allPresetsSelected)
         {
-            UpdateFeedback("Ready! All characters have presets selected.");
+            UpdateFeedback("Ready! Click Start Combat to proceed.");
+        }
+        else
+        {
+            UpdateFeedback("Select a preset for each character to continue.");
         }
     }
     
@@ -130,11 +146,5 @@ public class CardSelectionSceneManager : MonoBehaviour
         feedbackText.color = isError ? Color.red : Color.white;
     }
     
-    void OnDestroy()
-    {
-        if (startCombatButton != null)
-        {
-            startCombatButton.onClick.RemoveListener(OnStartCombatClicked);
-        }
-    }
+    // (Removed duplicate OnDestroy)
 }
