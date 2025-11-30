@@ -124,6 +124,36 @@ public class CardPresetManager : MonoBehaviour
     }
     
     /// <summary>
+    /// Checks if all 4 character cards have a preset selected
+    /// </summary>
+    /// <returns>True if all 4 cards have presets selected</returns>
+    public bool AreAllPresetsSelected()
+    {
+        if (cardHolder == null || cardHolder.characterCards == null)
+        {
+            return false;
+        }
+
+        // Must have exactly 4 cards
+        if (cardHolder.characterCards.Count != 4)
+        {
+            return false;
+        }
+
+        // All 4 cards must have a preset selected
+        int presetsSelectedCount = 0;
+        foreach (CharacterCard card in cardHolder.characterCards)
+        {
+            if (card != null && card.BoundHeroData != null && card.SelectedPreset != null)
+            {
+                presetsSelectedCount++;
+            }
+        }
+
+        return presetsSelectedCount == 4;
+    }
+
+    /// <summary>
     /// Collects all selected cards with their presets and prepares transition data
     /// </summary>
     /// <returns>Number of valid card-preset pairs</returns>

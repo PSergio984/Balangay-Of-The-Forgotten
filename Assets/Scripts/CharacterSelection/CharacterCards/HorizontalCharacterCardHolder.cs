@@ -30,6 +30,10 @@ public class HorizontalCharacterCardHolder : MonoBehaviour
 
     bool isCrossing = false;
     [SerializeField] private bool tweenCardReturn = true;
+    
+    [Header("Visual Handler")]
+    [Tooltip("Reference to VisualHandler GameObject - will be hidden when preset overlay is active")]
+    [SerializeField] private GameObject visualHandler;
 
     void Start()
     {
@@ -49,10 +53,44 @@ public class HorizontalCharacterCardHolder : MonoBehaviour
         }
 
         rect = GetComponent<RectTransform>();
+        InitializeCards();
+    }
+    
+    /// <summary>
+    /// Initializes or refreshes the card list and event subscriptions.
+    /// Called by Start() and can be called externally after dynamic card generation.
+    /// </summary>
+    public void RefreshCards()
+    {
+        InitializeCards();
+    }
+    
+    /// <summary>
+    /// Internal method to scan for cards and wire up event subscriptions
+    /// </summary>
+    private void InitializeCards()
+    {
+        // Unsubscribe from old cards (if any)
+        if (characterCards != null)
+        {
+            foreach (CharacterCard card in characterCards)
+            {
+                if (card != null)
+                {
+                    card.PointerEnterEvent.RemoveListener(CardPointerEnter);
+                    card.PointerExitEvent.RemoveListener(CardPointerExit);
+                    card.BeginDragEvent.RemoveListener(BeginDrag);
+                    card.EndDragEvent.RemoveListener(EndDrag);
+                }
+            }
+        }
+        
+        // Re-scan for all cards
         characterCards = GetComponentsInChildren<CharacterCard>().ToList();
 
         int characterCardCount = 0;
 
+        // Subscribe to all card events
         foreach (CharacterCard characterCard in characterCards)
         {
             characterCard.PointerEnterEvent.AddListener(CardPointerEnter);
@@ -71,16 +109,19 @@ public class HorizontalCharacterCardHolder : MonoBehaviour
             characterCardCount++;
         }
 
-        StartCoroutine(Frame());
-
-        IEnumerator Frame()
+        StartCoroutine(UpdateVisualIndexes());
+    }
+    
+    /// <summary>
+    /// Coroutine to update visual indexes after a short delay
+    /// </summary>
+    private IEnumerator UpdateVisualIndexes()
+    {
+        yield return new WaitForSecondsRealtime(.1f);
+        for (int i = 0; i < characterCards.Count; i++)
         {
-            yield return new WaitForSecondsRealtime(.1f);
-            for (int i = 0; i < characterCards.Count; i++)
-            {
-                if (characterCards[i].CharacterCardVisual != null)
-                    characterCards[i].CharacterCardVisual.UpdateIndex(transform.childCount);
-            }
+            if (characterCards[i].CharacterCardVisual != null)
+                characterCards[i].CharacterCardVisual.UpdateIndex(transform.childCount);
         }
     }
 
@@ -112,6 +153,36 @@ public class HorizontalCharacterCardHolder : MonoBehaviour
     void CardPointerExit(CharacterCard characterCard)
     {
         hoveredCard = null;
+    }
+    
+    /// <summary>
+    /// Enables or disables visibility for all cards (used when preset overlay opens/closes)
+    /// Hides both the card slots AND the visual handler
+    /// </summary>
+    public void SetCardsInteractable(bool interactable)
+    {
+        // Hide/show the card slots
+        if (characterCards != null)
+        {
+            for (int i = 0; i < characterCards.Count; i++)
+            {
+                CharacterCard card = characterCards[i];
+                if (card == null) continue;
+                
+                // Find the slot parent (CharacterCardSlot GameObject)
+                Transform slotTransform = card.transform.parent;
+                if (slotTransform == null) continue;
+                
+                // Disable/enable the slot GameObject
+                slotTransform.gameObject.SetActive(interactable);
+            }
+        }
+        
+        // Also hide/show the VisualHandler (contains CharacterCardVisual clones)
+        if (visualHandler != null)
+        {
+            visualHandler.SetActive(interactable);
+        }
     }
 
     void Update()
@@ -185,7 +256,7 @@ public class HorizontalCharacterCardHolder : MonoBehaviour
         }
 
         characterCards[index].transform.SetParent(focusedParent);
-        characterCards[index].transform.localPosition = characterCards[index].selected ? new Vector3(0, characterCards[index].selectionOffset, 0) : Vector3.zero;
+        characterCards[index].transform.localPosition = Vector3.zero;
         selectedCard.transform.SetParent(crossedParent);
 
         // Update slot assignments after swapping

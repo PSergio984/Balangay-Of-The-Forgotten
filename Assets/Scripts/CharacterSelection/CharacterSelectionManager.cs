@@ -209,20 +209,10 @@ public class CharacterSelectionManager : MonoBehaviour
     {
         yield return new WaitForEndOfFrame();
 
-        // Update card holder's internal list
+        // Let the card holder re-initialize its card list and event subscriptions
         if (cardHolder != null)
         {
-            cardHolder.characterCards = cardSpawnParent.GetComponentsInChildren<CharacterCard>().ToList();
-
-            // Update visual indexes
-            for (int i = 0; i < cardHolder.characterCards.Count; i++)
-            {
-                var card = cardHolder.characterCards[i];
-                if (card.CharacterCardVisual != null)
-                {
-                    card.CharacterCardVisual.UpdateIndex(i);
-                }
-            }
+            cardHolder.RefreshCards();
         }
 
         // Now that the cardHolder list is up-to-date, wire up preset manager
@@ -297,21 +287,28 @@ public class CharacterSelectionManager : MonoBehaviour
     }
     
     /// <summary>
-    /// Updates the selection UI (count text, confirm button state)
+    /// Updates the selection UI (preset count text, confirm button state)
     /// </summary>
     private void UpdateSelectionUI()
     {
-        // Update selection count text
-        if (selectionCountText != null)
+        // Count how many cards have presets selected
+        int presetsSelected = 0;
+        if (cardPresetManager != null)
         {
-            selectionCountText.text = $"Selected: {selectedHeroes.Count}/{maxSelections}";
+            presetsSelected = spawnedCards.Count(card => card != null && card.SelectedPreset != null);
         }
         
-        // Enable/disable confirm button based on selection validity
+        // Update preset count text
+        if (selectionCountText != null)
+        {
+            selectionCountText.text = $"Presets Selected: {presetsSelected}/4";
+        }
+        
+        // Enable/disable confirm button based on preset selection
         if (confirmButton != null)
         {
-            bool canConfirm = selectedHeroes.Count >= minSelections && selectedHeroes.Count <= maxSelections;
-            confirmButton.interactable = canConfirm;
+            bool allPresetsSelected = (cardPresetManager != null && cardPresetManager.AreAllPresetsSelected());
+            confirmButton.interactable = allPresetsSelected;
         }
     }
     

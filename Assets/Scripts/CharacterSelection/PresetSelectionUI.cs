@@ -32,7 +32,11 @@ public class PresetSelectionUI : MonoBehaviour
     [SerializeField] private Image[] presetImages; // 3 preset display images
     [SerializeField] private Button[] presetButtons; // 3 preset selection buttons
     [SerializeField] private Button backButton;
+    [SerializeField] private Button selectPresetButton; // Confirms and saves the selected preset
     [SerializeField] private TMP_Text currentBuildText; // Shows "Current: [Build Name]"
+    
+    [Header("Card Visibility Control")]
+    [SerializeField] private HorizontalCharacterCardHolder cardHolder; // Reference to hide/show cards when overlay is active
     
     [Header("Visual Feedback")]
     [SerializeField] private Color selectedPresetColor = Color.green;
@@ -40,6 +44,7 @@ public class PresetSelectionUI : MonoBehaviour
     
     private CharacterCard currentCard;
     private HeroData currentHero;
+    private int currentlyHighlightedPresetIndex = -1; // Tracks which preset is highlighted for selection
     
     void Start()
     {
@@ -50,6 +55,12 @@ public class PresetSelectionUI : MonoBehaviour
         // Wire up button events
         if (backButton != null)
             backButton.onClick.AddListener(OnBackClicked);
+        
+        if (selectPresetButton != null)
+        {
+            selectPresetButton.onClick.AddListener(OnSelectPresetClicked);
+            selectPresetButton.interactable = false; // Disabled until a preset is highlighted
+        }
         
         if (presetButtons == null)
         {
@@ -79,8 +90,19 @@ public class PresetSelectionUI : MonoBehaviour
         }
         currentCard = card;
         currentHero = card.BoundHeroData;
+        currentlyHighlightedPresetIndex = -1; // Reset highlighted preset
+        
+        // Disable select button until a preset is highlighted
+        if (selectPresetButton != null)
+            selectPresetButton.interactable = false;
+        
         // Update UI
         UpdateUI();
+        
+        // Hide/disable cards when overlay opens to prevent visual overlap and input conflicts
+        if (cardHolder != null)
+            cardHolder.SetCardsInteractable(false);
+        
         // Show panel
         if (panelRoot != null)
             panelRoot.SetActive(true);
@@ -115,9 +137,17 @@ public class PresetSelectionUI : MonoBehaviour
                 {
                     presetImages[i].sprite = presets[i].PresetSprite;
                     presetImages[i].gameObject.SetActive(true);
-                    // Highlight if currently selected
-                    bool isSelected = (currentCard.SelectedPreset == presets[i]);
-                    presetImages[i].color = isSelected ? selectedPresetColor : unselectedPresetColor;
+                    // Highlight if this is the currently highlighted preset for selection
+                    bool isHighlighted = (currentlyHighlightedPresetIndex == i);
+                    // Also show if it's the already saved preset (dimmer highlight)
+                    bool isCurrentlySaved = (currentCard.SelectedPreset == presets[i]);
+                    
+                    if (isHighlighted)
+                        presetImages[i].color = selectedPresetColor;
+                    else if (isCurrentlySaved)
+                        presetImages[i].color = Color.Lerp(unselectedPresetColor, selectedPresetColor, 0.3f);
+                    else
+                        presetImages[i].color = unselectedPresetColor;
                 }
                 else
                 {
@@ -171,7 +201,7 @@ public class PresetSelectionUI : MonoBehaviour
     }
     
     /// <summary>
-    /// Called when a preset button is clicked
+    /// Called when a preset button is clicked - highlights the preset but doesn't save yet
     /// </summary>
     private void OnPresetSelected(int index)
     {
@@ -181,12 +211,17 @@ public class PresetSelectionUI : MonoBehaviour
             CharacterBuildPreset preset = currentHero.BuildPresets[index];
             if (preset != null && currentCard != null)
             {
-                // Apply preset to card
-                currentCard.SelectedPreset = preset;
-                // Update visuals
+                // Mark this preset as highlighted (not saved yet)
+                currentlyHighlightedPresetIndex = index;
+                
+                // Enable the Select Preset button
+                if (selectPresetButton != null)
+                    selectPresetButton.interactable = true;
+                
+                // Update visuals to show highlight
                 UpdateUI();
-                UpdateCardVisual();
-                Debug.Log($"[PresetSelectionUI] Selected preset '{preset.PresetName}' for card");
+                
+                Debug.Log($"[PresetSelectionUI] Highlighted preset '{preset.PresetName}' (not saved yet)");
             }
         }
     }
@@ -210,10 +245,36 @@ public class PresetSelectionUI : MonoBehaviour
     }
     
     /// <summary>
-    /// Called when back button is clicked
+    /// Called when Select Preset button is clicked - saves the highlighted preset
+    /// </summary>
+    private void OnSelectPresetClicked()
+    {
+        if (currentHero == null || currentHero.BuildPresets == null) return;
+        if (currentlyHighlightedPresetIndex < 0 || currentlyHighlightedPresetIndex >= currentHero.BuildPresets.Count) return;
+        
+        CharacterBuildPreset preset = currentHero.BuildPresets[currentlyHighlightedPresetIndex];
+        if (preset != null && currentCard != null)
+        {
+            // Save preset to card
+            currentCard.SelectedPreset = preset;
+            
+            // Update the card visual
+            UpdateCardVisual();
+            
+            Debug.Log($"[PresetSelectionUI] Saved preset '{preset.PresetName}' for card");
+            
+            // Close the UI after saving
+            Hide();
+        }
+    }
+    
+    /// <summary>
+    /// Called when back button is clicked - cancels without saving
     /// </summary>
     private void OnBackClicked()
     {
+        // Reset highlighted index without saving
+        currentlyHighlightedPresetIndex = -1;
         Hide();
     }
     
@@ -225,8 +286,17 @@ public class PresetSelectionUI : MonoBehaviour
         if (panelRoot != null)
             panelRoot.SetActive(false);
         
+        // Re-enable cards when overlay closes
+        if (cardHolder != null)
+            cardHolder.SetCardsInteractable(true);
+        
         currentCard = null;
         currentHero = null;
+        currentlyHighlightedPresetIndex = -1;
+        
+        // Disable select button when hidden
+        if (selectPresetButton != null)
+            selectPresetButton.interactable = false;
     }
     
     // No static dictionary needed; use CharacterCard.SelectedPreset instead
@@ -236,6 +306,8 @@ public class PresetSelectionUI : MonoBehaviour
         // Clean up button listeners
         if (backButton != null)
             backButton.onClick.RemoveListener(OnBackClicked);
+        if (selectPresetButton != null)
+            selectPresetButton.onClick.RemoveListener(OnSelectPresetClicked);
         for (int i = 0; i < presetButtons.Length && i < MAX_PRESETS; i++)
         {
             if (presetButtons[i] != null && presetButtonDelegates[i] != null)

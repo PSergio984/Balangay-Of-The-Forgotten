@@ -31,27 +31,11 @@ public class CardSelectionSceneManager : MonoBehaviour
     
     [Header("Scene Settings")]
     [SerializeField] private string combatSceneName = "Combat";
-    [SerializeField] private int minRequiredSelections = 1;
-    [SerializeField] private int maxAllowedSelections = 4;
+    // Removed: No longer using min/max selection counts
+    // Now requires exactly 4 characters with presets selected
+    private const int REQUIRED_CHARACTERS = 4;
 
-    private void OnValidate()
-    {
-        bool changed = false;
-        if (minRequiredSelections < 0)
-        {
-            minRequiredSelections = 0;
-            changed = true;
-        }
-        if (minRequiredSelections > maxAllowedSelections)
-        {
-            maxAllowedSelections = minRequiredSelections;
-            changed = true;
-        }
-        if (changed)
-        {
-            Debug.LogWarning($"[CardSelectionSceneManager] minRequiredSelections and/or maxAllowedSelections were out of bounds and have been corrected. minRequiredSelections={minRequiredSelections}, maxAllowedSelections={maxAllowedSelections}", this);
-        }
-    }
+    // OnValidate removed - no longer using min/max selection validation
     
     void Start()
     {
@@ -62,7 +46,30 @@ public class CardSelectionSceneManager : MonoBehaviour
         }
         
         // Initial feedback
-        UpdateFeedback("Click cards to select build presets");
+        UpdateFeedback("Select a build preset for each of the 4 characters");
+        
+        // Update button state every frame
+        UpdateButtonState();
+    }
+    
+    private void Update()
+    {
+        // Continuously check if all presets are selected to enable/disable button
+        UpdateButtonState();
+    }
+    
+    private void UpdateButtonState()
+    {
+        if (startCombatButton == null || cardPresetManager == null)
+            return;
+            
+        bool allPresetsSelected = cardPresetManager.AreAllPresetsSelected();
+        startCombatButton.interactable = allPresetsSelected;
+        
+        if (allPresetsSelected)
+        {
+            UpdateFeedback("Ready! All characters have presets selected.");
+        }
     }
     
     /// <summary>
@@ -77,24 +84,24 @@ public class CardSelectionSceneManager : MonoBehaviour
             return;
         }
         
-        // Collect selections
+        // Validate all 4 presets are selected
+        if (!cardPresetManager.AreAllPresetsSelected())
+        {
+            UpdateFeedback($"All {REQUIRED_CHARACTERS} characters must have a preset selected!", true);
+            return;
+        }
+        
+        // Collect selections and prepare transition data
         int selectedCount = cardPresetManager.PrepareTransitionData();
         
-        // Validate
-        if (selectedCount < minRequiredSelections)
+        if (selectedCount != REQUIRED_CHARACTERS)
         {
-            UpdateFeedback($"Please select at least {minRequiredSelections} character(s) with presets", true);
+            UpdateFeedback($"ERROR: Expected {REQUIRED_CHARACTERS} characters, got {selectedCount}", true);
             return;
         }
         
-        if (selectedCount > maxAllowedSelections)
-        {
-            UpdateFeedback($"Too many selections! Maximum is {maxAllowedSelections}", true);
-            return;
-        }
-        
-        // Success - transition to combat
-        UpdateFeedback($"Starting combat with {selectedCount} characters...");
+        // Valid selection - proceed to combat
+        UpdateFeedback($"Loading combat with {REQUIRED_CHARACTERS} characters...");
         LoadCombatScene();
     }
     

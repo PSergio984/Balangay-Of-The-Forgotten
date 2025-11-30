@@ -213,13 +213,17 @@ public class CharacterCard : MonoBehaviour, IDragHandler, IBeginDragHandler, IEn
         if (wasDragged)
             return;
 
-        selected = !selected;
-        SelectEvent.Invoke(this, selected);
+        // COMMENTED OUT: Selection logic interferes with preset selection
+        // Now clicking a card only opens the preset selection UI (handled by CardPresetManager)
+        // The SelectEvent is still fired for preset selection to work
+        // selected = !selected;
+        SelectEvent.Invoke(this, true); // Always pass true to trigger preset selection UI
 
-        if (selected)
-            transform.localPosition += (CharacterCardVisual.transform.up * selectionOffset);
-        else
-            transform.localPosition = Vector3.zero;
+        // COMMENTED OUT: Visual offset for selection state
+        // if (selected)
+        //     transform.localPosition += (CharacterCardVisual.transform.up * selectionOffset);
+        // else
+        //     transform.localPosition = Vector3.zero;
     }
 
     public void Deselect()
