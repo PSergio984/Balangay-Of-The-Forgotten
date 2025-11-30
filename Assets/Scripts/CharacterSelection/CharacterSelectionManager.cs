@@ -32,6 +32,7 @@ public class CharacterSelectionManager : MonoBehaviour
     
     [Header("UI References")]
     [SerializeField] private HorizontalCharacterCardHolder cardHolder;
+    [SerializeField] private CardPresetManager cardPresetManager;
     [Tooltip("The prefab containing CharacterCard component - will be spawned for each hero")]
     [SerializeField] private GameObject characterCardPrefab;
     [Tooltip("Parent transform where character card slots will be spawned")]
@@ -158,6 +159,12 @@ public class CharacterSelectionManager : MonoBehaviour
 
             // Track the spawned card
             spawnedCards.Add(card);
+            
+            // Wire up for preset selection if manager is available
+            if (cardPresetManager != null)
+            {
+                cardPresetManager.WireUpCard(card);
+            }
         }
         
         Debug.Log($"[CharacterSelectionManager] Generated {spawnedCards.Count} character cards");
@@ -331,10 +338,14 @@ public class CharacterSelectionManager : MonoBehaviour
         {
             if (i < selectedHeroes.Count && selectedHeroes[i] != null)
             {
+                // Find the card for this hero to get the selected preset
+                CharacterCard card = spawnedCards.FirstOrDefault(c => c.BoundHeroData == selectedHeroes[i]);
+                CharacterBuildPreset preset = (card != null) ? card.SelectedPreset : null;
+
                 transitionData.CharacterSlots[i] = new CharacterSlotData(i)
                 {
                     Hero = selectedHeroes[i],
-                    SelectedPreset = null // Or assign a default/selected preset if available
+                    SelectedPreset = preset
                 };
             }
             else

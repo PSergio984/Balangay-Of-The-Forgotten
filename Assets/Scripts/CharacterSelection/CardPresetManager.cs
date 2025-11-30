@@ -1,0 +1,209 @@
+using UnityEngine;
+using System.Collections.Generic;
+
+/* CARD PRESET MANAGER
+ * 
+ * Purpose: Manages the interaction between character cards and preset selection UI
+ * 
+ * How it works:
+ * - Listens for card click events (SelectEvent from CharacterCard)
+ * - Opens PresetSelectionUI when a card is clicked
+ * - Tracks all card-preset pairs for final scene transition
+ * 
+ * Integration: Bridges CharacterCard, HorizontalCharacterCardHolder, and PresetSelectionUI
+ */
+
+/// <summary>
+/// Manager that connects character card clicks to preset selection UI
+/// </summary>
+public class CardPresetManager : MonoBehaviour
+{
+    [Header("References")]
+    [SerializeField] private HorizontalCharacterCardHolder cardHolder;
+    [SerializeField] private PresetSelectionUI presetSelectionUI;
+    [SerializeField] private CharacterTransitionData transitionData;
+    
+    [Header("Settings")]
+    [SerializeField] private bool autoWireCards = true;
+    [Tooltip("If true, clicking a card opens preset selection. If false, only manual ShowPresetSelection calls work.")]
+    [SerializeField] private bool enableCardClickToOpenPresets = true;
+    
+    void Start()
+    {
+        if (autoWireCards)
+        {
+            WireUpExistingCards();
+        }
+    }
+    
+    /// <summary>
+    /// Automatically wires up all existing character cards to open preset selection on click
+    /// </summary>
+    private void WireUpExistingCards()
+    {
+        if (cardHolder == null)
+        {
+            Debug.LogWarning("[CardPresetManager] No cardHolder assigned. Cannot wire up cards.");
+            return;
+        }
+        
+        if (cardHolder.characterCards == null || cardHolder.characterCards.Count == 0)
+        {
+            Debug.LogWarning("[CardPresetManager] No cards found in cardHolder.");
+            return;
+        }
+        
+        foreach (CharacterCard card in cardHolder.characterCards)
+        {
+            if (card != null && card.SelectEvent != null)
+            {
+                // Listen for card selection events
+                card.SelectEvent.AddListener(OnCardClicked);
+            }
+        }
+        
+        Debug.Log($"[CardPresetManager] Wired up {cardHolder.characterCards.Count} cards for preset selection");
+    }
+    
+    /// <summary>
+    /// Called when a character card is clicked/selected
+    /// </summary>
+    private void OnCardClicked(CharacterCard card, bool selected)
+    {
+        if (!enableCardClickToOpenPresets) return;
+        
+        if (card == null || !selected) return;
+        
+        // Only open preset selection if card has hero data
+        if (card.BoundHeroData != null)
+        {
+            ShowPresetSelectionForCard(card);
+        }
+        else
+        {
+            Debug.LogWarning("[CardPresetManager] Card clicked but has no BoundHeroData");
+        }
+    }
+    
+    /// <summary>
+    /// Opens the preset selection UI for a specific card
+    /// </summary>
+    public void ShowPresetSelectionForCard(CharacterCard card)
+    {
+        if (presetSelectionUI == null)
+        {
+            Debug.LogError("[CardPresetManager] PresetSelectionUI not assigned!");
+            return;
+        }
+        
+        if (card == null || card.BoundHeroData == null)
+        {
+            Debug.LogWarning("[CardPresetManager] Cannot show preset selection for invalid card");
+            return;
+        }
+        
+        // Check if hero has presets
+        if (card.BoundHeroData.BuildPresets == null || card.BoundHeroData.BuildPresets.Count == 0)
+        {
+            Debug.LogWarning($"[CardPresetManager] Hero '{card.BoundHeroData.HeroName}' has no build presets assigned");
+            return;
+        }
+        
+        presetSelectionUI.ShowForCard(card);
+    }
+    
+    /// <summary>
+    /// Manually wire up a newly spawned card (call this if cards are spawned after Start)
+    /// </summary>
+    public void WireUpCard(CharacterCard card)
+    {
+        if (card != null && card.SelectEvent != null)
+        {
+            // Prevent duplicate registration by always removing before adding
+            card.SelectEvent.RemoveListener(OnCardClicked);
+            card.SelectEvent.AddListener(OnCardClicked);
+        }
+    }
+    
+    /// <summary>
+    /// Collects all selected cards with their presets and prepares transition data
+    /// </summary>
+    /// <returns>Number of valid card-preset pairs</returns>
+    public int PrepareTransitionData()
+    {
+        if (transitionData == null)
+        {
+            Debug.LogWarning("[CardPresetManager] TransitionData not assigned. Cannot prepare data.");
+            return 0;
+        }
+        
+        if (cardHolder == null || cardHolder.characterCards == null)
+        {
+            Debug.LogWarning("[CardPresetManager] No cards available to collect data from");
+            return 0;
+        }
+        
+        List<CharacterSlotData> slots = new List<CharacterSlotData>();
+        // Collect selected cards with presets
+        foreach (CharacterCard card in cardHolder.characterCards)
+        {
+            if (card != null && card.BoundHeroData != null)
+            {
+                CharacterBuildPreset preset = card.SelectedPreset;
+                // Only include cards with presets selected
+                if (preset != null)
+                {
+                    CharacterSlotData slot = new CharacterSlotData(slots.Count)
+                    {
+                        Hero = card.BoundHeroData,
+                        SelectedPreset = preset
+                    };
+                    slots.Add(slot);
+                }
+            }
+        }
+
+        int validSelections = slots.Count;
+
+        // Validate we have 1-4 slots
+        if (validSelections == 0)
+        {
+            Debug.LogWarning("[CardPresetManager] No cards with presets selected. Cannot proceed.");
+            return 0;
+        }
+
+        if (validSelections > 4)
+        {
+            Debug.LogWarning($"[CardPresetManager] {validSelections} cards selected, but only 4 allowed. Taking first 4.");
+            slots = slots.GetRange(0, 4);
+            validSelections = 4;
+        }
+
+        // Pad to 4 slots if needed (fill remaining with empty slots)
+        while (slots.Count < 4)
+        {
+            slots.Add(new CharacterSlotData(slots.Count));
+        }
+
+        // Write to transition data
+        transitionData.CharacterSlots = slots.ToArray();
+
+        Debug.Log($"[CardPresetManager] Prepared transition data: {validSelections} selected, {slots.Count} total slots");
+        return validSelections;
+    }
+    
+    void OnDestroy()
+    {
+        // Clean up listeners
+        if (cardHolder != null && cardHolder.characterCards != null)
+        {
+            foreach (CharacterCard card in cardHolder.characterCards)
+            {
+                if (card != null && card.SelectEvent != null)
+                {
+                    card.SelectEvent.RemoveListener(OnCardClicked);
+                }
+            }
+        }
+    }
+}

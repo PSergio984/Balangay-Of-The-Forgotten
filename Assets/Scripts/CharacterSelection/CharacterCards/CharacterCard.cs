@@ -8,6 +8,9 @@ using UnityEngine.UI;
 
 public class CharacterCard : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler, IPointerEnterHandler, IPointerExitHandler, IPointerUpHandler, IPointerDownHandler
 {
+    // Stores the selected build preset for this card (used by PresetSelectionUI)
+    [HideInInspector]
+    public CharacterBuildPreset SelectedPreset;
     private Canvas canvas;
     private Image imageComponent;
     [SerializeField] private bool instantiateVisual = true;
@@ -217,6 +220,8 @@ public class CharacterCard : MonoBehaviour, IDragHandler, IBeginDragHandler, IEn
     private void OnDestroy()
     {
         if(CharacterCardVisual != null)
-        Destroy(CharacterCardVisual.gameObject);
+        {
+            Destroy(CharacterCardVisual.gameObject);
+        }
     }
 }

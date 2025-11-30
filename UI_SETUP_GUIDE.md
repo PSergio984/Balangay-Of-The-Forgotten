@@ -1,6 +1,6 @@
-# UI Setup Guide - Slot-Based Preset System
+# UI Setup Guide - Card-Based Preset System
 
-This guide shows how to structure your UI for the new 4-slot character preset selection system.
+This guide shows how to integrate build preset selection with your existing character card UI system.
 
 ## ⚠️ Critical: Fixed Stats Architecture
 
@@ -12,453 +12,313 @@ This guide shows how to structure your UI for the new 4-slot character preset se
 
 ---
 
+## System Overview
+
+Your existing card system (`CharacterCard`, `CharacterCardVisual`, `HorizontalCharacterCardHolder`) already handles:
+
+- Card display and selection
+- Drag and drop
+- Visual feedback
+
+**New additions integrate preset selection:**
+
+- Click a card → Opens preset selection UI overlay
+- Select a preset → Updates card to show preset name and stats
+- Card displays current build name below character info
+
+---
+
 ## Required UI Structure
 
 ```
-MainSelectionCanvas (GameObject)
-├── Slot1Button (Button)
-│   └── SlotImage (Image) ← Shows selected preset sprite
-├── Slot2Button (Button)
-│   └── SlotImage (Image)
-├── Slot3Button (Button)
-│   └── SlotImage (Image)
-├── Slot4Button (Button)
-│   └── SlotImage (Image)
-├── CurrentBuildText (TextMeshPro)
-├── SaveButton (Button)
-└── PresetSelectionUI (GameObject, initially disabled)
-   ├── TitleText (TextMeshPro)
-   ├── Preset1Button (Button)
-   │   └── PresetImage (Image)
-   ├── Preset2Button (Button)
-   │   └── PresetImage (Image)
-   ├── Preset3Button (Button)
-   │   └── PresetImage (Image)
-   └── BackButton (Button)
+Canvas (GameObject)
+├── HorizontalCharacterCardHolder (existing)
+│   └── [Character Cards spawn here]
+├── CardPresetManager (NEW - manages card↔preset interaction)
+└── PresetSelectionUI (NEW - overlay panel, initially disabled)
+    ├── PanelBackground (Image)
+    ├── TitleText (TextMeshPro) "Select Build for: [Hero Name]"
+    ├── Preset1Button (Button)
+    │   └── PresetImage (Image) ← Shows preset sprite
+    ├── Preset2Button (Button)
+    │   └── PresetImage (Image)
+    ├── Preset3Button (Button)
+    │   └── PresetImage (Image)
+    ├── CurrentBuildText (TextMeshPro) "Current: [Build Name]"
+    └── BackButton (Button)
 ```
 
 ---
 
 ## Step-by-Step Setup
 
-### Step 1: Create Main Selection Canvas
+### Step 1: Add Build Preset Text to CharacterCardVisual Prefab
 
-1. Add a Canvas to your scene (if not present)
-2. Add 4 Buttons for slots (Slot1Button, Slot2Button, Slot3Button, Slot4Button)
-3. Each slot button should have an Image child (SlotImage) to display the selected preset's sprite
-4. Add a TextMeshPro object below the slots for "Current Build: ..."
-5. Add a Save Button
+Your character cards already show hero portrait, name, and HP. Now add preset name display:
 
-### Step 2: Create Preset Selection UI
+1. Open your **CharacterCardVisual** prefab
+2. Find the hierarchy with `CharacterNameText` and `HealthText`
+3. Add a new **UI → Text - TextMeshPro** as a sibling
+4. Name it: `BuildPresetText`
+5. Position it below the health text (or wherever you want)
+6. Set placeholder text: "No Build"
+7. **Select CharacterCardVisual component** in Inspector
+8. In **Character Data Display** section, assign `BuildPresetText` to the **Build Preset Text** field
 
-1. Add a GameObject (PresetSelectionUI) under the Canvas, set it inactive by default
-2. Add a TitleText (TextMeshPro) at the top
-3. Add 3 Buttons (Preset1Button, Preset2Button, Preset3Button), each with an Image child (PresetImage)
-4. Add a BackButton (Button) at the bottom
+### Step 2: Create Preset Selection UI Overlay
 
----
+This is a full-screen overlay that appears when clicking a card:
 
-## Linking UI to Scripts
+1. In your scene, under Canvas, add **UI → Panel** (or GameObject with Image)
+2. Name it: `PresetSelectionPanel`
+3. Set **RectTransform** to stretch full screen (anchors: 0,0 to 1,1)
+4. Set **Image color** to semi-transparent black (e.g., `#000000AA`) for overlay effect
+5. **Disable the GameObject** (it will show when a card is clicked)
+6. Add **PresetSelectionUI** script component to this panel
 
-### MainSelectionUI Script
+Inside `PresetSelectionPanel`, create:
 
-Assign these references in the Inspector:
+**Title Text:**
 
-- **transitionData**: The `CharacterTransitionData` ScriptableObject asset. This asset stores the slot selection data, transition timings, animation clip references, and any parameters used by `MainSelectionUI` to animate character slot changes and pass data to the combat scene. You can create it via **Assets > Create > Data > Character Transition Data** (usually in `Assets/ScriptableObjects/` or `Assets/Data/`). For more details, see the [CharacterTransitionData class](../Scripts/SceneController/CharacterTransitionData.cs) or the setup guide.
-- **slotImages**: The 4 SlotImage components
-- **currentBuildText**: The TMP_Text for build name
-- **saveButton**: The Save Button
-- **presetSelectionUI**: Reference to your PresetSelectionUI script
+- Add **UI → Text - TextMeshPro**
+- Name: `TitleText`
+- Position: Top-center
+- Text: "Select Build for: Hero Name"
+- Font Size: 32
 
-### PresetSelectionUI Script
+**Preset Buttons (create 3 of these):**
+For each preset slot (1-3):
 
-Assign these references in the Inspector:
+- Add **UI → Button**
+- Name: `Preset1Button`, `Preset2Button`, `Preset3Button`
+- Position: Horizontal row in center
+- Size: 200x300 (adjust to fit your preset sprites)
+- Inside each button, add **UI → Image** child
+- Name: `PresetImage`
+- This will show the preset sprite
 
-- presetImages: 3 Image components for preset options
-- presetButtons: 3 Buttons for selecting presets
-- titleText: TMP_Text for the title
-- BackButton: Button for back/close functionality (must be wired to the PresetSelectionUI back/close handler)
+**Current Build Text:**
+
+- Add **UI → Text - TextMeshPro**
+- Name: `CurrentBuildText`
+- Position: Below preset buttons
+- Text: "Current: None"
+- Font Size: 24
+
+**Back Button:**
+
+- Add **UI → Button**
+- Name: `BackButton`
+- Position: Bottom-right or wherever you prefer
+- Set button text: "Back" or "Close"
+
+### Step 3: Link PresetSelectionUI Script
+
+Select `PresetSelectionPanel`, find the **PresetSelectionUI** component:
+
+- **Panel Root**: Assign the PresetSelectionPanel itself (this GameObject)
+- **Title Text**: Drag `TitleText` TMP_Text
+- **Preset Images**: Drag the 3 `PresetImage` Image components (array size 3)
+- **Preset Buttons**: Drag the 3 `Preset1Button`, `Preset2Button`, `Preset3Button` (array size 3)
+- **Back Button**: Drag `BackButton`
+- **Current Build Text**: Drag `CurrentBuildText` TMP_Text
+
+### Step 4: Add CardPresetManager to Scene
+
+This connects card clicks to the preset UI:
+
+1. Create empty GameObject in scene
+2. Name: `CardPresetManager`
+3. Add **CardPresetManager** script component
+4. In Inspector:
+   - **Card Holder**: Drag your `HorizontalCharacterCardHolder` GameObject
+   - **Preset Selection UI**: Drag the `PresetSelectionPanel` (with PresetSelectionUI script)
+   - **Transition Data**: Drag your `CharacterTransitionData` ScriptableObject asset
+   - **Auto Wire Cards**: ✓ Enabled (automatically hooks up cards on Start)
+   - **Enable Card Click To Open Presets**: ✓ Enabled
 
 ---
 
 ## How It Works
 
-1. Player clicks a slot button
-2. PresetSelectionUI appears, showing 3 preset options for that hero
-3. Player selects a preset; the slot image updates to show the preset's sprite
-4. "Current Build" text updates to show the selected preset name
-5. Player repeats for other slots, then clicks Save
+1. **Cards spawn** (via your existing system or CharacterSelectionManager)
+2. **Player clicks a card** → Card's `SelectEvent` fires
+3. **CardPresetManager** catches the event → Opens `PresetSelectionUI`
+4. **Preset UI shows** → Displays 3 preset options for that hero
+5. **Player selects preset** → Card updates to show preset name and stats
+6. **Player clicks Back** → Preset UI closes, card shows updated info
+7. **Repeat** for other cards as desired
+8. **When ready** → Call `CardPresetManager.PrepareTransitionData()` to collect all selections
 
 ---
 
-## Example Layout
+## Example Flow
 
 ```
-┌─────────────────────────────────────────────┐
-│ [Slot1] [Slot2] [Slot3] [Slot4]           │
-│   img     img     img     img              │
-│                                           │
-│ Current Build: Glass Cannon Set           │
-│                                           │
-│                [Save]                     │
-└─────────────────────────────────────────────┘
+┌─────────────────────────────────────────────────┐
+│ [Card1] [Card2] [Card3] [Card4]               │  ← Your existing cards
+│  Hero1   Hero2   Hero3   Hero4                │
+│ "Tank"  "Mage"   ...     ...                  │
+└─────────────────────────────────────────────────┘
+           ↓ Player clicks Card1
+
+┌──────────────────────────────────────────────────┐
+│         Select Build for: Hero1                  │  ← Overlay appears
+│                                                  │
+│  [Glass Cannon]  [Berserker]  [Bruiser]         │  ← 3 preset options
+│   HP: 650        HP: 700      HP: 800           │
+│   ATK: High      ATK: High    ATK: Med          │
+│                                                  │
+│  Current: Tank                                   │  ← Shows current
+│                                [Back]            │
+└──────────────────────────────────────────────────┘
+           ↓ Player clicks "Glass Cannon"
+
+┌─────────────────────────────────────────────────┐
+│ [Card1]         [Card2] [Card3] [Card4]        │  ← Card updated!
+│  Hero1           Hero2   Hero3   Hero4         │
+│ "Glass Cannon"  "Mage"   ...     ...           │  ← Shows new build
+│  HP: 650                                        │  ← Shows preset HP
+└─────────────────────────────────────────────────┘
+```
+
+---
+
+## Integration with Combat Scene
+
+When ready to transition to combat:
+
+```csharp
+// In your scene transition script (e.g., on Save button click):
+CardPresetManager manager = FindObjectOfType<CardPresetManager>();
+int selectedCount = manager.PrepareTransitionData();
+
+if (selectedCount > 0)
+{
+    SceneManager.LoadScene("Combat");
+    // MatchSetupSystem will read CharacterTransitionData.CharacterSlots
+}
+else
+{
+    Debug.LogWarning("No cards with presets selected!");
+}
 ```
 
 ---
 
 ## Tips
 
-- Preset sprites should contain all info (portrait, build name, stats)
-- No need for dynamic text overlays on slot images
-- Use TMP_Text for "Current Build" and UI labels
-- Use UnityEvents to wire up button clicks to your scripts
+- Preset sprites should show full character + build info (artist creates these)
+- Card displays "Build Name" below character name
+- HP updates to show preset's fixed value (not hero base)
+- If hero has no presets assigned, clicking card logs a warning
+- PresetSelectionUI automatically highlights currently selected preset
+- Use semi-transparent overlay to dim cards behind preset selection
+- Back button closes overlay without changing selection
 
 ---
 
-## Testing
+## Testing Checklist
 
-1. Play the scene
-2. Click each slot, select a preset, verify the slot image and build text update
-3. Click Save to proceed
-
----
-
-## Setting Up CharacterCard Prefab
-
-The CharacterCard prefab is used to visually display each hero's portrait, name, and stats within each slot of the preset selection UI. Before your preset selection UI can show correct visuals, you must ensure your CharacterCard prefab is set up as described below.
-
-### Step 1: Locate Your CharacterCard Prefab
-
-1. Navigate to `Assets/Prefabs/CharacterSelection/` (or wherever your prefab is)
-2. Double-click the **CharacterCard** prefab to enter Prefab editing mode
-3. Find the **CharacterCardVisual** GameObject in the hierarchy
+- [ ] Cards display correctly with hero data
+- [ ] Clicking a card opens preset selection overlay
+- [ ] Overlay shows 3 preset options (or however many hero has)
+- [ ] Clicking a preset updates card's "Build Name" text
+- [ ] Card HP updates to show preset's fixed HP value
+- [ ] Currently selected preset is highlighted in overlay
+- [ ] Back button closes overlay
+- [ ] Clicking another card shows that hero's presets
+- [ ] Can select presets for multiple cards
+- [ ] PrepareTransitionData() collects all card-preset pairs correctly
 
 ---
 
-### Step 2: Add Character Portrait Image
+## Advanced: Adding More Stats Display
 
-**Create the Image:**
+If you want to show ATK, DEF, MAG on cards (beyond just HP), follow this pattern:
 
-1. Right-click on the appropriate parent (likely inside ShakeParent/TiltParent)
-2. Select **UI → Image**
-3. Rename to `CharacterPortrait`
+### 1. Add Text Fields to Prefab
 
-**Configure RectTransform:**
+- Add **UI → Text - TextMeshPro** for each stat (AttackText, DefenseText, MagicText)
+- Position them below HP text or in a stat row
 
-```
-Anchors: Center (0.5, 0.5)
-Position: (0, 50, 0) - adjust based on your card layout
-Width: 128
-Height: 128
-Scale: (1, 1, 1)
-```
-
-**Configure Image Component:**
-
-```
-Source Image: None (will be set at runtime)
-Image Type: Simple
-Preserve Aspect: ✓ Enabled
-Raycast Target: ✗ Disabled (optional, for performance)
-```
-
-**Position Tips:**
-
-- Place near top/center of card
-- Leave room for name text below
-- Consider card frame/borders
-
----
-
-### Step 3: Add Character Name Text
-
-**Create the Text:**
-
-1. Right-click on the same parent as Portrait
-2. Select **UI → Text - TextMeshPro**
-3. Rename to `CharacterNameText`
-
-**Configure RectTransform:**
-
-```
-Anchors: Center (0.5, 0.5)
-Position: (0, -20, 0) - below portrait
-Width: 150
-Height: 30
-```
-
-**Configure TextMeshProUGUI Component:**
-
-```
-Text: "Character Name" (placeholder)
-Font: Your game font
-Font Size: 20-24
-Alignment: Center (Horizontal & Vertical)
-Color: White (#FFFFFF) or your theme color
-Wrapping: Enabled
-Overflow: Ellipsis (truncate long names)
-```
-
-**Style Enhancements:**
-
-- Add Outline effect (black, size 0.2) for readability
-- Add Shadow for depth
-- Consider gradient for visual appeal
-
----
-
-### Step 4: Add Health Text
-
-**Create the Text:**
-
-1. Right-click on the same parent
-2. Select **UI → Text - TextMeshPro**
-3. Rename to `HealthText`
-
-**Configure RectTransform:**
-
-```
-Anchors: Bottom-Center (0.5, 0)
-Position: (0, 10, 0) - near bottom of card
-Width: 100
-Height: 25
-```
-
-**Configure TextMeshProUGUI Component:**
-
-```
-Text: "HP: 100" (placeholder)
-Font: Your game font
-Font Size: 14-16
-Alignment: Center
-Color: Green (#00FF00) or theme color
-```
-
-**Optional Enhancements:**
-
-- Use icon before text (heart icon)
-- Color code based on HP (green = healthy, yellow = medium, red = low)
-- Add background panel for contrast
-
----
-
-### Step 5: Link to CharacterCardVisual Component
-
-**Select the CharacterCardVisual GameObject**
-
-**In the Inspector, find "Character Data Display" section:**
-
-1. **Character Portrait** field:
-
-   - Drag the `CharacterPortrait` Image you created
-   - OR click the circle icon → select CharacterPortrait from the list
-
-2. **Character Name Text** field:
-
-   - Drag the `CharacterNameText` TextMeshPro you created
-
-3. **Health Text** field:
-   - Drag the `HealthText` TextMeshPro you created
-
-**Verification:**
-
-- All three fields should show references (not "None")
-- Hover over each to verify it's the correct component
-
----
-
-## Example Layout Positions
-
-### Vertical Card Layout (Portrait-style)
-
-```
-┌─────────────────┐
-│  [Card Border]  │
-│                 │
-│   ┌─────────┐   │ ← CharacterPortrait (0, 60, 0)
-│   │         │   │
-│   │ Portrait│   │
-│   │         │   │
-│   └─────────┘   │
-│                 │
-│  "Warrior"      │ ← CharacterNameText (0, -10, 0)
-│                 │
-│   ⚔️ ATK: 25    │ ← Optional stats
-│   🛡️ DEF: 15    │
-│                 │
-│  HP: 150        │ ← HealthText (0, -70, 0)
-└─────────────────┘
-```
-
-### Horizontal Card Layout (Landscape)
-
-```
-┌──────────────────────────────┐
-│                              │
-│  ┌────────┐    Warrior       │
-│  │        │    HP: 150       │
-│  │Portrait│    ATK: 25       │
-│  │        │    DEF: 15       │
-│  └────────┘    MAG: 10       │
-│                              │
-└──────────────────────────────┘
-```
-
----
-
-## Testing the Setup
-
-### In Prefab Edit Mode:
-
-1. **Check Hierarchy:**
-
-   - CharacterPortrait exists
-   - CharacterNameText exists
-   - HealthText exists
-
-2. **Check References:**
-
-   - Select CharacterCardVisual
-   - All three fields in "Character Data Display" are assigned
-
-3. **Check Visibility:**
-   - All UI elements visible in Scene view
-   - Text is readable
-   - Portrait frame looks good
-
----
-
-### In Play Mode:
-
-1. **Run Character Selection Scene**
-2. **Verify Each Card Shows:**
-
-   - Hero portrait (from HeroData.Image)
-   - Hero name (from HeroData.HeroName)
-   - HP value (from HeroData.Health)
-
-3. **If Blank:**
-   - Check Console for errors
-   - Verify HeroData assets have Image/Name/Health filled in
-   - Verify CharacterCardVisual.UpdateCharacterData() is called
-
----
-
-## Advanced Customization
-
-### Add More Stats Display
+### 2. Add Fields to CharacterCardVisual.cs
 
 ```csharp
-// In CharacterCardVisual.cs, add fields:
+// Add to Character Data Display section:
 [SerializeField] private TMP_Text attackText;
 [SerializeField] private TMP_Text defenseText;
+[SerializeField] private TMP_Text magicText;
 
-// In UpdateCharacterData():
+// Update UpdateCharacterData() method:
 if (attackText != null)
-{
     attackText.text = $"ATK: {heroData.AttackPower}";
-}
-
 if (defenseText != null)
-{
     defenseText.text = $"DEF: {heroData.Defense}";
-}
+if (magicText != null)
+    magicText.text = $"MAG: {heroData.MagicPower}";
+
+// Update UpdatePresetData() method:
+if (attackText != null)
+    attackText.text = $"ATK: {preset.AttackPower}";
+if (defenseText != null)
+    defenseText.text = $"DEF: {preset.Defense}";
+if (magicText != null)
+    magicText.text = $"MAG: {preset.MagicPower}";
 ```
 
-### Add Character Class Icon
+### 3. Assign in Inspector
 
-```csharp
-[SerializeField] private Image classIcon;
-
-// In UpdateCharacterData():
-if (classIcon != null && heroData.ClassIcon != null)
-{
-    classIcon.sprite = heroData.ClassIcon;
-}
-```
-
-### Add Deck Size Display
-
-```csharp
-[SerializeField] private TMP_Text deckSizeText;
-
-// In UpdateCharacterData():
-if (deckSizeText != null && heroData.Deck != null)
-{
-    deckSizeText.text = $"{heroData.Deck.Count} Cards";
-}
-```
+- Drag each new TMP_Text to corresponding field in CharacterCardVisual component
 
 ---
 
-## Common Layout Issues
+## Troubleshooting
 
-### Problem: Portrait is stretched/distorted
+**Cards not responding to clicks:**
 
-**Solution**: Enable "Preserve Aspect" on Image component
+- Check CardPresetManager is in scene with Card Holder assigned
+- Verify autoWireCards is enabled
+- Check Console for warnings about missing hero data
 
-### Problem: Text is cut off
+**Preset UI not showing:**
 
-**Solution**: Increase Width/Height of RectTransform, enable Wrapping
+- Verify PresetSelectionPanel starts disabled
+- Check PresetSelectionUI script has all references assigned
+- Ensure hero has BuildPresets assigned in Inspector
 
-### Problem: Elements overlap
+**Card not updating after preset selection:**
 
-**Solution**: Adjust Position values, check RectTransform anchors
+- Check CharacterCardVisual has BuildPresetText field assigned
+- Verify UpdatePresetData() is being called (add Debug.Log to test)
+- Ensure preset has valid data (Health, PresetName, PresetSprite)
 
-### Problem: Text is unreadable
+**Stats showing wrong values:**
 
-**Solution**: Add Outline/Shadow effects, increase font size, adjust color
-
-### Problem: Portrait too large/small
-
-**Solution**: Adjust Width/Height in RectTransform (keep equal for square)
-
----
-
-## UI Best Practices
-
-### Spacing Guidelines
-
-- Minimum 10 units between elements
-- Portrait should be largest element (25-40% of card height)
-- Text should be readable at card scale (minimum 14pt font)
-
-### Color Guidelines
-
-- High contrast between text and background
-- Use thematic colors (green = health, red = attack, blue = magic)
-- Add outlines for text readability
-
-### Animation Considerations
-
-- All elements should be children of ShakeParent/TiltParent
-- This ensures they animate with the card
-- Don't animate text separately (will look jittery)
+- Confirm you're using preset stats (fixed values), not hero base stats
+- Check UpdatePresetData() updates all stat displays
+- Verify preset ScriptableObject has correct values
 
 ---
 
-## Checklist Before Testing
+## Final Checklist
 
-- [ ] CharacterPortrait Image created and positioned
-- [ ] CharacterNameText TMP created and styled
-- [ ] HealthText TMP created and positioned
-- [ ] All three assigned to CharacterCardVisual component
-- [ ] Placeholder text looks good in Scene view
-- [ ] Elements don't overlap
-- [ ] Text is readable
-- [ ] Prefab saved
-- [ ] HeroData assets have required data (Image, Name, Health)
-
----
-
-## Next Steps
-
-1. ✅ Complete prefab UI setup (this guide)
-2. Create 3-5 HeroData assets with real data
-3. Configure CharacterSelectionManager in scene
-4. Test card generation in Play mode
-5. Integrate with combat system
+- [ ] BuildPresetText added to CharacterCardVisual prefab
+- [ ] BuildPresetText field assigned in CharacterCardVisual component
+- [ ] PresetSelectionPanel created with all UI elements
+- [ ] PresetSelectionUI script configured with all references
+- [ ] CardPresetManager in scene with Card Holder, Preset UI, and Transition Data assigned
+- [ ] Hero assets have BuildPresets assigned (3 presets recommended)
+- [ ] Tested: Click card → preset UI opens
+- [ ] Tested: Select preset → card updates build name and stats
+- [ ] Tested: Back button closes preset UI
+- [ ] PrepareTransitionData() ready to call before scene transition
 
 ---
 
-**Reference**: See `SETUP_CHARACTER_SYSTEM.md` for full system setup.
+## Reference
+
+- **Setup Guide**: `SETUP_CHARACTER_SYSTEM.md` - Full system setup
+- **Architecture**: `CORRECTED_ARCHITECTURE.md` - Design decisions and data flow
+- **Quick Start**: `QUICK_START.md` - Minimal setup steps
+- **Implementation**: `IMPLEMENTATION_SUMMARY.md` - Complete system overview

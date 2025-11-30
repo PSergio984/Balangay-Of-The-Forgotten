@@ -9,6 +9,8 @@ using Unity.VisualScripting;
 
 public class CharacterCardVisual : MonoBehaviour
 {
+    // Stores the last HeroData for fallback health display
+    private HeroData currentHeroData;
     private bool initalize = false;
 
     [Header("Card")]
@@ -32,6 +34,7 @@ public class CharacterCardVisual : MonoBehaviour
     [SerializeField] private Image characterPortrait;
     [SerializeField] private TMPro.TMP_Text characterNameText;
     [SerializeField] private TMPro.TMP_Text healthText;
+    [SerializeField] private TMPro.TMP_Text buildPresetText; // Shows current build preset name
 
     [Header("Follow Parameters")]
     [SerializeField] private float followSpeed = 30;
@@ -112,25 +115,73 @@ public class CharacterCardVisual : MonoBehaviour
     public void UpdateCharacterData(HeroData heroData)
     {
         if (heroData == null) return;
-        
+        currentHeroData = heroData;
         // Update character portrait
         if (characterPortrait != null && heroData.Image != null)
         {
             characterPortrait.sprite = heroData.Image;
         }
-        
         // Update character name
-            if (characterNameText != null && heroData != null)
-            {
-                string safeName = string.IsNullOrWhiteSpace(heroData.HeroName) ? "Unknown" : heroData.HeroName.Trim();
-                characterNameText.text = safeName;
-            }
-        
+        if (characterNameText != null && heroData != null)
+        {
+            string safeName = string.IsNullOrWhiteSpace(heroData.HeroName) ? "Unknown" : heroData.HeroName.Trim();
+            characterNameText.text = safeName;
+        }
         // Update health display
         if (healthText != null)
         {
             healthText.text = $"HP: {heroData.Health}";
         }
+    }
+    
+    /// <summary>
+    /// Updates the visual display to show preset-specific data
+    /// </summary>
+    /// <param name="preset">The build preset to display (or null to clear)</param>
+    /// <remarks>
+    /// Called when player selects a build preset for this character.
+    /// Shows preset name and updates stats to show FIXED preset values (overrides hero base stats).
+    /// </remarks>
+    public void UpdatePresetData(CharacterBuildPreset preset)
+    {
+        if (preset == null)
+        {
+            // Clear preset info
+            if (buildPresetText != null)
+                buildPresetText.text = "No Build";
+            // Restore health from last HeroData if available
+            if (healthText != null)
+            {
+                if (currentHeroData != null)
+                {
+                    healthText.text = $"HP: {currentHeroData.Health}";
+                }
+                else
+                {
+                    healthText.text = "HP: --";
+                    Debug.LogWarning("[CharacterCardVisual] UpdatePresetData called with null currentHeroData; cannot display base health.", this);
+                }
+            }
+            return;
+        }
+        // Update preset name display
+        if (buildPresetText != null)
+        {
+            string safeName = preset.PresetName != null ? preset.PresetName.Trim() : null;
+            string presetName = string.IsNullOrWhiteSpace(safeName) ? "Unnamed Build" : safeName;
+            buildPresetText.text = presetName;
+        }
+        
+        // Update stats to show FIXED preset values (not base + modifier)
+        if (healthText != null)
+        {
+            healthText.text = $"HP: {preset.Health}";
+        }
+        
+        // Note: If you add more stat displays (ATK, DEF, etc.), update them here
+        // Example:
+        // if (attackText != null) attackText.text = $"ATK: {preset.AttackPower}";
+        // if (defenseText != null) defenseText.text = $"DEF: {preset.Defense}";
     }
 
     void Update()
