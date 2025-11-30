@@ -106,6 +106,8 @@ public class CharacterCard : MonoBehaviour, IDragHandler, IBeginDragHandler, IEn
                 // Fallback to hero portrait if no role card available
                 imageComponent.sprite = heroData.Image;
                 Debug.LogWarning($"[CharacterCard] HeroData '{heroData.HeroName}' has no RoleCard sprite! Using hero portrait as fallback.");
+                // No preset selected yet (ensure consistent clearing)
+                SelectedPreset = null;
             }
             else
             {

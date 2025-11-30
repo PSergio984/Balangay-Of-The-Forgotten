@@ -165,7 +165,7 @@ public class CharacterCardVisual : MonoBehaviour
         // Update card sprite to show the selected preset's card sprite (with baked-in stats)
         if (parentCard != null && preset.PresetSprite != null)
         {
-            Image cardImage = parentCard.GetComponent<Image>();
+            cardImage = parentCard.GetComponent<Image>();
             if (cardImage != null)
             {
                 cardImage.sprite = preset.PresetSprite;
