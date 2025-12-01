@@ -96,7 +96,7 @@ public class MainMenu : MonoBehaviour
         
         SceneController.Instance
             .NewTransition()
-            .Unload(SceneDatabase.Slots.Menu)
+            .Unload(SceneDatabase.Slots.MainMenu)
             .Load(SceneDatabase.Slots.SessionContent, SceneDatabase.Scenes.CharacterSelection, setActive: true)
             .WithOverlay()
             .Perform();

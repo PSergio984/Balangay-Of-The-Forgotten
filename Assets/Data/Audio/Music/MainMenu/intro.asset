@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::AudioSystem.SoundData
   clip: {fileID: 8300000, guid: 7514b949080f61d4ebda233f48b0fabc, type: 3}
   mixerGroup: {fileID: 4271439559464837993, guid: 1d8e109cc8751d241b1a0f5629757c92, type: 2}
-  loop: 0
+  loop: 1
   playOnAwake: 1
   frequentSound: 0
   volume: 1

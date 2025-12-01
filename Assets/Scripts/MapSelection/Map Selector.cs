@@ -42,7 +42,7 @@ public class MapSelector : MonoBehaviour
             .NewTransition()
             .Unload(SceneDatabase.Slots.SessionContent)
             .Unload(SceneDatabase.Slots.Session)
-            .Load(SceneDatabase.Slots.Menu, SceneDatabase.Scenes.MainMenu, setActive: true)
+            .Load(SceneDatabase.Slots.MainMenu, SceneDatabase.Scenes.MainMenu, setActive: true)
             .WithMusic(MenuMusic, MusicFadeTime)
             .WithOverlay()
             .Perform();

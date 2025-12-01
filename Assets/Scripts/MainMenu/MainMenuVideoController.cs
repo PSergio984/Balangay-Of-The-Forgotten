@@ -77,17 +77,16 @@ public class MainMenuVideoController : MonoBehaviour
         // Validate video lists
         if (useWebGLVideoPlayer && (webglVideoNames == null || webglVideoNames.Count == 0))
         {
-            LogError("WebGL video list is empty! Skipping to next scene.");
-            LoadNextScene();
+            allVideosFinished = true;
+            LogError("WebGL video list is empty! No videos to play.");
             return;
         }
         else if (!useWebGLVideoPlayer && (pcVideoClips == null || pcVideoClips.Count == 0))
         {
-            LogError("PC video clips list is empty! Skipping to next scene.");
-            LoadNextScene();
+            allVideosFinished = true;
+            LogError("PC video clips list is empty! No videos to play.");
             return;
         }
-
         // Start playing first video
         currentVideoIndex = 0;
         PlayCurrentVideo();
@@ -321,9 +320,12 @@ public class MainMenuVideoController : MonoBehaviour
 
         if (currentVideoIndex >= GetTotalVideoCount())
         {
-            LogDebug("All videos finished, transitioning to next scene");
+            // Mark all videos as finished before looping the last video
             allVideosFinished = true;
-            LoadNextScene();
+            // Loop the last video
+            currentVideoIndex = GetTotalVideoCount() - 1;
+            LogDebug("Last video finished, looping last video");
+            PlayCurrentVideo();
         }
         else
         {
@@ -450,20 +452,6 @@ public class MainMenuVideoController : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Load the next scene with optional fade transition
-    /// </summary>
-    private void LoadNextScene()
-    {
-        // Ensure music is stopped before scene transition
-        StopMusicForCurrentVideo();
-        
-         SceneController.Instance
-            .NewTransition()
-            .Load(SceneDatabase.Slots.SessionContent, SceneDatabase.Scenes.CharacterSelection, setActive: true)
-            .Unload(SceneDatabase.Scenes.MainMenu)
-            .Perform();
-    }
 
     // Debug logging methods
     private void LogDebug(string message)

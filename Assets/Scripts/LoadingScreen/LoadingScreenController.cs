@@ -376,9 +376,10 @@ public class LoadingScreenController : MonoBehaviour
 
         if (currentVideoIndex >= GetTotalVideoCount())
         {
-            LogDebug("All videos finished, transitioning to next scene");
-            allVideosFinished = true;
-            LoadNextScene();
+            // Loop the last video
+            currentVideoIndex = GetTotalVideoCount() - 1;
+            LogDebug("Last video finished, looping last video");
+            PlayCurrentVideo();
         }
         else
         {
@@ -509,7 +510,7 @@ public class LoadingScreenController : MonoBehaviour
         SceneController.Instance
             .NewTransition()
             .Unload(SceneDatabase.Slots.LoadingScreen)
-            .Load(SceneDatabase.Slots.Menu, SceneDatabase.Scenes.MainMenu, setActive: true) 
+            .Load(SceneDatabase.Slots.MainMenu, SceneDatabase.Scenes.MainMenu, setActive: true) 
             .Perform();
     }
 
