@@ -97,9 +97,8 @@ public class MainMenu : MonoBehaviour
         SceneController.Instance
             .NewTransition()
             .Unload(SceneDatabase.Slots.Menu)
-            .Load(SceneDatabase.Slots.SessionContent, SceneDatabase.Scenes.MapSelection, setActive: true)
+            .Load(SceneDatabase.Slots.SessionContent, SceneDatabase.Scenes.CharacterSelection, setActive: true)
             .WithOverlay()
-            .WithMusic(mapSelectionMusic, MusicFadeTime)
             .Perform();
     }
 

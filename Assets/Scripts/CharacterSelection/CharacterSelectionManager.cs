@@ -96,6 +96,18 @@ public class CharacterSelectionManager : MonoBehaviour
         // Generate character cards
         GenerateCharacterCards();
 
+        // Wire up confirm button event
+        if (confirmButton != null)
+        {
+            confirmButton.onClick.RemoveAllListeners();
+            confirmButton.onClick.AddListener(ConfirmSelection);
+            Debug.Log("[CharacterSelectionManager] ConfirmSelection listener added to confirmButton");
+        }
+        else
+        {
+            Debug.LogError("[CharacterSelectionManager] confirmButton is NULL! Cannot wire up event.");
+        }
+
         // After cards are generated, wire up preset manager (fixes timing issue)
         // (Removed: WireUpExistingCards is now only called after cardHolder.characterCards is populated in RefreshCardHolder)
     }
@@ -240,6 +252,8 @@ public class CharacterSelectionManager : MonoBehaviour
     /// <param name="isSelected">True if selected, false if deselected</param>
     private void OnCardSelectionChanged(CharacterCard card, bool isSelected)
     {
+        Debug.Log($"=== OnCardSelectionChanged: {card?.BoundHeroData?.HeroName ?? "NULL"}, isSelected={isSelected} ===");
+        
         if (card.BoundHeroData == null)
         {
             Debug.LogWarning("[CharacterSelectionManager] Card has no bound hero data!");
@@ -248,7 +262,7 @@ public class CharacterSelectionManager : MonoBehaviour
 
         if (suppressSelectionCallback)
         {
-            // Prevent reentrancy during forced deselection
+            Debug.Log("[CharacterSelectionManager] Suppressing callback (reentrancy guard)");
             return;
         }
 
@@ -257,6 +271,7 @@ public class CharacterSelectionManager : MonoBehaviour
             // Check if already selected
             if (selectedHeroes.Contains(card.BoundHeroData))
             {
+                Debug.Log($"[CharacterSelectionManager] {card.BoundHeroData.HeroName} already selected, ignoring");
                 return;
             }
 
@@ -270,6 +285,7 @@ public class CharacterSelectionManager : MonoBehaviour
                     CharacterCard oldestCard = spawnedCards.FirstOrDefault(c => c.BoundHeroData == oldestHero);
                     // Remove oldest hero from selection list first
                     selectedHeroes.RemoveAt(0);
+                    Debug.Log($"[CharacterSelectionManager] Removed oldest: {oldestHero.HeroName}");
                     if (oldestCard != null)
                     {
                         // Use reentrancy guard to prevent callback from double-removing
@@ -290,9 +306,12 @@ public class CharacterSelectionManager : MonoBehaviour
         else
         {
             // Remove from selection (if present)
-            selectedHeroes.Remove(card.BoundHeroData);
-            Debug.Log($"[CharacterSelectionManager] Deselected: {card.BoundHeroData.HeroName} ({selectedHeroes.Count}/{maxSelections})");
+            bool wasRemoved = selectedHeroes.Remove(card.BoundHeroData);
+            Debug.Log($"[CharacterSelectionManager] Deselected: {card.BoundHeroData.HeroName} (was in list: {wasRemoved}) ({selectedHeroes.Count}/{maxSelections})");
         }
+
+        // Log current selection state
+        Debug.Log($"[CharacterSelectionManager] Current selectedHeroes: {string.Join(", ", selectedHeroes.Select(h => h.HeroName))}");
 
         UpdateSelectionUI();
     }
@@ -319,24 +338,16 @@ public class CharacterSelectionManager : MonoBehaviour
             }
         }
         
-        // Count how many cards have presets selected (ALL cards, not just selected heroes)
-        int presetsSelected = 0;
-        if (cardPresetManager != null)
-        {
-            presetsSelected = spawnedCards.Count(card => card != null && card.SelectedPreset != null);
-            Debug.Log($"[CharacterSelectionManager] Presets counted: {presetsSelected}");
-        }
-        else
-        {
-            Debug.LogWarning($"[CharacterSelectionManager] cardPresetManager is NULL!");
-        }
+        // Count how many cards (ALL spawned heroes) have presets selected
+        int presetsSelected = spawnedCards.Count(card => card != null && card.SelectedPreset != null);
+        int totalHeroes = spawnedCards.Count;
+        Debug.Log($"[CharacterSelectionManager] Presets assigned: {presetsSelected}/{totalHeroes}");
         
-        // Update preset count text using presetsSelected (counts ALL cards with presets)
+        // Update preset count text to show ALL cards
         if (selectionCountText != null)
         {
-            int totalPresets = availableHeroes != null ? availableHeroes.Count : 0;
-            selectionCountText.text = $"Presets Selected: {presetsSelected}/{totalPresets}";
-            Debug.Log($"[CharacterSelectionManager] Updated UI text: 'Presets Selected: {presetsSelected}/{totalPresets}'");
+            selectionCountText.text = $"Presets Selected: {presetsSelected}/{totalHeroes}";
+            Debug.Log($"[CharacterSelectionManager] Updated UI text: 'Presets Selected: {presetsSelected}/{totalHeroes}'");
         }
         else
         {
@@ -346,7 +357,9 @@ public class CharacterSelectionManager : MonoBehaviour
         // Enable/disable confirm button based on preset selection
         if (confirmButton != null)
         {
-            confirmButton.interactable = IsValidSelection();
+            bool isValid = IsValidSelection();
+            confirmButton.interactable = isValid;
+            Debug.Log($"[CharacterSelectionManager] Confirm button interactable set to: {isValid}");
         }
     }
     
@@ -356,18 +369,7 @@ public class CharacterSelectionManager : MonoBehaviour
     /// </summary>
     public void ConfirmSelection()
     {
-        // Validate selection
-        if (selectedHeroes.Count < minSelections)
-        {
-            Debug.LogWarning($"[CharacterSelectionManager] Must select at least {minSelections} character(s)!");
-            return;
-        }
-        
-        if (selectedHeroes.Count > maxSelections)
-        {
-            Debug.LogWarning($"[CharacterSelectionManager] Cannot select more than {maxSelections} characters!");
-            return;
-        }
+        Debug.Log("=== [CharacterSelectionManager] ConfirmSelection() CALLED ===");
         
         if (transitionData == null)
         {
@@ -375,39 +377,53 @@ public class CharacterSelectionManager : MonoBehaviour
             return;
         }
         
-        if (!IsValidSelection())
+        // Validate that ALL spawned heroes have presets
+        bool isValid = IsValidSelection();
+        Debug.Log($"[CharacterSelectionManager] IsValidSelection returned: {isValid}");
+        
+        if (!isValid)
         {
-            Debug.LogWarning("Cannot confirm: Not all selected heroes have presets or incorrect number selected.");
+            Debug.LogWarning("Cannot confirm: Not all heroes have presets assigned!");
+            
+            // Debug: Show which heroes don't have presets
+            foreach (var card in spawnedCards)
+            {
+                if (card == null || card.BoundHeroData == null) continue;
+                
+                if (card.SelectedPreset == null)
+                {
+                    Debug.LogWarning($"  - {card.BoundHeroData.HeroName}: NO PRESET SELECTED");
+                }
+                else
+                {
+                    Debug.Log($"  - {card.BoundHeroData.HeroName}: Preset = {card.SelectedPreset.PresetName}");
+                }
+            }
             return;
         }
 
-        // Write selected heroes to slot-based CharacterTransitionData
-        if (transitionData.CharacterSlots == null || transitionData.CharacterSlots.Length != maxSelections)
-            transitionData.CharacterSlots = new CharacterSlotData[maxSelections];
-        for (int i = 0; i < maxSelections; i++)
+        // Use CardPresetManager to prepare transition data (handles all cards with presets)
+        if (cardPresetManager != null)
         {
-            if (i < selectedHeroes.Count && selectedHeroes[i] != null)
+            int validSelections = cardPresetManager.PrepareTransitionData();
+            Debug.Log($"[CharacterSelectionManager] CardPresetManager prepared {validSelections} slots");
+            
+            if (validSelections == 0)
             {
-                // Find the card for this hero to get the selected preset
-                CharacterCard card = spawnedCards.FirstOrDefault(c => c.BoundHeroData == selectedHeroes[i]);
-                CharacterBuildPreset preset = (card != null) ? card.SelectedPreset : null;
-
-                transitionData.CharacterSlots[i] = new CharacterSlotData(i)
-                {
-                    Hero = selectedHeroes[i],
-                    SelectedPreset = preset
-                };
-            }
-            else
-            {
-                transitionData.CharacterSlots[i] = new CharacterSlotData(i);
+                Debug.LogError("[CharacterSelectionManager] No valid selections prepared!");
+                return;
             }
         }
+        else
+        {
+            Debug.LogError("[CharacterSelectionManager] CardPresetManager is null!");
+            return;
+        }
 
-        Debug.Log($"[CharacterSelectionManager] Confirmed selection of {selectedHeroes.Count} heroes: {string.Join(", ", selectedHeroes.Select(h => h.HeroName))}");
+        Debug.Log($"[CharacterSelectionManager] Confirmed selection of {spawnedCards.Count} heroes");
 
-        // Load combat scene
-        StartCoroutine(LoadCombatScene());
+        // Load map scene
+        LoadMapScene();
     }
 
     /// <summary>
@@ -415,33 +431,46 @@ public class CharacterSelectionManager : MonoBehaviour
     /// </summary>
     private bool IsValidSelection()
     {
-        if (selectedHeroes.Count < minSelections || selectedHeroes.Count > maxSelections)
-            return false;
-        foreach (var hero in selectedHeroes)
+        Debug.Log($"=== [IsValidSelection] START ===");
+        
+        int totalHeroes = spawnedCards.Count;
+        int heroesWithPresets = 0;
+        
+        Debug.Log($"[IsValidSelection] Checking if ALL {totalHeroes} heroes have presets");
+        
+        // Check that ALL spawned cards have presets (not just selected ones)
+        foreach (var card in spawnedCards)
         {
-            var card = spawnedCards.FirstOrDefault(c => c.BoundHeroData == hero);
-            if (card == null || card.SelectedPreset == null)
-                return false;
+            if (card == null || card.BoundHeroData == null) continue;
+            
+            if (card.SelectedPreset != null)
+            {
+                heroesWithPresets++;
+                Debug.Log($"[IsValidSelection] ✓ {card.BoundHeroData.HeroName} has preset '{card.SelectedPreset.PresetName}'");
+            }
+            else
+            {
+                Debug.Log($"[IsValidSelection] ✗ {card.BoundHeroData.HeroName} has NO preset");
+            }
         }
-        return true;
+        
+        bool allHavePresets = (heroesWithPresets == totalHeroes) && (totalHeroes > 0);
+        Debug.Log($"[IsValidSelection] Result: {(allHavePresets ? "VALID" : "INVALID")} - {heroesWithPresets}/{totalHeroes} heroes have presets");
+        
+        return allHavePresets;
     }
     
     /// <summary>
     /// Loads the combat scene asynchronously
     /// </summary>
-    private IEnumerator LoadCombatScene()
+    private void LoadMapScene()
     {
-        // Optional: Show loading screen here
-        
-        AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(combatSceneName);
-        
-        // Wait until the scene is fully loaded
-        while (!asyncLoad.isDone)
-        {
-            // Optional: Update loading progress UI
-            // float progress = asyncLoad.progress / 0.9f;
-            yield return null;
-        }
+       SceneController.Instance
+            .NewTransition()
+            .Unload(SceneDatabase.Scenes.CharacterSelection)
+            .Load(SceneDatabase.Slots.SessionContent, SceneDatabase.Scenes.MapSelection, setActive: true)
+            .WithOverlay()
+            .Perform();
     }
     
     /// <summary>
@@ -480,6 +509,12 @@ public class CharacterSelectionManager : MonoBehaviour
         if (cardPresetManager != null)
         {
             cardPresetManager.PresetSelectionChanged -= UpdateSelectionUI;
+        }
+        
+        // Clean up confirm button listener
+        if (confirmButton != null)
+        {
+            confirmButton.onClick.RemoveListener(ConfirmSelection);
         }
     }
 }
