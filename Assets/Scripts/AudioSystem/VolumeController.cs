@@ -43,14 +43,29 @@ public class VolumeController : MonoBehaviour
         audioMixer.SetFloat("SFXVolume", sfxVolume);
     }
 
-    public void GOSetActive(GameObject buttonGroup)
+    [Header("UI References")]
+    [SerializeField] private GameObject menuButtons;
+    [SerializeField] private GameObject soundSettings;
+    [SerializeField] private GameObject logos;
+
+    /// <summary>
+    /// Shows the sound settings panel and hides menu buttons and logos
+    /// </summary>
+    public void ShowSoundSettings()
     {
-        buttonGroup.SetActive(true);
+        if (soundSettings != null) soundSettings.SetActive(true);
+        if (menuButtons != null) menuButtons.SetActive(false);
+        if (logos != null) logos.SetActive(false);
     }
 
-    public void GOSetDisable(GameObject buttonGroup)
+    /// <summary>
+    /// Hides the sound settings panel and shows menu buttons and logos
+    /// </summary>
+    public void HideSoundSettings()
     {
-        buttonGroup.SetActive(false);
+        if (soundSettings != null) soundSettings.SetActive(false);
+        if (menuButtons != null) menuButtons.SetActive(true);
+        if (logos != null) logos.SetActive(true);
     }
     
 
