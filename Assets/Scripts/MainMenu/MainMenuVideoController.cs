@@ -7,7 +7,7 @@ using AudioSystem;
 /// Professional video controller with robust error handling and smooth transitions
 /// Perfect for Balangay of the Forgotten splash screens and cutscenes
 /// </summary>
-public class LoadingScreenController : MonoBehaviour
+public class MainMenuVideoController : MonoBehaviour
 {
     [Header("Playback Mode")]
     [Tooltip("If true, use URL/StreamingAssets for video playback (WebGL/experimental). If false, use native VideoClip (PC/Android). Automatically set at runtime.")]
@@ -43,18 +43,12 @@ public class LoadingScreenController : MonoBehaviour
     [SerializeField] private bool skipOnAnyKey = true;
     [SerializeField] private float minimumPlayTime = 1f; // Prevent accidental immediate skips
     
-    [Header("Press To Continue Settings")]
-    [Tooltip("GameObject that displays 'Press To Continue' text")]
-    [SerializeField] private GameObject pressToContinueObject;
-    [Tooltip("Fade-in duration for Press To Continue text (seconds)")]
-    [SerializeField] private float fadeInDuration = 1.5f;
-    [Tooltip("Flicker speed for Press To Continue animation (pulses per second)")]
-    [SerializeField] private float flickerSpeed = 2f;
-    [Tooltip("Minimum alpha during flicker (0-1)")]
-    [SerializeField] private float flickerMinAlpha = 0.3f;
-    [Tooltip("Maximum alpha during flicker (0-1)")]
-    [SerializeField] private float flickerMaxAlpha = 1f;
-    
+    [Header("Transition Settings")]
+    [SerializeField] private SoundData MenuMusic;
+    [SerializeField] private float MusicFadeTime = 2f;
+
+
+
     [Header("Debug")]
     [SerializeField] private bool showDebugLogs = true;
 
@@ -66,8 +60,6 @@ public class LoadingScreenController : MonoBehaviour
     private int currentVideoIndex = 0;
     private bool allVideosFinished = false;
     private bool isMusicPlayingForCurrentVideo = false;
-    private CanvasGroup pressToContinueCanvasGroup;
-    private Coroutine flickerCoroutine;
 
      void Awake()
     {
@@ -78,29 +70,6 @@ public class LoadingScreenController : MonoBehaviour
     
     void Start()
     {
-        // Initialize Press To Continue
-        if (pressToContinueObject != null)
-        {
-            // Get the CanvasGroup from the parent canvas for proper layering
-            Transform canvasParent = pressToContinueObject.transform.parent;
-            if (canvasParent != null)
-            {
-                pressToContinueCanvasGroup = canvasParent.GetComponent<CanvasGroup>();
-            }
-            
-            // Fallback to the text object itself if parent doesn't have CanvasGroup
-            if (pressToContinueCanvasGroup == null)
-            {
-                pressToContinueCanvasGroup = pressToContinueObject.GetComponent<CanvasGroup>();
-            }
-            
-            if (pressToContinueCanvasGroup != null)
-            {
-                pressToContinueCanvasGroup.alpha = 0f; // Start invisible
-            }
-            pressToContinueObject.SetActive(false); // Hide initially
-        }
-        
         // Enable only the relevant video root
         if (pcVideoRoot != null) pcVideoRoot.SetActive(!useWebGLVideoPlayer);
         if (webglVideoRoot != null) webglVideoRoot.SetActive(useWebGLVideoPlayer);
@@ -131,11 +100,8 @@ public class LoadingScreenController : MonoBehaviour
 
     void OnDestroy()
     {
-        // Stop Press To Continue animations
-        HidePressToContinue();
-        
         // Stop any playing music
-        //StopMusicForCurrentVideo();
+        StopMusicForCurrentVideo();
         
         // Unsubscribe PC VideoPlayer events
         if (pcVideoPlayer != null)
@@ -259,20 +225,8 @@ public class LoadingScreenController : MonoBehaviour
 
         if (shouldSkip)
         {
-            // Check if we're on the last video
-            bool isLastVideo = (currentVideoIndex >= GetTotalVideoCount() - 1);
-            
-            if (isLastVideo)
-            {
-                LogDebug("Last video - Loading next scene");
-                videoFinished = true;
-                LoadNextScene();
-            }
-            else
-            {
-                LogDebug("Video skipped by user input");
-                SkipVideo();
-            }
+            LogDebug("Video skipped by user input");
+            SkipVideo();
         }
     }
 
@@ -295,14 +249,6 @@ public class LoadingScreenController : MonoBehaviour
         
         // Play background music if configured for this video
         PlayMusicForCurrentVideo();
-        
-        // Check if this is the last video
-        bool isLastVideo = (currentVideoIndex >= GetTotalVideoCount() - 1);
-        if (isLastVideo)
-        {
-            LogDebug("Last video detected - showing Press To Continue");
-            StartCoroutine(ShowPressToContinue());
-        }
         
         // Allow skipping after minimum time
         StartCoroutine(EnableSkipAfterDelay());
@@ -336,7 +282,6 @@ public class LoadingScreenController : MonoBehaviour
     private void OnVideoError(VideoPlayer vp, string message)
     {
         LogError($"Video {currentVideoIndex + 1} error: {message}");
-        videoFinished = true;
         AdvanceToNextVideo();
     }
 
@@ -370,7 +315,7 @@ public class LoadingScreenController : MonoBehaviour
     private void AdvanceToNextVideo()
     {
         // Stop current video's music before advancing
-        //StopMusicForCurrentVideo();
+        StopMusicForCurrentVideo();
         
         currentVideoIndex++;
 
@@ -470,6 +415,13 @@ public class LoadingScreenController : MonoBehaviour
             return;
         }
 
+        // Check if musicData.clip is valid
+        if (musicData.clip == null)
+        {
+            LogDebug($"Video {currentVideoIndex + 1} has no valid background music clip");
+            return;
+        }
+
         // Play music with crossfade
         if (MusicManager.Instance != null)
         {
@@ -504,84 +456,13 @@ public class LoadingScreenController : MonoBehaviour
     private void LoadNextScene()
     {
         // Ensure music is stopped before scene transition
-        //StopMusicForCurrentVideo();
+        StopMusicForCurrentVideo();
         
-        SceneController.Instance
+         SceneController.Instance
             .NewTransition()
-            .Unload(SceneDatabase.Slots.LoadingScreen)
-            .Load(SceneDatabase.Slots.Menu, SceneDatabase.Scenes.MainMenu, setActive: true) 
+            .Load(SceneDatabase.Slots.SessionContent, SceneDatabase.Scenes.CharacterSelection, setActive: true)
+            .Unload(SceneDatabase.Scenes.MainMenu)
             .Perform();
-    }
-
-    /// <summary>
-    /// Show Press To Continue with fade-in animation followed by flicker effect
-    /// </summary>
-    private IEnumerator ShowPressToContinue()
-    {
-        if (pressToContinueObject == null || pressToContinueCanvasGroup == null)
-        {
-            LogError("Press To Continue object or CanvasGroup is missing!");
-            yield break;
-        }
-
-        // Activate the object
-        pressToContinueObject.SetActive(true);
-        pressToContinueCanvasGroup.alpha = 0f;
-
-        // Fade in from 0 to 1
-        float elapsed = 0f;
-        while (elapsed < fadeInDuration)
-        {
-            elapsed += Time.deltaTime;
-            float alpha = Mathf.Lerp(0f, 1f, elapsed / fadeInDuration);
-            pressToContinueCanvasGroup.alpha = alpha;
-            yield return null;
-        }
-
-        // Ensure it's fully visible
-        pressToContinueCanvasGroup.alpha = 1f;
-
-        // Start flicker animation
-        flickerCoroutine = StartCoroutine(FlickerPressToContinue());
-    }
-
-    /// <summary>
-    /// Gaming-standard flicker/pulse effect for Press To Continue text
-    /// </summary>
-    private IEnumerator FlickerPressToContinue()
-    {
-        if (pressToContinueCanvasGroup == null) yield break;
-
-        while (true)
-        {
-            // Pulse using sine wave for smooth, professional animation
-            float time = Time.time * flickerSpeed * Mathf.PI; // Convert to radians
-            float alpha = Mathf.Lerp(flickerMinAlpha, flickerMaxAlpha, (Mathf.Sin(time) + 1f) * 0.5f);
-            pressToContinueCanvasGroup.alpha = alpha;
-            yield return null;
-        }
-    }
-
-    /// <summary>
-    /// Stop and hide Press To Continue
-    /// </summary>
-    private void HidePressToContinue()
-    {
-        if (flickerCoroutine != null)
-        {
-            StopCoroutine(flickerCoroutine);
-            flickerCoroutine = null;
-        }
-
-        if (pressToContinueObject != null)
-        {
-            pressToContinueObject.SetActive(false);
-        }
-
-        if (pressToContinueCanvasGroup != null)
-        {
-            pressToContinueCanvasGroup.alpha = 0f;
-        }
     }
 
     // Debug logging methods

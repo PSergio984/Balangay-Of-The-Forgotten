@@ -13,6 +13,7 @@ public static class SceneDatabase
     public class Scenes
     {
         public const string MainMenu = "MainMenu";
+        public const string CharacterSelection = "CharacterSelection";
         public const string MapSelection = "MapSelection";
         public const string LoadingScreen = "LoadingScreen";
         public const string Session = "Session";
