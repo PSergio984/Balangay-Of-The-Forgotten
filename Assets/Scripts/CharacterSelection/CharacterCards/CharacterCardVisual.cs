@@ -12,6 +12,7 @@ public class CharacterCardVisual : MonoBehaviour
     // Stores the last HeroData for fallback health display
     private HeroData currentHeroData;
     private bool initalize = false;
+    private bool layoutReady = false; // Prevents SmoothFollow from lerping to wrong position before layout is calculated
 
     [Header("Card")]
     public CharacterCard parentCard;
@@ -93,8 +94,131 @@ public class CharacterCardVisual : MonoBehaviour
         parentCard.PointerUpEvent.AddListener(PointerUp);
         parentCard.SelectEvent.AddListener(Select);
 
+        // Defer initial position sync to end of frame (after Unity layout system calculates positions)
+        // This fixes the issue where cards spawn at origin when starting from Core scene during scene transitions
+        StartCoroutine(InitializePositionAfterLayout());
+
         //Initialization
         initalize = true;
+    }
+
+    /// <summary>
+    /// Defers initial position synchronization until after Unity's layout system has calculated positions.
+    /// This prevents cards from spawning at origin during scene transitions from Core scene.
+    /// </summary>
+    private IEnumerator InitializePositionAfterLayout()
+    {
+        // Ensure layoutReady is false while waiting
+        layoutReady = false;
+        
+        // Wait for multiple frames to ensure layout is fully calculated
+        // This is especially important when loading scene additively from Core scene
+        // where the layout system needs more time to process
+        
+        // Frame 1: Wait for end of frame (initial layout pass)
+        yield return new WaitForEndOfFrame();
+        
+        // Force layout rebuild on the card's parent layout group
+        // This is critical for HorizontalLayoutGroup to calculate correct positions
+        ForceLayoutRebuild();
+        
+        // Wait until the card's position stabilizes (stops changing between frames)
+        // This handles the timing difference between direct scene load vs additive load
+        yield return WaitForPositionStable();
+        
+        // Final force rebuild after stabilization
+        ForceLayoutRebuild();
+        
+        // Wait one more end of frame for safety
+        yield return new WaitForEndOfFrame();
+        
+        // Now sync position with card transform - set IMMEDIATELY (not lerp)
+        if (cardTransform != null)
+        {
+            // Force immediate position sync (bypass lerp)
+            transform.position = cardTransform.position;
+            Debug.Log($"[CharacterCardVisual] Initial position synced to {cardTransform.position} after layout calculations");
+        }
+        
+        // NOW allow SmoothFollow to start lerping
+        layoutReady = true;
+    }
+    
+    /// <summary>
+    /// Waits until the card's position stops changing between frames.
+    /// This ensures the HorizontalLayoutGroup has finished positioning all children.
+    /// </summary>
+    private IEnumerator WaitForPositionStable()
+    {
+        if (cardTransform == null) yield break;
+        
+        const float positionThreshold = 0.01f; // Positions within this distance are considered "same"
+        const int stableFramesRequired = 3; // Number of consecutive stable frames required
+        const int maxWaitFrames = 30; // Maximum frames to wait (safety limit)
+        
+        int stableFrameCount = 0;
+        int totalFrames = 0;
+        Vector3 lastPosition = cardTransform.position;
+        
+        while (stableFrameCount < stableFramesRequired && totalFrames < maxWaitFrames)
+        {
+            yield return null;
+            totalFrames++;
+            
+            // Force layout rebuild each frame to ensure positions are current
+            ForceLayoutRebuild();
+            
+            Vector3 currentPosition = cardTransform.position;
+            float distance = Vector3.Distance(currentPosition, lastPosition);
+            
+            if (distance < positionThreshold)
+            {
+                stableFrameCount++;
+            }
+            else
+            {
+                // Position changed, reset stability counter
+                stableFrameCount = 0;
+            }
+            
+            lastPosition = currentPosition;
+        }
+        
+        if (totalFrames >= maxWaitFrames)
+        {
+            Debug.LogWarning($"[CharacterCardVisual] Position stabilization timed out after {maxWaitFrames} frames. Using current position.");
+        }
+    }
+    
+    /// <summary>
+    /// Forces all layout groups in the card's hierarchy to recalculate immediately.
+    /// Uses LayoutRebuilder which is more reliable than Canvas.ForceUpdateCanvases() for nested layouts.
+    /// </summary>
+    private void ForceLayoutRebuild()
+    {
+        // Force update all canvases first
+        Canvas.ForceUpdateCanvases();
+        
+        if (cardTransform == null) return;
+        
+        // Find the HorizontalLayoutGroup parent and force rebuild
+        var layoutGroup = cardTransform.GetComponentInParent<HorizontalLayoutGroup>();
+        if (layoutGroup != null)
+        {
+            LayoutRebuilder.ForceRebuildLayoutImmediate(layoutGroup.GetComponent<RectTransform>());
+        }
+        
+        // Also rebuild any parent RectTransforms up the hierarchy
+        Transform current = cardTransform;
+        while (current != null)
+        {
+            RectTransform rectTransform = current.GetComponent<RectTransform>();
+            if (rectTransform != null)
+            {
+                LayoutRebuilder.ForceRebuildLayoutImmediate(rectTransform);
+            }
+            current = current.parent;
+        }
     }
 
     public void UpdateIndex(int length)
@@ -201,6 +325,9 @@ public class CharacterCardVisual : MonoBehaviour
 
     private void SmoothFollow()
     {
+        // Don't lerp until layout is fully calculated - prevents lerping to wrong position at start
+        if (!layoutReady) return;
+        
         Vector3 verticalOffset = (Vector3.up * (parentCard.isDragging ? 0 : curveYOffset));
         transform.position = Vector3.Lerp(transform.position, cardTransform.position + verticalOffset, followSpeed * Time.deltaTime);
     }

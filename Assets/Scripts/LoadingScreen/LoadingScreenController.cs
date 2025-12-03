@@ -129,6 +129,33 @@ public class LoadingScreenController : MonoBehaviour
         HandleInput();
     }
 
+    void OnDisable()
+    {
+        // Called BEFORE OnDestroy when scene is unloaded
+        // Stop videos immediately to prevent overlap with next scene
+        if (pcVideoPlayer != null && pcVideoPlayer.isPlaying)
+        {
+            pcVideoPlayer.Stop();
+        }
+        if (webglVideoPlayer != null && webglVideoPlayer.isPlaying)
+        {
+            webglVideoPlayer.Stop();
+        }
+        
+        // Hide video roots immediately
+        if (pcVideoRoot != null)
+        {
+            pcVideoRoot.SetActive(false);
+        }
+        if (webglVideoRoot != null)
+        {
+            webglVideoRoot.SetActive(false);
+        }
+        
+        // Stop Press To Continue animations
+        HidePressToContinue();
+    }
+
     void OnDestroy()
     {
         // Stop Press To Continue animations
@@ -137,19 +164,38 @@ public class LoadingScreenController : MonoBehaviour
         // Stop any playing music
         //StopMusicForCurrentVideo();
         
-        // Unsubscribe PC VideoPlayer events
+        // Stop and cleanup PC VideoPlayer
         if (pcVideoPlayer != null)
         {
+            if (pcVideoPlayer.isPlaying)
+            {
+                pcVideoPlayer.Stop();
+            }
             pcVideoPlayer.loopPointReached -= OnVideoFinished;
             pcVideoPlayer.errorReceived -= OnVideoError;
             pcVideoPlayer.prepareCompleted -= OnVideoPrepared;
         }
-        // Unsubscribe WebGL VideoPlayer events
+        
+        // Stop and cleanup WebGL VideoPlayer
         if (webglVideoPlayer != null)
         {
+            if (webglVideoPlayer.isPlaying)
+            {
+                webglVideoPlayer.Stop();
+            }
             webglVideoPlayer.loopPointReached -= OnVideoFinished;
             webglVideoPlayer.errorReceived -= OnVideoError;
             webglVideoPlayer.prepareCompleted -= OnVideoPrepared;
+        }
+        
+        // Hide/disable video roots to prevent visual artifacts
+        if (pcVideoRoot != null)
+        {
+            pcVideoRoot.SetActive(false);
+        }
+        if (webglVideoRoot != null)
+        {
+            webglVideoRoot.SetActive(false);
         }
     }
 
@@ -511,6 +557,7 @@ public class LoadingScreenController : MonoBehaviour
             .NewTransition()
             .Unload(SceneDatabase.Slots.LoadingScreen)
             .Load(SceneDatabase.Slots.MainMenu, SceneDatabase.Scenes.MainMenu, setActive: true) 
+            .WithOverlay()
             .Perform();
     }
 

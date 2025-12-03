@@ -70,6 +70,23 @@ public class MainMenuVideoController : MonoBehaviour
     
     void Start()
     {
+        // Delay video start to ensure scene transition is complete
+        // This prevents the video from showing while another scene's video is still visible
+        StartCoroutine(DelayedStart());
+    }
+    
+    /// <summary>
+    /// Delays video initialization until scene transition is complete.
+    /// This prevents video overlap when transitioning from LoadingScreen to MainMenu.
+    /// </summary>
+    private IEnumerator DelayedStart()
+    {
+        // Wait 2 frames to ensure:
+        // 1. Previous scene is fully unloaded and its OnDestroy has run
+        // 2. This scene is fully initialized and active
+        yield return null;
+        yield return null;
+        
         // Enable only the relevant video root
         if (pcVideoRoot != null) pcVideoRoot.SetActive(!useWebGLVideoPlayer);
         if (webglVideoRoot != null) webglVideoRoot.SetActive(useWebGLVideoPlayer);
@@ -79,13 +96,13 @@ public class MainMenuVideoController : MonoBehaviour
         {
             allVideosFinished = true;
             LogError("WebGL video list is empty! No videos to play.");
-            return;
+            yield break;
         }
         else if (!useWebGLVideoPlayer && (pcVideoClips == null || pcVideoClips.Count == 0))
         {
             allVideosFinished = true;
             LogError("PC video clips list is empty! No videos to play.");
-            return;
+            yield break;
         }
         // Start playing first video
         currentVideoIndex = 0;
@@ -97,24 +114,70 @@ public class MainMenuVideoController : MonoBehaviour
         HandleInput();
     }
 
+    void OnDisable()
+    {
+        // Called BEFORE OnDestroy when scene is unloaded
+        // Stop videos immediately to prevent overlap with next scene
+        if (pcVideoPlayer != null && pcVideoPlayer.isPlaying)
+        {
+            pcVideoPlayer.Stop();
+        }
+        if (webglVideoPlayer != null && webglVideoPlayer.isPlaying)
+        {
+            webglVideoPlayer.Stop();
+        }
+        
+        // Hide video roots immediately
+        if (pcVideoRoot != null)
+        {
+            pcVideoRoot.SetActive(false);
+        }
+        if (webglVideoRoot != null)
+        {
+            webglVideoRoot.SetActive(false);
+        }
+        
+        // Stop any playing music
+        StopMusicForCurrentVideo();
+    }
+
     void OnDestroy()
     {
         // Stop any playing music
         StopMusicForCurrentVideo();
         
-        // Unsubscribe PC VideoPlayer events
+        // Stop and cleanup PC VideoPlayer
         if (pcVideoPlayer != null)
         {
+            if (pcVideoPlayer.isPlaying)
+            {
+                pcVideoPlayer.Stop();
+            }
             pcVideoPlayer.loopPointReached -= OnVideoFinished;
             pcVideoPlayer.errorReceived -= OnVideoError;
             pcVideoPlayer.prepareCompleted -= OnVideoPrepared;
         }
-        // Unsubscribe WebGL VideoPlayer events
+        
+        // Stop and cleanup WebGL VideoPlayer
         if (webglVideoPlayer != null)
         {
+            if (webglVideoPlayer.isPlaying)
+            {
+                webglVideoPlayer.Stop();
+            }
             webglVideoPlayer.loopPointReached -= OnVideoFinished;
             webglVideoPlayer.errorReceived -= OnVideoError;
             webglVideoPlayer.prepareCompleted -= OnVideoPrepared;
+        }
+        
+        // Hide/disable video roots to prevent visual artifacts
+        if (pcVideoRoot != null)
+        {
+            pcVideoRoot.SetActive(false);
+        }
+        if (webglVideoRoot != null)
+        {
+            webglVideoRoot.SetActive(false);
         }
     }
 

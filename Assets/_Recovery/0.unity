@@ -1061,7 +1061,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 505382869}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1a8a05de0ac134f4f9d01bef6b9da077, type: 3}
   m_Name: 
@@ -1091,7 +1091,7 @@ MonoBehaviour:
     CustomLookAtTarget: 0
   Lens:
     FieldOfView: 34
-    OrthographicSize: 10
+    OrthographicSize: 10.7639065
     NearClipPlane: 0.3
     FarClipPlane: 1000
     Dutch: 0
@@ -1224,15 +1224,15 @@ Camera:
   m_LensShift: {x: 0, y: 0}
   m_NormalizedViewPortRect:
     serializedVersion: 2
-    x: 0
+    x: -0.5
     y: 0
     width: 1
-    height: 1
+    height: 0
   near clip plane: 0.3
   far clip plane: 1000
   field of view: 34
   orthographic: 1
-  orthographic size: 10
+  orthographic size: 5.3999996
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -1277,8 +1277,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Unity.RenderPipelines.Universal.2D.Runtime::UnityEngine.Rendering.Universal.PixelPerfectCamera
   m_ComponentVersion: 1
   m_AssetsPPU: 100
-  m_RefResolutionX: 1920
-  m_RefResolutionY: 1080
+  m_RefResolutionX: 640
+  m_RefResolutionY: 360
   m_CropFrame: 1
   m_GridSnapping: 0
   m_FilterMode: 0
@@ -1657,14 +1657,14 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 1
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2074635280}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 60.77, y: -19.82}
-  m_SizeDelta: {x: 1620.98, y: 971.15}
+  m_AnchoredPosition: {x: -14.01, y: -19.82}
+  m_SizeDelta: {x: 1740.35, y: 971.15}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &709454489
 MonoBehaviour:

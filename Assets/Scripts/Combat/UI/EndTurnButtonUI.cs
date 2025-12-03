@@ -88,8 +88,8 @@ public class EndTurnButtonUI : MonoBehaviour
     {
         SceneController.Instance
             .NewTransition()
-            .Load(SceneDatabase.Scenes.MainMenu, SceneDatabase.Scenes.MainMenu, setActive: true)
-            .Unload(SceneDatabase.Scenes.Combat)
+            .Load(SceneDatabase.Slots.MainMenu, SceneDatabase.Scenes.MainMenu, setActive: true)
+            .Unload(SceneDatabase.Slots.SessionContent)
             .WithOverlay()
             .WithMusic(mapSelectionMusic, MusicFadeTime)
             .WithClearUnusedAssets()

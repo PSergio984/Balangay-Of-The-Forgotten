@@ -54,29 +54,10 @@ using UnityEditor;
 public class MainMenu : MonoBehaviour
 {
 
-    /// <summary>
-    /// Button that quits the game when clicked
-    /// </summary>
-    /// <remarks>
-    /// When players click this button, it exits the application. In editor, it stops 
-    /// play mode instead of trying to quit (which would cause issues).
-    /// Assign a UI Button component in the Inspector.
-    /// </remarks>
-    [SerializeField] private Button QuitButton;
+
     [SerializeField] private SoundData mapSelectionMusic;
     [SerializeField] private float MusicFadeTime = 2f;
 
-    /// <summary>
-    /// Sets up button listeners when the menu loads
-    /// </summary>
-    /// <remarks>
-    /// Unity calls this automatically when the scene starts. Connects the button 
-    /// click events to their respective methods so the menu responds to player input.
-    /// </remarks>
-    void Start()
-    {
-        QuitButton.onClick.AddListener(QuitGame);
-    }
 
     /// <summary>
     /// Initiates a new game session by transitioning from the menu to the session scenes
@@ -106,23 +87,22 @@ public class MainMenu : MonoBehaviour
     /// Quits the application or stops editor play mode
     /// </summary>
     /// <remarks>
-    /// Called when the quit button is clicked. In a built game, this closes the 
-    /// application. In the Unity editor, it stops play mode instead of trying 
-    /// to quit (which would cause problems in the editor).
+    /// Called when the quit button is clicked. Behavior depends on platform:
+    /// - Editor: Stops play mode
+    /// - WebGL: Refreshes the page (since Application.Quit doesn't work)
+    /// - Standalone: Quits the application
     /// </remarks>
-    private void QuitGame()
+    public void QuitGame()
     {
         #if UNITY_EDITOR
-                if (Application.isEditor)
-                {
-                    // Stop playing the scene in the editor
-                    EditorApplication.isPlaying = false;
-                }
-                else
-        #endif  
-            {
-            // Quit the application
-            Application.Quit();
-        }
+        // Stop playing the scene in the editor
+        EditorApplication.isPlaying = false;
+        #elif UNITY_WEBGL
+        // On WebGL, refresh the page to "quit" (Application.Quit doesn't work)
+        Application.OpenURL(Application.absoluteURL);
+        #else
+        // Quit the application on standalone builds
+        Application.Quit();
+        #endif
     }
 }
