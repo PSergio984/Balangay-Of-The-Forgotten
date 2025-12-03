@@ -18,10 +18,10 @@ MonoBehaviour:
     m_SceneAsset: {fileID: 102900000, guid: 8c9cfa26abfee488c85f1582747f6a02, type: 3}
     m_SceneName: Combat
   MapName: Bundok Pulag
-  mapThumbnail: {fileID: 21300000, guid: 184d5e4c84779b74baeb906677aae501, type: 3}
-  BossImage: {fileID: 21300000, guid: d90cb16502e3b8841a316d5a93cce724, type: 3}
-  CombatMapIcon: {fileID: 21300000, guid: 1b3d8231b1949af489c01b1d5ad2e8c1, type: 3}
-  BossName: Mayari
+  mapThumbnail: {fileID: -7613080903851761921, guid: 9bf2ffaf7441a784e8b40f0b89df4a45, type: 3}
+  bossImage: {fileID: 21300000, guid: d90cb16502e3b8841a316d5a93cce724, type: 3}
+  combatMapIcon: {fileID: 21300000, guid: be432df5b7f78eb4fb245dc00d6ca51a, type: 3}
+  bossName: Mayari
   enemyDatas:
   - {fileID: 11400000, guid: f17decc971290bf4fa570e0dcebe4813, type: 2}
   - {fileID: 11400000, guid: 1e20db64a7c97d7479846606d26413bd, type: 2}

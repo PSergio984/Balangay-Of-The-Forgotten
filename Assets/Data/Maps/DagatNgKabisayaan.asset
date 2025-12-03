@@ -19,9 +19,9 @@ MonoBehaviour:
     m_SceneName: Combat
   MapName: Dagat Ng Kabisayaan
   mapThumbnail: {fileID: 21300000, guid: 455a9ff5c5874ce4ba566cfee94f1fa7, type: 3}
-  BossImage: {fileID: 21300000, guid: 89e3beee3f4fb7f469680a5618692d7d, type: 3}
-  CombatMapIcon: {fileID: 21300000, guid: 189bd425089e4da4a84318beea9f75c2, type: 3}
-  BossName: Bakunawa
+  bossImage: {fileID: 21300000, guid: 89e3beee3f4fb7f469680a5618692d7d, type: 3}
+  combatMapIcon: {fileID: 21300000, guid: 8a2121e47ad39c44fac5904225c9e958, type: 3}
+  bossName: Bakunawa
   enemyDatas:
   - {fileID: 11400000, guid: bcd9445ea2359f846823d38c5dcabb1c, type: 2}
   - {fileID: 11400000, guid: 47ba028629da84246952941a644ef81e, type: 2}

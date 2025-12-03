@@ -20,7 +20,7 @@ MonoBehaviour:
   <MagicPower>k__BackingField: 0
   <Defense>k__BackingField: 125
   <AnimatorOverride>k__BackingField: {fileID: 22100000, guid: 42db0f552efe2fe43ab1371ee3fdd04f, type: 2}
-  <turnProfileOverride>k__BackingField: {fileID: 22100000, guid: ff073faca2f471d498bb1916c3d02616, type: 2}
+  <TurnProfileOverride>k__BackingField: {fileID: 22100000, guid: ff073faca2f471d498bb1916c3d02616, type: 2}
   <BuildPresets>k__BackingField:
   - {fileID: 11400000, guid: f6673d915a8a83243b1d3a2ec2e265f0, type: 2}
   - {fileID: 11400000, guid: d7cd5360285802149a4a0202dacb56b5, type: 2}

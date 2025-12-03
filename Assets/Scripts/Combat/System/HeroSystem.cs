@@ -105,7 +105,7 @@ public class HeroSystem : Singleton<HeroSystem>
             Debug.LogWarning($"[HeroSystem] HeroData at index {heroIndex} is null. Cannot get turn profile override.");
             return null;
         }
-        return storedHeroDatas[heroIndex].turnProfileOverride;
+        return storedHeroDatas[heroIndex].TurnProfileOverride;
     }
     /// <summary>
     /// Subscribe to enemy turn reactions when this system starts

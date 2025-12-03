@@ -19,9 +19,9 @@ MonoBehaviour:
     m_SceneName: Combat
   MapName: Daragang Magayon
   mapThumbnail: {fileID: 21300000, guid: 0f96b8c9496b7a441ad12c2fc54b98ee, type: 3}
-  BossImage: {fileID: 21300000, guid: eaee558e77ffee44ab7e8fb710f7ab93, type: 3}
-  CombatMapIcon: {fileID: 21300000, guid: b67dcea0b62ad324e9ee3cad034ed10d, type: 3}
-  BossName: Apolaki
+  bossImage: {fileID: 21300000, guid: eaee558e77ffee44ab7e8fb710f7ab93, type: 3}
+  combatMapIcon: {fileID: 21300000, guid: 90384e5722192e148abc61d4536abbff, type: 3}
+  bossName: Apolaki
   enemyDatas:
   - {fileID: 11400000, guid: a7649951d27a5f24ca254cadfc31a4e0, type: 2}
   - {fileID: 11400000, guid: 2e357dbd3dbadc848a8449ee7b5ea48e, type: 2}
