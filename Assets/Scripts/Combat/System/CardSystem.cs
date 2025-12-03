@@ -70,6 +70,8 @@ public class CardSystem : Singleton<CardSystem>
 
     private SoundBuilder soundBuilder;
 
+    [SerializeField] private Animator roleTurnAnimator;
+
     private void Start()
     {
         // Cache the sound builder for playing sounds and performance
@@ -168,6 +170,21 @@ public class CardSystem : Singleton<CardSystem>
     {
         int heroIndex = CurrentHeroUtil.CurrentHeroIndex;
         Debug.Log($"[CardSystem] Drawing cards for hero index: {heroIndex}");
+
+        // Update the turn profile animator to match the current hero
+        if (HeroSystem.Instance == null)
+        {
+            Debug.LogWarning("HeroSystem.Instance is null. Skipping GetHeroTurnProfileOverride.");
+        }
+        else
+        {
+            var turnProfileOverride = HeroSystem.Instance.GetHeroTurnProfileOverride(heroIndex);
+            if (turnProfileOverride != null)
+            {
+                SetAnimatorOverride(turnProfileOverride);
+            }
+        }
+
         var drawPile = drawPiles[heroIndex];
         var discardPile = discardPiles[heroIndex];
         var hand = hands[heroIndex];
@@ -199,13 +216,16 @@ public class CardSystem : Singleton<CardSystem>
         var hand = hands[heroIndex];
         // Copy to avoid modifying collection during iteration
         var handCopy = new List<Card>(hand);
+
         foreach (var card in handCopy)
         {
             CardView cardView = handView.RemoveCard(card);
             yield return DiscardCard(cardView, heroIndex);
         }
+
         hand.Clear();
     }
+
     /// <summary>
     /// Handles the complete process of playing a card including effects and targeting
     /// </summary>
@@ -216,6 +236,7 @@ public class CardSystem : Singleton<CardSystem>
     /// spends stamina, and executes effects with proper targeting. Manual target effects
     /// use the player-selected target, while other effects use their own target modes.
     /// </remarks>
+    
     private IEnumerator PlayCardPerformer(PlayCardsGA playCardsGA)
     {
         int heroIndex = CurrentHeroUtil.CurrentHeroIndex;
@@ -258,6 +279,7 @@ public class CardSystem : Singleton<CardSystem>
         var drawPile = drawPiles[heroIndex];
         var hand = hands[heroIndex];
         Card card = null;
+
         if (drawPile.Count > 0)
         {
             card = drawPile[0];
@@ -268,6 +290,7 @@ public class CardSystem : Singleton<CardSystem>
             Debug.LogWarning($"[CardSystem] Tried to draw a card for hero {heroIndex}, but deck and discard are empty.");
             yield break;
         }
+
         hand.Add(card);
         CardView cardView = CardViewCreator.Instance.CreateCardView(card, drawPilePoint.position, drawPilePoint.rotation);
         yield return handView.AddCard(cardView);
@@ -283,10 +306,10 @@ public class CardSystem : Singleton<CardSystem>
     /// </remarks>
     private void RefillDeck(int heroIndex)
     {
-    var drawPile = drawPiles[heroIndex];
-    var discardPile = discardPiles[heroIndex];
-    drawPile.AddRange(discardPile);
-    discardPile.Clear();
+        var drawPile = drawPiles[heroIndex];
+        var discardPile = discardPiles[heroIndex];
+        drawPile.AddRange(discardPile);
+        discardPile.Clear();
     }
 
     /// <summary>
@@ -317,4 +340,29 @@ public class CardSystem : Singleton<CardSystem>
             Destroy(cardView.gameObject);
         }
     }
+    /// <summary>
+    /// Assigns a new AnimatorOverrideController instance to the Animator at runtime.
+    /// </summary>
+    /// <param name="overrideController">The override controller to assign (from HeroData)</param>
+    public void SetAnimatorOverride(AnimatorOverrideController overrideController)
+    {
+        if (roleTurnAnimator != null && overrideController != null)
+        {
+            roleTurnAnimator.runtimeAnimatorController = overrideController;
+            Debug.Log($"[CardSystem] AnimatorOverrideController set at runtime: {overrideController.name} (Base: {overrideController.runtimeAnimatorController?.name})", roleTurnAnimator);
+            // Force rebind to ensure Animator uses the new override controller
+            roleTurnAnimator.Rebind();
+        }
+        else
+        {
+            if (roleTurnAnimator == null)
+            {
+                Debug.LogWarning($"[CardSystem] Cannot assign override: Animator reference is null on {gameObject.name}", this);
+            }
+            if (overrideController == null)
+            {
+                Debug.LogWarning($"[CardSystem] Cannot assign override: OverrideController is null on {gameObject.name}", this);
+            }
+        }
     }
+}

@@ -1,0 +1,689 @@
+fileFormatVersion: 2
+guid: 07e536ee3c56e8542aded7a516e2329b
+TextureImporter:
+  internalIDToNameTable:
+    - first:
+        213: -5915898440549698211
+      second: BabaylanAnimationprofile_0
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: { x: 0.5, y: 0.5 }
+  spritePixelsToUnits: 100
+  spriteBorder: { x: 0, y: 0, z: 0, w: 0 }
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+    - serializedVersion: 4
+      buildTarget: DefaultTexturePlatform
+      maxTextureSize: 2048
+      resizeAlgorithm: 0
+      textureFormat: -1
+      textureCompression: 0
+      compressionQuality: 50
+      crunchedCompression: 0
+      allowsAlphaSplitting: 0
+      overridden: 0
+      ignorePlatformSupport: 0
+      androidETC2FallbackOverride: 0
+      forceMaximumCompressionQuality_BC6H_BC7: 0
+    - serializedVersion: 4
+      buildTarget: Standalone
+      maxTextureSize: 2048
+      resizeAlgorithm: 0
+      textureFormat: -1
+      textureCompression: 1
+      compressionQuality: 50
+      crunchedCompression: 0
+      allowsAlphaSplitting: 0
+      overridden: 0
+      ignorePlatformSupport: 0
+      androidETC2FallbackOverride: 0
+      forceMaximumCompressionQuality_BC6H_BC7: 0
+    - serializedVersion: 4
+      buildTarget: WebGL
+      maxTextureSize: 2048
+      resizeAlgorithm: 0
+      textureFormat: -1
+      textureCompression: 1
+      compressionQuality: 50
+      crunchedCompression: 0
+      allowsAlphaSplitting: 0
+      overridden: 0
+      ignorePlatformSupport: 0
+      androidETC2FallbackOverride: 0
+      forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+      - serializedVersion: 2
+        name: BabaylanAnimationprofile_0
+        rect:
+          serializedVersion: 2
+          x: 0
+          y: 0
+          width: 29
+          height: 29
+        alignment: 0
+        pivot: { x: 0.5, y: 0.5 }
+        border: { x: 0, y: 0, z: 0, w: 0 }
+        customData:
+        outline: []
+        physicsShape: []
+        tessellationDetail: 0
+        bones: []
+        spriteID: d557fbb46b186eda0800000000000000
+        internalID: -5915898440549698211
+        vertices: []
+        indices:
+        edges: []
+        weights: []
+      - serializedVersion: 2
+        name: BabaylanAnimationprofile_1
+        rect:
+          serializedVersion: 2
+          x: 29
+          y: 0
+          width: 29
+          height: 29
+        alignment: 0
+        pivot: { x: 0.5, y: 0.5 }
+        border: { x: 0, y: 0, z: 0, w: 0 }
+        customData:
+        outline: []
+        physicsShape: []
+        tessellationDetail: 0
+        bones: []
+        spriteID: 2c341e7f3d4c8c241b8b45e78fd89da4
+        internalID: 1893508236
+        vertices: []
+        indices:
+        edges: []
+        weights: []
+      - serializedVersion: 2
+        name: BabaylanAnimationprofile_2
+        rect:
+          serializedVersion: 2
+          x: 58
+          y: 0
+          width: 29
+          height: 29
+        alignment: 0
+        pivot: { x: 0.5, y: 0.5 }
+        border: { x: 0, y: 0, z: 0, w: 0 }
+        customData:
+        outline: []
+        physicsShape: []
+        tessellationDetail: 0
+        bones: []
+        spriteID: 400131c757c8ea9459a7cd5cb70bca9b
+        internalID: 4264963
+        vertices: []
+        indices:
+        edges: []
+        weights: []
+      - serializedVersion: 2
+        name: BabaylanAnimationprofile_3
+        rect:
+          serializedVersion: 2
+          x: 87
+          y: 0
+          width: 29
+          height: 29
+        alignment: 0
+        pivot: { x: 0.5, y: 0.5 }
+        border: { x: 0, y: 0, z: 0, w: 0 }
+        customData:
+        outline: []
+        physicsShape: []
+        tessellationDetail: 0
+        bones: []
+        spriteID: 5fd9df53c93e00b40919bad773ad5978
+        internalID: -155863950
+        vertices: []
+        indices:
+        edges: []
+        weights: []
+      - serializedVersion: 2
+        name: BabaylanAnimationprofile_4
+        rect:
+          serializedVersion: 2
+          x: 116
+          y: 0
+          width: 29
+          height: 29
+        alignment: 0
+        pivot: { x: 0.5, y: 0.5 }
+        border: { x: 0, y: 0, z: 0, w: 0 }
+        customData:
+        outline: []
+        physicsShape: []
+        tessellationDetail: 0
+        bones: []
+        spriteID: dfa0af3f5c0a8394fa9486d76569b281
+        internalID: -769724495
+        vertices: []
+        indices:
+        edges: []
+        weights: []
+      - serializedVersion: 2
+        name: BabaylanAnimationprofile_5
+        rect:
+          serializedVersion: 2
+          x: 145
+          y: 0
+          width: 29
+          height: 29
+        alignment: 0
+        pivot: { x: 0.5, y: 0.5 }
+        border: { x: 0, y: 0, z: 0, w: 0 }
+        customData:
+        outline: []
+        physicsShape: []
+        tessellationDetail: 0
+        bones: []
+        spriteID: 8896e95333952e944bdfe204bf5b36dc
+        internalID: -1091075244
+        vertices: []
+        indices:
+        edges: []
+        weights: []
+      - serializedVersion: 2
+        name: BabaylanAnimationprofile_6
+        rect:
+          serializedVersion: 2
+          x: 174
+          y: 0
+          width: 29
+          height: 29
+        alignment: 0
+        pivot: { x: 0.5, y: 0.5 }
+        border: { x: 0, y: 0, z: 0, w: 0 }
+        customData:
+        outline: []
+        physicsShape: []
+        tessellationDetail: 0
+        bones: []
+        spriteID: 77924cbcd7dfab94697d69482add7dd1
+        internalID: -240122774
+        vertices: []
+        indices:
+        edges: []
+        weights: []
+      - serializedVersion: 2
+        name: BabaylanAnimationprofile_7
+        rect:
+          serializedVersion: 2
+          x: 203
+          y: 0
+          width: 29
+          height: 29
+        alignment: 0
+        pivot: { x: 0.5, y: 0.5 }
+        border: { x: 0, y: 0, z: 0, w: 0 }
+        customData:
+        outline: []
+        physicsShape: []
+        tessellationDetail: 0
+        bones: []
+        spriteID: e6c514bf8549d954f9071f031b218d23
+        internalID: 1501441252
+        vertices: []
+        indices:
+        edges: []
+        weights: []
+      - serializedVersion: 2
+        name: BabaylanAnimationprofile_8
+        rect:
+          serializedVersion: 2
+          x: 232
+          y: 0
+          width: 29
+          height: 29
+        alignment: 0
+        pivot: { x: 0.5, y: 0.5 }
+        border: { x: 0, y: 0, z: 0, w: 0 }
+        customData:
+        outline: []
+        physicsShape: []
+        tessellationDetail: 0
+        bones: []
+        spriteID: 4ecf65501ac8ddc43aaddf26848779e2
+        internalID: -303285470
+        vertices: []
+        indices:
+        edges: []
+        weights: []
+      - serializedVersion: 2
+        name: BabaylanAnimationprofile_9
+        rect:
+          serializedVersion: 2
+          x: 261
+          y: 0
+          width: 29
+          height: 29
+        alignment: 0
+        pivot: { x: 0.5, y: 0.5 }
+        border: { x: 0, y: 0, z: 0, w: 0 }
+        customData:
+        outline: []
+        physicsShape: []
+        tessellationDetail: 0
+        bones: []
+        spriteID: e274fbfd6795cc1419f94c9fff2db403
+        internalID: 1109588994
+        vertices: []
+        indices:
+        edges: []
+        weights: []
+      - serializedVersion: 2
+        name: BabaylanAnimationprofile_10
+        rect:
+          serializedVersion: 2
+          x: 290
+          y: 0
+          width: 29
+          height: 29
+        alignment: 0
+        pivot: { x: 0.5, y: 0.5 }
+        border: { x: 0, y: 0, z: 0, w: 0 }
+        customData:
+        outline: []
+        physicsShape: []
+        tessellationDetail: 0
+        bones: []
+        spriteID: c24f4cf0c5086634f96f1ff4b473b327
+        internalID: -844426824
+        vertices: []
+        indices:
+        edges: []
+        weights: []
+      - serializedVersion: 2
+        name: BabaylanAnimationprofile_11
+        rect:
+          serializedVersion: 2
+          x: 319
+          y: 0
+          width: 29
+          height: 29
+        alignment: 0
+        pivot: { x: 0.5, y: 0.5 }
+        border: { x: 0, y: 0, z: 0, w: 0 }
+        customData:
+        outline: []
+        physicsShape: []
+        tessellationDetail: 0
+        bones: []
+        spriteID: 1325d2d395f5fa5498cd19dc6bc76d21
+        internalID: 1918000655
+        vertices: []
+        indices:
+        edges: []
+        weights: []
+      - serializedVersion: 2
+        name: BabaylanAnimationprofile_12
+        rect:
+          serializedVersion: 2
+          x: 348
+          y: 0
+          width: 29
+          height: 29
+        alignment: 0
+        pivot: { x: 0.5, y: 0.5 }
+        border: { x: 0, y: 0, z: 0, w: 0 }
+        customData:
+        outline: []
+        physicsShape: []
+        tessellationDetail: 0
+        bones: []
+        spriteID: fb75541c7e2e68749909a0a7ea6e35e3
+        internalID: -259766377
+        vertices: []
+        indices:
+        edges: []
+        weights: []
+      - serializedVersion: 2
+        name: BabaylanAnimationprofile_13
+        rect:
+          serializedVersion: 2
+          x: 377
+          y: 0
+          width: 29
+          height: 29
+        alignment: 0
+        pivot: { x: 0.5, y: 0.5 }
+        border: { x: 0, y: 0, z: 0, w: 0 }
+        customData:
+        outline: []
+        physicsShape: []
+        tessellationDetail: 0
+        bones: []
+        spriteID: 547ba864c7ebf2b45ba773fbdc7d9dd8
+        internalID: -312800847
+        vertices: []
+        indices:
+        edges: []
+        weights: []
+      - serializedVersion: 2
+        name: BabaylanAnimationprofile_14
+        rect:
+          serializedVersion: 2
+          x: 406
+          y: 0
+          width: 29
+          height: 29
+        alignment: 0
+        pivot: { x: 0.5, y: 0.5 }
+        border: { x: 0, y: 0, z: 0, w: 0 }
+        customData:
+        outline: []
+        physicsShape: []
+        tessellationDetail: 0
+        bones: []
+        spriteID: f555526a4005d5644a3d5bd9a7a9a1f3
+        internalID: 1760822777
+        vertices: []
+        indices:
+        edges: []
+        weights: []
+      - serializedVersion: 2
+        name: BabaylanAnimationprofile_15
+        rect:
+          serializedVersion: 2
+          x: 435
+          y: 0
+          width: 29
+          height: 29
+        alignment: 0
+        pivot: { x: 0.5, y: 0.5 }
+        border: { x: 0, y: 0, z: 0, w: 0 }
+        customData:
+        outline: []
+        physicsShape: []
+        tessellationDetail: 0
+        bones: []
+        spriteID: 2438e78d46f61134791059ad575d7715
+        internalID: -885758968
+        vertices: []
+        indices:
+        edges: []
+        weights: []
+      - serializedVersion: 2
+        name: BabaylanAnimationprofile_16
+        rect:
+          serializedVersion: 2
+          x: 464
+          y: 0
+          width: 29
+          height: 29
+        alignment: 0
+        pivot: { x: 0.5, y: 0.5 }
+        border: { x: 0, y: 0, z: 0, w: 0 }
+        customData:
+        outline: []
+        physicsShape: []
+        tessellationDetail: 0
+        bones: []
+        spriteID: 3794ee11d20c34d45a20600de85d7251
+        internalID: -1518204507
+        vertices: []
+        indices:
+        edges: []
+        weights: []
+      - serializedVersion: 2
+        name: BabaylanAnimationprofile_17
+        rect:
+          serializedVersion: 2
+          x: 493
+          y: 0
+          width: 29
+          height: 29
+        alignment: 0
+        pivot: { x: 0.5, y: 0.5 }
+        border: { x: 0, y: 0, z: 0, w: 0 }
+        customData:
+        outline: []
+        physicsShape: []
+        tessellationDetail: 0
+        bones: []
+        spriteID: 3ff504484819c7d48acba2bfb1b8bf0a
+        internalID: 2110754056
+        vertices: []
+        indices:
+        edges: []
+        weights: []
+      - serializedVersion: 2
+        name: BabaylanAnimationprofile_18
+        rect:
+          serializedVersion: 2
+          x: 522
+          y: 0
+          width: 29
+          height: 29
+        alignment: 0
+        pivot: { x: 0.5, y: 0.5 }
+        border: { x: 0, y: 0, z: 0, w: 0 }
+        customData:
+        outline: []
+        physicsShape: []
+        tessellationDetail: 0
+        bones: []
+        spriteID: 6a9be451cc0324343af670c1e2d1af3c
+        internalID: 1148270187
+        vertices: []
+        indices:
+        edges: []
+        weights: []
+      - serializedVersion: 2
+        name: BabaylanAnimationprofile_19
+        rect:
+          serializedVersion: 2
+          x: 551
+          y: 0
+          width: 29
+          height: 29
+        alignment: 0
+        pivot: { x: 0.5, y: 0.5 }
+        border: { x: 0, y: 0, z: 0, w: 0 }
+        customData:
+        outline: []
+        physicsShape: []
+        tessellationDetail: 0
+        bones: []
+        spriteID: 75eb747401c82464e9609b4e7735775e
+        internalID: 1498059738
+        vertices: []
+        indices:
+        edges: []
+        weights: []
+      - serializedVersion: 2
+        name: BabaylanAnimationprofile_20
+        rect:
+          serializedVersion: 2
+          x: 580
+          y: 0
+          width: 29
+          height: 29
+        alignment: 0
+        pivot: { x: 0.5, y: 0.5 }
+        border: { x: 0, y: 0, z: 0, w: 0 }
+        customData:
+        outline: []
+        physicsShape: []
+        tessellationDetail: 0
+        bones: []
+        spriteID: 573cb3b7172172c4ebc8d8b83e5f48fb
+        internalID: 280161605
+        vertices: []
+        indices:
+        edges: []
+        weights: []
+      - serializedVersion: 2
+        name: BabaylanAnimationprofile_21
+        rect:
+          serializedVersion: 2
+          x: 609
+          y: 0
+          width: 29
+          height: 29
+        alignment: 0
+        pivot: { x: 0.5, y: 0.5 }
+        border: { x: 0, y: 0, z: 0, w: 0 }
+        customData:
+        outline: []
+        physicsShape: []
+        tessellationDetail: 0
+        bones: []
+        spriteID: ac5abe6abd2e40c4696cd085b10f0743
+        internalID: -842932692
+        vertices: []
+        indices:
+        edges: []
+        weights: []
+      - serializedVersion: 2
+        name: BabaylanAnimationprofile_22
+        rect:
+          serializedVersion: 2
+          x: 638
+          y: 0
+          width: 29
+          height: 29
+        alignment: 0
+        pivot: { x: 0.5, y: 0.5 }
+        border: { x: 0, y: 0, z: 0, w: 0 }
+        customData:
+        outline: []
+        physicsShape: []
+        tessellationDetail: 0
+        bones: []
+        spriteID: 6279f0c619d1a524c98466ba00132b6b
+        internalID: -174128861
+        vertices: []
+        indices:
+        edges: []
+        weights: []
+      - serializedVersion: 2
+        name: BabaylanAnimationprofile_23
+        rect:
+          serializedVersion: 2
+          x: 667
+          y: 0
+          width: 29
+          height: 29
+        alignment: 0
+        pivot: { x: 0.5, y: 0.5 }
+        border: { x: 0, y: 0, z: 0, w: 0 }
+        customData:
+        outline: []
+        physicsShape: []
+        tessellationDetail: 0
+        bones: []
+        spriteID: 1a91fcb9a40ed194daeda64e7fd7dfaa
+        internalID: -1537126551
+        vertices: []
+        indices:
+        edges: []
+        weights: []
+    outline: []
+    customData:
+    physicsShape: []
+    bones: []
+    spriteID: 61ea6a1301b38494e911577d77b6a4c5
+    internalID: 0
+    vertices: []
+    indices:
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries:
+        - key: SpriteEditor.SliceOnImport
+          value: True
+        - key: SpriteEditor.SliceSettings
+          value: '{"sliceOnImport":true,"gridCellCount":{"x":24.0,"y":1.0},"gridSpriteSize":{"x":29.0,"y":29.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":2,"keepEmptyRects":false,"isAlternate":false}'
+    nameFileIdTable:
+      BabaylanAnimationprofile_0: -5915898440549698211
+      BabaylanAnimationprofile_1: 1893508236
+      BabaylanAnimationprofile_10: -844426824
+      BabaylanAnimationprofile_11: 1918000655
+      BabaylanAnimationprofile_12: -259766377
+      BabaylanAnimationprofile_13: -312800847
+      BabaylanAnimationprofile_14: 1760822777
+      BabaylanAnimationprofile_15: -885758968
+      BabaylanAnimationprofile_16: -1518204507
+      BabaylanAnimationprofile_17: 2110754056
+      BabaylanAnimationprofile_18: 1148270187
+      BabaylanAnimationprofile_19: 1498059738
+      BabaylanAnimationprofile_2: 4264963
+      BabaylanAnimationprofile_20: 280161605
+      BabaylanAnimationprofile_21: -842932692
+      BabaylanAnimationprofile_22: -174128861
+      BabaylanAnimationprofile_23: -1537126551
+      BabaylanAnimationprofile_3: -155863950
+      BabaylanAnimationprofile_4: -769724495
+      BabaylanAnimationprofile_5: -1091075244
+      BabaylanAnimationprofile_6: -240122774
+      BabaylanAnimationprofile_7: 1501441252
+      BabaylanAnimationprofile_8: -303285470
+      BabaylanAnimationprofile_9: 1109588994
+  mipmapLimitGroupName:
+  pSDRemoveMatte: 0
+  userData:
+  assetBundleName:
+  assetBundleVariant:

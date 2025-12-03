@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.UI;
 
 
 /// <summary>
@@ -73,7 +73,10 @@ public class MatchSetupSystem : MonoBehaviour
     /// <para><strong>How:</strong> Assign the background GameObject's Image component</para>
     /// </remarks>
     [Tooltip("The background Image component that displays the level's background image")]
-    [SerializeField] private UnityEngine.UI.Image combatBackgroundRenderer;
+    [SerializeField] private Image combatBackgroundRenderer;
+
+    [Tooltip("The background Image component that displays the level's map image")]
+    [SerializeField] private Image mapIcon;
    
    
    [Header("Fallback Data (For Direct Testing)")]
@@ -88,6 +91,8 @@ public class MatchSetupSystem : MonoBehaviour
    /// </remarks>
    [Tooltip("Fallback enemies used when testing combat scene directly without going through level select")]
    [SerializeField] private List<EnemyData> fallbackEnemyDatas;
+
+   [SerializeField] private Animator roleTurnAnimator;
    
    /// </remarks>
     /// <summary>
@@ -112,8 +117,7 @@ public class MatchSetupSystem : MonoBehaviour
             if (selectedMapData != null && selectedMapData.EnemyDatas != null && selectedMapData.EnemyDatas.Count > 0) {
                 Debug.Log($"[MatchSetupSystem] Using enemies from selected level: {selectedMapData.MapId}");
                 enemiesToSpawn = new List<EnemyData>(selectedMapData.EnemyDatas);
-            }
-        }
+            }        }
         if (enemiesToSpawn == null && fallbackEnemyDatas != null && fallbackEnemyDatas.Count > 0) {
             Debug.Log("[MatchSetupSystem] No level selected - using fallback enemy data for testing");
             enemiesToSpawn = fallbackEnemyDatas;
@@ -132,10 +136,24 @@ public class MatchSetupSystem : MonoBehaviour
             Debug.Log($"[MatchSetupSystem] Set combat background from level: {selectedMapData.MapId}");
         }
 
+        // Set the map icon from selected level (if available)
+        if (mapIcon != null && selectedMapData != null && selectedMapData.CombatMapIcon != null)
+        {
+            mapIcon.sprite = selectedMapData.CombatMapIcon;
+            Debug.Log($"[MatchSetupSystem] Set combat map icon from level: {selectedMapData.MapId}");
+        }
+
         // Initialize sequential enemy spawning (only spawns first enemy, rest spawn on defeat)
         // SEQUENTIAL MODE: Enemies appear one at a time. When defeated, the next spawns automatically.
         EnemySystem.Instance.Setup(enemiesToSpawn);
 
+
+        // Defensive: Ensure heroDatas is not null or empty before any use
+        if (heroDatas == null || heroDatas.Count == 0)
+        {
+            Debug.LogWarning("[MatchSetupSystem] heroDatas is null or empty. Cannot setup heroes, cards, or animator override.", this);
+            return;
+        }
 
         // Spawn all hero entities first (multi-hero support)
         // This ensures heroes exist before cards are set up
@@ -143,6 +161,11 @@ public class MatchSetupSystem : MonoBehaviour
 
         // Prepare the card system with all hero decks (multi-hero support)
         CardSystem.Instance.Setup(heroDatas);
+
+        if (heroDatas[0] != null)
+        {
+            SetAnimatorOverride(heroDatas[0].TurnProfileOverride);
+        }
 
         // Give the player a starting perk - shows how any system can add perks
         if (perkData == null)
@@ -162,6 +185,31 @@ public class MatchSetupSystem : MonoBehaviour
 
     }
 
+    /// <summary>
+    /// Assigns a new AnimatorOverrideController instance to the Animator at runtime.
+    /// </summary>
+    /// <param name="overrideController">The override controller to assign (from HeroData)</param>
+    public void SetAnimatorOverride(AnimatorOverrideController overrideController)
+    {
+        if (roleTurnAnimator != null && overrideController != null)
+        {
+            roleTurnAnimator.runtimeAnimatorController = overrideController;
+            Debug.Log($"[MatchSetupSystem] AnimatorOverrideController set at runtime: {overrideController.name} (Base: {overrideController.runtimeAnimatorController?.name})", roleTurnAnimator);
+            // Force rebind to ensure Animator uses the new override controller
+            roleTurnAnimator.Rebind();
+        }
+        else
+        {
+            if (roleTurnAnimator == null)
+            {
+                Debug.LogWarning($"[MatchSetupSystem] Cannot assign override: Animator reference is null on {gameObject.name}", this);
+            }
+            if (overrideController == null)
+            {
+                Debug.LogWarning($"[MatchSetupSystem] Cannot assign override: OverrideController is null on {gameObject.name}", this);
+            }
+        }
+    }
 }
 
 

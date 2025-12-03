@@ -65,10 +65,14 @@ public class HeroData : ScriptableObject
     
     [Title("Animation", "Animation controller for this hero", TitleAlignments.Centered)]
     [field: SerializeField]
-    [field: LabelText("Animator Override Controller")]
+    [field: LabelText("Hero Animator Override Controller")]
     [field: AssetsOnly]
     public AnimatorOverrideController AnimatorOverride { get; private set; }
 
+    [field: SerializeField]
+    [field: LabelText("Turn Profile Animator Override Controller")]
+    [field: AssetsOnly]
+    public AnimatorOverrideController TurnProfileOverride { get; private set; }
     [Title("Build Presets", "Available build variants for this hero", TitleAlignments.Centered)]
     [field: SerializeField]
     [field: LabelText("Available Build Presets")]

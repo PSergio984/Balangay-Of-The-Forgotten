@@ -498,11 +498,18 @@ public class CharacterSelectionManager : MonoBehaviour
     /// [TEST] Skips character selection and transitions directly to the map scene.
     /// Use this for testing scene transitions without selecting characters.
     /// </summary>
-    [ContextMenu("Skip Character Selection (Testing)")]
+    [ContextMenu("Tools/Skip Character Selection For Testing")]
     private void SkipCharacterSelectionForTesting()
     {
         Debug.Log("[CharacterSelectionManager] TEST: Skipping character selection, transitioning to MapSelection...");
-        
+
+        // Null-check for transitionData (same as ConfirmSelection)
+        if (transitionData == null)
+        {
+            Debug.LogError("[CharacterSelectionManager] CharacterTransitionData reference is missing! Assign it in the Inspector.");
+            return;
+        }
+
         // Optionally assign default presets to all heroes for testing
         if (cardPresetManager != null)
         {
@@ -519,12 +526,11 @@ public class CharacterSelectionManager : MonoBehaviour
                     }
                 }
             }
-            
             // Prepare transition data with auto-assigned presets
             int validSelections = cardPresetManager.PrepareTransitionData();
             Debug.Log($"[TEST] Prepared {validSelections} hero slots for transition");
         }
-        
+
         // Force transition to map scene
         LoadMapScene();
     }

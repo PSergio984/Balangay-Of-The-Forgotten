@@ -1205,6 +1205,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: PCVideoPlayer
       objectReference: {fileID: 0}
+    - target: {fileID: 3277888685001346446, guid: a5cc9ecdf189f3b4cb0763e8ad129f8d, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1252,7 +1256,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5539857927476545546, guid: a7ab5f53a1231f84aae82fee0c64a7b3, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6872880896062976301, guid: a7ab5f53a1231f84aae82fee0c64a7b3, type: 3}
       propertyPath: m_IsActive

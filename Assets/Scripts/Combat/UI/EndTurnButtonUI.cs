@@ -77,6 +77,7 @@ public class EndTurnButtonUI : MonoBehaviour
             {
                 // Advance to next hero
                 CurrentHeroUtil.CurrentHeroIndex++;
+
                 Debug.Log($"[EndTurnButtonUI] Next hero: {CurrentHeroUtil.CurrentHeroIndex}");
                 // Draw new hand for the next hero using CardSystem performer
                 ActionSystem.Instance.Perform(new DrawCardsGA(5));

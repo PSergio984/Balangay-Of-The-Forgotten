@@ -72,8 +72,12 @@ public class LoadingScreenController : MonoBehaviour
      void Awake()
     {
 #if UNITY_WEBGL
-    useWebGLVideoPlayer = true;
+        useWebGLVideoPlayer = true;
 #endif
+        // CRITICAL: Hide all video roots immediately in Awake to prevent overlap
+        // This runs before ANY rendering happens, ensuring no stale video frames appear
+        if (pcVideoRoot != null) pcVideoRoot.SetActive(false);
+        if (webglVideoRoot != null) webglVideoRoot.SetActive(false);
     }
     
     void Start()
@@ -557,7 +561,6 @@ public class LoadingScreenController : MonoBehaviour
             .NewTransition()
             .Unload(SceneDatabase.Slots.LoadingScreen)
             .Load(SceneDatabase.Slots.MainMenu, SceneDatabase.Scenes.MainMenu, setActive: true) 
-            .WithOverlay()
             .Perform();
     }
 

@@ -57,6 +57,19 @@ public class MapSelectManager : MonoBehaviour
     /// </summary>
     public TextMeshProUGUI LevelHeaderText;
 
+
+    /// <summary>
+    /// Image component showing the portrait of the currently selected boss in the level select UI
+    /// Updated by LevelSelectSystemEventHandler when a map is selected
+    /// </summary>
+    public Image CurrentBossImage;
+
+    /// <summary>
+    /// Text component displaying the name or label of the currently selected boss in the level select UI
+    /// Updated by LevelSelectSystemEventHandler when a map is selected
+    /// </summary>
+    public TextMeshProUGUI CurrentBossImageText;
+
     [Header("Data")]
     /// <summary>
     /// ScriptableObject defining all maps in current area

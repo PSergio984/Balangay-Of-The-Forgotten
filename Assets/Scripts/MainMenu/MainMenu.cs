@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using AudioSystem;
+using System.Runtime.InteropServices;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -53,7 +54,14 @@ using UnityEditor;
 /// </remarks>
 public class MainMenu : MonoBehaviour
 {
-
+#if UNITY_WEBGL && !UNITY_EDITOR
+    /// <summary>
+    /// JavaScript function to refresh the page in WebGL builds.
+    /// This calls location.reload() in the browser to properly refresh.
+    /// </summary>
+    [DllImport("__Internal")]
+    private static extern void RefreshPage();
+#endif
 
     [SerializeField] private SoundData mapSelectionMusic;
     [SerializeField] private float MusicFadeTime = 2f;
@@ -89,7 +97,7 @@ public class MainMenu : MonoBehaviour
     /// <remarks>
     /// Called when the quit button is clicked. Behavior depends on platform:
     /// - Editor: Stops play mode
-    /// - WebGL: Refreshes the page (since Application.Quit doesn't work)
+    /// - WebGL: Refreshes the page using JavaScript (since Application.Quit doesn't work)
     /// - Standalone: Quits the application
     /// </remarks>
     public void QuitGame()
@@ -98,8 +106,8 @@ public class MainMenu : MonoBehaviour
         // Stop playing the scene in the editor
         EditorApplication.isPlaying = false;
         #elif UNITY_WEBGL
-        // On WebGL, refresh the page to "quit" (Application.Quit doesn't work)
-        Application.OpenURL(Application.absoluteURL);
+        // On WebGL, use JavaScript to refresh the page properly
+        RefreshPage();
         #else
         // Quit the application on standalone builds
         Application.Quit();

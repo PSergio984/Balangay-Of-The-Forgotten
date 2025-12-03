@@ -49,6 +49,12 @@ public class HeroSystem : Singleton<HeroSystem>
 {
     // Expose all hero views for targeting
     public List<HeroView> HeroViews => HeroBoardView.HeroViews;
+    
+    /// <summary>
+    /// Stored hero data list for accessing turn profile overrides
+    /// </summary>
+    private List<HeroData> storedHeroDatas;
+    
     /// <summary>
     /// The visual display component that shows the hero to players
     /// </summary>
@@ -72,12 +78,35 @@ public class HeroSystem : Singleton<HeroSystem>
 
     public void Setup(List<HeroData> heroDatas)
         {
+            // Store hero datas for turn profile access
+            storedHeroDatas = heroDatas;
+            
             foreach (var heroData in heroDatas)
             {
                 // Tell the hero view to set up the hero's appearance and stats
                 HeroBoardView.AddHero(heroData);
             }
         }
+    
+    /// <summary>
+    /// Gets the turn profile override for the hero at the specified index
+    /// </summary>
+    /// <param name="heroIndex">Index of the hero (0-based)</param>
+    /// <returns>The AnimatorOverrideController for the hero's turn profile, or null if not found</returns>
+    public AnimatorOverrideController GetHeroTurnProfileOverride(int heroIndex)
+    {
+        if (storedHeroDatas == null || heroIndex < 0 || heroIndex >= storedHeroDatas.Count)
+        {
+            Debug.LogWarning($"[HeroSystem] Cannot get turn profile override for hero index {heroIndex}");
+            return null;
+        }
+        if (storedHeroDatas[heroIndex] == null)
+        {
+            Debug.LogWarning($"[HeroSystem] HeroData at index {heroIndex} is null. Cannot get turn profile override.");
+            return null;
+        }
+        return storedHeroDatas[heroIndex].turnProfileOverride;
+    }
     /// <summary>
     /// Subscribe to enemy turn reactions when this system starts
     /// </summary>

@@ -1,7 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
 
-
 /*
  * 
  * Purpose: ScriptableObject container for map configuration data
@@ -59,8 +58,54 @@ public class MapData : ScriptableObject
     /// Visual preview image shown in map selection screen (public getter)
     /// </summary>
     public Sprite MapThumbnail => mapThumbnail;
-    
-    
+
+    [Header("Boss Info")]
+
+    /// <summary>
+    /// Portrait image of the boss enemy for this map
+    /// </summary>
+    /// <remarks>
+    /// <para><strong>Why:</strong> Displayed in map selection to preview the boss encounter</para>
+    /// <para><strong>How:</strong> Assign a boss portrait sprite in Inspector</para>
+    /// </remarks>
+    [Tooltip("Portrait image of the boss enemy displayed in map selection")]
+    [SerializeField] private Sprite bossImage;
+
+    /// <summary>
+    /// Portrait image of the boss enemy for this map (public getter)
+    /// </summary>
+    public Sprite BossImage => bossImage;
+
+    /// <summary>
+    /// Icon representing the combat type or difficulty of this map
+    /// </summary>
+    /// <remarks>
+    /// <para><strong>Why:</strong> Visual indicator for players in map selection UI</para>
+    /// <para><strong>How:</strong> Assign an icon sprite in Inspector</para>
+    /// </remarks>
+    [Tooltip("Icon representing the combat type or difficulty of this map")]
+    [SerializeField] private Sprite combatMapIcon;
+
+    /// <summary>
+    /// Icon representing the combat type or difficulty of this map (public getter)
+    /// </summary>
+    public Sprite CombatMapIcon => combatMapIcon;
+
+    /// <summary>
+    /// Display name of the boss enemy for this map
+    /// </summary>
+    /// <remarks>
+    /// <para><strong>Why:</strong> Shown in UI to introduce the boss encounter</para>
+    /// <para><strong>How:</strong> Enter the boss name in Inspector (e.g., "Dark Guardian")</para>
+    /// </remarks>
+    [Tooltip("Display name of the boss enemy shown in map selection UI")]
+    [SerializeField] private string bossName;
+
+    /// <summary>
+    /// Display name of the boss enemy for this map (public getter)
+    /// </summary>
+    public string BossName => bossName;
+
     [Header("Combat Setup")]
     
     /// <summary>

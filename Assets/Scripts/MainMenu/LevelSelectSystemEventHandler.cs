@@ -157,14 +157,41 @@ public class LevelSelectSystemEventHandler : DynamicEventSystemHandler
             if (_mapSelectManager != null && _mapSelectManager.LevelHeaderText != null)
             {
                 // If the button has map data, show the level name
+
                 if (_mapButton.MapData != null)
                 {
                     _mapSelectManager.LevelHeaderText.SetText(_mapButton.MapData.MapId);
+                    if (_mapSelectManager.CurrentBossImage != null)
+                    {
+                        if (_mapButton.MapData.BossImage != null)
+                        {
+                            _mapSelectManager.CurrentBossImage.sprite = _mapButton.MapData.BossImage;
+                        }
+                        else
+                        {
+                            _mapSelectManager.CurrentBossImage.sprite = null; // Or assign a placeholder sprite if available
+                        }
+                    }
+                    if (_mapSelectManager.CurrentBossImageText != null)
+                    {
+                        if (!string.IsNullOrEmpty(_mapButton.MapData.BossName))
+                        {
+                            _mapSelectManager.CurrentBossImageText.SetText(_mapButton.MapData.BossName);
+                        }
+                        else
+                        {
+                            _mapSelectManager.CurrentBossImageText.SetText("Unknown");
+                        }
+                    }
                 }
                 else
                 {
                     // If no data found, just show "Unknown"
                     _mapSelectManager.LevelHeaderText.SetText("Unknown");
+                    if (_mapSelectManager.CurrentBossImageText != null)
+                        _mapSelectManager.CurrentBossImageText.SetText("Unknown");
+                    if (_mapSelectManager.CurrentBossImage != null)
+                        _mapSelectManager.CurrentBossImage.sprite = null;
                 }
                 
                 // Get the button's position on screen

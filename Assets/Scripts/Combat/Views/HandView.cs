@@ -66,6 +66,13 @@ public class HandView : MonoBehaviour
     /// </remarks>
     // curved path for the cards positions
     [SerializeField] private SplineContainer splineContainer;
+
+
+    /// <summary>
+    /// Controls spacing between cards in the hand. Higher values produce smaller spacing; must be > 0.01.
+    /// </summary>
+    [Tooltip("Controls spacing between cards in the hand. Higher values produce smaller spacing; must be > 0.01.")]
+    [SerializeField, Range(0.01f, 100f)] private float cardSpacingDivisor = 10f;
     
     /// <summary>
     /// List of all card views currently displayed in the hand
@@ -161,8 +168,15 @@ public class HandView : MonoBehaviour
             }
         }
 
-        // Calculate spacing between cards (10% of spline length per card)
-        float cardSpacing = 1f / 10f;
+
+        // Validate and clamp cardSpacingDivisor to avoid division by zero
+        float safeSpacingDivisor = Mathf.Max(cardSpacingDivisor, 0.01f);
+        if (cardSpacingDivisor < 0.01f)
+        {
+            Debug.LogWarning($"[HandView] cardSpacingDivisor was too small (value: {cardSpacingDivisor}). Clamped to 0.01 to avoid division by zero.", this);
+        }
+        // Calculate spacing between cards
+        float cardSpacing = 1f / safeSpacingDivisor;
         // Calculate the starting position for the first card to center the hand
         float firstCardPosition = 0.5f - (cards.Count - 1) * cardSpacing / 2f;
 

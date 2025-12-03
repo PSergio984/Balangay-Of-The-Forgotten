@@ -23,6 +23,8 @@ public class MainMenuVideoController : MonoBehaviour
     [SerializeField] private GameObject pcVideoRoot;
     [Tooltip("Root GameObject for all WebGL video objects (e.g., VideoPlayer, mesh, UI)")]
     [SerializeField] private GameObject webglVideoRoot;
+    [Tooltip("The UI RawImage that displays the PC video RenderTexture (optional, hidden during load)")]
+    [SerializeField] private GameObject videoDisplayScreen;
     
     [Header("Video Sequence - PC/Standalone")]
     [Tooltip("List of VideoClips to play in sequence for PC/Standalone/Android builds")]
@@ -64,8 +66,14 @@ public class MainMenuVideoController : MonoBehaviour
      void Awake()
     {
 #if UNITY_WEBGL
-    useWebGLVideoPlayer = true;
+        useWebGLVideoPlayer = true;
 #endif
+        // CRITICAL: Hide all video elements immediately in Awake to prevent overlap
+        // This runs before ANY rendering happens, ensuring no stale video frames appear
+        if (pcVideoRoot != null) pcVideoRoot.SetActive(false);
+        if (webglVideoRoot != null) webglVideoRoot.SetActive(false);
+        // Also hide the video display screen (RawImage) to prevent showing stale RenderTexture content
+        if (videoDisplayScreen != null) videoDisplayScreen.SetActive(false);
     }
     
     void Start()
@@ -90,6 +98,11 @@ public class MainMenuVideoController : MonoBehaviour
         // Enable only the relevant video root
         if (pcVideoRoot != null) pcVideoRoot.SetActive(!useWebGLVideoPlayer);
         if (webglVideoRoot != null) webglVideoRoot.SetActive(useWebGLVideoPlayer);
+        
+        // Wait an additional frame after activating the video root
+        // This gives Unity time to properly initialize the VideoPlayer component
+        // before we try to prepare/play it
+        yield return null;
 
         // Validate video lists
         if (useWebGLVideoPlayer && (webglVideoNames == null || webglVideoNames.Count == 0))
@@ -136,7 +149,12 @@ public class MainMenuVideoController : MonoBehaviour
         {
             webglVideoRoot.SetActive(false);
         }
-        
+        // Also hide the video display screen (RawImage) to prevent showing stale RenderTexture content
+        if (videoDisplayScreen != null)
+        {
+            videoDisplayScreen.SetActive(false);
+        }
+
         // Stop any playing music
         StopMusicForCurrentVideo();
     }
@@ -223,6 +241,13 @@ public class MainMenuVideoController : MonoBehaviour
             return;
         }
 
+        // Ensure the VideoPlayer is enabled
+        if (!pcVideoPlayer.enabled)
+        {
+            LogDebug("Enabling disabled PC VideoPlayer");
+            pcVideoPlayer.enabled = true;
+        }
+
         if (currentVideoIndex >= pcVideoClips.Count)
         {
             LogError($"Video index {currentVideoIndex} out of range!");
@@ -254,7 +279,9 @@ public class MainMenuVideoController : MonoBehaviour
         pcVideoPlayer.isLooping = false;
         
         // Prepare and play
+        LogDebug($"Calling Prepare() on video clip: {clip.name}");
         pcVideoPlayer.Prepare();
+        LogDebug($"Prepare() called, isPrepared={pcVideoPlayer.isPrepared}, isPlaying={pcVideoPlayer.isPlaying}");
     }
 
     /// <summary>
@@ -298,6 +325,11 @@ public class MainMenuVideoController : MonoBehaviour
     private void OnVideoPrepared(VideoPlayer vp)
     {
         LogDebug("Video prepared, starting playback");
+        
+        // Show the video display screen now that video is ready to play
+        // This prevents showing stale RenderTexture content from previous scenes
+        if (videoDisplayScreen != null) videoDisplayScreen.SetActive(true);
+        
         if (useWebGLVideoPlayer)
         {
             if (webglVideoPlayer != null) webglVideoPlayer.Play();
