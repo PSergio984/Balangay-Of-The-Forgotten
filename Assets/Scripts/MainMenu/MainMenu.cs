@@ -114,6 +114,14 @@ public class MainMenu : MonoBehaviour
         #endif
     }
 
+    /// <summary>
+    /// Initiates a scene transition back to the loading screen.
+    /// </summary>
+    /// <remarks>
+    /// Triggers a transition that unloads the main menu, loads the loading scene, sets it active,
+    /// plays the loading video, and performs the transition. This is typically used to return to the
+    /// loading screen from the main menu, ensuring a consistent transition effect and video playback.
+    /// </remarks>
     public void GoBackLoadingScreen()
     {
         SceneController.Instance

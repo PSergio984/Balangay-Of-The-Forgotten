@@ -1,0 +1,3588 @@
+fileFormatVersion: 2
+guid: 43084a23f2d3dc6488fe72de90af2fec
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -5655054478289149037
+    second: BathalaAnimation_0
+  - first:
+      213: -5771999777325355359
+    second: BathalaAnimation_1
+  - first:
+      213: -5845166609809288428
+    second: BathalaAnimation_2
+  - first:
+      213: 7818971760529697803
+    second: BathalaAnimation_3
+  - first:
+      213: -7061548215078587057
+    second: BathalaAnimation_4
+  - first:
+      213: -965168157717651249
+    second: BathalaAnimation_5
+  - first:
+      213: 4859533941444740464
+    second: BathalaAnimation_6
+  - first:
+      213: 193101975363310690
+    second: BathalaAnimation_7
+  - first:
+      213: -4141240232221337941
+    second: BathalaAnimation_8
+  - first:
+      213: 7089121162574579095
+    second: BathalaAnimation_9
+  - first:
+      213: -4570666310782253445
+    second: BathalaAnimation_10
+  - first:
+      213: -3677005253287183847
+    second: BathalaAnimation_11
+  - first:
+      213: 6761642511566847842
+    second: BathalaAnimation_12
+  - first:
+      213: -3829953812442741040
+    second: BathalaAnimation_13
+  - first:
+      213: 4068165571386273020
+    second: BathalaAnimation_14
+  - first:
+      213: 4302564713420733359
+    second: BathalaAnimation_15
+  - first:
+      213: 708929855329394452
+    second: BathalaAnimation_16
+  - first:
+      213: 353917280762410249
+    second: BathalaAnimation_17
+  - first:
+      213: 3573939371776480816
+    second: BathalaAnimation_18
+  - first:
+      213: 6091445562354991939
+    second: BathalaAnimation_19
+  - first:
+      213: -2045870922540554907
+    second: BathalaAnimation_20
+  - first:
+      213: 5041609293511202256
+    second: BathalaAnimation_21
+  - first:
+      213: -5998438912599226282
+    second: BathalaAnimation_22
+  - first:
+      213: 4148389025236256643
+    second: BathalaAnimation_23
+  - first:
+      213: 8948448878662137625
+    second: BathalaAnimation_24
+  - first:
+      213: 1012677148245610801
+    second: BathalaAnimation_25
+  - first:
+      213: -408896072575865077
+    second: BathalaAnimation_26
+  - first:
+      213: -1166294225643262217
+    second: BathalaAnimation_27
+  - first:
+      213: 7613114045429426226
+    second: BathalaAnimation_28
+  - first:
+      213: -6710766923889574050
+    second: BathalaAnimation_29
+  - first:
+      213: 6840884164713198488
+    second: BathalaAnimation_30
+  - first:
+      213: -3739888557117723909
+    second: BathalaAnimation_31
+  - first:
+      213: 5627854605409298900
+    second: BathalaAnimation_32
+  - first:
+      213: 3484134910122902682
+    second: BathalaAnimation_33
+  - first:
+      213: 8444081238673941601
+    second: BathalaAnimation_34
+  - first:
+      213: 8979817035299521044
+    second: BathalaAnimation_35
+  - first:
+      213: -8912324805218597866
+    second: BathalaAnimation_36
+  - first:
+      213: 1698874955070295432
+    second: BathalaAnimation_37
+  - first:
+      213: -4506330648171330499
+    second: BathalaAnimation_38
+  - first:
+      213: -5518195488816306537
+    second: BathalaAnimation_39
+  - first:
+      213: -337470569852091965
+    second: BathalaAnimation_40
+  - first:
+      213: -1272335850055872695
+    second: BathalaAnimation_41
+  - first:
+      213: -4551515506848342806
+    second: BathalaAnimation_42
+  - first:
+      213: -6861977755360752518
+    second: BathalaAnimation_43
+  - first:
+      213: -656379721511760674
+    second: BathalaAnimation_44
+  - first:
+      213: -3792981458474066011
+    second: BathalaAnimation_45
+  - first:
+      213: 8666478871152414517
+    second: BathalaAnimation_46
+  - first:
+      213: 9140723934312173070
+    second: BathalaAnimation_47
+  - first:
+      213: -5567991426732697758
+    second: BathalaAnimation_48
+  - first:
+      213: 182491953817275126
+    second: BathalaAnimation_49
+  - first:
+      213: 3782117719674856571
+    second: BathalaAnimation_50
+  - first:
+      213: 5577399698247691631
+    second: BathalaAnimation_51
+  - first:
+      213: -8191017641953514707
+    second: BathalaAnimation_52
+  - first:
+      213: -1415324301660103229
+    second: BathalaAnimation_53
+  - first:
+      213: -6055239285829262805
+    second: BathalaAnimation_54
+  - first:
+      213: -1939893911532784551
+    second: BathalaAnimation_55
+  - first:
+      213: 4504207860788672700
+    second: BathalaAnimation_56
+  - first:
+      213: -4840175256408997316
+    second: BathalaAnimation_57
+  - first:
+      213: -5666597300035532322
+    second: BathalaAnimation_58
+  - first:
+      213: 7562150674467079567
+    second: BathalaAnimation_59
+  - first:
+      213: 7028250886622732703
+    second: BathalaAnimation_60
+  - first:
+      213: -3350840451748960734
+    second: BathalaAnimation_61
+  - first:
+      213: -6107186625440568479
+    second: BathalaAnimation_62
+  - first:
+      213: 5383790716712623560
+    second: BathalaAnimation_63
+  - first:
+      213: -1083014662402139229
+    second: BathalaAnimation_64
+  - first:
+      213: -4277212008866108559
+    second: BathalaAnimation_65
+  - first:
+      213: 6580374209606513321
+    second: BathalaAnimation_66
+  - first:
+      213: 3531782944630508849
+    second: BathalaAnimation_67
+  - first:
+      213: 3476324310660240555
+    second: BathalaAnimation_68
+  - first:
+      213: 5771635458478139505
+    second: BathalaAnimation_69
+  - first:
+      213: -6339352818577626530
+    second: BathalaAnimation_70
+  - first:
+      213: -288137657813882556
+    second: BathalaAnimation_71
+  - first:
+      213: -6719589842988948238
+    second: BathalaAnimation_72
+  - first:
+      213: 7054724723289334104
+    second: BathalaAnimation_73
+  - first:
+      213: 161461475128180215
+    second: BathalaAnimation_74
+  - first:
+      213: -4056603837109039404
+    second: BathalaAnimation_75
+  - first:
+      213: -7080762399543332153
+    second: BathalaAnimation_76
+  - first:
+      213: 8196648282270138826
+    second: BathalaAnimation_77
+  - first:
+      213: -215709864739770485
+    second: BathalaAnimation_78
+  - first:
+      213: -1441692430102048342
+    second: BathalaAnimation_79
+  - first:
+      213: -6373571696819599949
+    second: BathalaAnimation_80
+  - first:
+      213: -7922511490163382754
+    second: BathalaAnimation_81
+  - first:
+      213: 4669547012297634813
+    second: BathalaAnimation_82
+  - first:
+      213: 573009031131458435
+    second: BathalaAnimation_83
+  - first:
+      213: -6368092564135331175
+    second: BathalaAnimation_84
+  - first:
+      213: -6713270730604778901
+    second: BathalaAnimation_85
+  - first:
+      213: 8525283095398647274
+    second: BathalaAnimation_86
+  - first:
+      213: 2814693533903597271
+    second: BathalaAnimation_87
+  - first:
+      213: 7455518049373684023
+    second: BathalaAnimation_88
+  - first:
+      213: -8388707967229598124
+    second: BathalaAnimation_89
+  - first:
+      213: -2096651676897079601
+    second: BathalaAnimation_90
+  - first:
+      213: 5232103714575487444
+    second: BathalaAnimation_91
+  - first:
+      213: 5591948002091146380
+    second: BathalaAnimation_92
+  - first:
+      213: -4091239831531246037
+    second: BathalaAnimation_93
+  - first:
+      213: -1709699130406527750
+    second: BathalaAnimation_94
+  - first:
+      213: -4671229659277203438
+    second: BathalaAnimation_95
+  - first:
+      213: 1192416960860757635
+    second: BathalaAnimation_96
+  - first:
+      213: 3344242708417494983
+    second: BathalaAnimation_97
+  - first:
+      213: -8489433924827618804
+    second: BathalaAnimation_98
+  - first:
+      213: 8374973813551540512
+    second: BathalaAnimation_99
+  - first:
+      213: 5600290941533745014
+    second: BathalaAnimation_100
+  - first:
+      213: 9074318656342599161
+    second: BathalaAnimation_101
+  - first:
+      213: 3843198880403101675
+    second: BathalaAnimation_102
+  - first:
+      213: 2056852482342761110
+    second: BathalaAnimation_103
+  - first:
+      213: -548387526498378572
+    second: BathalaAnimation_104
+  - first:
+      213: 5798672725950153794
+    second: BathalaAnimation_105
+  - first:
+      213: -6401851113989469208
+    second: BathalaAnimation_106
+  - first:
+      213: -8068371668414657077
+    second: BathalaAnimation_107
+  - first:
+      213: -6165450795572922661
+    second: BathalaAnimation_108
+  - first:
+      213: -7303414055455084348
+    second: BathalaAnimation_109
+  - first:
+      213: -5876099986658776811
+    second: BathalaAnimation_110
+  - first:
+      213: 7859871163261519334
+    second: BathalaAnimation_111
+  - first:
+      213: 319398808048529034
+    second: BathalaAnimation_112
+  - first:
+      213: -1431653553297718606
+    second: BathalaAnimation_113
+  - first:
+      213: 6819909120683165852
+    second: BathalaAnimation_114
+  - first:
+      213: 5543521006203586556
+    second: BathalaAnimation_115
+  - first:
+      213: 6723851417081666634
+    second: BathalaAnimation_116
+  - first:
+      213: 2039664456087273053
+    second: BathalaAnimation_117
+  - first:
+      213: 2828793136447601298
+    second: BathalaAnimation_118
+  - first:
+      213: -7576412902954443967
+    second: BathalaAnimation_119
+  - first:
+      213: -8951243321717443741
+    second: BathalaAnimation_120
+  - first:
+      213: 7935471472273388186
+    second: BathalaAnimation_121
+  - first:
+      213: 7545684018397330165
+    second: BathalaAnimation_122
+  - first:
+      213: -7594212952984469479
+    second: BathalaAnimation_123
+  - first:
+      213: 3828774197620171796
+    second: BathalaAnimation_124
+  - first:
+      213: 2827052134802839527
+    second: BathalaAnimation_125
+  - first:
+      213: -2928414224130296186
+    second: BathalaAnimation_126
+  - first:
+      213: -7264134013525485135
+    second: BathalaAnimation_127
+  - first:
+      213: 4779487427297694235
+    second: BathalaAnimation_128
+  - first:
+      213: 5570156493326859134
+    second: BathalaAnimation_129
+  - first:
+      213: -3303185581421387481
+    second: BathalaAnimation_130
+  - first:
+      213: -4130166742294278379
+    second: BathalaAnimation_131
+  - first:
+      213: 8162487726463992761
+    second: BathalaAnimation_132
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: BathalaAnimation_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 10
+        width: 63
+        height: 68
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 393e71ce9e53581b0800000000000000
+      internalID: -5655054478289149037
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BathalaAnimation_1
+      rect:
+        serializedVersion: 2
+        x: 17
+        y: 76
+        width: 30
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1ae63eca8ccb5efa0800000000000000
+      internalID: -5771999777325355359
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BathalaAnimation_2
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 10
+        width: 65
+        height: 68
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 413d759ffebc1eea0800000000000000
+      internalID: -5845166609809288428
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BathalaAnimation_3
+      rect:
+        serializedVersion: 2
+        x: 81
+        y: 76
+        width: 30
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b0cee27b361928c60800000000000000
+      internalID: 7818971760529697803
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BathalaAnimation_4
+      rect:
+        serializedVersion: 2
+        x: 145
+        y: 76
+        width: 30
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f4572f3ef47500e90800000000000000
+      internalID: -7061548215078587057
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BathalaAnimation_5
+      rect:
+        serializedVersion: 2
+        x: 209
+        y: 76
+        width: 31
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fc0a8ba9ca80b92f0800000000000000
+      internalID: -965168157717651249
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BathalaAnimation_6
+      rect:
+        serializedVersion: 2
+        x: 273
+        y: 77
+        width: 31
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 07584c17f58807340800000000000000
+      internalID: 4859533941444740464
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BathalaAnimation_7
+      rect:
+        serializedVersion: 2
+        x: 320
+        y: 9
+        width: 65
+        height: 68
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 264d4f639390ea200800000000000000
+      internalID: 193101975363310690
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BathalaAnimation_8
+      rect:
+        serializedVersion: 2
+        x: 337
+        y: 76
+        width: 30
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ba614e433fb5786c0800000000000000
+      internalID: -4141240232221337941
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BathalaAnimation_9
+      rect:
+        serializedVersion: 2
+        x: 384
+        y: 10
+        width: 65
+        height: 68
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 79546f8332e916260800000000000000
+      internalID: 7089121162574579095
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BathalaAnimation_10
+      rect:
+        serializedVersion: 2
+        x: 401
+        y: 76
+        width: 30
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b768afee43bb190c0800000000000000
+      internalID: -4570666310782253445
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BathalaAnimation_11
+      rect:
+        serializedVersion: 2
+        x: 448
+        y: 10
+        width: 65
+        height: 68
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 91a72982437a8fcc0800000000000000
+      internalID: -3677005253287183847
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BathalaAnimation_12
+      rect:
+        serializedVersion: 2
+        x: 465
+        y: 76
+        width: 31
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 26f3f102a0e26dd50800000000000000
+      internalID: 6761642511566847842
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BathalaAnimation_13
+      rect:
+        serializedVersion: 2
+        x: 512
+        y: 10
+        width: 65
+        height: 68
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0d6823fac4549dac0800000000000000
+      internalID: -3829953812442741040
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BathalaAnimation_14
+      rect:
+        serializedVersion: 2
+        x: 529
+        y: 76
+        width: 30
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cfce3f97807057830800000000000000
+      internalID: 4068165571386273020
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BathalaAnimation_15
+      rect:
+        serializedVersion: 2
+        x: 576
+        y: 9
+        width: 65
+        height: 68
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fabb2969fc7c5bb30800000000000000
+      internalID: 4302564713420733359
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BathalaAnimation_16
+      rect:
+        serializedVersion: 2
+        x: 593
+        y: 76
+        width: 30
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 41fd39582ff96d900800000000000000
+      internalID: 708929855329394452
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BathalaAnimation_17
+      rect:
+        serializedVersion: 2
+        x: 657
+        y: 77
+        width: 31
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 90537b744ed59e400800000000000000
+      internalID: 353917280762410249
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BathalaAnimation_18
+      rect:
+        serializedVersion: 2
+        x: 721
+        y: 76
+        width: 31
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 036158f4cee299130800000000000000
+      internalID: 3573939371776480816
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BathalaAnimation_19
+      rect:
+        serializedVersion: 2
+        x: 785
+        y: 76
+        width: 30
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3438cc01779298450800000000000000
+      internalID: 6091445562354991939
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BathalaAnimation_20
+      rect:
+        serializedVersion: 2
+        x: 832
+        y: 10
+        width: 65
+        height: 68
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5656ba54c3b9b93e0800000000000000
+      internalID: -2045870922540554907
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BathalaAnimation_21
+      rect:
+        serializedVersion: 2
+        x: 849
+        y: 76
+        width: 30
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0d51b0cd0f467f540800000000000000
+      internalID: 5041609293511202256
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BathalaAnimation_22
+      rect:
+        serializedVersion: 2
+        x: 896
+        y: 10
+        width: 65
+        height: 85
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 65884af079341cca0800000000000000
+      internalID: -5998438912599226282
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BathalaAnimation_23
+      rect:
+        serializedVersion: 2
+        x: 960
+        y: 10
+        width: 65
+        height: 85
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 387065fd6d9029930800000000000000
+      internalID: 4148389025236256643
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BathalaAnimation_24
+      rect:
+        serializedVersion: 2
+        x: 1024
+        y: 10
+        width: 65
+        height: 85
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 917366f18d64f2c70800000000000000
+      internalID: 8948448878662137625
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BathalaAnimation_25
+      rect:
+        serializedVersion: 2
+        x: 1088
+        y: 9
+        width: 65
+        height: 85
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 131d55d3080cd0e00800000000000000
+      internalID: 1012677148245610801
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BathalaAnimation_26
+      rect:
+        serializedVersion: 2
+        x: 1169
+        y: 72
+        width: 30
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b0f201c303f435af0800000000000000
+      internalID: -408896072575865077
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BathalaAnimation_27
+      rect:
+        serializedVersion: 2
+        x: 1233
+        y: 72
+        width: 30
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7fea1f0c49d70dfe0800000000000000
+      internalID: -1166294225643262217
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BathalaAnimation_28
+      rect:
+        serializedVersion: 2
+        x: 1297
+        y: 73
+        width: 30
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 238ab5863e637a960800000000000000
+      internalID: 7613114045429426226
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BathalaAnimation_29
+      rect:
+        serializedVersion: 2
+        x: 1344
+        y: 10
+        width: 65
+        height: 67
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e5ffe13b9019ed2a0800000000000000
+      internalID: -6710766923889574050
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BathalaAnimation_30
+      rect:
+        serializedVersion: 2
+        x: 1361
+        y: 74
+        width: 30
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 893335b37e3bfee50800000000000000
+      internalID: 6840884164713198488
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BathalaAnimation_31
+      rect:
+        serializedVersion: 2
+        x: 1408
+        y: 10
+        width: 65
+        height: 67
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bfa237d0c2f391cc0800000000000000
+      internalID: -3739888557117723909
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BathalaAnimation_32
+      rect:
+        serializedVersion: 2
+        x: 1425
+        y: 74
+        width: 30
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4d9a7fa22f72a1e40800000000000000
+      internalID: 5627854605409298900
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BathalaAnimation_33
+      rect:
+        serializedVersion: 2
+        x: 1472
+        y: 10
+        width: 65
+        height: 85
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a94c963bd322a5030800000000000000
+      internalID: 3484134910122902682
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BathalaAnimation_34
+      rect:
+        serializedVersion: 2
+        x: 1536
+        y: 10
+        width: 65
+        height: 85
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 16463bdd5276f2570800000000000000
+      internalID: 8444081238673941601
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BathalaAnimation_35
+      rect:
+        serializedVersion: 2
+        x: 1600
+        y: 10
+        width: 65
+        height: 85
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 41287093408be9c70800000000000000
+      internalID: 8979817035299521044
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BathalaAnimation_36
+      rect:
+        serializedVersion: 2
+        x: 1664
+        y: 9
+        width: 65
+        height: 85
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6140b062fcf015480800000000000000
+      internalID: -8912324805218597866
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BathalaAnimation_37
+      rect:
+        serializedVersion: 2
+        x: 1745
+        y: 72
+        width: 30
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 88dc5c645cd939710800000000000000
+      internalID: 1698874955070295432
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BathalaAnimation_38
+      rect:
+        serializedVersion: 2
+        x: 1809
+        y: 72
+        width: 30
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d34ca4ba62c4671c0800000000000000
+      internalID: -4506330648171330499
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BathalaAnimation_39
+      rect:
+        serializedVersion: 2
+        x: 1856
+        y: 10
+        width: 65
+        height: 84
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 796e0f7807e6b63b0800000000000000
+      internalID: -5518195488816306537
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BathalaAnimation_40
+      rect:
+        serializedVersion: 2
+        x: 1920
+        y: 10
+        width: 65
+        height: 67
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3c141d10e40115bf0800000000000000
+      internalID: -337470569852091965
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BathalaAnimation_41
+      rect:
+        serializedVersion: 2
+        x: 1937
+        y: 74
+        width: 30
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 94fcc661941c75ee0800000000000000
+      internalID: -1272335850055872695
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BathalaAnimation_42
+      rect:
+        serializedVersion: 2
+        x: 1984
+        y: 10
+        width: 65
+        height: 67
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: aec5f90f2c4c5d0c0800000000000000
+      internalID: -4551515506848342806
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BathalaAnimation_43
+      rect:
+        serializedVersion: 2
+        x: 2001
+        y: 74
+        width: 30
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a7c071b769b55c0a0800000000000000
+      internalID: -6861977755360752518
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BathalaAnimation_44
+      rect:
+        serializedVersion: 2
+        x: 2048
+        y: 10
+        width: 65
+        height: 85
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: edc8585fe1214e6f0800000000000000
+      internalID: -656379721511760674
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BathalaAnimation_45
+      rect:
+        serializedVersion: 2
+        x: 2112
+        y: 10
+        width: 65
+        height: 85
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5af9208a57f9c5bc0800000000000000
+      internalID: -3792981458474066011
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BathalaAnimation_46
+      rect:
+        serializedVersion: 2
+        x: 2176
+        y: 10
+        width: 65
+        height: 85
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 53fc778cd94854870800000000000000
+      internalID: 8666478871152414517
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BathalaAnimation_47
+      rect:
+        serializedVersion: 2
+        x: 2240
+        y: 9
+        width: 65
+        height: 85
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e0e86961dff5ade70800000000000000
+      internalID: 9140723934312173070
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BathalaAnimation_48
+      rect:
+        serializedVersion: 2
+        x: 2321
+        y: 72
+        width: 30
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2675d214c458ab2b0800000000000000
+      internalID: -5567991426732697758
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BathalaAnimation_49
+      rect:
+        serializedVersion: 2
+        x: 2385
+        y: 72
+        width: 30
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6fa45a11777588200800000000000000
+      internalID: 182491953817275126
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BathalaAnimation_50
+      rect:
+        serializedVersion: 2
+        x: 2449
+        y: 73
+        width: 30
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b742eeb0708cc7430800000000000000
+      internalID: 3782117719674856571
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BathalaAnimation_51
+      rect:
+        serializedVersion: 2
+        x: 2496
+        y: 10
+        width: 65
+        height: 67
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f6dac68a977e66d40800000000000000
+      internalID: 5577399698247691631
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BathalaAnimation_52
+      rect:
+        serializedVersion: 2
+        x: 2513
+        y: 74
+        width: 30
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d2b276e3ad8a35e80800000000000000
+      internalID: -8191017641953514707
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BathalaAnimation_53
+      rect:
+        serializedVersion: 2
+        x: 2560
+        y: 10
+        width: 65
+        height: 67
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3cd529ddb02cb5ce0800000000000000
+      internalID: -1415324301660103229
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BathalaAnimation_54
+      rect:
+        serializedVersion: 2
+        x: 2577
+        y: 74
+        width: 30
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b22282a93f777fba0800000000000000
+      internalID: -6055239285829262805
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BathalaAnimation_55
+      rect:
+        serializedVersion: 2
+        x: 2624
+        y: 10
+        width: 65
+        height: 85
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9543525f3cc1415e0800000000000000
+      internalID: -1939893911532784551
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BathalaAnimation_56
+      rect:
+        serializedVersion: 2
+        x: 2688
+        y: 10
+        width: 65
+        height: 85
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cb8b4d06f29228e30800000000000000
+      internalID: 4504207860788672700
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BathalaAnimation_57
+      rect:
+        serializedVersion: 2
+        x: 2752
+        y: 0
+        width: 65
+        height: 95
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c324b17af3e34dcb0800000000000000
+      internalID: -4840175256408997316
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BathalaAnimation_58
+      rect:
+        serializedVersion: 2
+        x: 2816
+        y: 0
+        width: 65
+        height: 94
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ed9c13e47c33c51b0800000000000000
+      internalID: -5666597300035532322
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BathalaAnimation_59
+      rect:
+        serializedVersion: 2
+        x: 2897
+        y: 72
+        width: 30
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f854791f8f722f860800000000000000
+      internalID: 7562150674467079567
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BathalaAnimation_60
+      rect:
+        serializedVersion: 2
+        x: 2961
+        y: 72
+        width: 30
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f91e871b1fc598160800000000000000
+      internalID: 7028250886622732703
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BathalaAnimation_61
+      rect:
+        serializedVersion: 2
+        x: 3008
+        y: 0
+        width: 65
+        height: 94
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2266e76dc5c6f71d0800000000000000
+      internalID: -3350840451748960734
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BathalaAnimation_62
+      rect:
+        serializedVersion: 2
+        x: 3072
+        y: 0
+        width: 65
+        height: 77
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 16b29951f1aee3ba0800000000000000
+      internalID: -6107186625440568479
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BathalaAnimation_63
+      rect:
+        serializedVersion: 2
+        x: 3089
+        y: 74
+        width: 30
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8cd93bed12117ba40800000000000000
+      internalID: 5383790716712623560
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BathalaAnimation_64
+      rect:
+        serializedVersion: 2
+        x: 3136
+        y: 0
+        width: 65
+        height: 77
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3ab1bf017eb58f0f0800000000000000
+      internalID: -1083014662402139229
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BathalaAnimation_65
+      rect:
+        serializedVersion: 2
+        x: 3153
+        y: 74
+        width: 30
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 17b208ee65a44a4c0800000000000000
+      internalID: -4277212008866108559
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BathalaAnimation_66
+      rect:
+        serializedVersion: 2
+        x: 3199
+        y: 0
+        width: 194
+        height: 95
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9a2fcb4ba7f225b50800000000000000
+      internalID: 6580374209606513321
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BathalaAnimation_67
+      rect:
+        serializedVersion: 2
+        x: 3392
+        y: 10
+        width: 63
+        height: 68
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 13d0c7e30e9630130800000000000000
+      internalID: 3531782944630508849
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BathalaAnimation_68
+      rect:
+        serializedVersion: 2
+        x: 3409
+        y: 76
+        width: 30
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ba455fcca826e3030800000000000000
+      internalID: 3476324310660240555
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BathalaAnimation_69
+      rect:
+        serializedVersion: 2
+        x: 50
+        y: 55
+        width: 15
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 17863abbed7f81050800000000000000
+      internalID: 5771635458478139505
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BathalaAnimation_70
+      rect:
+        serializedVersion: 2
+        x: 114
+        y: 56
+        width: 15
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e5a2fc6e2381608a0800000000000000
+      internalID: -6339352818577626530
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BathalaAnimation_71
+      rect:
+        serializedVersion: 2
+        x: 128
+        y: 9
+        width: 65
+        height: 67
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 449279ba354500cf0800000000000000
+      internalID: -288137657813882556
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BathalaAnimation_72
+      rect:
+        serializedVersion: 2
+        x: 192
+        y: 9
+        width: 65
+        height: 66
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2f42254c3a83fb2a0800000000000000
+      internalID: -6719589842988948238
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BathalaAnimation_73
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 9
+        width: 65
+        height: 67
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 851a3df12ca67e160800000000000000
+      internalID: 7054724723289334104
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BathalaAnimation_74
+      rect:
+        serializedVersion: 2
+        x: 640
+        y: 9
+        width: 65
+        height: 67
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7fdfced2b50ad3200800000000000000
+      internalID: 161461475128180215
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BathalaAnimation_75
+      rect:
+        serializedVersion: 2
+        x: 704
+        y: 9
+        width: 65
+        height: 66
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4de01ae8d4c04b7c0800000000000000
+      internalID: -4056603837109039404
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BathalaAnimation_76
+      rect:
+        serializedVersion: 2
+        x: 768
+        y: 9
+        width: 65
+        height: 67
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7c2f644fc141cbd90800000000000000
+      internalID: -7080762399543332153
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BathalaAnimation_77
+      rect:
+        serializedVersion: 2
+        x: 882
+        y: 56
+        width: 15
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ac1078d5f2850c170800000000000000
+      internalID: 8196648282270138826
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BathalaAnimation_78
+      rect:
+        serializedVersion: 2
+        x: 1152
+        y: 9
+        width: 65
+        height: 65
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b8f63a95505a10df0800000000000000
+      internalID: -215709864739770485
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BathalaAnimation_79
+      rect:
+        serializedVersion: 2
+        x: 1216
+        y: 9
+        width: 65
+        height: 65
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: aa1d56c8f541efbe0800000000000000
+      internalID: -1441692430102048342
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BathalaAnimation_80
+      rect:
+        serializedVersion: 2
+        x: 1280
+        y: 9
+        width: 65
+        height: 67
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3b585947f468c87a0800000000000000
+      internalID: -6373571696819599949
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BathalaAnimation_81
+      rect:
+        serializedVersion: 2
+        x: 1728
+        y: 9
+        width: 65
+        height: 65
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e166cd366c59d0290800000000000000
+      internalID: -7922511490163382754
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BathalaAnimation_82
+      rect:
+        serializedVersion: 2
+        x: 1792
+        y: 9
+        width: 65
+        height: 65
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: df3bcf174409dc040800000000000000
+      internalID: 4669547012297634813
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BathalaAnimation_83
+      rect:
+        serializedVersion: 2
+        x: 2304
+        y: 9
+        width: 65
+        height: 65
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 38b6ea98dacb3f700800000000000000
+      internalID: 573009031131458435
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BathalaAnimation_84
+      rect:
+        serializedVersion: 2
+        x: 2368
+        y: 9
+        width: 65
+        height: 65
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 99a38e17d8dff97a0800000000000000
+      internalID: -6368092564135331175
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BathalaAnimation_85
+      rect:
+        serializedVersion: 2
+        x: 2432
+        y: 9
+        width: 65
+        height: 67
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b6a6645c6dba5d2a0800000000000000
+      internalID: -6713270730604778901
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BathalaAnimation_86
+      rect:
+        serializedVersion: 2
+        x: 2880
+        y: 0
+        width: 65
+        height: 74
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ae501ee6ec3ef4670800000000000000
+      internalID: 8525283095398647274
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BathalaAnimation_87
+      rect:
+        serializedVersion: 2
+        x: 2944
+        y: 0
+        width: 65
+        height: 74
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7dea9ef2bdccf0720800000000000000
+      internalID: 2814693533903597271
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BathalaAnimation_88
+      rect:
+        serializedVersion: 2
+        x: 3442
+        y: 55
+        width: 14
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7318e653a22577760800000000000000
+      internalID: 7455518049373684023
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BathalaAnimation_89
+      rect:
+        serializedVersion: 2
+        x: 19
+        y: 0
+        width: 26
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4566ac09c82559b80800000000000000
+      internalID: -8388707967229598124
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BathalaAnimation_90
+      rect:
+        serializedVersion: 2
+        x: 83
+        y: 0
+        width: 26
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fce82dc886237e2e0800000000000000
+      internalID: -2096651676897079601
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BathalaAnimation_91
+      rect:
+        serializedVersion: 2
+        x: 147
+        y: 0
+        width: 26
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4d116478b9a2c9840800000000000000
+      internalID: 5232103714575487444
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BathalaAnimation_92
+      rect:
+        serializedVersion: 2
+        x: 211
+        y: 0
+        width: 26
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c8c191b94179a9d40800000000000000
+      internalID: 5591948002091146380
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BathalaAnimation_93
+      rect:
+        serializedVersion: 2
+        x: 275
+        y: 0
+        width: 26
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b2ea6aeac0ff837c0800000000000000
+      internalID: -4091239831531246037
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BathalaAnimation_94
+      rect:
+        serializedVersion: 2
+        x: 339
+        y: 0
+        width: 26
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: afc135303bde548e0800000000000000
+      internalID: -1709699130406527750
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BathalaAnimation_95
+      rect:
+        serializedVersion: 2
+        x: 403
+        y: 0
+        width: 26
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2186386cf557c2fb0800000000000000
+      internalID: -4671229659277203438
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BathalaAnimation_96
+      rect:
+        serializedVersion: 2
+        x: 467
+        y: 0
+        width: 26
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 38e914088e05c8010800000000000000
+      internalID: 1192416960860757635
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BathalaAnimation_97
+      rect:
+        serializedVersion: 2
+        x: 531
+        y: 0
+        width: 26
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7cf3ae55603296e20800000000000000
+      internalID: 3344242708417494983
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BathalaAnimation_98
+      rect:
+        serializedVersion: 2
+        x: 595
+        y: 0
+        width: 26
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c02ef7603d87f2a80800000000000000
+      internalID: -8489433924827618804
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BathalaAnimation_99
+      rect:
+        serializedVersion: 2
+        x: 659
+        y: 0
+        width: 26
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 02920f79f42e93470800000000000000
+      internalID: 8374973813551540512
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BathalaAnimation_100
+      rect:
+        serializedVersion: 2
+        x: 723
+        y: 0
+        width: 26
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 67fe4f090fa38bd40800000000000000
+      internalID: 5600290941533745014
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BathalaAnimation_101
+      rect:
+        serializedVersion: 2
+        x: 787
+        y: 0
+        width: 26
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9f5200a7db47eed70800000000000000
+      internalID: 9074318656342599161
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BathalaAnimation_102
+      rect:
+        serializedVersion: 2
+        x: 851
+        y: 0
+        width: 26
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: be71b930509c55530800000000000000
+      internalID: 3843198880403101675
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BathalaAnimation_103
+      rect:
+        serializedVersion: 2
+        x: 915
+        y: 0
+        width: 26
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 692bb6d5f686b8c10800000000000000
+      internalID: 2056852482342761110
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BathalaAnimation_104
+      rect:
+        serializedVersion: 2
+        x: 979
+        y: 0
+        width: 26
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4bc1fcb337cb368f0800000000000000
+      internalID: -548387526498378572
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BathalaAnimation_105
+      rect:
+        serializedVersion: 2
+        x: 1043
+        y: 0
+        width: 26
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 244410f1f16097050800000000000000
+      internalID: 5798672725950153794
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BathalaAnimation_106
+      rect:
+        serializedVersion: 2
+        x: 1107
+        y: 0
+        width: 26
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8eb08bd845e0827a0800000000000000
+      internalID: -6401851113989469208
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BathalaAnimation_107
+      rect:
+        serializedVersion: 2
+        x: 1171
+        y: 0
+        width: 26
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bcd815437b2670090800000000000000
+      internalID: -8068371668414657077
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BathalaAnimation_108
+      rect:
+        serializedVersion: 2
+        x: 1235
+        y: 0
+        width: 26
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bd6f9b9da2bef6aa0800000000000000
+      internalID: -6165450795572922661
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BathalaAnimation_109
+      rect:
+        serializedVersion: 2
+        x: 1299
+        y: 0
+        width: 26
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4c031099c9f05aa90800000000000000
+      internalID: -7303414055455084348
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BathalaAnimation_110
+      rect:
+        serializedVersion: 2
+        x: 1363
+        y: 0
+        width: 26
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 519a68ee136e37ea0800000000000000
+      internalID: -5876099986658776811
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BathalaAnimation_111
+      rect:
+        serializedVersion: 2
+        x: 1427
+        y: 0
+        width: 26
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6e50a8afd2fd31d60800000000000000
+      internalID: 7859871163261519334
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BathalaAnimation_112
+      rect:
+        serializedVersion: 2
+        x: 1491
+        y: 0
+        width: 26
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a8e6a6f068bbe6400800000000000000
+      internalID: 319398808048529034
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BathalaAnimation_113
+      rect:
+        serializedVersion: 2
+        x: 1555
+        y: 0
+        width: 26
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2b28342bdaeb12ce0800000000000000
+      internalID: -1431653553297718606
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BathalaAnimation_114
+      rect:
+        serializedVersion: 2
+        x: 1619
+        y: 0
+        width: 26
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c9844ca363f25ae50800000000000000
+      internalID: 6819909120683165852
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BathalaAnimation_115
+      rect:
+        serializedVersion: 2
+        x: 1683
+        y: 0
+        width: 26
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cf74eabfbfa8eec40800000000000000
+      internalID: 5543521006203586556
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BathalaAnimation_116
+      rect:
+        serializedVersion: 2
+        x: 1747
+        y: 0
+        width: 26
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a4cd8a54d3bef4d50800000000000000
+      internalID: 6723851417081666634
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BathalaAnimation_117
+      rect:
+        serializedVersion: 2
+        x: 1811
+        y: 0
+        width: 26
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d5e721624085e4c10800000000000000
+      internalID: 2039664456087273053
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BathalaAnimation_118
+      rect:
+        serializedVersion: 2
+        x: 1875
+        y: 0
+        width: 26
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 29ab509be54e14720800000000000000
+      internalID: 2828793136447601298
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BathalaAnimation_119
+      rect:
+        serializedVersion: 2
+        x: 1939
+        y: 0
+        width: 26
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 14bd6b73b9c2bd690800000000000000
+      internalID: -7576412902954443967
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BathalaAnimation_120
+      rect:
+        serializedVersion: 2
+        x: 2003
+        y: 0
+        width: 26
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 363b1f6ef9bc6c380800000000000000
+      internalID: -8951243321717443741
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BathalaAnimation_121
+      rect:
+        serializedVersion: 2
+        x: 2067
+        y: 0
+        width: 26
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a92f9169245702e60800000000000000
+      internalID: 7935471472273388186
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BathalaAnimation_122
+      rect:
+        serializedVersion: 2
+        x: 2131
+        y: 0
+        width: 26
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5fa3aefc2a7a7b860800000000000000
+      internalID: 7545684018397330165
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BathalaAnimation_123
+      rect:
+        serializedVersion: 2
+        x: 2195
+        y: 0
+        width: 26
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 910c0bc1e8feb9690800000000000000
+      internalID: -7594212952984469479
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BathalaAnimation_124
+      rect:
+        serializedVersion: 2
+        x: 2259
+        y: 0
+        width: 26
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 414e456d8d9822530800000000000000
+      internalID: 3828774197620171796
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BathalaAnimation_125
+      rect:
+        serializedVersion: 2
+        x: 2323
+        y: 0
+        width: 26
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7e7de6030f4bb3720800000000000000
+      internalID: 2827052134802839527
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BathalaAnimation_126
+      rect:
+        serializedVersion: 2
+        x: 2387
+        y: 0
+        width: 26
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 686338f47ce2c57d0800000000000000
+      internalID: -2928414224130296186
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BathalaAnimation_127
+      rect:
+        serializedVersion: 2
+        x: 2451
+        y: 0
+        width: 26
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1b91bfa0a9c903b90800000000000000
+      internalID: -7264134013525485135
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BathalaAnimation_128
+      rect:
+        serializedVersion: 2
+        x: 2515
+        y: 0
+        width: 26
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b1256880e76245240800000000000000
+      internalID: 4779487427297694235
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BathalaAnimation_129
+      rect:
+        serializedVersion: 2
+        x: 2579
+        y: 0
+        width: 26
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e7b351891db2d4d40800000000000000
+      internalID: 5570156493326859134
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BathalaAnimation_130
+      rect:
+        serializedVersion: 2
+        x: 2643
+        y: 0
+        width: 26
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 721af28f63ab822d0800000000000000
+      internalID: -3303185581421387481
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BathalaAnimation_131
+      rect:
+        serializedVersion: 2
+        x: 2707
+        y: 0
+        width: 26
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 51fca6efa33bea6c0800000000000000
+      internalID: -4130166742294278379
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BathalaAnimation_132
+      rect:
+        serializedVersion: 2
+        x: 3411
+        y: 0
+        width: 26
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9b34f5b275bf64170800000000000000
+      internalID: 8162487726463992761
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      BathalaAnimation_0: -5655054478289149037
+      BathalaAnimation_1: -5771999777325355359
+      BathalaAnimation_10: -4570666310782253445
+      BathalaAnimation_100: 5600290941533745014
+      BathalaAnimation_101: 9074318656342599161
+      BathalaAnimation_102: 3843198880403101675
+      BathalaAnimation_103: 2056852482342761110
+      BathalaAnimation_104: -548387526498378572
+      BathalaAnimation_105: 5798672725950153794
+      BathalaAnimation_106: -6401851113989469208
+      BathalaAnimation_107: -8068371668414657077
+      BathalaAnimation_108: -6165450795572922661
+      BathalaAnimation_109: -7303414055455084348
+      BathalaAnimation_11: -3677005253287183847
+      BathalaAnimation_110: -5876099986658776811
+      BathalaAnimation_111: 7859871163261519334
+      BathalaAnimation_112: 319398808048529034
+      BathalaAnimation_113: -1431653553297718606
+      BathalaAnimation_114: 6819909120683165852
+      BathalaAnimation_115: 5543521006203586556
+      BathalaAnimation_116: 6723851417081666634
+      BathalaAnimation_117: 2039664456087273053
+      BathalaAnimation_118: 2828793136447601298
+      BathalaAnimation_119: -7576412902954443967
+      BathalaAnimation_12: 6761642511566847842
+      BathalaAnimation_120: -8951243321717443741
+      BathalaAnimation_121: 7935471472273388186
+      BathalaAnimation_122: 7545684018397330165
+      BathalaAnimation_123: -7594212952984469479
+      BathalaAnimation_124: 3828774197620171796
+      BathalaAnimation_125: 2827052134802839527
+      BathalaAnimation_126: -2928414224130296186
+      BathalaAnimation_127: -7264134013525485135
+      BathalaAnimation_128: 4779487427297694235
+      BathalaAnimation_129: 5570156493326859134
+      BathalaAnimation_13: -3829953812442741040
+      BathalaAnimation_130: -3303185581421387481
+      BathalaAnimation_131: -4130166742294278379
+      BathalaAnimation_132: 8162487726463992761
+      BathalaAnimation_14: 4068165571386273020
+      BathalaAnimation_15: 4302564713420733359
+      BathalaAnimation_16: 708929855329394452
+      BathalaAnimation_17: 353917280762410249
+      BathalaAnimation_18: 3573939371776480816
+      BathalaAnimation_19: 6091445562354991939
+      BathalaAnimation_2: -5845166609809288428
+      BathalaAnimation_20: -2045870922540554907
+      BathalaAnimation_21: 5041609293511202256
+      BathalaAnimation_22: -5998438912599226282
+      BathalaAnimation_23: 4148389025236256643
+      BathalaAnimation_24: 8948448878662137625
+      BathalaAnimation_25: 1012677148245610801
+      BathalaAnimation_26: -408896072575865077
+      BathalaAnimation_27: -1166294225643262217
+      BathalaAnimation_28: 7613114045429426226
+      BathalaAnimation_29: -6710766923889574050
+      BathalaAnimation_3: 7818971760529697803
+      BathalaAnimation_30: 6840884164713198488
+      BathalaAnimation_31: -3739888557117723909
+      BathalaAnimation_32: 5627854605409298900
+      BathalaAnimation_33: 3484134910122902682
+      BathalaAnimation_34: 8444081238673941601
+      BathalaAnimation_35: 8979817035299521044
+      BathalaAnimation_36: -8912324805218597866
+      BathalaAnimation_37: 1698874955070295432
+      BathalaAnimation_38: -4506330648171330499
+      BathalaAnimation_39: -5518195488816306537
+      BathalaAnimation_4: -7061548215078587057
+      BathalaAnimation_40: -337470569852091965
+      BathalaAnimation_41: -1272335850055872695
+      BathalaAnimation_42: -4551515506848342806
+      BathalaAnimation_43: -6861977755360752518
+      BathalaAnimation_44: -656379721511760674
+      BathalaAnimation_45: -3792981458474066011
+      BathalaAnimation_46: 8666478871152414517
+      BathalaAnimation_47: 9140723934312173070
+      BathalaAnimation_48: -5567991426732697758
+      BathalaAnimation_49: 182491953817275126
+      BathalaAnimation_5: -965168157717651249
+      BathalaAnimation_50: 3782117719674856571
+      BathalaAnimation_51: 5577399698247691631
+      BathalaAnimation_52: -8191017641953514707
+      BathalaAnimation_53: -1415324301660103229
+      BathalaAnimation_54: -6055239285829262805
+      BathalaAnimation_55: -1939893911532784551
+      BathalaAnimation_56: 4504207860788672700
+      BathalaAnimation_57: -4840175256408997316
+      BathalaAnimation_58: -5666597300035532322
+      BathalaAnimation_59: 7562150674467079567
+      BathalaAnimation_6: 4859533941444740464
+      BathalaAnimation_60: 7028250886622732703
+      BathalaAnimation_61: -3350840451748960734
+      BathalaAnimation_62: -6107186625440568479
+      BathalaAnimation_63: 5383790716712623560
+      BathalaAnimation_64: -1083014662402139229
+      BathalaAnimation_65: -4277212008866108559
+      BathalaAnimation_66: 6580374209606513321
+      BathalaAnimation_67: 3531782944630508849
+      BathalaAnimation_68: 3476324310660240555
+      BathalaAnimation_69: 5771635458478139505
+      BathalaAnimation_7: 193101975363310690
+      BathalaAnimation_70: -6339352818577626530
+      BathalaAnimation_71: -288137657813882556
+      BathalaAnimation_72: -6719589842988948238
+      BathalaAnimation_73: 7054724723289334104
+      BathalaAnimation_74: 161461475128180215
+      BathalaAnimation_75: -4056603837109039404
+      BathalaAnimation_76: -7080762399543332153
+      BathalaAnimation_77: 8196648282270138826
+      BathalaAnimation_78: -215709864739770485
+      BathalaAnimation_79: -1441692430102048342
+      BathalaAnimation_8: -4141240232221337941
+      BathalaAnimation_80: -6373571696819599949
+      BathalaAnimation_81: -7922511490163382754
+      BathalaAnimation_82: 4669547012297634813
+      BathalaAnimation_83: 573009031131458435
+      BathalaAnimation_84: -6368092564135331175
+      BathalaAnimation_85: -6713270730604778901
+      BathalaAnimation_86: 8525283095398647274
+      BathalaAnimation_87: 2814693533903597271
+      BathalaAnimation_88: 7455518049373684023
+      BathalaAnimation_89: -8388707967229598124
+      BathalaAnimation_9: 7089121162574579095
+      BathalaAnimation_90: -2096651676897079601
+      BathalaAnimation_91: 5232103714575487444
+      BathalaAnimation_92: 5591948002091146380
+      BathalaAnimation_93: -4091239831531246037
+      BathalaAnimation_94: -1709699130406527750
+      BathalaAnimation_95: -4671229659277203438
+      BathalaAnimation_96: 1192416960860757635
+      BathalaAnimation_97: 3344242708417494983
+      BathalaAnimation_98: -8489433924827618804
+      BathalaAnimation_99: 8374973813551540512
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
