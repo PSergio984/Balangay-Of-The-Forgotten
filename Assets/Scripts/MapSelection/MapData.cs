@@ -147,6 +147,25 @@ public class MapData : ScriptableObject
     /// </summary>
     public GameObject MapButtonObj { get; set; }
 
+    [Header("Loading Screen")]
+    /// <summary>
+    /// Custom loading video filename for this map (without .mp4 extension).
+    /// Example: "loadingMayari" will load "loadingMayari.mp4" from StreamingAssets.
+    /// Leave empty to use default loading video.
+    /// </summary>
+    /// <remarks>
+    /// <para><strong>Why:</strong> Each map can have a unique loading video for immersion</para>
+    /// <para><strong>How:</strong> Enter the video filename without extension (e.g., "loadingApolaki", "loadingBathala")</para>
+    /// <para><strong>Video location:</strong> Videos should be in StreamingAssets folder</para>
+    /// </remarks>
+    [Tooltip("Video filename without extension (e.g., 'loadingMayari' → 'loadingMayari.mp4'). Leave empty for default.")]
+    [SerializeField] private string loadingVideoId;
+    
+    /// <summary>
+    /// Gets the loading video ID for this map, or null if using default
+    /// </summary>
+    public string LoadingVideoId => string.IsNullOrEmpty(loadingVideoId) ? null : loadingVideoId;
+
     [Header("Music")]
     /// <summary>
     /// Music to play for this map if no enemy-specific music is set.

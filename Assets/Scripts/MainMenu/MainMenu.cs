@@ -87,7 +87,7 @@ public class MainMenu : MonoBehaviour
             .NewTransition()
             .Unload(SceneDatabase.Slots.MainMenu)
             .Load(SceneDatabase.Slots.SessionContent, SceneDatabase.Scenes.CharacterSelection, setActive: true)
-            .WithOverlay()
+            .WithLoadingVideo("loading")
             .Perform();
     }
 
@@ -112,5 +112,15 @@ public class MainMenu : MonoBehaviour
         // Quit the application on standalone builds
         Application.Quit();
         #endif
+    }
+
+    public void GoBackLoadingScreen()
+    {
+        SceneController.Instance
+            .NewTransition()
+            .Unload(SceneDatabase.Slots.MainMenu)
+            .Load(SceneDatabase.Slots.LoadingScreen, SceneDatabase.Scenes.LoadingScreen, setActive: true)
+            .WithLoadingVideo("loading")
+            .Perform();
     }
 }

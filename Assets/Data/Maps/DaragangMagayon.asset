@@ -26,4 +26,5 @@ MonoBehaviour:
   - {fileID: 11400000, guid: a7649951d27a5f24ca254cadfc31a4e0, type: 2}
   - {fileID: 11400000, guid: 2e357dbd3dbadc848a8449ee7b5ea48e, type: 2}
   combatBackgroundSprite: {fileID: 21300000, guid: 8b52ab8f10e286f4d977d3bf9021e01e, type: 3}
+  loadingVideoId: loadingApolaki
   MapMusic: {fileID: 0}

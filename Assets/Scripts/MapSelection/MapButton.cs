@@ -261,8 +261,18 @@ public class MapButton : MonoBehaviour
         {
             transition = transition.WithMusic(selectedMusic, MusicFadeTime); // Start playing selected combat music
         }
-        transition
-            .WithOverlay()                                                                        // Show a loading screen overlay
-            .Perform();                                                                           // Actually do all the above actions
+        
+        // Use map-specific loading video if available, otherwise use default loading overlay
+        string loadingVideoId = MapData.LoadingVideoId;
+        if (!string.IsNullOrEmpty(loadingVideoId))
+        {
+            transition.WithLoadingVideo(loadingVideoId);  // Show map-specific loading video
+        }
+        else
+        {
+            transition.WithLoadingVideo();  // Show default loading video
+        }
+        
+        transition.Perform();  // Actually do all the above actions
     }
 }

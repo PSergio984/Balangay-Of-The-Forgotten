@@ -469,7 +469,7 @@ public class CharacterSelectionManager : MonoBehaviour
             .NewTransition()
             .Unload(SceneDatabase.Scenes.CharacterSelection)
             .Load(SceneDatabase.Slots.SessionContent, SceneDatabase.Scenes.MapSelection, setActive: true)
-            .WithOverlay()
+            .WithLoadingVideo("loading")
             .Perform();
     }
     

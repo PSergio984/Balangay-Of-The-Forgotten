@@ -68,6 +68,9 @@ public class LoadingScreenController : MonoBehaviour
     private bool isMusicPlayingForCurrentVideo = false;
     private CanvasGroup pressToContinueCanvasGroup;
     private Coroutine flickerCoroutine;
+    
+    // Cached RenderTexture for clearing
+    private RenderTexture webglRenderTexture;
 
      void Awake()
     {
@@ -78,6 +81,13 @@ public class LoadingScreenController : MonoBehaviour
         // This runs before ANY rendering happens, ensuring no stale video frames appear
         if (pcVideoRoot != null) pcVideoRoot.SetActive(false);
         if (webglVideoRoot != null) webglVideoRoot.SetActive(false);
+        
+        // Cache and clear the WebGL RenderTexture to prevent showing previous scene's video
+        if (webglVideoPlayer != null && webglVideoPlayer.targetTexture != null)
+        {
+            webglRenderTexture = webglVideoPlayer.targetTexture;
+            ClearRenderTexture(webglRenderTexture);
+        }
     }
     
     void Start()
@@ -144,6 +154,16 @@ public class LoadingScreenController : MonoBehaviour
         if (webglVideoPlayer != null && webglVideoPlayer.isPlaying)
         {
             webglVideoPlayer.Stop();
+        }
+        
+        // CRITICAL: Clear the RenderTexture to prevent showing stale video frames in next scene
+        if (webglRenderTexture != null)
+        {
+            ClearRenderTexture(webglRenderTexture);
+        }
+        else if (webglVideoPlayer != null && webglVideoPlayer.targetTexture != null)
+        {
+            ClearRenderTexture(webglVideoPlayer.targetTexture);
         }
         
         // Hide video roots immediately
@@ -633,6 +653,28 @@ public class LoadingScreenController : MonoBehaviour
         {
             pressToContinueCanvasGroup.alpha = 0f;
         }
+    }
+
+    /// <summary>
+    /// Clears a RenderTexture to black to prevent showing stale video frames.
+    /// This is critical for preventing video overlap during scene transitions.
+    /// </summary>
+    /// <param name="rt">The RenderTexture to clear</param>
+    private void ClearRenderTexture(RenderTexture rt)
+    {
+        if (rt == null) return;
+        
+        // Store the current active RenderTexture
+        RenderTexture prev = RenderTexture.active;
+        
+        // Set the target RenderTexture as active and clear it to black
+        RenderTexture.active = rt;
+        GL.Clear(true, true, Color.black);
+        
+        // Restore the previous active RenderTexture
+        RenderTexture.active = prev;
+        
+        LogDebug("RenderTexture cleared to black");
     }
 
     // Debug logging methods
