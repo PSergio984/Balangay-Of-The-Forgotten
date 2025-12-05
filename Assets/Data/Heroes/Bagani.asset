@@ -27,7 +27,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 15014db4d61b59b469bf838f9a1b2fba, type: 2}
   <Deck>k__BackingField:
   - {fileID: 11400000, guid: 84fb868badf54b64a82197a7933dc990, type: 2}
-  - {fileID: 11400000, guid: 8b5d7a1c6cdfa0446a52eea399fc2ab1, type: 2}
   - {fileID: 11400000, guid: 57ce94d0d13facb489afbbfd10d20699, type: 2}
   - {fileID: 11400000, guid: c8869bbac0c0b974c901ce9eecb092d7, type: 2}
   - {fileID: 11400000, guid: 14db5b1b3d0c83d4387ca4040b997604, type: 2}

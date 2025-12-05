@@ -147,6 +147,12 @@ public class CardSystem : Singleton<CardSystem>
             var deck = new List<Card>();
             foreach (var cardData in heroDatas[i].Deck)
             {
+                // Skip null card data entries (defensive check for missing asset references)
+                if (cardData == null)
+                {
+                    Debug.LogWarning($"[CardSystem] Hero '{heroDatas[i].HeroName}' has a null CardData entry in their deck. Skipping this card.");
+                    continue;
+                }
                 deck.Add(new Card(cardData));
             }
             drawPiles.Add(deck);
@@ -364,5 +370,43 @@ public class CardSystem : Singleton<CardSystem>
                 Debug.LogWarning($"[CardSystem] Cannot assign override: OverrideController is null on {gameObject.name}", this);
             }
         }
+    }
+    
+    /// <summary>
+    /// Gets all cards for a specific hero or all heroes for cooldown processing
+    /// </summary>
+    /// <param name="heroIndex">The hero index, or -1 for all heroes</param>
+    /// <returns>List of all cards across draw pile, hand, and discard pile</returns>
+    /// <remarks>
+    /// Used by CooldownSystem to reduce cooldowns on all cards regardless of which pile they're in.
+    /// Cooldown persists on the Card object itself, not based on where it is located.
+    /// </remarks>
+    public List<Card> GetAllCardsForHero(int heroIndex)
+    {
+        List<Card> allCards = new List<Card>();
+        
+        if (heroIndex == -1)
+        {
+            // Get cards for all heroes
+            for (int i = 0; i < drawPiles.Count; i++)
+            {
+                allCards.AddRange(drawPiles[i]);
+                allCards.AddRange(hands[i]);
+                allCards.AddRange(discardPiles[i]);
+            }
+        }
+        else if (heroIndex >= 0 && heroIndex < drawPiles.Count)
+        {
+            // Get cards for specific hero
+            allCards.AddRange(drawPiles[heroIndex]);
+            allCards.AddRange(hands[heroIndex]);
+            allCards.AddRange(discardPiles[heroIndex]);
+        }
+        else
+        {
+            Debug.LogWarning($"[CardSystem] Invalid heroIndex: {heroIndex}");
+        }
+        
+        return allCards;
     }
 }

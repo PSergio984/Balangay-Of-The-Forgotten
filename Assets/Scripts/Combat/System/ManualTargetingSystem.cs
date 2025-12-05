@@ -109,4 +109,20 @@ public class ManualTargetingSystem : Singleton<ManualTargetingSystem>
         // No valid target found
         return null;
     }
+    
+    /// <summary>
+    /// Cancels targeting without selecting a target
+    /// </summary>
+    /// <remarks>
+    /// Called when targeting needs to be aborted (e.g., card went on cooldown, interaction blocked).
+    /// Simply hides the arrow visual without performing any target selection.
+    /// </remarks>
+    public void CancelTargeting()
+    {
+        // Hide the targeting arrow since targeting is cancelled
+        if (arrowView != null)
+        {
+            arrowView.gameObject.SetActive(false);
+        }
+    }
 }
