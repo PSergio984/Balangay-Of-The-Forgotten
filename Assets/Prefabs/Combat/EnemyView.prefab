@@ -29,7 +29,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.5, y: 1.5, z: 1.5}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 8127243894924347057}
@@ -106,8 +106,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.42640018, y: 0.5044271, z: 0.01}
-  m_Center: {x: 0.014269561, y: 0.006341681, z: 0}
+  m_Size: {x: 1.520591, y: 2.419262, z: 0.01}
+  m_Center: {x: -0.034578234, y: -0.042506464, z: 0}
 --- !u!114 &6225066031905398916
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -312,7 +312,7 @@ PrefabInstance:
     - target: {fileID: 5359590059526882101, guid: abfc41d4823e2cf41a3f50f9396393e8, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 7757818279168096282, guid: d70566264c1a8604b88c4b9acb36f7be, type: 3}
+      objectReference: {fileID: -7879286083456141338, guid: 517f78f36b6a44d428afbdbf415d9145, type: 3}
     - target: {fileID: 6078906570798715426, guid: abfc41d4823e2cf41a3f50f9396393e8, type: 3}
       propertyPath: m_AnchoredPosition.x
       value: 1.146

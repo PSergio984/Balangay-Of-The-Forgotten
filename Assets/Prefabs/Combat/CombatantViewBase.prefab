@@ -67,8 +67,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 'Health: 9999'
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 9c9fd3f72e8ce16449e3d6a637806a6c, type: 2}
-  m_sharedMaterial: {fileID: 4735949462366821319, guid: 9c9fd3f72e8ce16449e3d6a637806a6c, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 0f9a156c76507654f89a97d8891fa9d7, type: 2}
+  m_sharedMaterial: {fileID: 8183816451260799139, guid: 0f9a156c76507654f89a97d8891fa9d7, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -103,6 +103,7 @@ MonoBehaviour:
   m_VerticalAlignment: 4096
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -480,6 +481,7 @@ MonoBehaviour:
   m_VerticalAlignment: 4096
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -674,6 +676,7 @@ Transform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &5359590059526882101
 SpriteRenderer:
+  serializedVersion: 2
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -719,6 +722,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_MaskInteraction: 0
   m_Sprite: {fileID: 3459804591421401218, guid: c5b7c0ef2cc62c443b540e9d43616ba6, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -728,7 +732,6 @@ SpriteRenderer:
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
-  m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!1 &3624687841636303038
 GameObject:
@@ -873,8 +876,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 'Defense : 9999'
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 0f9a156c76507654f89a97d8891fa9d7, type: 2}
+  m_sharedMaterial: {fileID: 8183816451260799139, guid: 0f9a156c76507654f89a97d8891fa9d7, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -909,6 +912,7 @@ MonoBehaviour:
   m_VerticalAlignment: 4096
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -1010,8 +1014,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 'Magic: 9999'
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 0f9a156c76507654f89a97d8891fa9d7, type: 2}
+  m_sharedMaterial: {fileID: 8183816451260799139, guid: 0f9a156c76507654f89a97d8891fa9d7, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -1046,6 +1050,7 @@ MonoBehaviour:
   m_VerticalAlignment: 4096
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -1222,8 +1227,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 'Attack : 9999'
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 0f9a156c76507654f89a97d8891fa9d7, type: 2}
+  m_sharedMaterial: {fileID: 8183816451260799139, guid: 0f9a156c76507654f89a97d8891fa9d7, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -1258,6 +1263,7 @@ MonoBehaviour:
   m_VerticalAlignment: 4096
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -1316,8 +1322,8 @@ RectTransform:
   m_GameObject: {fileID: 8642917124413522030}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 2.08, y: 2.08, z: 2.08}
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 4198064686589710762}
   - {fileID: 2614564792396720829}
