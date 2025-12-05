@@ -56,6 +56,13 @@ public class EnemyData : ScriptableObject
     [field: ValidateInput("@Defense > 0", "Defense must be greater than 0")]
     public float Defense { get; private set; }
 
+    [Title("Animation", "Animation controller for this enemy", TitleAlignments.Centered)]
+    [field: SerializeField]
+    [field: LabelText("Enemy Animator Override Controller")]
+    [field: AssetsOnly]
+    [field: InfoBox("Assign an AnimatorOverrideController to give this enemy unique animations.", InfoMessageType.Info)]
+    public AnimatorOverrideController AnimatorOverride { get; private set; }
+
     [field: SerializeField]
     [field: LabelText("Enemy Moveset ")]
     [field: Required("Enemy needs a moveset!")]

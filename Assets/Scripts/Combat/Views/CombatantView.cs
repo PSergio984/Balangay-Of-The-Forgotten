@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening; // Import DOTween library for smooth animations
 using TMPro; // Import TextMeshPro for UI text components
@@ -183,14 +184,38 @@ public class CombatantView : MonoBehaviour
     protected virtual void Awake()
     {
         // Eagerly assign the animation controller from the component on this GameObject
-        animationController = GetComponent<CombatantAnimationController>();
+        if (animationController == null)
+        {
+            animationController = GetComponent<CombatantAnimationController>();
+        }
+        
+        if (animationController == null)
+        {
+            Debug.LogWarning($"[CombatantView] No CombatantAnimationController found on {gameObject.name}. Animations will not play.", this);
+        }
     }
+    
+    /// <summary>
+    /// Ensures the animation controller is assigned (call if Setup happens before Awake)
+    /// </summary>
+    protected void EnsureAnimationController()
+    {
+        if (animationController == null)
+        {
+            animationController = GetComponent<CombatantAnimationController>();
+        }
+    }
+    
     // Expose animationController to subclasses (e.g., HeroView)
     protected CombatantAnimationController AnimationController
     {
         get
         {
-            // Eager initialization: animationController is assigned in Awake
+            // Lazy initialization if not yet assigned
+            if (animationController == null)
+            {
+                animationController = GetComponent<CombatantAnimationController>();
+            }
             return animationController;
         }
     }
@@ -290,10 +315,18 @@ public class CombatantView : MonoBehaviour
             CurrentHealth = 0;
         }
 
+        // Use the property to ensure lazy initialization of animation controller
+        var animCtrl = AnimationController;
+        
         // Play hit animation if animation controller exists
-        if (animationController != null)
+        if (animCtrl != null)
         {
-            animationController.PlayHit();
+            Debug.Log($"[CombatantView] Damage called on {gameObject.name}, triggering PlayHit animation", this);
+            animCtrl.PlayHit();
+        }
+        else
+        {
+            Debug.LogWarning($"[CombatantView] Damage called on {gameObject.name}, but AnimationController is NULL! Check if CombatantAnimationController component exists.", this);
         }
 
         // Play a screen shake animation when taking damage (0.2 seconds, 0.5 intensity)
@@ -401,5 +434,57 @@ public class CombatantView : MonoBehaviour
         {
             animationController.PlayIdle();
         }
+    }
+    
+    /// <summary>
+    /// Plays an animation and waits for it to complete before returning
+    /// </summary>
+    /// <param name="state">The animation state to play</param>
+    /// <param name="returnToIdle">If true, returns to idle animation after completing</param>
+    /// <returns>Coroutine that waits for animation to finish</returns>
+    /// <remarks>
+    /// <para><strong>Use case:</strong> When you need to wait for an animation to finish 
+    /// before continuing (e.g., hit animation before next target, attack animation before damage)</para>
+    /// <para><strong>Example:</strong> <c>yield return target.PlayAnimationAndWait(CombatantAnimState.Hit);</c></para>
+    /// <para><strong>Timing:</strong> Uses animation clip length plus a small buffer for transitions</para>
+    /// </remarks>
+    public IEnumerator PlayAnimationAndWait(CombatantAnimState state, bool returnToIdle = true)
+    {
+        if (animationController != null)
+        {
+            // Trigger the animation
+            animationController.SetState(state);
+            
+            // Get the duration of this animation type
+            float duration = animationController.GetAnimationDuration(state);
+            
+            // Wait for the animation to complete (with small buffer for transitions)
+            yield return new WaitForSeconds(duration + 0.05f);
+            
+            // Optionally return to idle
+            if (returnToIdle && state != CombatantAnimState.Dead && state != CombatantAnimState.Idle)
+            {
+                animationController.PlayIdle();
+            }
+        }
+        else
+        {
+            // No animation controller, use fallback timing
+            yield return new WaitForSeconds(0.3f);
+        }
+    }
+    
+    /// <summary>
+    /// Gets the duration of a specific animation state
+    /// </summary>
+    /// <param name="state">The animation state to query</param>
+    /// <returns>Duration in seconds, or a default fallback</returns>
+    public float GetAnimationDuration(CombatantAnimState state)
+    {
+        if (animationController != null)
+        {
+            return animationController.GetAnimationDuration(state);
+        }
+        return 0.5f; // Default fallback
     }
 }

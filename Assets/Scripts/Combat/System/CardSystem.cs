@@ -254,6 +254,18 @@ public class CardSystem : Singleton<CardSystem>
         // SpendStaminaGA spendStaminaGA = new (playCardsGA.Card.Stamina);
         // ActionSystem.Instance.AddReaction(spendStaminaGA);
 
+        // Get the current hero for animation
+        var currentHero = CurrentHeroUtil.GetCurrentHero();
+        
+        // Determine animation type based on card effects (attack for damage, cast for magic/buffs)
+        CombatantAnimState animState = DetermineCardAnimationType(playCardsGA.Card);
+        
+        // Play the hero animation and wait for it to complete
+        if (currentHero != null)
+        {
+            yield return currentHero.PlayAnimationAndWait(animState, returnToIdle: true);
+        }
+
         if (playCardsGA.Card.ManualTargetEffect != null)
         {
             PerformEffectGA performEffectGA = new(playCardsGA.Card.ManualTargetEffect, new() { playCardsGA.ManualTarget });
@@ -266,6 +278,36 @@ public class CardSystem : Singleton<CardSystem>
             PerformEffectGA performEffectGA = new(effectWrapper.effects,targets);
             ActionSystem.Instance.AddReaction(performEffectGA);
         }
+    }
+    
+    /// <summary>
+    /// Determines what animation type a card should trigger based on its effects
+    /// </summary>
+    /// <param name="card">The card being played</param>
+    /// <returns>The appropriate animation state for the card type</returns>
+    private CombatantAnimState DetermineCardAnimationType(Card card)
+    {
+        // Check if the card has damage effects (indicates attack)
+        if (card.ManualTargetEffect != null)
+        {
+            // If targeting enemies with damage, use attack animation
+            if (card.ManualTargetEffect is DealDamageEffect)
+            {
+                return CombatantAnimState.Attack;
+            }
+        }
+        
+        // Check other effects for damage
+        foreach (var effectWrapper in card.OtherEffects)
+        {
+            if (effectWrapper.effects is DealDamageEffect)
+            {
+                return CombatantAnimState.Attack;
+            }
+        }
+        
+        // Default to cast animation for non-damage cards (buffs, heals, etc.)
+        return CombatantAnimState.Cast;
     }
 
     

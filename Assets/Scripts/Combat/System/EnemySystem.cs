@@ -304,12 +304,18 @@ public class EnemySystem : Singleton<EnemySystem>
             yield break;
         }
         
+        // Play attack animation on the enemy
+        attacker.PlayAnimation(CombatantAnimState.Attack);
+        
         // Animate the enemy moving forward (attack windup) - moves left 1 unit in 0.15 seconds
         Tween tween = attacker.transform.DOMoveX(attacker.transform.position.x - 1f, 0.15f);
         // Wait for the forward movement animation to complete
         yield return tween.WaitForCompletion();
-        // Animate the enemy moving back to original position - moves right 1 unit in 0.25 seconds
-        attacker.transform.DOMoveX(attacker.transform.position.x + 1f, 0.25f);
+        
+        // Wait for the attack animation to reach its impact point
+        float attackDuration = attacker.GetAnimationDuration(CombatantAnimState.Attack);
+        yield return new WaitForSeconds(attackDuration * 0.4f); // Wait for impact moment (40% of animation)
+        
         // Create a damage action with caster tracking for perk system
         var heroViews = HeroSystem.Instance.HeroViews;
         if (heroViews == null || heroViews.Count == 0)
@@ -321,6 +327,16 @@ public class EnemySystem : Singleton<EnemySystem>
         DealDamageGA dealDamageGA = new(attacker.AttackPower, new() { heroViews[randomIndex] }, attackHeroGA.Caster);
         // Add the damage action to the queue to actually hurt the hero
         ActionSystem.Instance.AddReaction(dealDamageGA);
+        
+        // Wait for remaining attack animation
+        yield return new WaitForSeconds(attackDuration * 0.6f);
+        
+        // Animate the enemy moving back to original position - moves right 1 unit in 0.25 seconds
+        Tween backTween = attacker.transform.DOMoveX(attacker.transform.position.x + 1f, 0.25f);
+        yield return backTween.WaitForCompletion();
+        
+        // Return enemy to idle animation
+        attacker.PlayIdleAnimation();
     }
     
     /// <summary>

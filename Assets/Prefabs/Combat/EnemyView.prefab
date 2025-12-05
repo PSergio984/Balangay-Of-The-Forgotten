@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 6299611088830314261}
   - component: {fileID: 8822996112574267595}
   - component: {fileID: 7659909115800132482}
+  - component: {fileID: 6225066031905398916}
   m_Layer: 0
   m_Name: EnemyView
   m_TagString: Untagged
@@ -52,7 +53,7 @@ MonoBehaviour:
   AttackText: {fileID: 8837352646586927322}
   DefenseText: {fileID: 3758721879891298662}
   statusEffectsUI: {fileID: 1411210944844214674}
-  animationController: {fileID: 0}
+  animationController: {fileID: 6225066031905398916}
   spriteRenderer: {fileID: 5524720702786943516}
   sliderHealth: {fileID: 0}
   gradientHealth:
@@ -107,6 +108,19 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.42640018, y: 0.5044271, z: 0.01}
   m_Center: {x: 0.014269561, y: 0.006341681, z: 0}
+--- !u!114 &6225066031905398916
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6757213365071207454}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 175257b41776b2841baf45dce741c6e4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CombatantAnimationController
+  animator: {fileID: 2111766727459010990}
 --- !u!1001 &489439863637817641
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -157,11 +171,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 591286565303798011, guid: abfc41d4823e2cf41a3f50f9396393e8, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -0.043
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 591286565303798011, guid: abfc41d4823e2cf41a3f50f9396393e8, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 48.911
+      value: 49.26
       objectReference: {fileID: 0}
     - target: {fileID: 900519335096749585, guid: abfc41d4823e2cf41a3f50f9396393e8, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
@@ -298,7 +312,7 @@ PrefabInstance:
     - target: {fileID: 5359590059526882101, guid: abfc41d4823e2cf41a3f50f9396393e8, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300000, guid: 21f52a895168eae47912e42c058cd3e8, type: 3}
+      objectReference: {fileID: 7757818279168096282, guid: d70566264c1a8604b88c4b9acb36f7be, type: 3}
     - target: {fileID: 6078906570798715426, guid: abfc41d4823e2cf41a3f50f9396393e8, type: 3}
       propertyPath: m_AnchoredPosition.x
       value: 1.146
@@ -464,6 +478,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 818333407956166932, guid: abfc41d4823e2cf41a3f50f9396393e8, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1275713360536843645}
+    - targetCorrespondingSourceObject: {fileID: 3284066645139058842, guid: abfc41d4823e2cf41a3f50f9396393e8, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2111766727459010990}
   m_SourcePrefab: {fileID: 100100000, guid: abfc41d4823e2cf41a3f50f9396393e8, type: 3}
 --- !u!1 &977733088782307389 stripped
 GameObject:
@@ -504,6 +521,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cbd8775deffb8b459c1b63d3200bf1e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::StatusEffectsUI
+--- !u!1 &3123685874327669171 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3284066645139058842, guid: abfc41d4823e2cf41a3f50f9396393e8, type: 3}
+  m_PrefabInstance: {fileID: 489439863637817641}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &2111766727459010990
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3123685874327669171}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: eb526f05f63d8b84a98125979989d8d5, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!114 &3213796671783217888 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 3049893513500333001, guid: abfc41d4823e2cf41a3f50f9396393e8, type: 3}

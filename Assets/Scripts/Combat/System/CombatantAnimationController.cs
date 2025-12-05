@@ -151,12 +151,14 @@ public class CombatantAnimationController : MonoBehaviour
     /// <remarks>
     /// Call when character is not performing any action.
     /// Default state for characters waiting for their turn.
+    /// Uses CrossFade for smooth transition from any state.
     /// </remarks>
     public void PlayIdle()
     {
         if (animator != null)
         {
-            animator.SetTrigger(IdleHash);
+            // Use CrossFade for smooth transition from any state
+            animator.CrossFade("idle", 0.15f, 0);
         }
     }
     
@@ -167,12 +169,15 @@ public class CombatantAnimationController : MonoBehaviour
     /// Call when character performs an attack action.
     /// Should be called before or during damage application.
     /// Consider using animation events to time damage application with animation.
+    /// Uses CrossFade to force immediate transition from any state.
     /// </remarks>
     public void PlayAttack()
     {
         if (animator != null)
         {
-            animator.SetTrigger(AttackHash);
+            Debug.Log($"[CombatantAnimationController] PlayAttack triggered on {gameObject.name}", this);
+            // Use CrossFade for immediate transition from any state
+            animator.CrossFade("Attack", 0.1f, 0);
         }
     }
     
@@ -183,13 +188,40 @@ public class CombatantAnimationController : MonoBehaviour
     /// Call when character takes damage.
     /// Works with damage shake effect for impactful feedback.
     /// Should be brief so gameplay continues smoothly.
+    /// Uses CrossFade to force immediate transition from any state.
     /// </remarks>
     public void PlayHit()
     {
         if (animator != null)
         {
-            animator.SetTrigger(HitHash);
+            // Get current animator state for debugging
+            AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
+            string currentStateName = GetCurrentStateName();
+            Debug.Log($"[CombatantAnimationController] PlayHit triggered on {gameObject.name}. Current state: {currentStateName}, normalizedTime: {stateInfo.normalizedTime:F2}", this);
+            
+            // Use CrossFade for immediate transition from any state (0.1f transition duration)
+            // This bypasses the need for proper transitions in the animator controller
+            animator.CrossFade("Hit", 0.1f, 0);
         }
+        else
+        {
+            Debug.LogWarning($"[CombatantAnimationController] PlayHit failed - animator is null on {gameObject.name}", this);
+        }
+    }
+    
+    /// <summary>
+    /// Helper to get current animator state name for debugging
+    /// </summary>
+    private string GetCurrentStateName()
+    {
+        if (animator == null) return "null animator";
+        
+        AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
+        if (stateInfo.IsName("idle")) return "Idle";
+        if (stateInfo.IsName("Attack")) return "Attack";
+        if (stateInfo.IsName("Hit")) return "Hit";
+        if (stateInfo.IsName("Dead")) return "Dead";
+        return $"Unknown (hash: {stateInfo.fullPathHash})";
     }
     
     /// <summary>
@@ -199,12 +231,15 @@ public class CombatantAnimationController : MonoBehaviour
     /// Call when character's health reaches zero.
     /// Should transition to a final state (not loop).
     /// Character typically becomes inactive after this animation.
+    /// Uses CrossFade to force immediate transition from any state.
     /// </remarks>
     public void PlayDead()
     {
         if (animator != null)
         {
-            animator.SetTrigger(DeadHash);
+            Debug.Log($"[CombatantAnimationController] PlayDead triggered on {gameObject.name}", this);
+            // Use CrossFade for immediate transition from any state
+            animator.CrossFade("Dead", 0.1f, 0);
         }
     }
     
@@ -329,5 +364,95 @@ public class CombatantAnimationController : MonoBehaviour
     public void OnAnimationComplete()
     {
         Debug.Log($"[CombatantAnimationController] Animation completed on {gameObject.name}");
+    }
+    
+    // --- Animation Duration Methods for Sequencing ---
+    
+    /// <summary>
+    /// Gets the duration of the current animation clip being played
+    /// </summary>
+    /// <returns>Duration in seconds, or 0 if no animator or no clip is playing</returns>
+    /// <remarks>
+    /// Useful for waiting until an animation finishes before continuing.
+    /// Uses the first layer (layer 0) which is typically the main animation layer.
+    /// </remarks>
+    public float GetCurrentAnimationDuration()
+    {
+        if (animator == null) return 0f;
+        
+        AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
+        return stateInfo.length;
+    }
+    
+    /// <summary>
+    /// Gets the remaining time for the current animation
+    /// </summary>
+    /// <returns>Remaining time in seconds, or 0 if no animator</returns>
+    /// <remarks>
+    /// Calculates how much time is left based on current normalized time.
+    /// Useful for mid-animation checks or partial waits.
+    /// </remarks>
+    public float GetCurrentAnimationRemainingTime()
+    {
+        if (animator == null) return 0f;
+        
+        AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
+        float normalizedTime = stateInfo.normalizedTime % 1f; // Handle looping
+        return stateInfo.length * (1f - normalizedTime);
+    }
+    
+    /// <summary>
+    /// Checks if an animation is currently playing (not idle)
+    /// </summary>
+    /// <returns>True if any non-idle animation is playing</returns>
+    public bool IsAnimationPlaying()
+    {
+        if (animator == null) return false;
+        
+        AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
+        // Check if it's not the idle state and still has time to play
+        return !stateInfo.IsName("Idle") && stateInfo.normalizedTime < 1f;
+    }
+    
+    /// <summary>
+    /// Gets the duration of a specific animation state by hash
+    /// </summary>
+    /// <param name="stateHash">The hash of the animation state</param>
+    /// <returns>Duration in seconds, or a default fallback if not found</returns>
+    public float GetAnimationDuration(CombatantAnimState state)
+    {
+        if (animator == null) return 0.5f; // Default fallback
+        
+        // Get the appropriate hash
+        int stateHash = state switch
+        {
+            CombatantAnimState.Idle => IdleHash,
+            CombatantAnimState.Attack => AttackHash,
+            CombatantAnimState.Hit => HitHash,
+            CombatantAnimState.Dead => DeadHash,
+            CombatantAnimState.Victory => VictoryHash,
+            CombatantAnimState.Cast => CastHash,
+            CombatantAnimState.Defend => DefendHash,
+            _ => IdleHash
+        };
+        
+        // Try to get the clip info from the current controller
+        AnimatorClipInfo[] clipInfo = animator.GetCurrentAnimatorClipInfo(0);
+        if (clipInfo.Length > 0)
+        {
+            return clipInfo[0].clip.length;
+        }
+        
+        // Fallback durations based on typical animation lengths
+        return state switch
+        {
+            CombatantAnimState.Hit => 0.4f,
+            CombatantAnimState.Attack => 0.6f,
+            CombatantAnimState.Cast => 0.8f,
+            CombatantAnimState.Dead => 1.0f,
+            CombatantAnimState.Victory => 1.5f,
+            CombatantAnimState.Defend => 0.5f,
+            _ => 0.5f
+        };
     }
 }

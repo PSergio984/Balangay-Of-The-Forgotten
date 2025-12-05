@@ -62,6 +62,28 @@ public class EnemyView : CombatantView
         Data = enemyData;
         // Set up the base combatant properties without UI (UI assigned later in AssignHealthBar)
         SetupBaseWithoutUI(enemyData.Health, enemyData.Image, enemyData.EnemyName, enemyData.MagicPower, enemyData.AttackPower, enemyData.Defense);
+
+        // Force-assign the animation controller in case Setup is called before Awake
+        animationController = GetComponent<CombatantAnimationController>();
+        var animCtrl = AnimationController;
+        if (animCtrl != null)
+        {
+            if (enemyData.AnimatorOverride != null)
+            {
+                Debug.Log($"[EnemyView] Setting AnimatorOverrideController: {enemyData.AnimatorOverride.name}", this);
+                animCtrl.SetAnimatorOverride(enemyData.AnimatorOverride);
+            }
+            else
+            {
+                Debug.LogWarning($"[EnemyView] EnemyData.AnimatorOverride is null for enemy: {enemyData.EnemyName}", this);
+            }
+            // Force play idle animation after setup
+            animCtrl.PlayIdle();
+        }
+        else
+        {
+            Debug.LogWarning($"[EnemyView] AnimationController is null on {gameObject.name}", this);
+        }
     }
 
     /// <summary>

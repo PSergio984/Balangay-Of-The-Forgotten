@@ -126,24 +126,26 @@ public class DamageSystem : MonoBehaviour
             // Show the popup before applying damage for immediate feedback
             DamagePopUp.Create(popupPosition, Mathf.RoundToInt(damageAmount), isCrit, isMiss);
 
-            // Apply the damage amount to this target (reduces their health)
-            target.Damage(Mathf.RoundToInt(damageAmount));
-
-            // Check if target still exists after taking damage (safety check)
-            if (target != null)
+            // Spawn a visual effect at the sprite's position to show damage was dealt
+            if (target != null && damageVFX != null)
             {
-                // Spawn a visual effect at the sprite's position to show damage was dealt
                 Instantiate(damageVFX, popupPosition, Quaternion.identity);
             }
 
-            // Wait 0.15 seconds before damaging the next target (for visual timing)
-            yield return new WaitForSeconds(0.15f);
+            // Apply the damage amount to this target (reduces their health)
+            // This also triggers the hit animation internally
+            target.Damage(Mathf.RoundToInt(damageAmount));
+
+            // Wait for the hit animation to complete before processing next target
+            // This creates proper visual sequencing for multiple targets
+            float hitAnimDuration = target.GetAnimationDuration(CombatantAnimState.Hit);
+            yield return new WaitForSeconds(hitAnimDuration + 0.1f);
 
             // Check if the target died from the damage and handle death
             if(target != null && target.CurrentHealth <= 0)
             {
-                // Play death animation before processing death
-                target.PlayAnimation(CombatantAnimState.Dead);
+                // Play death animation and wait for it to complete
+                yield return target.PlayAnimationAndWait(CombatantAnimState.Dead, returnToIdle: false);
 
                 // If the target is an enemy that died, create a kill enemy action
                 if (target is EnemyView enemyView)
@@ -158,6 +160,11 @@ public class DamageSystem : MonoBehaviour
                     //nothing here for now
                     //handles heroes death        
                 }
+            }
+            else if (target != null)
+            {
+                // Target survived, return to idle animation
+                target.PlayIdleAnimation();
             }
         }
         // Wait one frame before continuing (required for coroutines)
