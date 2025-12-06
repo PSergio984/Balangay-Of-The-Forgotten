@@ -143,6 +143,9 @@ TextureImporter:
   - first:
       213: 6033000109986460236
     second: BathalaAnimationIdle_46
+  - first:
+      213: 4506792301996146990
+    second: BathalaAnimationIdle_47
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -185,7 +188,7 @@ TextureImporter:
   lightmap: 0
   compressionQuality: 50
   spriteMode: 2
-  spriteExtrude: 9
+  spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
@@ -236,6 +239,19 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 4
     buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WindowsStoreApps
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
@@ -672,7 +688,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 0b1d111327595c74ea32e211832b6629
+    spriteID: 84fd3fc8abf05fe4583a0299fb6645a2
     internalID: 0
     vertices: []
     indices: 

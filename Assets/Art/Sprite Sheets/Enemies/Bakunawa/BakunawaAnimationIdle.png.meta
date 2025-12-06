@@ -1,148 +1,58 @@
 fileFormatVersion: 2
-guid: 517f78f36b6a44d428afbdbf415d9145
+guid: 891c2b497fd9d0b4da6e1f3bc67ba541
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -7221812534086333437
-    second: BathalaAnimationTurn_0
+      213: 1089226461020094022
+    second: BakunawaAnimationIdle_0
   - first:
-      213: 5737854914276476144
-    second: BathalaAnimationTurn_1
+      213: -6962860054626587984
+    second: BakunawaAnimationIdle_1
   - first:
-      213: -5633007334776193715
-    second: BathalaAnimationTurn_2
+      213: -7327687418597623430
+    second: BakunawaAnimationIdle_2
   - first:
-      213: -4755842693693923809
-    second: BathalaAnimationTurn_3
+      213: 944961046367297728
+    second: BakunawaAnimationIdle_3
   - first:
-      213: -5249370545782896157
-    second: BathalaAnimationTurn_4
+      213: 3396069764752511752
+    second: BakunawaAnimationIdle_4
   - first:
-      213: -6415897427026000771
-    second: BathalaAnimationTurn_5
+      213: -7711412932122517832
+    second: BakunawaAnimationIdle_5
   - first:
-      213: 1490853402649892121
-    second: BathalaAnimationTurn_6
+      213: 3474067488503415136
+    second: BakunawaAnimationIdle_6
   - first:
-      213: 8787011478958000693
-    second: BathalaAnimationTurn_7
+      213: -5684811918352654612
+    second: BakunawaAnimationIdle_7
   - first:
-      213: -9079239958735610086
-    second: BathalaAnimationTurn_8
+      213: 8627483229400129382
+    second: BakunawaAnimationIdle_8
   - first:
-      213: -7879286083456141338
-    second: BathalaAnimationTurn_9
+      213: 1761536176275278256
+    second: BakunawaAnimationIdle_9
   - first:
-      213: 3190915116312209409
-    second: BathalaAnimationTurn_10
+      213: 4175105269461144669
+    second: BakunawaAnimationIdle_10
   - first:
-      213: -2425986376224385595
-    second: BathalaAnimationTurn_11
+      213: -2579585380723597546
+    second: BakunawaAnimationIdle_11
   - first:
-      213: 8201265315979796175
-    second: BathalaAnimationTurn_12
+      213: 1832991756216656834
+    second: BakunawaAnimationIdle_12
   - first:
-      213: -9041104125409384774
-    second: BathalaAnimationTurn_13
+      213: 6014347852524217216
+    second: BakunawaAnimationIdle_13
   - first:
-      213: 8549772434654199388
-    second: BathalaAnimationTurn_14
+      213: -3963369758980837588
+    second: BakunawaAnimationIdle_14
   - first:
-      213: 8394171566554286062
-    second: BathalaAnimationTurn_15
+      213: -507722194167004200
+    second: BakunawaAnimationIdle_15
   - first:
-      213: 3370817457755762232
-    second: BathalaAnimationTurn_16
-  - first:
-      213: 3759066728148023309
-    second: BathalaAnimationTurn_17
-  - first:
-      213: 258287921616273109
-    second: BathalaAnimationTurn_18
-  - first:
-      213: 1810778298498202728
-    second: BathalaAnimationTurn_19
-  - first:
-      213: -2989497074959154218
-    second: BathalaAnimationTurn_20
-  - first:
-      213: 4288656295281673588
-    second: BathalaAnimationTurn_21
-  - first:
-      213: -1060030465446835436
-    second: BathalaAnimationTurn_22
-  - first:
-      213: -4311674902138299131
-    second: BathalaAnimationTurn_23
-  - first:
-      213: -6144278756966662744
-    second: BathalaAnimationTurn_24
-  - first:
-      213: 4554381457723018556
-    second: BathalaAnimationTurn_25
-  - first:
-      213: -5460762316437927031
-    second: BathalaAnimationTurn_26
-  - first:
-      213: 7667483207638116419
-    second: BathalaAnimationTurn_27
-  - first:
-      213: 9005419275923053946
-    second: BathalaAnimationTurn_28
-  - first:
-      213: -4471768722114326756
-    second: BathalaAnimationTurn_29
-  - first:
-      213: 538659637042933115
-    second: BathalaAnimationTurn_30
-  - first:
-      213: 4215129474327511682
-    second: BathalaAnimationTurn_31
-  - first:
-      213: -5067223908110013628
-    second: BathalaAnimationTurn_32
-  - first:
-      213: -4548798040003000700
-    second: BathalaAnimationTurn_33
-  - first:
-      213: 4592100664418975574
-    second: BathalaAnimationTurn_34
-  - first:
-      213: -9199178965459189770
-    second: BathalaAnimationTurn_35
-  - first:
-      213: -8587429026114960416
-    second: BathalaAnimationTurn_36
-  - first:
-      213: -316106442114502443
-    second: BathalaAnimationTurn_37
-  - first:
-      213: -1074368572153068056
-    second: BathalaAnimationTurn_38
-  - first:
-      213: 51515930076022114
-    second: BathalaAnimationTurn_39
-  - first:
-      213: -8167819355467407198
-    second: BathalaAnimationTurn_40
-  - first:
-      213: 3565392259838151957
-    second: BathalaAnimationTurn_41
-  - first:
-      213: 3494063819247630422
-    second: BathalaAnimationTurn_42
-  - first:
-      213: 3507578197375239620
-    second: BathalaAnimationTurn_43
-  - first:
-      213: 1115371183796395609
-    second: BathalaAnimationTurn_44
-  - first:
-      213: -5470822065824701281
-    second: BathalaAnimationTurn_45
-  - first:
-      213: -7706253059103377677
-    second: BathalaAnimationTurn_46
+      213: 3384675081429152583
+    second: BakunawaAnimationIdle_16
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -264,7 +174,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: BathalaAnimationTurn_0
+      name: BakunawaAnimationIdle_0
       rect:
         serializedVersion: 2
         x: 0
@@ -279,14 +189,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 30c025753c7f6cb90800000000000000
-      internalID: -7221812534086333437
+      spriteID: 64efe0102b5bd1f00800000000000000
+      internalID: 1089226461020094022
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: BathalaAnimationTurn_1
+      name: BakunawaAnimationIdle_1
       rect:
         serializedVersion: 2
         x: 64
@@ -301,14 +211,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 0f4cd22e4a4f0af40800000000000000
-      internalID: 5737854914276476144
+      spriteID: 0baa93fcba3fe5f90800000000000000
+      internalID: -6962860054626587984
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: BathalaAnimationTurn_2
+      name: BakunawaAnimationIdle_2
       rect:
         serializedVersion: 2
         x: 128
@@ -323,14 +233,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: d4dbe798ca983d1b0800000000000000
-      internalID: -5633007334776193715
+      spriteID: a79b365dd13de4a90800000000000000
+      internalID: -7327687418597623430
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: BathalaAnimationTurn_3
+      name: BakunawaAnimationIdle_3
       rect:
         serializedVersion: 2
         x: 192
@@ -345,14 +255,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: f1e9cb2844adffdb0800000000000000
-      internalID: -4755842693693923809
+      spriteID: 0c0ed47a01d2d1d00800000000000000
+      internalID: 944961046367297728
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: BathalaAnimationTurn_4
+      name: BakunawaAnimationIdle_4
       rect:
         serializedVersion: 2
         x: 256
@@ -367,14 +277,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 3e9463c0d4d7627b0800000000000000
-      internalID: -5249370545782896157
+      spriteID: 80394883573412f20800000000000000
+      internalID: 3396069764752511752
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: BathalaAnimationTurn_5
+      name: BakunawaAnimationIdle_5
       rect:
         serializedVersion: 2
         x: 320
@@ -389,14 +299,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: d74c5c2784726f6a0800000000000000
-      internalID: -6415897427026000771
+      spriteID: 8bedb788bce8bf490800000000000000
+      internalID: -7711412932122517832
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: BathalaAnimationTurn_6
+      name: BakunawaAnimationIdle_6
       rect:
         serializedVersion: 2
         x: 384
@@ -411,14 +321,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 9151125554390b410800000000000000
-      internalID: 1490853402649892121
+      spriteID: 061caf179fd563030800000000000000
+      internalID: 3474067488503415136
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: BathalaAnimationTurn_7
+      name: BakunawaAnimationIdle_7
       rect:
         serializedVersion: 2
         x: 448
@@ -433,14 +343,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 53a4290726cb1f970800000000000000
-      internalID: 8787011478958000693
+      spriteID: ceedeaffdad7b11b0800000000000000
+      internalID: -5684811918352654612
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: BathalaAnimationTurn_8
+      name: BakunawaAnimationIdle_8
       rect:
         serializedVersion: 2
         x: 512
@@ -455,14 +365,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: a1f18058c5f000280800000000000000
-      internalID: -9079239958735610086
+      spriteID: 66fd80a694afab770800000000000000
+      internalID: 8627483229400129382
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: BathalaAnimationTurn_9
+      name: BakunawaAnimationIdle_9
       rect:
         serializedVersion: 2
         x: 576
@@ -477,14 +387,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 6e7fae7ad0727a290800000000000000
-      internalID: -7879286083456141338
+      spriteID: 0b943edb1db327810800000000000000
+      internalID: 1761536176275278256
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: BathalaAnimationTurn_10
+      name: BakunawaAnimationIdle_10
       rect:
         serializedVersion: 2
         x: 640
@@ -499,14 +409,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 108a6306468684c20800000000000000
-      internalID: 3190915116312209409
+      spriteID: d54d7163f14f0f930800000000000000
+      internalID: 4175105269461144669
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: BathalaAnimationTurn_11
+      name: BakunawaAnimationIdle_11
       rect:
         serializedVersion: 2
         x: 704
@@ -521,14 +431,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 5c555378e3a255ed0800000000000000
-      internalID: -2425986376224385595
+      spriteID: 61fdd2273c8733cd0800000000000000
+      internalID: -2579585380723597546
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: BathalaAnimationTurn_12
+      name: BakunawaAnimationIdle_12
       rect:
         serializedVersion: 2
         x: 768
@@ -543,14 +453,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: fce15bb4a5fb0d170800000000000000
-      internalID: 8201265315979796175
+      spriteID: 2c363896a48107910800000000000000
+      internalID: 1832991756216656834
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: BathalaAnimationTurn_13
+      name: BakunawaAnimationIdle_13
       rect:
         serializedVersion: 2
         x: 832
@@ -565,8 +475,74 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: ab6a7a323bb878280800000000000000
-      internalID: -9041104125409384774
+      spriteID: 083e659a181477350800000000000000
+      internalID: 6014347852524217216
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BakunawaAnimationIdle_14
+      rect:
+        serializedVersion: 2
+        x: 896
+        y: 0
+        width: 64
+        height: 96
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c2feb6af3384ff8c0800000000000000
+      internalID: -3963369758980837588
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BakunawaAnimationIdle_15
+      rect:
+        serializedVersion: 2
+        x: 960
+        y: 0
+        width: 64
+        height: 96
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8d3081cba5534f8f0800000000000000
+      internalID: -507722194167004200
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BakunawaAnimationIdle_16
+      rect:
+        serializedVersion: 2
+        x: 1024
+        y: 0
+        width: 64
+        height: 96
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 74373b4cd08c8fe20800000000000000
+      internalID: 3384675081429152583
       vertices: []
       indices: 
       edges: []
@@ -575,7 +551,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: d0daa49a855f453408df8338414ffac7
+    spriteID: 7fdf98d82496d6f43a428f584d326c5b
     internalID: 0
     vertices: []
     indices: 
@@ -587,20 +563,23 @@ TextureImporter:
       - key: SpriteEditor.SliceSettings
         value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":64.0,"y":96.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":1,"keepEmptyRects":false,"isAlternate":false}'
     nameFileIdTable:
-      BathalaAnimationTurn_0: -7221812534086333437
-      BathalaAnimationTurn_1: 5737854914276476144
-      BathalaAnimationTurn_10: 3190915116312209409
-      BathalaAnimationTurn_11: -2425986376224385595
-      BathalaAnimationTurn_12: 8201265315979796175
-      BathalaAnimationTurn_13: -9041104125409384774
-      BathalaAnimationTurn_2: -5633007334776193715
-      BathalaAnimationTurn_3: -4755842693693923809
-      BathalaAnimationTurn_4: -5249370545782896157
-      BathalaAnimationTurn_5: -6415897427026000771
-      BathalaAnimationTurn_6: 1490853402649892121
-      BathalaAnimationTurn_7: 8787011478958000693
-      BathalaAnimationTurn_8: -9079239958735610086
-      BathalaAnimationTurn_9: -7879286083456141338
+      BakunawaAnimationIdle_0: 1089226461020094022
+      BakunawaAnimationIdle_1: -6962860054626587984
+      BakunawaAnimationIdle_10: 4175105269461144669
+      BakunawaAnimationIdle_11: -2579585380723597546
+      BakunawaAnimationIdle_12: 1832991756216656834
+      BakunawaAnimationIdle_13: 6014347852524217216
+      BakunawaAnimationIdle_14: -3963369758980837588
+      BakunawaAnimationIdle_15: -507722194167004200
+      BakunawaAnimationIdle_16: 3384675081429152583
+      BakunawaAnimationIdle_2: -7327687418597623430
+      BakunawaAnimationIdle_3: 944961046367297728
+      BakunawaAnimationIdle_4: 3396069764752511752
+      BakunawaAnimationIdle_5: -7711412932122517832
+      BakunawaAnimationIdle_6: 3474067488503415136
+      BakunawaAnimationIdle_7: -5684811918352654612
+      BakunawaAnimationIdle_8: 8627483229400129382
+      BakunawaAnimationIdle_9: 1761536176275278256
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

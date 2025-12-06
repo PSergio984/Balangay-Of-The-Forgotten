@@ -1,121 +1,58 @@
 fileFormatVersion: 2
-guid: 012b1f0aa8634534185b535b5fb83527
+guid: 63716efa4d0431d40916d2b960b7cc00
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 4716987310220574672
-    second: BathalaAnimationDying_0
+      213: 1865012459257664872
+    second: MayariAnimationDying_0
   - first:
-      213: -1430426440356267187
-    second: BathalaAnimationDying_1
+      213: -4296121494225079815
+    second: MayariAnimationDying_1
   - first:
-      213: -1662037393352008627
-    second: BathalaAnimationDying_2
+      213: -5123989687315515579
+    second: MayariAnimationDying_2
   - first:
-      213: 6835935830211058112
-    second: BathalaAnimationDying_3
+      213: 480235534773383391
+    second: MayariAnimationDying_3
   - first:
-      213: -3383041393921620347
-    second: BathalaAnimationDying_4
+      213: -6645218919318487269
+    second: MayariAnimationDying_4
   - first:
-      213: 1303787749156485910
-    second: BathalaAnimationDying_5
+      213: -2731529570977678885
+    second: MayariAnimationDying_5
   - first:
-      213: 2671160192256340658
-    second: BathalaAnimationDying_6
+      213: -3549770141390690561
+    second: MayariAnimationDying_6
   - first:
-      213: 9155036904243767102
-    second: BathalaAnimationDying_7
+      213: -8496003535367020191
+    second: MayariAnimationDying_7
   - first:
-      213: 3418955453198322646
-    second: BathalaAnimationDying_8
+      213: -5219157808356232492
+    second: MayariAnimationDying_8
   - first:
-      213: -4504622272454919961
-    second: BathalaAnimationDying_9
+      213: -7631536603319527379
+    second: MayariAnimationDying_9
   - first:
-      213: 3766926025155681673
-    second: BathalaAnimationDying_10
+      213: 2902958688702508775
+    second: MayariAnimationDying_10
   - first:
-      213: 1469828193645353705
-    second: BathalaAnimationDying_11
+      213: 4509563278836291453
+    second: MayariAnimationDying_11
   - first:
-      213: 7492469647880397925
-    second: BathalaAnimationDying_12
+      213: 7007172592812586294
+    second: MayariAnimationDying_12
   - first:
-      213: 3632782813405111337
-    second: BathalaAnimationDying_13
+      213: -403743513794318868
+    second: MayariAnimationDying_13
   - first:
-      213: -9200246033691863977
-    second: BathalaAnimationDying_14
+      213: -4089403061287581669
+    second: MayariAnimationDying_14
   - first:
-      213: -2781015340314392116
-    second: BathalaAnimationDying_15
+      213: 4189343980878577667
+    second: MayariAnimationDying_15
   - first:
-      213: -7758181506033457735
-    second: BathalaAnimationDying_16
-  - first:
-      213: -5830554454797038761
-    second: BathalaAnimationDying_17
-  - first:
-      213: 8212788871685163226
-    second: BathalaAnimationDying_18
-  - first:
-      213: -1374443729346693519
-    second: BathalaAnimationDying_19
-  - first:
-      213: -2772634947806713944
-    second: BathalaAnimationDying_20
-  - first:
-      213: -7877943062016470866
-    second: BathalaAnimationDying_21
-  - first:
-      213: 4137083517295997354
-    second: BathalaAnimationDying_22
-  - first:
-      213: -3038214281297678099
-    second: BathalaAnimationDying_23
-  - first:
-      213: 661425353565536398
-    second: BathalaAnimationDying_24
-  - first:
-      213: 700229559185656491
-    second: BathalaAnimationDying_25
-  - first:
-      213: -1444518080529067989
-    second: BathalaAnimationDying_26
-  - first:
-      213: -1342257088189623817
-    second: BathalaAnimationDying_27
-  - first:
-      213: -6226483999546882692
-    second: BathalaAnimationDying_28
-  - first:
-      213: 6751980026093523877
-    second: BathalaAnimationDying_29
-  - first:
-      213: -4204367633565708358
-    second: BathalaAnimationDying_30
-  - first:
-      213: -6537892303251355291
-    second: BathalaAnimationDying_31
-  - first:
-      213: -838149486036509930
-    second: BathalaAnimationDying_32
-  - first:
-      213: -2195638967396269356
-    second: BathalaAnimationDying_33
-  - first:
-      213: -4899947843318492097
-    second: BathalaAnimationDying_34
-  - first:
-      213: -3339276119443816964
-    second: BathalaAnimationDying_35
-  - first:
-      213: 3657391025853789832
-    second: BathalaAnimationDying_36
-  - first:
-      213: -1385088410953436182
-    second: BathalaAnimationDying_37
+      213: 1546482809284864350
+    second: MayariAnimationDying_16
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -237,7 +174,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: BathalaAnimationDying_0
+      name: MayariAnimationDying_0
       rect:
         serializedVersion: 2
         x: 0
@@ -252,14 +189,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 0dff8bb87fa167140800000000000000
-      internalID: 4716987310220574672
+      spriteID: 8651bbf43fad1e910800000000000000
+      internalID: 1865012459257664872
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: BathalaAnimationDying_1
+      name: MayariAnimationDying_1
       rect:
         serializedVersion: 2
         x: 64
@@ -274,14 +211,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: d4bfc313bba162ce0800000000000000
-      internalID: -1430426440356267187
+      spriteID: 9f13bc8434c1164c0800000000000000
+      internalID: -4296121494225079815
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: BathalaAnimationDying_2
+      name: MayariAnimationDying_2
       rect:
         serializedVersion: 2
         x: 128
@@ -296,14 +233,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: d4c56ddebc14fe8e0800000000000000
-      internalID: -1662037393352008627
+      spriteID: 5473bc6078ee3e8b0800000000000000
+      internalID: -5123989687315515579
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: BathalaAnimationDying_3
+      name: MayariAnimationDying_3
       rect:
         serializedVersion: 2
         x: 192
@@ -318,14 +255,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 0c958135b6f1ede50800000000000000
-      internalID: 6835935830211058112
+      spriteID: fd0ffaaaca32aa600800000000000000
+      internalID: 480235534773383391
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: BathalaAnimationDying_4
+      name: MayariAnimationDying_4
       rect:
         serializedVersion: 2
         x: 256
@@ -340,14 +277,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 5860cdeb6c50d01d0800000000000000
-      internalID: -3383041393921620347
+      spriteID: b1ff05bc99077c3a0800000000000000
+      internalID: -6645218919318487269
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: BathalaAnimationDying_5
+      name: MayariAnimationDying_5
       rect:
         serializedVersion: 2
         x: 320
@@ -362,14 +299,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 61b7af2dc0cf71210800000000000000
-      internalID: 1303787749156485910
+      spriteID: bd97664d358a71ad0800000000000000
+      internalID: -2731529570977678885
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: BathalaAnimationDying_6
+      name: MayariAnimationDying_6
       rect:
         serializedVersion: 2
         x: 384
@@ -384,14 +321,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 2b27a9dda0ed11520800000000000000
-      internalID: 2671160192256340658
+      spriteID: ff6ae182ddeacbec0800000000000000
+      internalID: -3549770141390690561
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: BathalaAnimationDying_7
+      name: MayariAnimationDying_7
       rect:
         serializedVersion: 2
         x: 448
@@ -406,14 +343,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: e37aa071f893d0f70800000000000000
-      internalID: 9155036904243767102
+      spriteID: 1616cff5cc1281a80800000000000000
+      internalID: -8496003535367020191
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: BathalaAnimationDying_8
+      name: MayariAnimationDying_8
       rect:
         serializedVersion: 2
         x: 512
@@ -428,14 +365,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 6db45caced1927f20800000000000000
-      internalID: 3418955453198322646
+      spriteID: 4d2783620a3d197b0800000000000000
+      internalID: -5219157808356232492
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: BathalaAnimationDying_9
+      name: MayariAnimationDying_9
       rect:
         serializedVersion: 2
         x: 576
@@ -450,14 +387,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 7e8f203e8ed5c71c0800000000000000
-      internalID: -4504622272454919961
+      spriteID: d289fb494e5571690800000000000000
+      internalID: -7631536603319527379
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: BathalaAnimationDying_10
+      name: MayariAnimationDying_10
       rect:
         serializedVersion: 2
         x: 640
@@ -472,14 +409,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 98d1498034fc64430800000000000000
-      internalID: 3766926025155681673
+      spriteID: 7ee2fbdfb81694820800000000000000
+      internalID: 2902958688702508775
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: BathalaAnimationDying_11
+      name: MayariAnimationDying_11
       rect:
         serializedVersion: 2
         x: 704
@@ -494,14 +431,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 9ead51364f0e56410800000000000000
-      internalID: 1469828193645353705
+      spriteID: d77de2fc8ef259e30800000000000000
+      internalID: 4509563278836291453
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: BathalaAnimationDying_12
+      name: MayariAnimationDying_12
       rect:
         serializedVersion: 2
         x: 768
@@ -516,14 +453,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 564ae4ca2799af760800000000000000
-      internalID: 7492469647880397925
+      spriteID: 635727af85a7e3160800000000000000
+      internalID: 7007172592812586294
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: BathalaAnimationDying_13
+      name: MayariAnimationDying_13
       rect:
         serializedVersion: 2
         x: 832
@@ -538,14 +475,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 924e723b8bc3a6230800000000000000
-      internalID: 3632782813405111337
+      spriteID: cedebefc96d956af0800000000000000
+      internalID: -403743513794318868
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: BathalaAnimationDying_14
+      name: MayariAnimationDying_14
       rect:
         serializedVersion: 2
         x: 896
@@ -560,14 +497,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 75499933af8225080800000000000000
-      internalID: -9200246033691863977
+      spriteID: b180f8415958f37c0800000000000000
+      internalID: -4089403061287581669
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: BathalaAnimationDying_15
+      name: MayariAnimationDying_15
       rect:
         serializedVersion: 2
         x: 960
@@ -582,14 +519,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: cc906ad4849d769d0800000000000000
-      internalID: -2781015340314392116
+      spriteID: 300403e872a832a30800000000000000
+      internalID: 4189343980878577667
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: BathalaAnimationDying_16
+      name: MayariAnimationDying_16
       rect:
         serializedVersion: 2
         x: 1024
@@ -604,14 +541,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 9b5eedd5607655490800000000000000
-      internalID: -7758181506033457735
+      spriteID: e592ca2ebe5367510800000000000000
+      internalID: 1546482809284864350
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: BathalaAnimationDying_17
+      name: MayariAnimationDying_17
       rect:
         serializedVersion: 2
         x: 1088
@@ -624,16 +561,16 @@ TextureImporter:
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 75b404e6d95b51fa0800000000000000
-      internalID: -5830554454797038761
+      spriteID: dac70699eaf1427478e13e0a4ae9066c
+      internalID: 2060331048
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: BathalaAnimationDying_18
+      name: MayariAnimationDying_18
       rect:
         serializedVersion: 2
         x: 1152
@@ -646,16 +583,16 @@ TextureImporter:
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: ad8431037ffa9f170800000000000000
-      internalID: 8212788871685163226
+      spriteID: 208575f8643855b4c8b1be4e8f166527
+      internalID: -465261736
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: BathalaAnimationDying_19
+      name: MayariAnimationDying_19
       rect:
         serializedVersion: 2
         x: 1216
@@ -668,16 +605,16 @@ TextureImporter:
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 176f684d5befcece0800000000000000
-      internalID: -1374443729346693519
+      spriteID: 2848e85d50701dc4dbe604281a7c2cc3
+      internalID: 615912183
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: BathalaAnimationDying_20
+      name: MayariAnimationDying_20
       rect:
         serializedVersion: 2
         x: 1280
@@ -690,16 +627,16 @@ TextureImporter:
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 8a7a52c743f9589d0800000000000000
-      internalID: -2772634947806713944
+      spriteID: 5d24aa8fa4787e64db657f68cf56a187
+      internalID: 522248198
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: BathalaAnimationDying_21
+      name: MayariAnimationDying_21
       rect:
         serializedVersion: 2
         x: 1344
@@ -712,16 +649,16 @@ TextureImporter:
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: ea051c3368ceba290800000000000000
-      internalID: -7877943062016470866
+      spriteID: 09afaba76cee707459253a6ac6457496
+      internalID: 155636323
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: BathalaAnimationDying_22
+      name: MayariAnimationDying_22
       rect:
         serializedVersion: 2
         x: 1408
@@ -734,16 +671,16 @@ TextureImporter:
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: aa13d8e2a8fd96930800000000000000
-      internalID: 4137083517295997354
+      spriteID: 7ec37314804c7ac4faf12d3430b95bb3
+      internalID: -1656218533
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: BathalaAnimationDying_23
+      name: MayariAnimationDying_23
       rect:
         serializedVersion: 2
         x: 1472
@@ -756,16 +693,16 @@ TextureImporter:
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: de0bbb3553816d5d0800000000000000
-      internalID: -3038214281297678099
+      spriteID: 87e1d273a9bec774ab1c9df97f595eb2
+      internalID: -1115094185
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: BathalaAnimationDying_24
+      name: MayariAnimationDying_24
       rect:
         serializedVersion: 2
         x: 1536
@@ -778,16 +715,16 @@ TextureImporter:
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: e8006bccadadd2900800000000000000
-      internalID: 661425353565536398
+      spriteID: f3efdc2f822f6ac4babed86bd67da548
+      internalID: 485878537
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: BathalaAnimationDying_25
+      name: MayariAnimationDying_25
       rect:
         serializedVersion: 2
         x: 1600
@@ -800,16 +737,16 @@ TextureImporter:
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: baa4d78f217b7b900800000000000000
-      internalID: 700229559185656491
+      spriteID: 87b19893c9a2f2d42a798da9e65091e4
+      internalID: -1680243856
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: BathalaAnimationDying_26
+      name: MayariAnimationDying_26
       rect:
         serializedVersion: 2
         x: 1664
@@ -822,10 +759,10 @@ TextureImporter:
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: b209f6a857a04fbe0800000000000000
-      internalID: -1444518080529067989
+      spriteID: c28951e6429a39f4e9fecc245d82d96a
+      internalID: 110423739
       vertices: []
       indices: 
       edges: []
@@ -834,7 +771,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: fdb00d6996008dd4b8256631cab5d752
+    spriteID: 5ded3dfdd10b10c41a5bfcf1afc5bb6e
     internalID: 0
     vertices: []
     indices: 
@@ -846,33 +783,33 @@ TextureImporter:
       - key: SpriteEditor.SliceSettings
         value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":64.0,"y":96.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":1,"keepEmptyRects":false,"isAlternate":false}'
     nameFileIdTable:
-      BathalaAnimationDying_0: 4716987310220574672
-      BathalaAnimationDying_1: -1430426440356267187
-      BathalaAnimationDying_10: 3766926025155681673
-      BathalaAnimationDying_11: 1469828193645353705
-      BathalaAnimationDying_12: 7492469647880397925
-      BathalaAnimationDying_13: 3632782813405111337
-      BathalaAnimationDying_14: -9200246033691863977
-      BathalaAnimationDying_15: -2781015340314392116
-      BathalaAnimationDying_16: -7758181506033457735
-      BathalaAnimationDying_17: -5830554454797038761
-      BathalaAnimationDying_18: 8212788871685163226
-      BathalaAnimationDying_19: -1374443729346693519
-      BathalaAnimationDying_2: -1662037393352008627
-      BathalaAnimationDying_20: -2772634947806713944
-      BathalaAnimationDying_21: -7877943062016470866
-      BathalaAnimationDying_22: 4137083517295997354
-      BathalaAnimationDying_23: -3038214281297678099
-      BathalaAnimationDying_24: 661425353565536398
-      BathalaAnimationDying_25: 700229559185656491
-      BathalaAnimationDying_26: -1444518080529067989
-      BathalaAnimationDying_3: 6835935830211058112
-      BathalaAnimationDying_4: -3383041393921620347
-      BathalaAnimationDying_5: 1303787749156485910
-      BathalaAnimationDying_6: 2671160192256340658
-      BathalaAnimationDying_7: 9155036904243767102
-      BathalaAnimationDying_8: 3418955453198322646
-      BathalaAnimationDying_9: -4504622272454919961
+      MayariAnimationDying_0: 1865012459257664872
+      MayariAnimationDying_1: -4296121494225079815
+      MayariAnimationDying_10: 2902958688702508775
+      MayariAnimationDying_11: 4509563278836291453
+      MayariAnimationDying_12: 7007172592812586294
+      MayariAnimationDying_13: -403743513794318868
+      MayariAnimationDying_14: -4089403061287581669
+      MayariAnimationDying_15: 4189343980878577667
+      MayariAnimationDying_16: 1546482809284864350
+      MayariAnimationDying_17: 2060331048
+      MayariAnimationDying_18: -465261736
+      MayariAnimationDying_19: 615912183
+      MayariAnimationDying_2: -5123989687315515579
+      MayariAnimationDying_20: 522248198
+      MayariAnimationDying_21: 155636323
+      MayariAnimationDying_22: -1656218533
+      MayariAnimationDying_23: -1115094185
+      MayariAnimationDying_24: 485878537
+      MayariAnimationDying_25: -1680243856
+      MayariAnimationDying_26: 110423739
+      MayariAnimationDying_3: 480235534773383391
+      MayariAnimationDying_4: -6645218919318487269
+      MayariAnimationDying_5: -2731529570977678885
+      MayariAnimationDying_6: -3549770141390690561
+      MayariAnimationDying_7: -8496003535367020191
+      MayariAnimationDying_8: -5219157808356232492
+      MayariAnimationDying_9: -7631536603319527379
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

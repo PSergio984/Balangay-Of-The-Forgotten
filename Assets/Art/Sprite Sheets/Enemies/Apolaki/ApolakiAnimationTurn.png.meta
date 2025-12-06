@@ -1,121 +1,70 @@
 fileFormatVersion: 2
-guid: 012b1f0aa8634534185b535b5fb83527
+guid: d5a48e21cfc9a9d4ba9599a3d0a79a38
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 4716987310220574672
-    second: BathalaAnimationDying_0
+      213: -9027731130655959887
+    second: ApolakiAnimationTurn_0
   - first:
-      213: -1430426440356267187
-    second: BathalaAnimationDying_1
+      213: 2034615935180221581
+    second: ApolakiAnimationTurn_1
   - first:
-      213: -1662037393352008627
-    second: BathalaAnimationDying_2
+      213: -5423554244172098060
+    second: ApolakiAnimationTurn_2
   - first:
-      213: 6835935830211058112
-    second: BathalaAnimationDying_3
+      213: -3848675643214329148
+    second: ApolakiAnimationTurn_3
   - first:
-      213: -3383041393921620347
-    second: BathalaAnimationDying_4
+      213: -3916554314861550644
+    second: ApolakiAnimationTurn_4
   - first:
-      213: 1303787749156485910
-    second: BathalaAnimationDying_5
+      213: -171330035005888148
+    second: ApolakiAnimationTurn_5
   - first:
-      213: 2671160192256340658
-    second: BathalaAnimationDying_6
+      213: -5141434508690819391
+    second: ApolakiAnimationTurn_6
   - first:
-      213: 9155036904243767102
-    second: BathalaAnimationDying_7
+      213: 6299211933924376743
+    second: ApolakiAnimationTurn_7
   - first:
-      213: 3418955453198322646
-    second: BathalaAnimationDying_8
+      213: 7323581428008311275
+    second: ApolakiAnimationTurn_8
   - first:
-      213: -4504622272454919961
-    second: BathalaAnimationDying_9
+      213: -2963792824087389231
+    second: ApolakiAnimationTurn_9
   - first:
-      213: 3766926025155681673
-    second: BathalaAnimationDying_10
+      213: 7855901647496949450
+    second: ApolakiAnimationTurn_10
   - first:
-      213: 1469828193645353705
-    second: BathalaAnimationDying_11
+      213: -1417742070413406868
+    second: ApolakiAnimationTurn_11
   - first:
-      213: 7492469647880397925
-    second: BathalaAnimationDying_12
+      213: -7648786013949468937
+    second: ApolakiAnimationTurn_12
   - first:
-      213: 3632782813405111337
-    second: BathalaAnimationDying_13
+      213: -3419992042609507222
+    second: ApolakiAnimationTurn_13
   - first:
-      213: -9200246033691863977
-    second: BathalaAnimationDying_14
+      213: -7827846711952540143
+    second: ApolakiAnimationTurn_14
   - first:
-      213: -2781015340314392116
-    second: BathalaAnimationDying_15
+      213: -3562193535369169663
+    second: ApolakiAnimationTurn_15
   - first:
-      213: -7758181506033457735
-    second: BathalaAnimationDying_16
+      213: 1716130032635993770
+    second: ApolakiAnimationTurn_16
   - first:
-      213: -5830554454797038761
-    second: BathalaAnimationDying_17
+      213: -3526206756560055052
+    second: ApolakiAnimationTurn_17
   - first:
-      213: 8212788871685163226
-    second: BathalaAnimationDying_18
+      213: -2622757612218317980
+    second: ApolakiAnimationTurn_18
   - first:
-      213: -1374443729346693519
-    second: BathalaAnimationDying_19
+      213: -9140452757870114821
+    second: ApolakiAnimationTurn_19
   - first:
-      213: -2772634947806713944
-    second: BathalaAnimationDying_20
-  - first:
-      213: -7877943062016470866
-    second: BathalaAnimationDying_21
-  - first:
-      213: 4137083517295997354
-    second: BathalaAnimationDying_22
-  - first:
-      213: -3038214281297678099
-    second: BathalaAnimationDying_23
-  - first:
-      213: 661425353565536398
-    second: BathalaAnimationDying_24
-  - first:
-      213: 700229559185656491
-    second: BathalaAnimationDying_25
-  - first:
-      213: -1444518080529067989
-    second: BathalaAnimationDying_26
-  - first:
-      213: -1342257088189623817
-    second: BathalaAnimationDying_27
-  - first:
-      213: -6226483999546882692
-    second: BathalaAnimationDying_28
-  - first:
-      213: 6751980026093523877
-    second: BathalaAnimationDying_29
-  - first:
-      213: -4204367633565708358
-    second: BathalaAnimationDying_30
-  - first:
-      213: -6537892303251355291
-    second: BathalaAnimationDying_31
-  - first:
-      213: -838149486036509930
-    second: BathalaAnimationDying_32
-  - first:
-      213: -2195638967396269356
-    second: BathalaAnimationDying_33
-  - first:
-      213: -4899947843318492097
-    second: BathalaAnimationDying_34
-  - first:
-      213: -3339276119443816964
-    second: BathalaAnimationDying_35
-  - first:
-      213: 3657391025853789832
-    second: BathalaAnimationDying_36
-  - first:
-      213: -1385088410953436182
-    second: BathalaAnimationDying_37
+      213: 8937173456158681490
+    second: ApolakiAnimationTurn_20
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -237,7 +186,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: BathalaAnimationDying_0
+      name: ApolakiAnimationTurn_0
       rect:
         serializedVersion: 2
         x: 0
@@ -252,14 +201,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 0dff8bb87fa167140800000000000000
-      internalID: 4716987310220574672
+      spriteID: 1b4148d1e5e07b280800000000000000
+      internalID: -9027731130655959887
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: BathalaAnimationDying_1
+      name: ApolakiAnimationTurn_1
       rect:
         serializedVersion: 2
         x: 64
@@ -274,14 +223,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: d4bfc313bba162ce0800000000000000
-      internalID: -1430426440356267187
+      spriteID: d8c24c6c9686c3c10800000000000000
+      internalID: 2034615935180221581
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: BathalaAnimationDying_2
+      name: ApolakiAnimationTurn_2
       rect:
         serializedVersion: 2
         x: 128
@@ -296,14 +245,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: d4c56ddebc14fe8e0800000000000000
-      internalID: -1662037393352008627
+      spriteID: 4f55f00762aabb4b0800000000000000
+      internalID: -5423554244172098060
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: BathalaAnimationDying_3
+      name: ApolakiAnimationTurn_3
       rect:
         serializedVersion: 2
         x: 192
@@ -318,14 +267,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 0c958135b6f1ede50800000000000000
-      internalID: 6835935830211058112
+      spriteID: 4ca0386c4e1c69ac0800000000000000
+      internalID: -3848675643214329148
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: BathalaAnimationDying_4
+      name: ApolakiAnimationTurn_4
       rect:
         serializedVersion: 2
         x: 256
@@ -340,14 +289,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 5860cdeb6c50d01d0800000000000000
-      internalID: -3383041393921620347
+      spriteID: cc36727f99a95a9c0800000000000000
+      internalID: -3916554314861550644
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: BathalaAnimationDying_5
+      name: ApolakiAnimationTurn_5
       rect:
         serializedVersion: 2
         x: 320
@@ -362,14 +311,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 61b7af2dc0cf71210800000000000000
-      internalID: 1303787749156485910
+      spriteID: c696e1cad305f9df0800000000000000
+      internalID: -171330035005888148
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: BathalaAnimationDying_6
+      name: ApolakiAnimationTurn_6
       rect:
         serializedVersion: 2
         x: 384
@@ -384,14 +333,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 2b27a9dda0ed11520800000000000000
-      internalID: 2671160192256340658
+      spriteID: 1c67c890e84f5a8b0800000000000000
+      internalID: -5141434508690819391
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: BathalaAnimationDying_7
+      name: ApolakiAnimationTurn_7
       rect:
         serializedVersion: 2
         x: 448
@@ -406,14 +355,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: e37aa071f893d0f70800000000000000
-      internalID: 9155036904243767102
+      spriteID: 7a0c67611eb4b6750800000000000000
+      internalID: 6299211933924376743
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: BathalaAnimationDying_8
+      name: ApolakiAnimationTurn_8
       rect:
         serializedVersion: 2
         x: 512
@@ -428,14 +377,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 6db45caced1927f20800000000000000
-      internalID: 3418955453198322646
+      spriteID: be9551cb18692a560800000000000000
+      internalID: 7323581428008311275
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: BathalaAnimationDying_9
+      name: ApolakiAnimationTurn_9
       rect:
         serializedVersion: 2
         x: 576
@@ -450,14 +399,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 7e8f203e8ed5c71c0800000000000000
-      internalID: -4504622272454919961
+      spriteID: 1db5b6c112e7ed6d0800000000000000
+      internalID: -2963792824087389231
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: BathalaAnimationDying_10
+      name: ApolakiAnimationTurn_10
       rect:
         serializedVersion: 2
         x: 640
@@ -472,14 +421,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 98d1498034fc64430800000000000000
-      internalID: 3766926025155681673
+      spriteID: ace26711de4c50d60800000000000000
+      internalID: 7855901647496949450
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: BathalaAnimationDying_11
+      name: ApolakiAnimationTurn_11
       rect:
         serializedVersion: 2
         x: 704
@@ -494,14 +443,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 9ead51364f0e56410800000000000000
-      internalID: 1469828193645353705
+      spriteID: c6dc1e5391b235ce0800000000000000
+      internalID: -1417742070413406868
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: BathalaAnimationDying_12
+      name: ApolakiAnimationTurn_12
       rect:
         serializedVersion: 2
         x: 768
@@ -516,14 +465,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 564ae4ca2799af760800000000000000
-      internalID: 7492469647880397925
+      spriteID: 7fed09335ad0ad590800000000000000
+      internalID: -7648786013949468937
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: BathalaAnimationDying_13
+      name: ApolakiAnimationTurn_13
       rect:
         serializedVersion: 2
         x: 832
@@ -538,14 +487,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 924e723b8bc3a6230800000000000000
-      internalID: 3632782813405111337
+      spriteID: a64099d6b5fb980d0800000000000000
+      internalID: -3419992042609507222
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: BathalaAnimationDying_14
+      name: ApolakiAnimationTurn_14
       rect:
         serializedVersion: 2
         x: 896
@@ -560,14 +509,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 75499933af8225080800000000000000
-      internalID: -9200246033691863977
+      spriteID: 11efbd1a3e6ed5390800000000000000
+      internalID: -7827846711952540143
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: BathalaAnimationDying_15
+      name: ApolakiAnimationTurn_15
       rect:
         serializedVersion: 2
         x: 960
@@ -582,14 +531,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: cc906ad4849d769d0800000000000000
-      internalID: -2781015340314392116
+      spriteID: 105b0275adb809ec0800000000000000
+      internalID: -3562193535369169663
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: BathalaAnimationDying_16
+      name: ApolakiAnimationTurn_16
       rect:
         serializedVersion: 2
         x: 1024
@@ -604,14 +553,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 9b5eedd5607655490800000000000000
-      internalID: -7758181506033457735
+      spriteID: aaed5a71c2be0d710800000000000000
+      internalID: 1716130032635993770
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: BathalaAnimationDying_17
+      name: ApolakiAnimationTurn_17
       rect:
         serializedVersion: 2
         x: 1088
@@ -626,14 +575,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 75b404e6d95b51fa0800000000000000
-      internalID: -5830554454797038761
+      spriteID: 4f4d7a633a5601fc0800000000000000
+      internalID: -3526206756560055052
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: BathalaAnimationDying_18
+      name: ApolakiAnimationTurn_18
       rect:
         serializedVersion: 2
         x: 1152
@@ -648,14 +597,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: ad8431037ffa9f170800000000000000
-      internalID: 8212788871685163226
+      spriteID: 46386cff8d71a9bd0800000000000000
+      internalID: -2622757612218317980
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: BathalaAnimationDying_19
+      name: ApolakiAnimationTurn_19
       rect:
         serializedVersion: 2
         x: 1216
@@ -670,14 +619,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 176f684d5befcece0800000000000000
-      internalID: -1374443729346693519
+      spriteID: bf789e815a6962180800000000000000
+      internalID: -9140452757870114821
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: BathalaAnimationDying_20
+      name: ApolakiAnimationTurn_20
       rect:
         serializedVersion: 2
         x: 1280
@@ -692,140 +641,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 8a7a52c743f9589d0800000000000000
-      internalID: -2772634947806713944
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: BathalaAnimationDying_21
-      rect:
-        serializedVersion: 2
-        x: 1344
-        y: 0
-        width: 64
-        height: 96
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: ea051c3368ceba290800000000000000
-      internalID: -7877943062016470866
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: BathalaAnimationDying_22
-      rect:
-        serializedVersion: 2
-        x: 1408
-        y: 0
-        width: 64
-        height: 96
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: aa13d8e2a8fd96930800000000000000
-      internalID: 4137083517295997354
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: BathalaAnimationDying_23
-      rect:
-        serializedVersion: 2
-        x: 1472
-        y: 0
-        width: 64
-        height: 96
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: de0bbb3553816d5d0800000000000000
-      internalID: -3038214281297678099
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: BathalaAnimationDying_24
-      rect:
-        serializedVersion: 2
-        x: 1536
-        y: 0
-        width: 64
-        height: 96
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: e8006bccadadd2900800000000000000
-      internalID: 661425353565536398
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: BathalaAnimationDying_25
-      rect:
-        serializedVersion: 2
-        x: 1600
-        y: 0
-        width: 64
-        height: 96
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: baa4d78f217b7b900800000000000000
-      internalID: 700229559185656491
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: BathalaAnimationDying_26
-      rect:
-        serializedVersion: 2
-        x: 1664
-        y: 0
-        width: 64
-        height: 96
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: b209f6a857a04fbe0800000000000000
-      internalID: -1444518080529067989
+      spriteID: 299636e38e7370c70800000000000000
+      internalID: 8937173456158681490
       vertices: []
       indices: 
       edges: []
@@ -834,7 +651,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: fdb00d6996008dd4b8256631cab5d752
+    spriteID: 32ddea452300df14da8a04737f7f1f20
     internalID: 0
     vertices: []
     indices: 
@@ -846,33 +663,27 @@ TextureImporter:
       - key: SpriteEditor.SliceSettings
         value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":64.0,"y":96.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":1,"keepEmptyRects":false,"isAlternate":false}'
     nameFileIdTable:
-      BathalaAnimationDying_0: 4716987310220574672
-      BathalaAnimationDying_1: -1430426440356267187
-      BathalaAnimationDying_10: 3766926025155681673
-      BathalaAnimationDying_11: 1469828193645353705
-      BathalaAnimationDying_12: 7492469647880397925
-      BathalaAnimationDying_13: 3632782813405111337
-      BathalaAnimationDying_14: -9200246033691863977
-      BathalaAnimationDying_15: -2781015340314392116
-      BathalaAnimationDying_16: -7758181506033457735
-      BathalaAnimationDying_17: -5830554454797038761
-      BathalaAnimationDying_18: 8212788871685163226
-      BathalaAnimationDying_19: -1374443729346693519
-      BathalaAnimationDying_2: -1662037393352008627
-      BathalaAnimationDying_20: -2772634947806713944
-      BathalaAnimationDying_21: -7877943062016470866
-      BathalaAnimationDying_22: 4137083517295997354
-      BathalaAnimationDying_23: -3038214281297678099
-      BathalaAnimationDying_24: 661425353565536398
-      BathalaAnimationDying_25: 700229559185656491
-      BathalaAnimationDying_26: -1444518080529067989
-      BathalaAnimationDying_3: 6835935830211058112
-      BathalaAnimationDying_4: -3383041393921620347
-      BathalaAnimationDying_5: 1303787749156485910
-      BathalaAnimationDying_6: 2671160192256340658
-      BathalaAnimationDying_7: 9155036904243767102
-      BathalaAnimationDying_8: 3418955453198322646
-      BathalaAnimationDying_9: -4504622272454919961
+      ApolakiAnimationTurn_0: -9027731130655959887
+      ApolakiAnimationTurn_1: 2034615935180221581
+      ApolakiAnimationTurn_10: 7855901647496949450
+      ApolakiAnimationTurn_11: -1417742070413406868
+      ApolakiAnimationTurn_12: -7648786013949468937
+      ApolakiAnimationTurn_13: -3419992042609507222
+      ApolakiAnimationTurn_14: -7827846711952540143
+      ApolakiAnimationTurn_15: -3562193535369169663
+      ApolakiAnimationTurn_16: 1716130032635993770
+      ApolakiAnimationTurn_17: -3526206756560055052
+      ApolakiAnimationTurn_18: -2622757612218317980
+      ApolakiAnimationTurn_19: -9140452757870114821
+      ApolakiAnimationTurn_2: -5423554244172098060
+      ApolakiAnimationTurn_20: 8937173456158681490
+      ApolakiAnimationTurn_3: -3848675643214329148
+      ApolakiAnimationTurn_4: -3916554314861550644
+      ApolakiAnimationTurn_5: -171330035005888148
+      ApolakiAnimationTurn_6: -5141434508690819391
+      ApolakiAnimationTurn_7: 6299211933924376743
+      ApolakiAnimationTurn_8: 7323581428008311275
+      ApolakiAnimationTurn_9: -2963792824087389231
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

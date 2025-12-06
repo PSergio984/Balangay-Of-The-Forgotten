@@ -1357,10 +1357,10 @@ Camera:
   m_LensShift: {x: 0, y: 0}
   m_NormalizedViewPortRect:
     serializedVersion: 2
-    x: -0.33333334
+    x: 0
     y: 0
     width: 1
-    height: 0.44444445
+    height: 1
   near clip plane: 0.3
   far clip plane: 1000
   field of view: 34
@@ -3090,6 +3090,78 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::HandView
   splineContainer: {fileID: 1451194846}
   cardSpacingDivisor: 7
+  useCurveBasedPositioning: 1
+  positioningCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 2
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 0.5
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: -2
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  positioningInfluence: 0.3
+  rotationCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: -2
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 0.5
+      value: 0
+      inSlope: -2
+      outSlope: -2
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: -1
+      inSlope: -2
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  rotationInfluence: 15
+  baseYPosition: -2.5
+  handWidth: 4
+  maxCardsBeforeCompression: 7
 --- !u!1 &1389449502
 GameObject:
   m_ObjectHideFlags: 0
@@ -3439,20 +3511,20 @@ MonoBehaviour:
       TangentIn:
         x: -0
         y: -0
-        z: -1.0457863
+        z: -1.0455811
       TangentOut:
         x: 0
         y: 0
-        z: 1.0457863
+        z: 1.0455811
       Rotation:
         value:
-          x: -0.61213624
-          y: 0.35396218
-          z: -0.3539616
-          w: 0.61213654
+          x: -0.61207587
+          y: 0.35406655
+          z: -0.35406598
+          w: 0.61207616
     - Position:
         x: 0.1651994
-        y: 1.0041142
+        y: 1
         z: 0
       TangentIn:
         x: 0
@@ -3464,10 +3536,10 @@ MonoBehaviour:
         z: 7.712903
       Rotation:
         value:
-          x: 0.4993394
+          x: 0.49933943
           y: -0.5006599
-          z: 0.5006726
-          w: -0.49932644
+          z: 0.5006725
+          w: -0.49932638
     - Position:
         x: 8.898545
         y: -4.212727
@@ -3475,17 +3547,17 @@ MonoBehaviour:
       TangentIn:
         x: -0
         y: -0
-        z: -1.0172844
+        z: -1.0170735
       TangentOut:
         x: 0
         y: 0
-        z: 1.0172844
+        z: 1.0170735
       Rotation:
         value:
-          x: -0.34899122
-          y: 0.6149838
-          z: -0.6149838
-          w: 0.34899136
+          x: -0.34909803
+          y: 0.61492324
+          z: -0.6149232
+          w: 0.34909815
     m_MetaData:
     - Mode: 0
       Tension: 0.5

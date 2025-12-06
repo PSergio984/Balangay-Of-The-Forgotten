@@ -1,148 +1,64 @@
 fileFormatVersion: 2
-guid: 517f78f36b6a44d428afbdbf415d9145
+guid: 16c4c185b91c3cf47a7ae5fce205500f
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -7221812534086333437
-    second: BathalaAnimationTurn_0
+      213: -7207853451599486582
+    second: MayariAnimationTurn_0
   - first:
-      213: 5737854914276476144
-    second: BathalaAnimationTurn_1
+      213: -913154068778451570
+    second: MayariAnimationTurn_1
   - first:
-      213: -5633007334776193715
-    second: BathalaAnimationTurn_2
+      213: 8222127147036437526
+    second: MayariAnimationTurn_2
   - first:
-      213: -4755842693693923809
-    second: BathalaAnimationTurn_3
+      213: 8674486708751743800
+    second: MayariAnimationTurn_3
   - first:
-      213: -5249370545782896157
-    second: BathalaAnimationTurn_4
+      213: -8737850495427514387
+    second: MayariAnimationTurn_4
   - first:
-      213: -6415897427026000771
-    second: BathalaAnimationTurn_5
+      213: -4202995768774559801
+    second: MayariAnimationTurn_5
   - first:
-      213: 1490853402649892121
-    second: BathalaAnimationTurn_6
+      213: -7915341730269299834
+    second: MayariAnimationTurn_6
   - first:
-      213: 8787011478958000693
-    second: BathalaAnimationTurn_7
+      213: -798205905523106914
+    second: MayariAnimationTurn_7
   - first:
-      213: -9079239958735610086
-    second: BathalaAnimationTurn_8
+      213: 3984926157506455906
+    second: MayariAnimationTurn_8
   - first:
-      213: -7879286083456141338
-    second: BathalaAnimationTurn_9
+      213: 2098358813362852566
+    second: MayariAnimationTurn_9
   - first:
-      213: 3190915116312209409
-    second: BathalaAnimationTurn_10
+      213: 3303334302141571413
+    second: MayariAnimationTurn_10
   - first:
-      213: -2425986376224385595
-    second: BathalaAnimationTurn_11
+      213: 840056011627223930
+    second: MayariAnimationTurn_11
   - first:
-      213: 8201265315979796175
-    second: BathalaAnimationTurn_12
+      213: -2445097346112304590
+    second: MayariAnimationTurn_12
   - first:
-      213: -9041104125409384774
-    second: BathalaAnimationTurn_13
+      213: 415631682608842931
+    second: MayariAnimationTurn_13
   - first:
-      213: 8549772434654199388
-    second: BathalaAnimationTurn_14
+      213: -3859140295704162380
+    second: MayariAnimationTurn_14
   - first:
-      213: 8394171566554286062
-    second: BathalaAnimationTurn_15
+      213: 4731622365569386300
+    second: MayariAnimationTurn_15
   - first:
-      213: 3370817457755762232
-    second: BathalaAnimationTurn_16
+      213: -4918480251627198115
+    second: MayariAnimationTurn_16
   - first:
-      213: 3759066728148023309
-    second: BathalaAnimationTurn_17
+      213: -5097693320096909006
+    second: MayariAnimationTurn_17
   - first:
-      213: 258287921616273109
-    second: BathalaAnimationTurn_18
-  - first:
-      213: 1810778298498202728
-    second: BathalaAnimationTurn_19
-  - first:
-      213: -2989497074959154218
-    second: BathalaAnimationTurn_20
-  - first:
-      213: 4288656295281673588
-    second: BathalaAnimationTurn_21
-  - first:
-      213: -1060030465446835436
-    second: BathalaAnimationTurn_22
-  - first:
-      213: -4311674902138299131
-    second: BathalaAnimationTurn_23
-  - first:
-      213: -6144278756966662744
-    second: BathalaAnimationTurn_24
-  - first:
-      213: 4554381457723018556
-    second: BathalaAnimationTurn_25
-  - first:
-      213: -5460762316437927031
-    second: BathalaAnimationTurn_26
-  - first:
-      213: 7667483207638116419
-    second: BathalaAnimationTurn_27
-  - first:
-      213: 9005419275923053946
-    second: BathalaAnimationTurn_28
-  - first:
-      213: -4471768722114326756
-    second: BathalaAnimationTurn_29
-  - first:
-      213: 538659637042933115
-    second: BathalaAnimationTurn_30
-  - first:
-      213: 4215129474327511682
-    second: BathalaAnimationTurn_31
-  - first:
-      213: -5067223908110013628
-    second: BathalaAnimationTurn_32
-  - first:
-      213: -4548798040003000700
-    second: BathalaAnimationTurn_33
-  - first:
-      213: 4592100664418975574
-    second: BathalaAnimationTurn_34
-  - first:
-      213: -9199178965459189770
-    second: BathalaAnimationTurn_35
-  - first:
-      213: -8587429026114960416
-    second: BathalaAnimationTurn_36
-  - first:
-      213: -316106442114502443
-    second: BathalaAnimationTurn_37
-  - first:
-      213: -1074368572153068056
-    second: BathalaAnimationTurn_38
-  - first:
-      213: 51515930076022114
-    second: BathalaAnimationTurn_39
-  - first:
-      213: -8167819355467407198
-    second: BathalaAnimationTurn_40
-  - first:
-      213: 3565392259838151957
-    second: BathalaAnimationTurn_41
-  - first:
-      213: 3494063819247630422
-    second: BathalaAnimationTurn_42
-  - first:
-      213: 3507578197375239620
-    second: BathalaAnimationTurn_43
-  - first:
-      213: 1115371183796395609
-    second: BathalaAnimationTurn_44
-  - first:
-      213: -5470822065824701281
-    second: BathalaAnimationTurn_45
-  - first:
-      213: -7706253059103377677
-    second: BathalaAnimationTurn_46
+      213: 3906921225279514512
+    second: MayariAnimationTurn_18
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -264,7 +180,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: BathalaAnimationTurn_0
+      name: MayariAnimationTurn_0
       rect:
         serializedVersion: 2
         x: 0
@@ -279,14 +195,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 30c025753c7f6cb90800000000000000
-      internalID: -7221812534086333437
+      spriteID: a81e650897f88fb90800000000000000
+      internalID: -7207853451599486582
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: BathalaAnimationTurn_1
+      name: MayariAnimationTurn_1
       rect:
         serializedVersion: 2
         x: 64
@@ -301,14 +217,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 0f4cd22e4a4f0af40800000000000000
-      internalID: 5737854914276476144
+      spriteID: e8df1496633d353f0800000000000000
+      internalID: -913154068778451570
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: BathalaAnimationTurn_2
+      name: MayariAnimationTurn_2
       rect:
         serializedVersion: 2
         x: 128
@@ -323,14 +239,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: d4dbe798ca983d1b0800000000000000
-      internalID: -5633007334776193715
+      spriteID: 61ce339d31dda1270800000000000000
+      internalID: 8222127147036437526
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: BathalaAnimationTurn_3
+      name: MayariAnimationTurn_3
       rect:
         serializedVersion: 2
         x: 192
@@ -345,14 +261,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: f1e9cb2844adffdb0800000000000000
-      internalID: -4755842693693923809
+      spriteID: 83bbef3c3b7f16870800000000000000
+      internalID: 8674486708751743800
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: BathalaAnimationTurn_4
+      name: MayariAnimationTurn_4
       rect:
         serializedVersion: 2
         x: 256
@@ -367,14 +283,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 3e9463c0d4d7627b0800000000000000
-      internalID: -5249370545782896157
+      spriteID: def629ff44becb680800000000000000
+      internalID: -8737850495427514387
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: BathalaAnimationTurn_5
+      name: MayariAnimationTurn_5
       rect:
         serializedVersion: 2
         x: 320
@@ -389,14 +305,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: d74c5c2784726f6a0800000000000000
-      internalID: -6415897427026000771
+      spriteID: 7c7f8b1ed95fba5c0800000000000000
+      internalID: -4202995768774559801
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: BathalaAnimationTurn_6
+      name: MayariAnimationTurn_6
       rect:
         serializedVersion: 2
         x: 384
@@ -411,14 +327,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 9151125554390b410800000000000000
-      internalID: 1490853402649892121
+      spriteID: 68bf87332ae072290800000000000000
+      internalID: -7915341730269299834
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: BathalaAnimationTurn_7
+      name: MayariAnimationTurn_7
       rect:
         serializedVersion: 2
         x: 448
@@ -433,14 +349,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 53a4290726cb1f970800000000000000
-      internalID: 8787011478958000693
+      spriteID: e9b1daf35f33ce4f0800000000000000
+      internalID: -798205905523106914
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: BathalaAnimationTurn_8
+      name: MayariAnimationTurn_8
       rect:
         serializedVersion: 2
         x: 512
@@ -455,14 +371,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: a1f18058c5f000280800000000000000
-      internalID: -9079239958735610086
+      spriteID: 269a55a2a3d4d4730800000000000000
+      internalID: 3984926157506455906
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: BathalaAnimationTurn_9
+      name: MayariAnimationTurn_9
       rect:
         serializedVersion: 2
         x: 576
@@ -477,14 +393,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 6e7fae7ad0727a290800000000000000
-      internalID: -7879286083456141338
+      spriteID: 6d29dc1293ede1d10800000000000000
+      internalID: 2098358813362852566
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: BathalaAnimationTurn_10
+      name: MayariAnimationTurn_10
       rect:
         serializedVersion: 2
         x: 640
@@ -499,14 +415,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 108a6306468684c20800000000000000
-      internalID: 3190915116312209409
+      spriteID: 551e285cb0dc7dd20800000000000000
+      internalID: 3303334302141571413
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: BathalaAnimationTurn_11
+      name: MayariAnimationTurn_11
       rect:
         serializedVersion: 2
         x: 704
@@ -521,14 +437,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 5c555378e3a255ed0800000000000000
-      internalID: -2425986376224385595
+      spriteID: a7bd874ed7a78ab00800000000000000
+      internalID: 840056011627223930
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: BathalaAnimationTurn_12
+      name: MayariAnimationTurn_12
       rect:
         serializedVersion: 2
         x: 768
@@ -543,14 +459,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: fce15bb4a5fb0d170800000000000000
-      internalID: 8201265315979796175
+      spriteID: 23ac9bb1be4411ed0800000000000000
+      internalID: -2445097346112304590
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: BathalaAnimationTurn_13
+      name: MayariAnimationTurn_13
       rect:
         serializedVersion: 2
         x: 832
@@ -565,8 +481,96 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: ab6a7a323bb878280800000000000000
-      internalID: -9041104125409384774
+      spriteID: 3b84c4f20de94c500800000000000000
+      internalID: 415631682608842931
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MayariAnimationTurn_14
+      rect:
+        serializedVersion: 2
+        x: 896
+        y: 0
+        width: 64
+        height: 96
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4bf48200954917ac0800000000000000
+      internalID: -3859140295704162380
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MayariAnimationTurn_15
+      rect:
+        serializedVersion: 2
+        x: 960
+        y: 0
+        width: 64
+        height: 96
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c378e07e8791aa140800000000000000
+      internalID: 4731622365569386300
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MayariAnimationTurn_16
+      rect:
+        serializedVersion: 2
+        x: 1024
+        y: 0
+        width: 64
+        height: 96
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d59acf6354c0ebbb0800000000000000
+      internalID: -4918480251627198115
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MayariAnimationTurn_17
+      rect:
+        serializedVersion: 2
+        x: 1088
+        y: 0
+        width: 64
+        height: 96
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 239fdb12fea5149b0800000000000000
+      internalID: -5097693320096909006
       vertices: []
       indices: 
       edges: []
@@ -575,7 +579,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: d0daa49a855f453408df8338414ffac7
+    spriteID: 5714a62203679394a9fdbf186e70ca25
     internalID: 0
     vertices: []
     indices: 
@@ -587,20 +591,24 @@ TextureImporter:
       - key: SpriteEditor.SliceSettings
         value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":64.0,"y":96.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":1,"keepEmptyRects":false,"isAlternate":false}'
     nameFileIdTable:
-      BathalaAnimationTurn_0: -7221812534086333437
-      BathalaAnimationTurn_1: 5737854914276476144
-      BathalaAnimationTurn_10: 3190915116312209409
-      BathalaAnimationTurn_11: -2425986376224385595
-      BathalaAnimationTurn_12: 8201265315979796175
-      BathalaAnimationTurn_13: -9041104125409384774
-      BathalaAnimationTurn_2: -5633007334776193715
-      BathalaAnimationTurn_3: -4755842693693923809
-      BathalaAnimationTurn_4: -5249370545782896157
-      BathalaAnimationTurn_5: -6415897427026000771
-      BathalaAnimationTurn_6: 1490853402649892121
-      BathalaAnimationTurn_7: 8787011478958000693
-      BathalaAnimationTurn_8: -9079239958735610086
-      BathalaAnimationTurn_9: -7879286083456141338
+      MayariAnimationTurn_0: -7207853451599486582
+      MayariAnimationTurn_1: -913154068778451570
+      MayariAnimationTurn_10: 3303334302141571413
+      MayariAnimationTurn_11: 840056011627223930
+      MayariAnimationTurn_12: -2445097346112304590
+      MayariAnimationTurn_13: 415631682608842931
+      MayariAnimationTurn_14: -3859140295704162380
+      MayariAnimationTurn_15: 4731622365569386300
+      MayariAnimationTurn_16: -4918480251627198115
+      MayariAnimationTurn_17: -5097693320096909006
+      MayariAnimationTurn_2: 8222127147036437526
+      MayariAnimationTurn_3: 8674486708751743800
+      MayariAnimationTurn_4: -8737850495427514387
+      MayariAnimationTurn_5: -4202995768774559801
+      MayariAnimationTurn_6: -7915341730269299834
+      MayariAnimationTurn_7: -798205905523106914
+      MayariAnimationTurn_8: 3984926157506455906
+      MayariAnimationTurn_9: 2098358813362852566
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
