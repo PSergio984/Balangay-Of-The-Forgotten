@@ -282,6 +282,7 @@ public class EnemySystem : Singleton<EnemySystem>
 
             // Show the move name as a popup above the enemy
             string moveName = !string.IsNullOrEmpty(move.Description) ? move.Description : "Unknown Move";
+            Debug.Log($"[EnemySystem] {enemy.name} selected move: '{moveName}' (Move has ManualTargetEffect: {move.ManualTargetEffect != null}, OtherEffects count: {move.OtherEffects?.Count ?? 0})");
             ShowMoveNamePopup(enemy, moveName);
 
             // Start tracking hit targets for this move sequence
@@ -292,7 +293,18 @@ public class EnemySystem : Singleton<EnemySystem>
             {
                 // For now, target a random hero (could be improved with AI logic)
                 var heroTargets = HeroSystem.Instance.HeroViews;
+                if (heroTargets == null || heroTargets.Count == 0)
+                {
+                    Debug.LogWarning($"[EnemySystem] {enemy.name} tried to use move '{moveName}' but no heroes are available to target!");
+                    continue;
+                }
                 var target = heroTargets[Random.Range(0, heroTargets.Count)];
+                if (target == null)
+                {
+                    Debug.LogWarning($"[EnemySystem] {enemy.name} selected null target for move '{moveName}'!");
+                    continue;
+                }
+                Debug.Log($"[EnemySystem] {enemy.name} using move '{moveName}' (ManualTargetEffect) targeting {target.name}");
                 PerformEffectGA performEffectGA = new(move.ManualTargetEffect, new List<CombatantView> { target });
                 ActionSystem.Instance.AddReaction(performEffectGA);
             }
@@ -302,16 +314,60 @@ public class EnemySystem : Singleton<EnemySystem>
             {
                 foreach (var effectWrapper in move.OtherEffects)
                 {
+                    // Defensive check: Ensure effectWrapper is valid
+                    if (effectWrapper == null)
+                    {
+                        Debug.LogWarning($"[EnemySystem] {enemy.name} move '{moveName}' has null effectWrapper in OtherEffects!");
+                        continue;
+                    }
+
+                    // Defensive check: Ensure effects is not null
+                    if (effectWrapper.effects == null)
+                    {
+                        Debug.LogWarning($"[EnemySystem] {enemy.name} move '{moveName}' has null effects in effectWrapper!");
+                        continue;
+                    }
+
+                    // Defensive check: Ensure targetMode is not null
+                    if (effectWrapper.targetMode == null)
+                    {
+                        Debug.LogWarning($"[EnemySystem] {enemy.name} move '{moveName}' has null targetMode in effectWrapper!");
+                        continue;
+                    }
+
                     // Set caster on target mode if it's TargetsHitByPreviousEffectTM
                     if (effectWrapper.targetMode is TargetsHitByPreviousEffectTM hitTargetMode)
                     {
                         hitTargetMode.SetCaster(enemy);
                     }
 
-                    List<CombatantView> targets = effectWrapper.targetMode.GetTargets();
+                    List<CombatantView> targets = null;
+                    try
+                    {
+                        targets = effectWrapper.targetMode.GetTargets();
+                    }
+                    catch (System.Exception ex)
+                    {
+                        Debug.LogError($"[EnemySystem] Exception getting targets for {enemy.name} move '{moveName}': {ex.Message}\n{ex.StackTrace}");
+                        continue;
+                    }
+
+                    if (targets == null)
+                    {
+                        Debug.LogWarning($"[EnemySystem] {enemy.name} move '{moveName}' targetMode returned null targets list!");
+                        targets = new List<CombatantView>();
+                    }
+
+                    Debug.Log($"[EnemySystem] {enemy.name} using move '{moveName}' (OtherEffect: {effectWrapper.effects.GetType().Name}) targeting {targets.Count} target(s)");
                     PerformEffectGA performEffectGA = new(effectWrapper.effects, targets);
                     ActionSystem.Instance.AddReaction(performEffectGA);
                 }
+            }
+
+            // Log if move has no effects configured
+            if (move.ManualTargetEffect == null && (move.OtherEffects == null || move.OtherEffects.Count == 0))
+            {
+                Debug.LogWarning($"[EnemySystem] {enemy.name} move '{moveName}' has no effects configured! Move will do nothing.");
             }
 
         }

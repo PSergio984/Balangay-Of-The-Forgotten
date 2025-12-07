@@ -21,8 +21,7 @@ MonoBehaviour:
   <AnimatorOverride>k__BackingField: {fileID: 22100000, guid: e37073d5ae1dd3049986a696c669fe0f, type: 2}
   <Moveset>k__BackingField:
   - {fileID: 11400000, guid: abaa3b2c8fadd0040a92239afd42fd4f, type: 2}
-  - {fileID: 11400000, guid: abaa3b2c8fadd0040a92239afd42fd4f, type: 2}
-  - {fileID: 11400000, guid: abaa3b2c8fadd0040a92239afd42fd4f, type: 2}
-  - {fileID: 11400000, guid: abaa3b2c8fadd0040a92239afd42fd4f, type: 2}
-  - {fileID: 11400000, guid: abaa3b2c8fadd0040a92239afd42fd4f, type: 2}
+  - {fileID: 11400000, guid: 2455795bcb626fb4c9a1822a7cbc01f4, type: 2}
+  - {fileID: 11400000, guid: c54c22bd650181d4ebcfac6e2fc057ad, type: 2}
+  - {fileID: 11400000, guid: 94fbc2768fc9584418a67a4fa7cfba75, type: 2}
   CombatMusic: {fileID: 11400000, guid: fc392867c45deb64b9027c5165526b5e, type: 2}
