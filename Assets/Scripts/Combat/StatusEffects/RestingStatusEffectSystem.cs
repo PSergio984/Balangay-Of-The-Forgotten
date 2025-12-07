@@ -100,12 +100,27 @@ public class RestingStatusEffectSystem : MonoBehaviour
         
         float multiplier = chargingMultipliers[action.Caster];
         
-        // Apply the multiplier to the damage
-        float originalDamage = action.Amount;
-        float boostedDamage = originalDamage * multiplier;
-        action.Amount = boostedDamage;
+        // Apply the multiplier to the damage (handle both uniform and per-target)
+        bool hasPerTargetDamages = action.PerTargetDamages != null && 
+                                   action.PerTargetDamages.Count == action.Targets.Count;
         
-        Debug.Log($"[RestingSystem] CHARGING bonus! {action.Caster.name}'s attack boosted from {originalDamage:F1} to {boostedDamage:F1} ({multiplier}x)");
+        if (hasPerTargetDamages)
+        {
+            // Modify per-target damages
+            for (int i = 0; i < action.PerTargetDamages.Count; i++)
+            {
+                float originalDamage = action.PerTargetDamages[i];
+                action.PerTargetDamages[i] = originalDamage * multiplier;
+            }
+            Debug.Log($"[RestingSystem] CHARGING bonus! {action.Caster.name}'s attack boosted by {multiplier}x (per-target damage)");
+        }
+        else
+        {
+            // Modify uniform damage
+            float originalDamage = action.Amount;
+            action.Amount = originalDamage * multiplier;
+            Debug.Log($"[RestingSystem] CHARGING bonus! {action.Caster.name}'s attack boosted from {originalDamage:F1} to {action.Amount:F1} ({multiplier}x)");
+        }
         
         // Consume the charging bonus and ensure cleanup
         RemoveChargingState(action.Caster);
@@ -144,10 +159,69 @@ public class RestingStatusEffectSystem : MonoBehaviour
     }
 
     /// <summary>
+    /// Reduces RESTING and CHARGING duration by 1 turn for a combatant
+    /// Called by StatusEffectTickSystem at the end of each turn
+    /// </summary>
+    /// <param name="combatant">The combatant whose RESTING/CHARGING should tick</param>
+    public static void TickResting(CombatantView combatant)
+    {
+        if (combatant == null) return;
+        
+        // Clean up destroyed combatants periodically
+        CleanupDestroyedCombatants();
+        
+        // Tick RESTING duration
+        int restingStacks = combatant.GetStatusEffectStacks(StatusEffectType.RESTING);
+        if (restingStacks > 0)
+        {
+            int remainingTurns = restingStacks - 1;
+            if (remainingTurns <= 0)
+            {
+                combatant.RemoveStatusEffect(StatusEffectType.RESTING, restingStacks);
+                Debug.Log($"[RestingSystem] {combatant.name}'s RESTING expired");
+            }
+            else
+            {
+                // Update stacks to match remaining turns
+                combatant.RemoveStatusEffect(StatusEffectType.RESTING, restingStacks);
+                combatant.AddStatusEffect(StatusEffectType.RESTING, remainingTurns);
+                Debug.Log($"[RestingSystem] {combatant.name} RESTING: {restingStacks} → {remainingTurns} turns remaining");
+            }
+        }
+        
+        // Tick CHARGING duration (if not consumed by damage)
+        int chargingStacks = combatant.GetStatusEffectStacks(StatusEffectType.CHARGING);
+        if (chargingStacks > 0)
+        {
+            int remainingTurns = chargingStacks - 1;
+            if (remainingTurns <= 0)
+            {
+                // CHARGING expired without being used - clean up
+                combatant.RemoveStatusEffect(StatusEffectType.CHARGING, chargingStacks);
+                if (chargingMultipliers.ContainsKey(combatant))
+                {
+                    chargingMultipliers.Remove(combatant);
+                }
+                Debug.Log($"[RestingSystem] {combatant.name}'s CHARGING expired without being used");
+            }
+            else
+            {
+                // Update stacks to match remaining turns
+                combatant.RemoveStatusEffect(StatusEffectType.CHARGING, chargingStacks);
+                combatant.AddStatusEffect(StatusEffectType.CHARGING, remainingTurns);
+                Debug.Log($"[RestingSystem] {combatant.name} CHARGING: {chargingStacks} → {remainingTurns} turns remaining");
+            }
+        }
+    }
+
+    /// <summary>
     /// Decrements RESTING stacks at the end of a skipped turn
     /// Should be called after the turn is skipped
     /// </summary>
     /// <param name="combatant">The combatant whose resting should decrement</param>
+    /// <remarks>
+    /// DEPRECATED: Use TickResting() instead, which is called by StatusEffectTickSystem
+    /// </remarks>
     public static void DecrementResting(CombatantView combatant)
     {
         // Clean up destroyed combatants periodically (once per turn is sufficient)

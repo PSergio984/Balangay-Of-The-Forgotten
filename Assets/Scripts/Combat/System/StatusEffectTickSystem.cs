@@ -132,6 +132,13 @@ public class StatusEffectTickSystem : Singleton<StatusEffectTickSystem>
 				DefenseIgnoreSystem.TickDefenseIgnore(combatant);
 			}
 			
+			// RESTING/CHARGING: tick duration (handled by RestingStatusEffectSystem)
+			RestingStatusEffectSystem restingSystem = FindObjectOfType<RestingStatusEffectSystem>();
+			if (restingSystem != null)
+			{
+				RestingStatusEffectSystem.TickResting(combatant);
+			}
+			
 			// Invulnerable: reduce stack by 1
 			int invulStacks = combatant.GetStatusEffectStacks(StatusEffectType.INVULNERABLE);
 			if (invulStacks > 0)

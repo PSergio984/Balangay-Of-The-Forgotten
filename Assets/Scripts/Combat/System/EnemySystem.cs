@@ -258,6 +258,14 @@ public class EnemySystem : Singleton<EnemySystem>
             if (enemy.CurrentHealth <= 0)
                 continue;
 
+            // Check if enemy should skip turn (RESTING or CHARGING)
+            if (RestingStatusEffectSystem.ShouldSkipTurn(enemy))
+            {
+                Debug.Log($"[EnemySystem] {enemy.name} is RESTING/CHARGING, skipping turn");
+                // Decrement will be handled by StatusEffectTickSystem
+                continue;
+            }
+
             // Get the moveset from EnemyData
             var moveset = enemy.Data?.Moveset;
             if (moveset == null || moveset.Count == 0)

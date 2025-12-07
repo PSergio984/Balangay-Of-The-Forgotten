@@ -15,28 +15,25 @@ MonoBehaviour:
   <Description>k__BackingField: Shadow Dive
   <Information>k__BackingField: "\u2022\tBakunawa will recharge its inner magical
     power, skip 1 turn.\r\n\u2022\tNext attack deals double damage.\r\n"
+  <VFXData>k__BackingField: {fileID: 0}
   <ManualTargetEffect>k__BackingField:
     rid: -2
   <OtherEffects>k__BackingField:
   - <targetMode>k__BackingField:
-      rid: 1437264605691248871
+      rid: 5040687042380169456
     <effects>k__BackingField:
-      rid: 1437264605691248861
+      rid: 5040687042380169457
   references:
     version: 2
     RefIds:
     - rid: -2
       type: {class: , ns: , asm: }
-    - rid: 1437264605691248861
-      type: {class: DealDamageEffect, ns: , asm: Assembly-CSharp}
-      data:
-        baseDamage: 50
-        damageAmplification: 1
-        accuracy: 1
-        critChance: 0
-        defenseIgnore: 0
-        AttackAmp: 1.5
-        MagicAmp: 0
-    - rid: 1437264605691248871
-      type: {class: RandomTargetTM, ns: , asm: Assembly-CSharp}
+    - rid: 5040687042380169456
+      type: {class: SelfEnemyTM, ns: , asm: Assembly-CSharp}
       data: 
+    - rid: 5040687042380169457
+      type: {class: SkipTurnEffect, ns: , asm: Assembly-CSharp}
+      data:
+        turnsToSkip: 1
+        isCharging: 1
+        chargingMultiplier: 2

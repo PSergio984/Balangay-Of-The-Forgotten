@@ -24,7 +24,7 @@ MonoBehaviour:
     <effects>k__BackingField:
       rid: 1437264605691248861
   - <targetMode>k__BackingField:
-      rid: 5040687038726930807
+      rid: 5040687042380169443
     <effects>k__BackingField:
       rid: 5040687038726930809
   references:
@@ -45,9 +45,6 @@ MonoBehaviour:
     - rid: 1437264605691248871
       type: {class: RandomTargetTM, ns: , asm: Assembly-CSharp}
       data: 
-    - rid: 5040687038726930807
-      type: {class: RandomTargetTM, ns: , asm: Assembly-CSharp}
-      data: 
     - rid: 5040687038726930809
       type: {class: HealEffect, ns: , asm: Assembly-CSharp}
       data:
@@ -55,3 +52,6 @@ MonoBehaviour:
         MagicAmp: 1
         percentHeal: 0
         selfHealPercent: 0
+    - rid: 5040687042380169443
+      type: {class: SelfEnemyTM, ns: , asm: Assembly-CSharp}
+      data: 
