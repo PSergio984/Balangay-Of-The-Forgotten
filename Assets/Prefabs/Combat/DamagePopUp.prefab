@@ -29,7 +29,7 @@ RectTransform:
   m_GameObject: {fileID: 4482271233331895285}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.075, y: 0.075, z: 0.075}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 0}
@@ -69,8 +69,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 9999
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 9c9fd3f72e8ce16449e3d6a637806a6c, type: 2}
-  m_sharedMaterial: {fileID: 4735949462366821319, guid: 9c9fd3f72e8ce16449e3d6a637806a6c, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 6c768b948183fc74cb98cc90082f6e3d, type: 2}
+  m_sharedMaterial: {fileID: 7288972926298314984, guid: 6c768b948183fc74cb98cc90082f6e3d, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -100,11 +100,12 @@ MonoBehaviour:
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 0
-  m_HorizontalAlignment: 1
-  m_VerticalAlignment: 1024
+  m_fontStyle: 1
+  m_HorizontalAlignment: 2
+  m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -156,6 +157,7 @@ MonoBehaviour:
   spawnOffsetX: 0.5
   spawnOffsetY: 1
   moveSpeed: 2
+  fadeOnlyDuration: 1.2
 --- !u!223 &7473214572983603267
 Canvas:
   m_ObjectHideFlags: 0

@@ -33,7 +33,7 @@ MonoBehaviour:
     - rid: -2
       type: {class: , ns: , asm: }
     - rid: 5040687012623679996
-      type: {class: NoTM, ns: , asm: Assembly-CSharp}
+      type: {class: HeroTM, ns: , asm: Assembly-CSharp}
       data: 
     - rid: 5040687012623679997
       type: {class: ApplyRageEffect, ns: , asm: Assembly-CSharp}

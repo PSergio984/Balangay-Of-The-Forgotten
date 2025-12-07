@@ -18,6 +18,8 @@ MonoBehaviour:
   <Art>k__BackingField: {fileID: 21300000, guid: 20a2a0db281e1024eb56131be735d4b7, type: 3}
   <BackgroundArt>k__BackingField: {fileID: 21300000, guid: ce42a0dd549148942802ec803be9fff3, type: 3}
   <RoleData>k__BackingField: {fileID: 11400000, guid: 22c12e1b910d4314f914ae5367dc7d2e, type: 2}
+  <Cooldown>k__BackingField: 1
+  <VFXData>k__BackingField: {fileID: 0}
   <ManualTargetEffect>k__BackingField:
     rid: -2
   <OtherEffects>k__BackingField:
@@ -37,6 +39,7 @@ MonoBehaviour:
       type: {class: DealDamageEffect, ns: , asm: Assembly-CSharp}
       data:
         baseDamage: 150
+        damageAmplification: 1
         accuracy: 1
         critChance: 0
         defenseIgnore: 0

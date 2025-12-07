@@ -264,12 +264,14 @@ public class CombatantAnimationController : MonoBehaviour
     /// <remarks>
     /// Call when character casts magic or special abilities.
     /// Differentiates magic from physical attacks visually.
+    /// Uses CrossFade to transition to Attack state (since Cast trigger doesn't exist).
     /// </remarks>
     public void PlayCast()
     {
         if (animator != null)
         {
-            animator.SetTrigger(CastHash);
+            // Use CrossFade to Attack state since Cast trigger doesn't exist in Animator Controller
+            animator.CrossFade("Attack", 0.1f, 0);
         }
     }
     

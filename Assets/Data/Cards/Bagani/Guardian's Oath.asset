@@ -20,11 +20,12 @@ MonoBehaviour:
   <BackgroundArt>k__BackingField: {fileID: 21300000, guid: 143f95eb116944d47b7e499395969022, type: 3}
   <RoleData>k__BackingField: {fileID: 11400000, guid: 8a873cc1966fdd641a8f8d3b47bd0288, type: 2}
   <Cooldown>k__BackingField: 4
+  <VFXData>k__BackingField: {fileID: 0}
   <ManualTargetEffect>k__BackingField:
     rid: -2
   <OtherEffects>k__BackingField:
   - <targetMode>k__BackingField:
-      rid: 5040687012623680000
+      rid: 5040687034078331148
     <effects>k__BackingField:
       rid: 5040687012623680001
   - <targetMode>k__BackingField:
@@ -36,9 +37,6 @@ MonoBehaviour:
     RefIds:
     - rid: -2
       type: {class: , ns: , asm: }
-    - rid: 5040687012623680000
-      type: {class: NoTM, ns: , asm: Assembly-CSharp}
-      data: 
     - rid: 5040687012623680001
       type: {class: SelfDamageEffect, ns: , asm: Assembly-CSharp}
       data:
@@ -56,5 +54,8 @@ MonoBehaviour:
         percentOfCasterCurrentHP: 0.25
         percentOfCasterMaxHP: 0
         duration: 2
-        canStack: 1
+        canStack: 0
         excludeCaster: 1
+    - rid: 5040687034078331148
+      type: {class: HeroTM, ns: , asm: Assembly-CSharp}
+      data: 

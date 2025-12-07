@@ -19,11 +19,12 @@ MonoBehaviour:
   <BackgroundArt>k__BackingField: {fileID: 21300000, guid: 5560364091e52464892d959bc35e5650, type: 3}
   <RoleData>k__BackingField: {fileID: 11400000, guid: a0daa321f3e42da4481eea6b7e5f4a54, type: 2}
   <Cooldown>k__BackingField: 3
+  <VFXData>k__BackingField: {fileID: 0}
   <ManualTargetEffect>k__BackingField:
     rid: -2
   <OtherEffects>k__BackingField:
   - <targetMode>k__BackingField:
-      rid: 5040687012623679962
+      rid: 5040687034078331146
     <effects>k__BackingField:
       rid: 5040687012623679963
   references:
@@ -31,12 +32,12 @@ MonoBehaviour:
     RefIds:
     - rid: -2
       type: {class: , ns: , asm: }
-    - rid: 5040687012623679962
-      type: {class: NoTM, ns: , asm: Assembly-CSharp}
-      data: 
     - rid: 5040687012623679963
       type: {class: RemoveDebuffEffect, ns: , asm: Assembly-CSharp}
       data:
         removeAllDebuffs: 1
         specificDebuff: 13
         includeCaster: 1
+    - rid: 5040687034078331146
+      type: {class: HeroTM, ns: , asm: Assembly-CSharp}
+      data: 

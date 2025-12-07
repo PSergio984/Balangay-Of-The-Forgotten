@@ -87,6 +87,11 @@ MonoBehaviour:
     m_NumColorKeys: 2
     m_NumAlphaKeys: 3
   fillHealth: {fileID: 0}
+  healthAnimDuration: 0.4
+  healthDecreaseEase: 15
+  healthIncreaseEase: 27
+  enableHealthPulse: 1
+  healthPulseScale: 1.2
 --- !u!65 &7659909115800132482
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -106,8 +111,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1.520591, y: 2.419262, z: 0.01}
-  m_Center: {x: -0.034578234, y: -0.042506464, z: 0}
+  m_Size: {x: 3.1390197, y: 2.419262, z: 0.01}
+  m_Center: {x: -0.8437914, y: -0.042506456, z: 0}
 --- !u!114 &6225066031905398916
 MonoBehaviour:
   m_ObjectHideFlags: 0

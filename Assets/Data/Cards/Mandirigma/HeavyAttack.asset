@@ -20,6 +20,7 @@ MonoBehaviour:
   <BackgroundArt>k__BackingField: {fileID: 21300000, guid: 4a639004020b7db49b5c72376628a912, type: 3}
   <RoleData>k__BackingField: {fileID: 11400000, guid: a0daa321f3e42da4481eea6b7e5f4a54, type: 2}
   <Cooldown>k__BackingField: 2
+  <VFXData>k__BackingField: {fileID: 0}
   <ManualTargetEffect>k__BackingField:
     rid: -2
   <OtherEffects>k__BackingField:
@@ -28,9 +29,9 @@ MonoBehaviour:
     <effects>k__BackingField:
       rid: 5040687012623679993
   - <targetMode>k__BackingField:
-      rid: 5040687012623679994
+      rid: 5040687034078331144
     <effects>k__BackingField:
-      rid: 5040687012623679995
+      rid: 5040687034078331145
   references:
     version: 2
     RefIds:
@@ -49,11 +50,11 @@ MonoBehaviour:
         defenseIgnore: 0
         AttackAmp: 3.34
         MagicAmp: 1
-    - rid: 5040687012623679994
+    - rid: 5040687034078331144
       type: {class: AllEnemiesTM, ns: , asm: Assembly-CSharp}
       data: 
-    - rid: 5040687012623679995
-      type: {class: AddStatusEffectEffect, ns: , asm: Assembly-CSharp}
+    - rid: 5040687034078331145
+      type: {class: ApplyDefenseDownEffect, ns: , asm: Assembly-CSharp}
       data:
-        statusEffectType: 15
-        stackCount: 1
+        defensePercentage: 10
+        duration: 1

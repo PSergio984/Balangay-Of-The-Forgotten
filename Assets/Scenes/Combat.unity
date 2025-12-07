@@ -1019,8 +1019,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 6.389362, y: 1.7131227, z: 0.01}
-  m_Center: {x: -0.6646168, y: -0.9694937, z: 0}
+  m_Size: {x: 6.7654953, y: 1.7131225, z: 0.01}
+  m_Center: {x: -0.47654995, y: -0.9694937, z: 0}
 --- !u!1 &447929218
 GameObject:
   m_ObjectHideFlags: 0
@@ -2305,6 +2305,27 @@ GameObject:
   - component: {fileID: 844015673}
   - component: {fileID: 844015674}
   - component: {fileID: 844015675}
+  - component: {fileID: 844015696}
+  - component: {fileID: 844015695}
+  - component: {fileID: 844015694}
+  - component: {fileID: 844015693}
+  - component: {fileID: 844015692}
+  - component: {fileID: 844015691}
+  - component: {fileID: 844015690}
+  - component: {fileID: 844015689}
+  - component: {fileID: 844015688}
+  - component: {fileID: 844015687}
+  - component: {fileID: 844015686}
+  - component: {fileID: 844015685}
+  - component: {fileID: 844015684}
+  - component: {fileID: 844015683}
+  - component: {fileID: 844015682}
+  - component: {fileID: 844015681}
+  - component: {fileID: 844015680}
+  - component: {fileID: 844015679}
+  - component: {fileID: 844015678}
+  - component: {fileID: 844015677}
+  - component: {fileID: 844015676}
   m_Layer: 0
   m_Name: StatusEffectSystem
   m_TagString: Untagged
@@ -2355,6 +2376,259 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3f3e2741d2ee6bc4a88f723031584daf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TauntStatusEffectSystem
+--- !u!114 &844015676
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 844015672}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b77ae841ac94c954cadc4904c923e35c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BurnSystem
+  burnVFX: {fileID: 8194992990867289339, guid: 99bc28c0d45f51c4fbac01080b73edc7, type: 3}
+--- !u!114 &844015677
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 844015672}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3f3e2741d2ee6bc4a88f723031584daf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TauntStatusEffectSystem
+--- !u!114 &844015678
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 844015672}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ee888ac306e6f64cbbf0e02df5191f6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::InvulnerableStatusEffectSystem
+--- !u!114 &844015679
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 844015672}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5dca224a03ccc7b41aeedd5e115d94b8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::StunStatusEffectSystem
+--- !u!114 &844015680
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 844015672}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8d5c2bea6e521c545a10437f829c4ee5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ShieldStatusEffectSystem
+--- !u!114 &844015681
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 844015672}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a6a161a4ca6fc8a4cb7f9839ed72a29a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LifestealSystem
+--- !u!114 &844015682
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 844015672}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc3e4776655bb3a4bb5d74c86baab4e6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::RestingStatusEffectSystem
+--- !u!114 &844015683
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 844015672}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0e2217609b08c9348b561457710e674c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::RageStatusEffectSystem
+--- !u!114 &844015684
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 844015672}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fdfcb01e6a4ea294a8b8dfa422c8b8b2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BuffDebuffSystem
+--- !u!114 &844015685
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 844015672}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 00860361aa07a364caf683ac5422aa93, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DevouredSystem
+--- !u!114 &844015686
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 844015672}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7db92ac1ce04df645aed4235f2a8d88b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TempHpSystem
+--- !u!114 &844015687
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 844015672}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 92bfb79d051b51b41b97fa2751b8e2ee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FocusedSystem
+--- !u!114 &844015688
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 844015672}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e66439344c85f4145b7175a52108e5d6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SelfDamageSystem
+--- !u!114 &844015689
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 844015672}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 65608ba8c3e964247a6ce12f3517bac4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DamageUpSystem
+--- !u!114 &844015690
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 844015672}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bcb29ea23bc7add47b77b5e8258fe714, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AttackDownSystem
+--- !u!114 &844015691
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 844015672}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dd86a2bf92fa75b4494526602cddb619, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AttackUpSystem
+--- !u!114 &844015692
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 844015672}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6664d0a8811d45546b23ed2c80e3196d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DefenseDownSystem
+--- !u!114 &844015693
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 844015672}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9f80c688016545440aad998091fdfb1d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DefenseUpSystem
+--- !u!114 &844015694
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 844015672}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa2ad5f4bcf156443a3953ac16b3f37a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ArmorStatusEffectSystem
+--- !u!114 &844015695
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 844015672}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4148911b9c7db2a459fb19b8b05ccb45, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CritDownSystem
+--- !u!114 &844015696
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 844015672}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 624e108314a059d48a9c474a59a52be5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CritUpSystem
 --- !u!1 &907565393
 GameObject:
   m_ObjectHideFlags: 0
@@ -3007,51 +3281,6 @@ LineRenderer:
   m_UseWorldSpace: 0
   m_Loop: 0
   m_ApplyActiveColorSpace: 0
---- !u!1 &1289157037
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1289157038}
-  - component: {fileID: 1289157039}
-  m_Layer: 0
-  m_Name: BurnSystem
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1289157038
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1289157037}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1687521520}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1289157039
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1289157037}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b77ae841ac94c954cadc4904c923e35c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::BurnSystem
-  burnVFX: {fileID: 8194992990867289339, guid: 99bc28c0d45f51c4fbac01080b73edc7, type: 3}
 --- !u!1 &1350358604
 GameObject:
   m_ObjectHideFlags: 0
@@ -3963,7 +4192,6 @@ Transform:
   - {fileID: 2049530805}
   - {fileID: 1176069025}
   - {fileID: 844015673}
-  - {fileID: 1289157038}
   - {fileID: 2124177267}
   - {fileID: 2100399249}
   - {fileID: 1755896211}
