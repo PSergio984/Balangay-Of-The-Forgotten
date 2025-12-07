@@ -24,7 +24,7 @@ MonoBehaviour:
     rid: -2
   <OtherEffects>k__BackingField:
   - <targetMode>k__BackingField:
-      rid: 5040687020829311226
+      rid: 5040687034078331174
     <effects>k__BackingField:
       rid: 5040687020829311065
   references:
@@ -42,11 +42,11 @@ MonoBehaviour:
           rid: 5040687020829311236
         showWarningIfFailed: 1
         failureMessage: Condition not met!
-    - rid: 5040687020829311226
-      type: {class: NoTM, ns: , asm: Assembly-CSharp}
-      data: 
     - rid: 5040687020829311236
       type: {class: ApplyDefenseUpEffect, ns: , asm: Assembly-CSharp}
       data:
         defensePercentage: 50
         duration: 3
+    - rid: 5040687034078331174
+      type: {class: HeroTM, ns: , asm: Assembly-CSharp}
+      data: 

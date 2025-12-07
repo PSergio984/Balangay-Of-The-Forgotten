@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -177,12 +178,26 @@ public class MatchSetupSystem : MonoBehaviour
             PerkSystem.Instance.AddPerk(new Perk(perkData));
         }
 
-        // Create an action to draw 5 cards for the starting hand of the first hero
+        // Delay card drawing until after Battle Start and Player Turn banners complete
+        // Sequence: Battle Start -> Player Turn -> Draw Cards (not simultaneously)
+        StartCoroutine(DelayedInitialCardDraw());
+    }
+    
+    /// <summary>
+    /// Delays initial card drawing until after the player turn banner animation completes
+    /// </summary>
+    private IEnumerator DelayedInitialCardDraw()
+    {
+        // Wait for Battle Start banner (0.5s delay + ~1.9s animation = ~2.4s)
+        // Then wait for Player Turn banner (~1.9s animation)
+        // Total wait: ~4.3s, add buffer for safety
+        float totalBannerDuration = 4.5f;
+        
+        yield return new WaitForSeconds(totalBannerDuration);
+        
+        // Now draw cards after both banners have finished
         DrawCardsGA drawCardsGA = new(5);
-
-        // Execute the draw cards action to give the first hero their starting hand
         ActionSystem.Instance.Perform(drawCardsGA);
-
     }
 
     /// <summary>

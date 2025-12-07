@@ -146,13 +146,39 @@ public class ActionSystem : Singleton<ActionSystem>
     /// </summary>
     /// <param name="gameAction">The reaction action to add to the current processing queue</param>
     /// <remarks>
-    /// This is used internally during the Flow to queue up additional reactions
+    /// This is used internally during the Flow to queue up additional reactions.
+    /// WARNING: This method should only be called during active Flow() execution.
+    /// If called outside of Flow(), the action will be lost and a warning will be logged.
     /// </remarks>
     // Method for other systems to add additional reactions during action processing
     // This is used internally during the Flow to queue up additional reactions
     public void AddReaction(GameAction gameAction)
     {
-        reactions?.Add(gameAction);
+        // Skip null actions (some effects like ConditionalEffect return null when condition isn't met)
+        if (gameAction == null)
+        {
+            return;
+        }
+        
+        // Check if we're in an active Flow execution using the isPerforming flag
+        // This is the reliable indicator of whether reactions can be added
+        if (!isPerforming)
+        {
+            Debug.LogWarning($"[ActionSystem] AddReaction() called outside of active Flow() execution. " +
+                           $"Action '{gameAction.GetType().Name}' will be lost. " +
+                           $"Ensure AddReaction() is only called during action processing (inside performers or reactions).");
+            return;
+        }
+        
+        // Defensive check: reactions should always be set during Flow execution, but verify it's not null
+        if (reactions == null)
+        {
+            Debug.LogError($"[ActionSystem] reactions list is null during active Flow execution. " +
+                         $"This indicates a bug in the ActionSystem. Action '{gameAction.GetType().Name}' will be lost.");
+            return;
+        }
+        
+        reactions.Add(gameAction);
     }
 
     /// <summary>
@@ -184,6 +210,10 @@ public class ActionSystem : Singleton<ActionSystem>
         PerformSubscribers(action, postSubs);  // Trigger any global post-reactions  
         yield return PerformReactions();       // Execute all queued post-reactions
 
+        // Reset reactions to null after Flow completes to prevent stale references
+        // This ensures AddReaction() can properly detect when called outside of Flow execution
+        reactions = null;
+
         // All phases complete - run any cleanup code
         OnFlowFinished?.Invoke();
     }
@@ -204,6 +234,13 @@ public class ActionSystem : Singleton<ActionSystem>
         // Process each reaction one by one (important for turn-based timing)
         foreach(var reaction in reactions)
         {
+            // Skip null reactions (defensive check - should not happen if AddReaction is used correctly)
+            if (reaction == null)
+            {
+                Debug.LogWarning("[ActionSystem] Skipping null reaction in PerformReactions");
+                continue;
+            }
+            
             // Each reaction goes through the full Flow process (Pre->Main->Post)
             yield return Flow(reaction);
         }

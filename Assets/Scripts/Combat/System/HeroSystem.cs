@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -181,9 +182,30 @@ public class HeroSystem : Singleton<HeroSystem>
     {
         // Use StatusEffectTickSystem to process all enemy status effect ticks
         StatusEffectTickSystem.Instance.TickStatusEffects(HeroBoardView.HeroViews.ConvertAll(e => (CombatantView)e));
-        // Draw new hand for the player's next turn
+        
+        // Delay card drawing until after player turn banner animation completes
+        // This provides better UX by not drawing cards simultaneously with the banner
+        StartCoroutine(DelayedCardDraw());
+    }
+    
+    /// <summary>
+    /// Delays card drawing until after the player turn banner animation completes
+    /// </summary>
+    private IEnumerator DelayedCardDraw()
+    {
+        // Wait for player turn banner animation to complete
+        // Banner animation duration: fadeInDuration (0.4s) + holdDuration (1.0s) + slideOutDuration (0.5s) = ~1.9s
+        // Add a small buffer for safety
+        float bannerAnimationDuration = 2.0f;
+        
+        // Wait for banner to finish animating
+        yield return new WaitForSeconds(bannerAnimationDuration);
+        
+        // Now draw cards after the banner has finished
+        // Use Perform() instead of AddReaction() because we're outside of an active action flow
+        // (the EnemyTurnGA flow has already completed by the time this coroutine finishes)
         DrawCardsGA drawCardsGA = new(5);
-        ActionSystem.Instance.AddReaction(drawCardsGA);
+        ActionSystem.Instance.Perform(drawCardsGA);
     }
 
    

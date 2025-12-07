@@ -240,6 +240,13 @@ public class EnemySystem : Singleton<EnemySystem>
     // Handles what happens during the enemy turn - makes all enemies attack
     private IEnumerator EnemyTurnPerformer(EnemyTurnGA enemyTurnGA)
     {
+        // Wait for enemy turn banner animation to complete before starting attacks
+        // Banner animation duration: fadeInDuration (0.4s) + holdDuration (1.0s) + slideOutDuration (0.5s) = ~1.9s
+        // Add a small buffer for safety
+        float bannerAnimationDuration = 2.0f;
+        
+        // Wait for banner to finish animating
+        yield return new WaitForSeconds(bannerAnimationDuration);
 
         // Use StatusEffectTickSystem to process all enemy status effect ticks
         StatusEffectTickSystem.Instance.TickStatusEffects(enemyBoardView.EnemyViews.ConvertAll(e => (CombatantView)e));
@@ -306,8 +313,10 @@ public class EnemySystem : Singleton<EnemySystem>
         Vector3 popupPosition = spriteRenderer != null ? spriteRenderer.transform.position : enemy.transform.position;
         popupPosition.y += moveNameOffsetY;
         
-        // Create a text popup with the move name
-        DamagePopUp.CreateTextPopUp(popupPosition, moveName, moveNameColor, DamagePopUp.PopUpAnimationMode.FadeOnly);
+        // Create a text popup with the move name using a smaller scale than damage popups
+        // Damage numbers use scale 1.0f, but text popups should be smaller (0.5f = 50% size)
+        // This makes move names appear smaller than damage numbers
+        DamagePopUp.CreateTextPopUp(popupPosition, moveName, moveNameColor, DamagePopUp.PopUpAnimationMode.FadeOnly, 0.5f);
     }
   
     /// <summary>

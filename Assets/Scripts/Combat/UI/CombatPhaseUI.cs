@@ -28,11 +28,15 @@ public class CombatPhaseUI : Singleton<CombatPhaseUI>
     [SerializeField] [Required("Banner panel is required for animations!")]
     private RectTransform bannerPanel;
     
-    [Tooltip("The main title text (e.g., 'Battle Start', 'Player Turn')")]
-    [SerializeField] [Required("Title text is required to display phase names!")]
-    private TMP_Text titleText;
+    [Tooltip("Image for 'Battle Start' banner (square aspect ratio)")]
+    [SerializeField] [Required("Battle Start image is required!")]
+    private Image battleStartImage;
     
-    [Tooltip("The subtitle text (e.g., '1st turn', 'Enemy Turn')")]
+    [Tooltip("Image for 'Player Turn' and 'Enemy Turn' banners (rectangular aspect ratio)")]
+    [SerializeField] [Required("Turn banner image is required!")]
+    private Image turnBannerImage;
+    
+    [Tooltip("The subtitle text for turn numbers (e.g., '1st turn', '2nd turn')")]
     [SerializeField]
     private TMP_Text subtitleText;
     
@@ -43,6 +47,19 @@ public class CombatPhaseUI : Singleton<CombatPhaseUI>
     [Tooltip("Optional decorative elements (swords, dividers, etc.)")]
     [SerializeField]
     private CanvasGroup decorationsGroup;
+    
+    [Header("Banner Sprites")]
+    [Tooltip("Sprite image for 'Battle Start' banner")]
+    [SerializeField] [Required("Battle Start sprite is required!")]
+    private Sprite battleStartSprite;
+    
+    [Tooltip("Sprite image for 'Player Turn' banner")]
+    [SerializeField] [Required("Player Turn sprite is required!")]
+    private Sprite playerTurnSprite;
+    
+    [Tooltip("Sprite image for 'Enemy Turn' banner")]
+    [SerializeField] [Required("Enemy Turn sprite is required!")]
+    private Sprite enemyTurnSprite;
 
     [Header("Animation Settings")]
     [Tooltip("Duration for fade in animation")]
@@ -63,21 +80,15 @@ public class CombatPhaseUI : Singleton<CombatPhaseUI>
     [Tooltip("Ease type for slide out")]
     [SerializeField] private Ease slideOutEase = Ease.InQuad;
 
-    [Header("Colors")]
-    [Tooltip("Color for Player Turn text")]
-    [SerializeField] private Color playerTurnColor = new Color(1f, 0.85f, 0.4f, 1f); // Gold
-    
-    [Tooltip("Color for Enemy Turn text")]
-    [SerializeField] private Color enemyTurnColor = new Color(0.8f, 0.3f, 0.3f, 1f); // Red
-    
-    [Tooltip("Color for Battle Start text")]
-    [SerializeField] private Color battleStartColor = Color.white;
 
-    // Canvas group for fading the entire banner
-    private CanvasGroup bannerCanvasGroup;
+    // Canvas group for fading the background (stays in place)
+    private CanvasGroup backgroundCanvasGroup;
     
-    // Original position for resetting
-    private Vector2 originalPosition;
+    // Original positions for resetting
+    private Vector2 bannerPanelOriginalPosition;
+    private Vector2 battleStartImageOriginalPosition;
+    private Vector2 turnBannerImageOriginalPosition;
+    private Vector2 subtitleTextOriginalPosition;
     
     // Track current turn number
     private int currentTurnNumber = 0;
@@ -87,15 +98,33 @@ public class CombatPhaseUI : Singleton<CombatPhaseUI>
 
     private void Start()
     {
-        // Ensure we have a canvas group for fading
-        bannerCanvasGroup = bannerPanel.GetComponent<CanvasGroup>();
-        if (bannerCanvasGroup == null)
+        // Ensure we have a canvas group for fading the background
+        if (bannerBackground != null)
         {
-            bannerCanvasGroup = bannerPanel.gameObject.AddComponent<CanvasGroup>();
+            backgroundCanvasGroup = bannerBackground.GetComponent<CanvasGroup>();
+            if (backgroundCanvasGroup == null)
+        {
+                backgroundCanvasGroup = bannerBackground.gameObject.AddComponent<CanvasGroup>();
+            }
         }
         
-        // Store original position
-        originalPosition = bannerPanel.anchoredPosition;
+        // Store original positions
+        bannerPanelOriginalPosition = bannerPanel.anchoredPosition;
+        
+        if (battleStartImage != null)
+        {
+            battleStartImageOriginalPosition = battleStartImage.rectTransform.anchoredPosition;
+        }
+        
+        if (turnBannerImage != null)
+        {
+            turnBannerImageOriginalPosition = turnBannerImage.rectTransform.anchoredPosition;
+        }
+        
+        if (subtitleText != null)
+        {
+            subtitleTextOriginalPosition = subtitleText.rectTransform.anchoredPosition;
+        }
         
         // Hide initially
         HideBanner();
@@ -107,7 +136,7 @@ public class CombatPhaseUI : Singleton<CombatPhaseUI>
     public void ShowBattleStart()
     {
         currentTurnNumber = 0;
-        ShowBanner("Battle Start", "", battleStartColor);
+        ShowBanner(battleStartSprite, "", true);
     }
 
     /// <summary>
@@ -117,7 +146,7 @@ public class CombatPhaseUI : Singleton<CombatPhaseUI>
     {
         currentTurnNumber++;
         string ordinal = GetOrdinal(currentTurnNumber);
-        ShowBanner("Player Turn", $"{ordinal} turn", playerTurnColor);
+        ShowBanner(playerTurnSprite, $"{ordinal} turn", false);
     }
 
     /// <summary>
@@ -125,39 +154,38 @@ public class CombatPhaseUI : Singleton<CombatPhaseUI>
     /// </summary>
     public void ShowEnemyTurn()
     {
-        ShowBanner("Enemy Turn", "", enemyTurnColor);
+        ShowBanner(enemyTurnSprite, "", false);
     }
 
     /// <summary>
-    /// Generic method to show any banner with custom text
+    /// Generic method to show any banner with image and optional subtitle text
     /// </summary>
-    public void ShowBanner(string title, string subtitle, Color titleColor)
+    /// <param name="bannerSprite">The sprite image to display for the banner</param>
+    /// <param name="subtitle">Optional subtitle text (e.g., turn number)</param>
+    /// <param name="isBattleStart">True if this is Battle Start (uses square image), false for turn banners (uses rectangular image)</param>
+    public void ShowBanner(Sprite bannerSprite, string subtitle, bool isBattleStart)
     {
         if (isAnimating)
         {
-            // Kill any ongoing animation and continue
+            // Kill any ongoing animations and continue
             DOTween.Kill(bannerPanel);
-            DOTween.Kill(bannerCanvasGroup);
+            if (battleStartImage != null) DOTween.Kill(battleStartImage.rectTransform);
+            if (turnBannerImage != null) DOTween.Kill(turnBannerImage.rectTransform);
+            if (subtitleText != null) DOTween.Kill(subtitleText.rectTransform);
+            if (backgroundCanvasGroup != null) DOTween.Kill(backgroundCanvasGroup);
         }
         
-        StartCoroutine(AnimateBanner(title, subtitle, titleColor));
+        StartCoroutine(AnimateBanner(bannerSprite, subtitle, isBattleStart));
     }
 
     /// <summary>
     /// Coroutine that handles the full banner animation sequence
     /// </summary>
-    private IEnumerator AnimateBanner(string title, string subtitle, Color titleColor)
+    private IEnumerator AnimateBanner(Sprite bannerSprite, string subtitle, bool isBattleStart)
     {
         isAnimating = true;
         
         // Validate required components
-        if (titleText == null)
-        {
-            Debug.LogError("[CombatPhaseUI] Title text is not assigned! Cannot show banner.", this);
-            isAnimating = false;
-            yield break;
-        }
-        
         if (bannerPanel == null)
         {
             Debug.LogError("[CombatPhaseUI] Banner panel is not assigned! Cannot animate banner.", this);
@@ -165,9 +193,41 @@ public class CombatPhaseUI : Singleton<CombatPhaseUI>
             yield break;
         }
         
-        // Setup banner content
-        titleText.text = title;
-        titleText.color = titleColor;
+        if (bannerSprite == null)
+        {
+            Debug.LogError("[CombatPhaseUI] Banner sprite is null! Cannot show banner.", this);
+            isAnimating = false;
+            yield break;
+        }
+        
+        // Select the appropriate image component based on banner type
+        Image activeImage = isBattleStart ? battleStartImage : turnBannerImage;
+        RectTransform activeImageRect = activeImage != null ? activeImage.rectTransform : null;
+        Vector2 activeImageOriginalPos = isBattleStart ? battleStartImageOriginalPosition : turnBannerImageOriginalPosition;
+        
+        if (activeImage == null || activeImageRect == null)
+        {
+            Debug.LogError($"[CombatPhaseUI] {(isBattleStart ? "Battle Start" : "Turn Banner")} image is not assigned! Cannot show banner.", this);
+            isAnimating = false;
+            yield break;
+        }
+        
+        // Hide both images first, then show the correct one
+        if (battleStartImage != null)
+        {
+            battleStartImage.gameObject.SetActive(isBattleStart);
+            battleStartImage.rectTransform.anchoredPosition = battleStartImageOriginalPosition;
+        }
+        
+        if (turnBannerImage != null)
+        {
+            turnBannerImage.gameObject.SetActive(!isBattleStart);
+            turnBannerImage.rectTransform.anchoredPosition = turnBannerImageOriginalPosition;
+        }
+        
+        // Setup banner content on the active image
+        activeImage.sprite = bannerSprite;
+        activeImage.color = Color.white; // Use sprite's original colors
         
         if (subtitleText != null)
         {
@@ -175,22 +235,82 @@ public class CombatPhaseUI : Singleton<CombatPhaseUI>
             subtitleText.gameObject.SetActive(!string.IsNullOrEmpty(subtitle));
         }
         
-        // Reset position and make visible but transparent
-        bannerPanel.anchoredPosition = originalPosition;
-        bannerCanvasGroup.alpha = 0f;
-        bannerPanel.gameObject.SetActive(true);
+        // Reset positions and make visible but transparent
+        bannerPanel.anchoredPosition = bannerPanelOriginalPosition;
+        activeImageRect.anchoredPosition = activeImageOriginalPos;
         
-        // Phase 1: Fade in at center
-        Tween fadeIn = bannerCanvasGroup.DOFade(1f, fadeInDuration).SetEase(fadeInEase);
+        // Reset subtitle text position
+        if (subtitleText != null)
+        {
+            subtitleText.rectTransform.anchoredPosition = subtitleTextOriginalPosition;
+        }
+        
+        // Set initial alpha values
+        if (backgroundCanvasGroup != null)
+        {
+            backgroundCanvasGroup.alpha = 0f;
+        }
+        
+        // Create canvas group for the active image if it doesn't exist
+        CanvasGroup activeImageCanvasGroup = activeImage.GetComponent<CanvasGroup>();
+        if (activeImageCanvasGroup == null)
+        {
+            activeImageCanvasGroup = activeImage.gameObject.AddComponent<CanvasGroup>();
+        }
+        activeImageCanvasGroup.alpha = 0f;
+        
+        // Create canvas group for subtitle text if it doesn't exist
+        CanvasGroup subtitleCanvasGroup = null;
+        if (subtitleText != null)
+        {
+            subtitleCanvasGroup = subtitleText.GetComponent<CanvasGroup>();
+            if (subtitleCanvasGroup == null)
+            {
+                subtitleCanvasGroup = subtitleText.gameObject.AddComponent<CanvasGroup>();
+            }
+            subtitleCanvasGroup.alpha = 0f;
+        }
+        
+        // Make panel and images visible
+        bannerPanel.gameObject.SetActive(true);
+        activeImage.gameObject.SetActive(true);
+        
+        // Phase 1: Fade in at center (both background, banner image, and subtitle text)
+        Sequence fadeIn = DOTween.Sequence();
+        if (backgroundCanvasGroup != null)
+        {
+            fadeIn.Join(backgroundCanvasGroup.DOFade(1f, fadeInDuration).SetEase(fadeInEase));
+        }
+        fadeIn.Join(activeImageCanvasGroup.DOFade(1f, fadeInDuration).SetEase(fadeInEase));
+        if (subtitleCanvasGroup != null)
+        {
+            fadeIn.Join(subtitleCanvasGroup.DOFade(1f, fadeInDuration).SetEase(fadeInEase));
+        }
         yield return fadeIn.WaitForCompletion();
         
         // Phase 2: Hold
         yield return new WaitForSeconds(holdDuration);
         
-        // Phase 3: Slide out to left while fading
+        // Phase 3: Slide out banner image and subtitle text to left while fading, background only fades
         Sequence slideOut = DOTween.Sequence();
-        slideOut.Append(bannerPanel.DOAnchorPosX(originalPosition.x - slideOutDistance, slideOutDuration).SetEase(slideOutEase));
-        slideOut.Join(bannerCanvasGroup.DOFade(0f, slideOutDuration).SetEase(Ease.InQuad));
+        
+        // Banner image slides out and fades
+        slideOut.Append(activeImageRect.DOAnchorPosX(activeImageOriginalPos.x - slideOutDistance, slideOutDuration).SetEase(slideOutEase));
+        slideOut.Join(activeImageCanvasGroup.DOFade(0f, slideOutDuration).SetEase(Ease.InQuad));
+        
+        // Subtitle text slides out with the banner image and fades
+        if (subtitleText != null && subtitleCanvasGroup != null)
+        {
+            slideOut.Join(subtitleText.rectTransform.DOAnchorPosX(subtitleTextOriginalPosition.x - slideOutDistance, slideOutDuration).SetEase(slideOutEase));
+            slideOut.Join(subtitleCanvasGroup.DOFade(0f, slideOutDuration).SetEase(Ease.InQuad));
+        }
+        
+        // Background only fades (stays in place)
+        if (backgroundCanvasGroup != null)
+        {
+            slideOut.Join(backgroundCanvasGroup.DOFade(0f, slideOutDuration).SetEase(Ease.InQuad));
+        }
+        
         yield return slideOut.WaitForCompletion();
         
         // Hide and reset
@@ -205,11 +325,47 @@ public class CombatPhaseUI : Singleton<CombatPhaseUI>
     {
         if (bannerPanel != null)
         {
-            bannerCanvasGroup.alpha = 0f;
-            bannerPanel.anchoredPosition = originalPosition;
+            // Reset background
+            if (backgroundCanvasGroup != null)
+            {
+                backgroundCanvasGroup.alpha = 0f;
+            }
+            
+            // Reset banner panel position
+            bannerPanel.anchoredPosition = bannerPanelOriginalPosition;
+            
+            // Reset image positions
+            if (battleStartImage != null)
+            {
+                battleStartImage.rectTransform.anchoredPosition = battleStartImageOriginalPosition;
+                CanvasGroup cg = battleStartImage.GetComponent<CanvasGroup>();
+                if (cg != null) cg.alpha = 0f;
+            }
+            
+            if (turnBannerImage != null)
+            {
+                turnBannerImage.rectTransform.anchoredPosition = turnBannerImageOriginalPosition;
+                CanvasGroup cg = turnBannerImage.GetComponent<CanvasGroup>();
+                if (cg != null) cg.alpha = 0f;
+            }
+            
+            // Reset subtitle text position
+            if (subtitleText != null)
+            {
+                subtitleText.rectTransform.anchoredPosition = subtitleTextOriginalPosition;
+                CanvasGroup cg = subtitleText.GetComponent<CanvasGroup>();
+                if (cg != null) cg.alpha = 0f;
+            }
+            
+            // Hide panel
             bannerPanel.gameObject.SetActive(false);
         }
     }
+    
+    /// <summary>
+    /// Returns true if a banner animation is currently playing
+    /// </summary>
+    public bool IsAnimating => isAnimating;
 
     /// <summary>
     /// Gets the ordinal suffix for a number (1st, 2nd, 3rd, etc.)

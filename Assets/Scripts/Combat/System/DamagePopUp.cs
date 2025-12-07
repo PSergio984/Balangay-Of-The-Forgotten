@@ -60,7 +60,8 @@ public class DamagePopUp : MonoBehaviour
     /// <param name="text">Text to display</param>
     /// <param name="color">Color of the text</param>
     /// <param name="animationMode">Animation style (default: FadeOnly for text announcements)</param>
-    public static DamagePopUp CreateTextPopUp(Vector3 position, string text, Color color, PopUpAnimationMode animationMode = PopUpAnimationMode.FadeOnly)
+    /// <param name="scaleMultiplier">Scale multiplier for the popup size (default: 0.7 for smaller text popups)</param>
+    public static DamagePopUp CreateTextPopUp(Vector3 position, string text, Color color, PopUpAnimationMode animationMode = PopUpAnimationMode.FadeOnly, float scaleMultiplier = 0.7f)
     {
         if (GameAssets.i.pfDamagePopup == null)
         {
@@ -79,7 +80,7 @@ public class DamagePopUp : MonoBehaviour
         
         Vector3 offset = new Vector3(damagePopUp.spawnOffsetX, damagePopUp.spawnOffsetY, 0f);
         damagePopUpObj.transform.position = position + offset;
-        damagePopUp.SetupText(text, color, animationMode);
+        damagePopUp.SetupText(text, color, animationMode, scaleMultiplier);
         return damagePopUp;
     }
 
@@ -109,6 +110,7 @@ public class DamagePopUp : MonoBehaviour
 
     private static int sortingOrder;
     private Vector3 initialScale;
+    private float originalFontSize;
     
     /// <summary>
     /// Current animation mode for this popup instance
@@ -118,6 +120,11 @@ public class DamagePopUp : MonoBehaviour
     private void Awake()
     {
         initialScale = transform.localScale;
+        // Store original font size for text popup scaling
+        if (textMesh != null)
+        {
+            originalFontSize = textMesh.fontSize;
+        }
     }
 
     /// <summary>
@@ -165,12 +172,22 @@ public class DamagePopUp : MonoBehaviour
 
         moveVector = Vector3.up * moveSpeed;
         transform.localScale = initialScale;
+        
+        // Reset font size to original for damage numbers
+        if (textMesh != null && originalFontSize > 0)
+        {
+            textMesh.fontSize = originalFontSize;
+        }
     }
 
     /// <summary>
     /// Setup popup with custom text and color (for status effects, move names, etc.)
     /// </summary>
-    public void SetupText(string text, Color color, PopUpAnimationMode animationMode = PopUpAnimationMode.FadeOnly)
+    /// <param name="text">Text to display</param>
+    /// <param name="color">Color of the text</param>
+    /// <param name="animationMode">Animation style (default: FadeOnly for text announcements)</param>
+    /// <param name="scaleMultiplier">Scale multiplier for the popup size (default: 0.7 for smaller text popups)</param>
+    public void SetupText(string text, Color color, PopUpAnimationMode animationMode = PopUpAnimationMode.FadeOnly, float scaleMultiplier = 0.1f)
     {
         currentAnimationMode = animationMode;
         
@@ -190,7 +207,16 @@ public class DamagePopUp : MonoBehaviour
 
         // Slower movement for text announcements
         moveVector = Vector3.up * (moveSpeed * 0.5f);
-        transform.localScale = initialScale;
+        
+        // Apply scale multiplier to make text popups smaller than damage numbers
+        transform.localScale = initialScale * scaleMultiplier;
+        
+        // Also reduce font size directly to make text popups smaller
+        // This ensures longer text strings don't appear too large
+        if (textMesh != null && originalFontSize > 0)
+        {
+            textMesh.fontSize = originalFontSize * scaleMultiplier;
+        }
     }
 
 
