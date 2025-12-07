@@ -43,7 +43,7 @@ public class StatusEffectsUI : MonoBehaviour
     /// These images represent each type of status effect visually.
     /// Armor sprite for armor effects, burn sprite for burn effects, etc.
     /// </remarks>
-    [SerializeField] private Sprite armorSprite, attackUpSprite, burnSprite, critUpSprite, defenseDownSprite, defenseUpSprite, dmgUpSprite, ignoreDefenseSprite, invulnerableSprite, rageSprite, tauntSprite, tempHpSprite;
+    [SerializeField] private Sprite armorSprite, attackUpSprite, attackDownSprite, burnSprite, critUpSprite, critDownSprite, defenseDownSprite, defenseUpSprite, dmgUpSprite, ignoreDefenseSprite, invulnerableSprite, rageSprite, shieldSprite, stunSprite, devouredSprite, tauntSprite, tempHpSprite, restingSprite, chargingSprite;
     
     /// <summary>
     /// Dictionary tracking all currently displayed status effect UIs
@@ -112,15 +112,22 @@ public class StatusEffectsUI : MonoBehaviour
         {
             StatusEffectType.ARMOR => armorSprite,
             StatusEffectType.ATTACK_UP => attackUpSprite,
+            StatusEffectType.ATTACK_DOWN => attackDownSprite,
             StatusEffectType.BURN => burnSprite,
+            StatusEffectType.CHARGING => chargingSprite,
             StatusEffectType.CRIT_UP => critUpSprite,
+            StatusEffectType.CRIT_DOWN => critDownSprite,
             StatusEffectType.DEFENSE_DOWN => defenseDownSprite,
             StatusEffectType.DEFENSE_UP => defenseUpSprite,
+            StatusEffectType.DEFENSE_IGNORE => ignoreDefenseSprite,
+            StatusEffectType.DEVOURED => devouredSprite,
             StatusEffectType.DMG_UP => dmgUpSprite,
             StatusEffectType.FOCUSED => ignoreDefenseSprite,
-            StatusEffectType.DEFENSE_IGNORE => ignoreDefenseSprite,
             StatusEffectType.INVULNERABLE => invulnerableSprite,
             StatusEffectType.RAGE => rageSprite,
+            StatusEffectType.RESTING => restingSprite,
+            StatusEffectType.SHIELD => shieldSprite,
+            StatusEffectType.STUN => stunSprite,
             StatusEffectType.TAUNT => tauntSprite,
             StatusEffectType.TEMP_HP => tempHpSprite,
             _ => null,

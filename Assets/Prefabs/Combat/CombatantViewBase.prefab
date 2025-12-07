@@ -607,16 +607,23 @@ MonoBehaviour:
   statusEffectUIPrefab: {fileID: 5011485877358572500, guid: 2e427b1bfb27e1c418427a32f592d4be, type: 3}
   armorSprite: {fileID: 21300000, guid: 018e8181c15070f4e91eab8aad84ca64, type: 3}
   attackUpSprite: {fileID: 21300000, guid: d637a652ae63d6d4a8fc31c80bed944e, type: 3}
+  attackDownSprite: {fileID: 10915, guid: 0000000000000000f000000000000000, type: 0}
   burnSprite: {fileID: 21300000, guid: 6f8feab35fd9bcf429c94eb37edee724, type: 3}
   critUpSprite: {fileID: 21300000, guid: ede18cb9593c9b248a045f852eff5709, type: 3}
-  defenseDownSprite: {fileID: 10915, guid: 0000000000000000f000000000000000, type: 0}
+  critDownSprite: {fileID: 21300000, guid: f94971c254a4f654895525c80a9708a4, type: 3}
+  defenseDownSprite: {fileID: 21300000, guid: 58fe10e7b97b51043bc33e5ed0958586, type: 3}
   defenseUpSprite: {fileID: 21300000, guid: 65574a08036e0494588ffb3a0736afef, type: 3}
   dmgUpSprite: {fileID: 21300000, guid: 018e8181c15070f4e91eab8aad84ca64, type: 3}
   ignoreDefenseSprite: {fileID: 21300000, guid: d637a652ae63d6d4a8fc31c80bed944e, type: 3}
   invulnerableSprite: {fileID: 21300000, guid: 018e8181c15070f4e91eab8aad84ca64, type: 3}
   rageSprite: {fileID: 21300000, guid: 73dc1ecceb7afb042993660c571e1bcb, type: 3}
+  shieldSprite: {fileID: 21300000, guid: 9d8bdf71c3e4b944c8f2eb11af9dd6ba, type: 3}
+  stunSprite: {fileID: 21300000, guid: 90384e5722192e148abc61d4536abbff, type: 3}
+  devouredSprite: {fileID: 21300000, guid: 8a2121e47ad39c44fac5904225c9e958, type: 3}
   tauntSprite: {fileID: 21300000, guid: 3a407efcaee3ff947985fafa1017759e, type: 3}
   tempHpSprite: {fileID: 21300000, guid: d637a652ae63d6d4a8fc31c80bed944e, type: 3}
+  restingSprite: {fileID: 21300000, guid: 39a58a7546975d3418e850ba88162d15, type: 3}
+  chargingSprite: {fileID: 21300000, guid: 8127cda091eeaf94e91f4cdad906ca9b, type: 3}
 --- !u!114 &7886810224053934251
 MonoBehaviour:
   m_ObjectHideFlags: 0

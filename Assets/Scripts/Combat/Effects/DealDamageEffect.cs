@@ -96,6 +96,24 @@ public class DealDamageEffect : Effects
     /// </remarks>
     public override GameAction GetGameAction(List<CombatantView> targets, CombatantView caster)
     {
+        // Defensive check: Ensure caster is not null
+        if (caster == null)
+        {
+            Debug.LogError($"[DealDamageEffect] Caster is null! Cannot calculate damage. Targets: {(targets != null ? targets.Count.ToString() : "null")}");
+            // Return 0 damage action with filtered targets
+            List<CombatantView> safeTargets = new List<CombatantView>();
+            if (targets != null)
+            {
+                foreach (var target in targets)
+                {
+                    if (target != null) safeTargets.Add(target);
+                }
+            }
+            return new DealDamageGA(0, safeTargets, null);
+        }
+
+        Debug.Log($"[DealDamageEffect] Processing damage effect. Caster: {caster.name} (Attack: {caster.AttackPower}, Magic: {caster.MagicPower}), Targets: {(targets != null ? targets.Count : 0)}");
+        
         // Step 1: Check if attack hits using refactored method
         bool hit = DamageCalculator.IsHit(accuracy);
         if (!hit)
@@ -122,6 +140,8 @@ public class DealDamageEffect : Effects
             caster.AttackPower, 
             caster.MagicPower
         );
+        
+        Debug.Log($"[DealDamageEffect] Skill power calculated: {skillPower} (Base: {baseDamage}, AttackAmp: {AttackAmp}, MagicAmp: {MagicAmp})");
 
         // Step 3: Determine coefficient based on attacker type
         float coefficient = caster is EnemyView ? 1.5f : 1.0f;

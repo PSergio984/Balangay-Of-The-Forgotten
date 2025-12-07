@@ -59,22 +59,36 @@ public class PerformEffectGA : GameAction
     /// The effect will use these targets to determine who gets affected.
     /// </remarks>
     public List<CombatantView> Targets { get; set; }
+    
+    /// <summary>
+    /// The combatant who is casting this effect (for caster tracking)
+    /// </summary>
+    /// <remarks>
+    /// This property holds the caster of the effect (hero or enemy) for proper attribution.
+    /// Used by the perk system to know who caused the effect for reactive targeting.
+    /// Can be null for effects that don't need caster information.
+    /// </remarks>
+    public CombatantView Caster { get; set; }
 
     /// <summary>
-    /// Creates a new effect performance action with targets
+    /// Creates a new effect performance action with targets and optional caster
     /// </summary>
     /// <param name="effect">The card effect to be processed</param>
     /// <param name="targets">The targets selected by the target mode for this effect</param>
+    /// <param name="caster">The combatant casting this effect (null for effects that don't need caster tracking)</param>
     /// <remarks>
     /// Creates an action that wraps a card effect and its targets for processing by the EffectSystem.
     /// The targets parameter comes from the effect's target mode (all enemies, random target, etc.).
+    /// The caster parameter is used for proper attribution (enemy attacks vs hero cards).
     /// Creates a copy of the targets list to prevent external modifications.
     /// </remarks>
-    public PerformEffectGA(Effects effect, List<CombatantView> targets)
+    public PerformEffectGA(Effects effect, List<CombatantView> targets, CombatantView caster = null)
     {
         // Store the effect that needs to be processed
         Effect = effect;
         // Store a copy of the targets to prevent external modifications (null-safe)
         Targets = targets == null ? null : new(targets);
+        // Store the caster for proper attribution
+        Caster = caster;
     }
 }

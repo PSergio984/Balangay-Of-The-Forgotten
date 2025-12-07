@@ -285,14 +285,14 @@ public class CardSystem : Singleton<CardSystem>
 
         if (playCardsGA.Card.ManualTargetEffect != null)
         {
-            PerformEffectGA performEffectGA = new(playCardsGA.Card.ManualTargetEffect, new() { playCardsGA.ManualTarget });
+            PerformEffectGA performEffectGA = new(playCardsGA.Card.ManualTargetEffect, new() { playCardsGA.ManualTarget }, currentHero);
             ActionSystem.Instance.AddReaction(performEffectGA);
         }
 
         foreach (var effectWrapper in playCardsGA.Card.OtherEffects)
         {
             List<CombatantView> targets = effectWrapper.targetMode.GetTargets();
-            PerformEffectGA performEffectGA = new(effectWrapper.effects,targets);
+            PerformEffectGA performEffectGA = new(effectWrapper.effects, targets, currentHero);
             ActionSystem.Instance.AddReaction(performEffectGA);
         }
     }

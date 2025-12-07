@@ -63,8 +63,13 @@ public class StunEffect : Effects
     /// <returns>ApplyStunGA with successfully stunned targets, or null if none stunned</returns>
     public override GameAction GetGameAction(List<CombatantView> targets, CombatantView caster)
     {
+        Debug.Log($"[StunEffect] Processing stun effect. Caster: {(caster != null ? caster.name : "null")}, Targets: {(targets != null ? targets.Count : 0)}, StunChance: {stunChance}, Duration: {stunDuration}, MaxTargets: {maxStunnedTargets}");
+        
         if (targets == null || targets.Count == 0)
+        {
+            Debug.LogWarning("[StunEffect] No targets provided, returning null action.");
             return null;
+        }
         
         List<CombatantView> stunnedTargets = new List<CombatantView>();
         int maxToStun = maxStunnedTargets > 0 ? maxStunnedTargets : targets.Count;        

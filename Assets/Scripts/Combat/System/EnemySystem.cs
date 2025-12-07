@@ -105,6 +105,8 @@ public class EnemySystem : Singleton<EnemySystem>
     {
         // Register a method to handle when it's the enemy's turn
         ActionSystem.AttachPerformer<EnemyTurnGA>(EnemyTurnPerformer);
+        // Register a POST reaction to clean up after enemy turn completes
+        ActionSystem.SubscribeReaction<EnemyTurnGA>(EnemyTurnPostReaction, ReactionTiming.POST);
         // Register a method to handle when an enemy needs to be killed/removed
         ActionSystem.AttachPerformer<KillEnemyGA>(KillEnemyPerformer);
     }
@@ -121,6 +123,8 @@ public class EnemySystem : Singleton<EnemySystem>
     {
         // Unregister the enemy turn handler
         ActionSystem.DetachPerformer<EnemyTurnGA>();
+        // Note: UnsubscribeReaction has a known bug and may not work correctly
+        // The reaction will be cleaned up when the GameObject is destroyed
         // Unregister the kill enemy handler
         ActionSystem.DetachPerformer<KillEnemyGA>();
     }
@@ -305,7 +309,7 @@ public class EnemySystem : Singleton<EnemySystem>
                     continue;
                 }
                 Debug.Log($"[EnemySystem] {enemy.name} using move '{moveName}' (ManualTargetEffect) targeting {target.name}");
-                PerformEffectGA performEffectGA = new(move.ManualTargetEffect, new List<CombatantView> { target });
+                PerformEffectGA performEffectGA = new(move.ManualTargetEffect, new List<CombatantView> { target }, enemy);
                 ActionSystem.Instance.AddReaction(performEffectGA);
             }
 
@@ -359,7 +363,7 @@ public class EnemySystem : Singleton<EnemySystem>
                     }
 
                     Debug.Log($"[EnemySystem] {enemy.name} using move '{moveName}' (OtherEffect: {effectWrapper.effects.GetType().Name}) targeting {targets.Count} target(s)");
-                    PerformEffectGA performEffectGA = new(effectWrapper.effects, targets);
+                    PerformEffectGA performEffectGA = new(effectWrapper.effects, targets, enemy);
                     ActionSystem.Instance.AddReaction(performEffectGA);
                 }
             }
@@ -372,15 +376,28 @@ public class EnemySystem : Singleton<EnemySystem>
 
         }
         
-        // Wait for all actions from all enemies to complete before clearing trackers
-        // This ensures hit targets are available for all effects in all moves
-        yield return new WaitUntil(() => !ActionSystem.Instance.isPerforming);
-        
-        // Clear all hit target trackers after all enemy moves complete
-        HitTargetTracker.ClearAll();
+        // Don't wait here - let the ActionSystem process all reactions automatically
+        // The POST reaction will handle cleanup after all actions complete
+        Debug.Log("[EnemySystem] All enemy moves queued. Reactions will be processed by ActionSystem.");
         
         // Wait one frame before continuing (required for coroutines)
         yield return null;
+    }
+
+    /// <summary>
+    /// POST reaction that runs after all enemy turn actions complete
+    /// </summary>
+    /// <param name="enemyTurnGA">The enemy turn action that just completed</param>
+    /// <remarks>
+    /// This runs after all PerformEffectGA reactions have been processed.
+    /// Used to clean up hit target trackers and perform any final enemy turn cleanup.
+    /// </remarks>
+    private void EnemyTurnPostReaction(EnemyTurnGA enemyTurnGA)
+    {
+        Debug.Log("[EnemySystem] Enemy turn POST reaction - cleaning up hit target trackers");
+        // Clear all hit target trackers after all enemy moves complete
+        // This happens after all reactions (PerformEffectGA -> DealDamageGA, etc.) are processed
+        HitTargetTracker.ClearAll();
     }
 
     /// <summary>

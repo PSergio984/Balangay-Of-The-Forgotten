@@ -103,13 +103,22 @@ public class EffectSystem : MonoBehaviour
 
         // Get the specific game action that this effect should perform (damage, heal, etc.)
         // Pass the targets and caster info so the effect knows who is involved
-        CombatantView caster = CurrentHeroUtil.GetCurrentHero();
+        // Use caster from PerformEffectGA if provided (for enemy attacks), otherwise fall back to current hero (for hero cards)
+        CombatantView caster = performEffectGA.Caster ?? CurrentHeroUtil.GetCurrentHero();
         
-        // Validate caster - GetCurrentHero() can return null when no heroes exist or index is out of bounds
+        Debug.Log($"[EffectSystem] Processing effect {performEffectGA.Effect.GetType().Name}. " +
+                 $"Caster: {(caster != null ? caster.name : "null")} " +
+                 $"(from PerformEffectGA: {(performEffectGA.Caster != null ? performEffectGA.Caster.name : "null")}, " +
+                 $"fallback: {(CurrentHeroUtil.GetCurrentHero() != null ? CurrentHeroUtil.GetCurrentHero().name : "null")}), " +
+                 $"Targets: {(performEffectGA.Targets != null ? performEffectGA.Targets.Count : 0)}");
+        
+        // Log warning if caster is still null (should be rare)
         if (caster == null)
         {
-            Debug.LogWarning($"[EffectSystem] GetCurrentHero() returned null while processing effect {performEffectGA.Effect.GetType().Name}. " +
-                           $"This may occur when no heroes exist or current hero index is invalid. Effect will proceed with null caster.");
+            Debug.LogWarning($"[EffectSystem] Caster is null while processing effect {performEffectGA.Effect.GetType().Name}. " +
+                           $"PerformEffectGA.Caster was {(performEffectGA.Caster == null ? "null" : "set")}, " +
+                           $"GetCurrentHero() returned {(CurrentHeroUtil.GetCurrentHero() == null ? "null" : "a hero")}. " +
+                           $"Effect will proceed with null caster.");
         }
         
         GameAction effectAction = null;
