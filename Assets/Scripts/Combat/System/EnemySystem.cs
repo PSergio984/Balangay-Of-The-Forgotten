@@ -210,6 +210,13 @@ public class EnemySystem : Singleton<EnemySystem>
         // Example: VictorySystem.Instance.ShowVictoryScreen();
     }
 
+    [Header("Move Name Display")]
+    [Tooltip("Color for enemy move name popups")]
+    [SerializeField] private Color moveNameColor = new Color(1f, 0.5f, 0.5f, 1f); // Light red
+    
+    [Tooltip("Vertical offset for move name popup above enemy")]
+    [SerializeField] private float moveNameOffsetY = 2f;
+
     /// <summary>
     /// Makes all enemies perform their actions during enemy turn
     /// </summary>
@@ -227,6 +234,8 @@ public class EnemySystem : Singleton<EnemySystem>
     /// ATTACK INTEGRATION: Creates AttackHeroGA actions with proper caster tracking.
     /// This enables the perk system to know which enemy attacked for reactive targeting.
     /// Only living enemies (CurrentHealth > 0) can attack.
+    /// 
+    /// MOVE NAME DISPLAY: Shows the enemy's move name as a popup when they act.
     /// </remarks>
     // Handles what happens during the enemy turn - makes all enemies attack
     private IEnumerator EnemyTurnPerformer(EnemyTurnGA enemyTurnGA)
@@ -247,6 +256,7 @@ public class EnemySystem : Singleton<EnemySystem>
             if (moveset == null || moveset.Count == 0)
             {
                 // Fallback: basic attack if no moveset
+                ShowMoveNamePopup(enemy, "Attack");
                 AttackHeroGA fallbackAttack = new(enemy);
                 ActionSystem.Instance.AddReaction(fallbackAttack);
                 continue;
@@ -254,6 +264,10 @@ public class EnemySystem : Singleton<EnemySystem>
 
             // Randomly select a move
             var move = moveset[Random.Range(0, moveset.Count)];
+
+            // Show the move name as a popup above the enemy
+            string moveName = !string.IsNullOrEmpty(move.Description) ? move.Description : "Unknown Move";
+            ShowMoveNamePopup(enemy, moveName);
 
             // Handle manual target effect (single-target, e.g., attack or debuff)
             if (move.ManualTargetEffect != null)
@@ -278,6 +292,22 @@ public class EnemySystem : Singleton<EnemySystem>
         }
         // Wait one frame before continuing (required for coroutines)
         yield return null;
+    }
+
+    /// <summary>
+    /// Displays the enemy's move name as a popup above them
+    /// </summary>
+    /// <param name="enemy">The enemy performing the move</param>
+    /// <param name="moveName">The name of the move to display</param>
+    private void ShowMoveNamePopup(EnemyView enemy, string moveName)
+    {
+        // Get position above the enemy
+        SpriteRenderer spriteRenderer = enemy.GetComponentInChildren<SpriteRenderer>();
+        Vector3 popupPosition = spriteRenderer != null ? spriteRenderer.transform.position : enemy.transform.position;
+        popupPosition.y += moveNameOffsetY;
+        
+        // Create a text popup with the move name
+        DamagePopUp.CreateTextPopUp(popupPosition, moveName, moveNameColor, DamagePopUp.PopUpAnimationMode.FadeOnly);
     }
   
     /// <summary>

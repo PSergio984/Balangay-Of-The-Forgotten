@@ -39,7 +39,7 @@ MonoBehaviour:
       data:
         baseDamage: 50
         damageAmplification: 1
-        accuracy: 0
+        accuracy: 1
         critChance: 0
         defenseIgnore: 0
         AttackAmp: 1.5

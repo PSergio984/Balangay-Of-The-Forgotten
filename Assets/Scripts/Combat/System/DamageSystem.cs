@@ -95,6 +95,7 @@ public class DamageSystem : MonoBehaviour
     /// 
     /// UPDATED: Now supports per-target damage calculation. If PerTargetDamages is set,
     /// each target receives their specific damage amount. Otherwise, uses Amount for all targets.
+    /// Also integrates with CombatVFXManager for enhanced visual/audio feedback.
     /// </remarks>
     // The main method that processes damage actions and applies damage to targets
     private IEnumerator DealDamagePerformer(DealDamageGA dealDamageGA)
@@ -123,12 +124,29 @@ public class DamageSystem : MonoBehaviour
             bool isMiss = damageAmount == 0f;
             // If DealDamageGA has a crit info, you can extend this logic; for now, assume no crit info, so always false
             bool isCrit = false;
+            
             // Show the popup before applying damage for immediate feedback
             DamagePopUp.Create(popupPosition, Mathf.RoundToInt(damageAmount), isCrit, isMiss);
 
-            // Spawn a visual effect at the sprite's position to show damage was dealt
-            if (target != null && damageVFX != null)
+            // Use CombatVFXManager for enhanced VFX/SFX if available
+            if (CombatVFXManager.Instance != null)
             {
+                if (isMiss)
+                {
+                    CombatVFXManager.Instance.PlayMissEffect(popupPosition);
+                }
+                else if (isCrit)
+                {
+                    CombatVFXManager.Instance.PlayDamageEffect(popupPosition, true);
+                }
+                else
+                {
+                    CombatVFXManager.Instance.PlayDamageEffect(popupPosition, false);
+                }
+            }
+            else if (target != null && damageVFX != null)
+            {
+                // Fallback: use the old instantiation method
                 Instantiate(damageVFX, popupPosition, Quaternion.identity);
             }
 

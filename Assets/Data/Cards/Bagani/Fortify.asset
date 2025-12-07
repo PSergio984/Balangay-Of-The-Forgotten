@@ -18,11 +18,29 @@ MonoBehaviour:
   <Art>k__BackingField: {fileID: 21300000, guid: 96ffc84691ad62d498322e62c5262dbc, type: 3}
   <BackgroundArt>k__BackingField: {fileID: 21300000, guid: d4bcb8c2f5a8a744f99089ac16372e00, type: 3}
   <RoleData>k__BackingField: {fileID: 11400000, guid: 8a873cc1966fdd641a8f8d3b47bd0288, type: 2}
+  <Cooldown>k__BackingField: 4
   <ManualTargetEffect>k__BackingField:
     rid: -2
-  <OtherEffects>k__BackingField: []
+  <OtherEffects>k__BackingField:
+  - <targetMode>k__BackingField:
+      rid: 5040687012623679998
+    <effects>k__BackingField:
+      rid: 5040687012623679999
   references:
     version: 2
     RefIds:
     - rid: -2
       type: {class: , ns: , asm: }
+    - rid: 5040687012623679998
+      type: {class: NoTM, ns: , asm: Assembly-CSharp}
+      data: 
+    - rid: 5040687012623679999
+      type: {class: ApplyShieldEffect, ns: , asm: Assembly-CSharp}
+      data:
+        flatShieldAmount: 0
+        percentOfTargetMaxHP: 0.3
+        percentOfCasterCurrentHP: 0
+        percentOfCasterMaxHP: 0
+        duration: 2
+        canStack: 1
+        excludeCaster: 0

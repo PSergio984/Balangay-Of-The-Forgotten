@@ -61,6 +61,72 @@ public class StatusEffectTickSystem : Singleton<StatusEffectTickSystem>
 				ApplyBurnGA applyBurnGA = new(burnStacks, combatant);
 				ActionSystem.Instance.AddReaction(applyBurnGA);
 			}
+			
+			// DEVOURED: apply DoT damage and reduce stack
+			int devouredStacks = combatant.GetStatusEffectStacks(StatusEffectType.DEVOURED);
+			if (devouredStacks > 0)
+			{
+				DealDamageGA dotDamage = new DealDamageGA(devouredStacks, new List<CombatantView> { combatant }, null);
+				ActionSystem.Instance.AddReaction(dotDamage);
+				combatant.RemoveStatusEffect(StatusEffectType.DEVOURED, 1);
+			}
+			
+			// DEFENSE_UP: tick duration (handled by DefenseUpSystem)
+			DefenseUpSystem defenseUpSystem = FindObjectOfType<DefenseUpSystem>();
+			if (defenseUpSystem != null)
+			{
+				defenseUpSystem.TickDefenseUp(combatant);
+			}
+			
+			// DEFENSE_DOWN: tick duration (handled by DefenseDownSystem)
+			DefenseDownSystem defenseDownSystem = FindObjectOfType<DefenseDownSystem>();
+			if (defenseDownSystem != null)
+			{
+				defenseDownSystem.TickDefenseDown(combatant);
+			}
+			
+			// DMG_UP: tick duration (handled by DamageUpSystem)
+			DamageUpSystem damageUpSystem = FindObjectOfType<DamageUpSystem>();
+			if (damageUpSystem != null)
+			{
+				damageUpSystem.TickDamageUp(combatant);
+			}
+			
+			// ATTACK_UP: tick duration (handled by AttackUpSystem)
+			AttackUpSystem attackUpSystem = FindObjectOfType<AttackUpSystem>();
+			if (attackUpSystem != null)
+			{
+				attackUpSystem.TickAttackUp(combatant);
+			}
+			
+			// ATTACK_DOWN: tick duration (handled by AttackDownSystem)
+			AttackDownSystem attackDownSystem = FindObjectOfType<AttackDownSystem>();
+			if (attackDownSystem != null)
+			{
+				attackDownSystem.TickAttackDown(combatant);
+			}
+			
+			// CRIT_UP: tick duration (handled by CritUpSystem)
+			CritUpSystem critUpSystem = FindObjectOfType<CritUpSystem>();
+			if (critUpSystem != null)
+			{
+				critUpSystem.TickCritUp(combatant);
+			}
+			
+			// CRIT_DOWN: tick duration (handled by CritDownSystem)
+			CritDownSystem critDownSystem = FindObjectOfType<CritDownSystem>();
+			if (critDownSystem != null)
+			{
+				critDownSystem.TickCritDown(combatant);
+			}
+			
+			// FOCUSED: tick duration (handled by FocusedSystem)
+			FocusedSystem focusedSystem = FindObjectOfType<FocusedSystem>();
+			if (focusedSystem != null)
+			{
+				focusedSystem.TickFocused(combatant);
+			}
+			
 			// Invulnerable: reduce stack by 1
 			int invulStacks = combatant.GetStatusEffectStacks(StatusEffectType.INVULNERABLE);
 			if (invulStacks > 0)

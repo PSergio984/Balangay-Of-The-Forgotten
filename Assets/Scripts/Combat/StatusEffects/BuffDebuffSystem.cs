@@ -47,11 +47,8 @@ public class BuffDebuffSystem : MonoBehaviour
         StatusEffectType.ATTACK_UP,
         StatusEffectType.CRIT_UP,
         StatusEffectType.DMG_UP,
-        StatusEffectType.IGNORE_DEFENSE,
-        StatusEffectType.HIT_UP,
         StatusEffectType.RAGE,
         StatusEffectType.FOCUSED,
-        StatusEffectType.BLESSED,
     };
 
     private void OnEnable()

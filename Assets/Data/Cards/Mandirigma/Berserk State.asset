@@ -24,24 +24,18 @@ MonoBehaviour:
     rid: -2
   <OtherEffects>k__BackingField:
   - <targetMode>k__BackingField:
-      rid: 8634069515110449821
+      rid: 5040687012623679996
     <effects>k__BackingField:
-      rid: 8634069515110449822
+      rid: 5040687012623679997
   references:
     version: 2
     RefIds:
     - rid: -2
       type: {class: , ns: , asm: }
-    - rid: 8634069515110449821
-      type: {class: EveryoneTM, ns: , asm: Assembly-CSharp}
+    - rid: 5040687012623679996
+      type: {class: NoTM, ns: , asm: Assembly-CSharp}
       data: 
-    - rid: 8634069515110449822
-      type: {class: DealDamageEffect, ns: , asm: Assembly-CSharp}
+    - rid: 5040687012623679997
+      type: {class: ApplyRageEffect, ns: , asm: Assembly-CSharp}
       data:
-        baseDamage: 0
-        damageAmplification: 1
-        accuracy: 1
-        critChance: 0
-        defenseIgnore: 0
-        AttackAmp: 1
-        MagicAmp: 0
+        duration: 3

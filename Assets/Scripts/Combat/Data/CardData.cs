@@ -165,6 +165,21 @@ public class CardData : ScriptableObject
     public int Cooldown { get; private set; } = 0;
 
 
+    [Title("VFX & SFX", "Visual and audio effects for this card", TitleAlignments.Centered)]
+    
+    /// <summary>
+    /// Optional VFX/SFX data for this card's visual and audio effects
+    /// </summary>
+    /// <remarks>
+    /// Assign a CardVFXData asset to give this card custom visual and sound effects.
+    /// If left empty, default effects will be used based on the effect type.
+    /// </remarks>
+    [field: SerializeField]
+    [field: LabelText("Card VFX/SFX")]
+    [field: InfoBox("Optional: Assign custom VFX and SFX for this card", InfoMessageType.None)]
+    [field: AssetsOnly]
+    public CardVFXData VFXData { get; private set; }
+
     [Title("Card Effects", "Define what this card does when played", TitleAlignments.Centered)]
     [InfoBox("Manual Target Effect: Player chooses the target (like single-target damage)\n" +
              "Other Effects: Automatic targeting (like area damage, self-buffs)", InfoMessageType.Info)]

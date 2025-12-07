@@ -158,6 +158,22 @@ public class CombatantView : MonoBehaviour
     /// </remarks>
     [SerializeField] protected Image fillHealth;
     
+    [Header("Health Bar Animation")]
+    [Tooltip("Duration for health bar slider animation")]
+    [SerializeField] protected float healthAnimDuration = 0.4f;
+    
+    [Tooltip("Ease type for health decrease (damage)")]
+    [SerializeField] protected Ease healthDecreaseEase = Ease.OutQuint;
+    
+    [Tooltip("Ease type for health increase (healing)")]
+    [SerializeField] protected Ease healthIncreaseEase = Ease.OutBack;
+    
+    [Tooltip("Enable pulsing animation when health changes")]
+    [SerializeField] protected bool enableHealthPulse = true;
+    
+    [Tooltip("Scale multiplier for health text pulse")]
+    [SerializeField] protected float healthPulseScale = 1.2f;
+
         /// <summary>
         /// The defense stat of this combatant (used in damage reduction)
         /// </summary>
@@ -236,6 +252,7 @@ public class CombatantView : MonoBehaviour
     protected void SetupBase(int health, Sprite image, string name, float magicPower, float attackPower, float defense)
     {
         MaxHealth = CurrentHealth = health;
+        previousHealth = health; // Initialize previous health
         MagicPower = magicPower;
         AttackPower = attackPower;
         Defense = defense;
@@ -247,13 +264,8 @@ public class CombatantView : MonoBehaviour
         if (sliderHealth != null)
         {
             sliderHealth.maxValue = MaxHealth;
-            sliderHealth.value = CurrentHealth;
-            if (fillHealth != null)
-            {
-                fillHealth.color = gradientHealth.Evaluate(1f);
-            }
         }
-        healthText.text = CurrentHealth + "/" + MaxHealth;
+        SetHealthImmediate(); // Use immediate set for initialization
     }
 
     /// <summary>
@@ -279,17 +291,91 @@ public class CombatantView : MonoBehaviour
             spriteRenderer.sprite = image;
     }
 
+    /// <summary>
+    /// Stores previous health value for detecting healing vs damage
+    /// </summary>
+    private int previousHealth = -1;
+
+    /// <summary>
+    /// Updates health UI with smooth animation
+    /// </summary>
     private void UpdateHealth()
     {
+        // Determine if this is healing or damage
+        bool isHealing = previousHealth >= 0 && CurrentHealth > previousHealth;
+        previousHealth = CurrentHealth;
+        
+        AnimateHealthBar(isHealing);
+        AnimateHealthText();
+    }
+
+    /// <summary>
+    /// Animates the health bar slider smoothly from current to new value
+    /// </summary>
+    private void AnimateHealthBar(bool isHealing)
+    {
+        if (sliderHealth == null) return;
+        
+        // Kill any existing health bar animation
+        DOTween.Kill(sliderHealth);
+        
+        // Choose ease based on whether healing or taking damage
+        Ease ease = isHealing ? healthIncreaseEase : healthDecreaseEase;
+        
+        // Animate slider value
+        sliderHealth.DOValue(CurrentHealth, healthAnimDuration).SetEase(ease);
+        
+        // Animate fill color
+        if (fillHealth != null && gradientHealth != null)
+        {
+            float targetNormalized = (float)CurrentHealth / MaxHealth;
+            Color targetColor = gradientHealth.Evaluate(targetNormalized);
+            fillHealth.DOColor(targetColor, healthAnimDuration).SetEase(ease);
+        }
+    }
+
+    /// <summary>
+    /// Animates the health text with a subtle pulse effect
+    /// </summary>
+    private void AnimateHealthText()
+    {
+        if (healthText == null) return;
+        
+        // Update text immediately
+        healthText.text = CurrentHealth + "/" + MaxHealth;
+        
+        // Apply pulse animation if enabled
+        if (enableHealthPulse)
+        {
+            // Kill any existing text animation
+            DOTween.Kill(healthText.transform);
+            
+            // Pulse animation: scale up then back to normal
+            healthText.transform.localScale = Vector3.one;
+            healthText.transform.DOPunchScale(Vector3.one * (healthPulseScale - 1f), 0.3f, 1, 0.5f);
+        }
+    }
+
+    /// <summary>
+    /// Immediately sets health without animation (for initialization)
+    /// </summary>
+    private void SetHealthImmediate()
+    {
+        previousHealth = CurrentHealth;
+        
         if (sliderHealth != null)
         {
             sliderHealth.value = CurrentHealth;
-            if (fillHealth != null)
+            if (fillHealth != null && gradientHealth != null)
             {
                 fillHealth.color = gradientHealth.Evaluate(sliderHealth.normalizedValue);
             }
         }
-        healthText.text = CurrentHealth + "/" + MaxHealth;
+        
+        if (healthText != null)
+        {
+            healthText.text = CurrentHealth + "/" + MaxHealth;
+        }
     }
 
     /// <summary>
@@ -333,7 +419,25 @@ public class CombatantView : MonoBehaviour
         // Then return to original position to fix animation issue
         transform.DOShakePosition(0.2f, 0.5f);
         
-        // Update the health display to show the new health value
+        // Update the health display to show the new health value (animated)
+        UpdateHealth();
+    }
+
+    /// <summary>
+    /// Heals this combatant, increasing health with visual effects
+    /// </summary>
+    /// <param name="healAmount">How much health to restore</param>
+    /// <remarks>
+    /// Called by healing effects and abilities. Increases health up to MaxHealth,
+    /// plays a healing visual indicator, and updates the health display with
+    /// the healing-specific animation (green pulse, upward direction).
+    /// </remarks>
+    public void Heal(int healAmount)
+    {
+        // Apply healing (clamped to MaxHealth)
+        CurrentHealth = Mathf.Min(CurrentHealth + healAmount, MaxHealth);
+        
+        // Update the health display (animation will detect this is healing)
         UpdateHealth();
     }
 

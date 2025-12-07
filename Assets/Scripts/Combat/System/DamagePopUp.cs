@@ -1,10 +1,35 @@
 using TMPro;
 using UnityEngine;
 
+/// <summary>
+/// Popup text display system for damage numbers, status effects, and announcements.
+/// Supports multiple animation modes: scaling (default) and fade-only.
+/// </summary>
 public class DamagePopUp : MonoBehaviour
 {
+    /// <summary>
+    /// Animation mode for the popup display
+    /// </summary>
+    public enum PopUpAnimationMode
+    {
+        /// <summary>Default mode - scales up then down before fading</summary>
+        ScaleAndFade,
+        /// <summary>Simple mode - only moves up and fades out, no scaling</summary>
+        FadeOnly
+    }
 
+    /// <summary>
+    /// Creates a damage popup with the default scaling animation
+    /// </summary>
     public static DamagePopUp Create(Vector3 position, int popUpAmount, bool isCrit, bool isMiss)
+    {
+        return Create(position, popUpAmount, isCrit, isMiss, PopUpAnimationMode.ScaleAndFade);
+    }
+
+    /// <summary>
+    /// Creates a damage popup with specified animation mode
+    /// </summary>
+    public static DamagePopUp Create(Vector3 position, int popUpAmount, bool isCrit, bool isMiss, PopUpAnimationMode animationMode)
     {
         if (GameAssets.i.pfDamagePopup == null)
         {
@@ -24,7 +49,37 @@ public class DamagePopUp : MonoBehaviour
         // Apply horizontal and vertical offset after instantiation
         Vector3 offset = new Vector3(damagePopUp.spawnOffsetX, damagePopUp.spawnOffsetY, 0f);
         damagePopUpObj.transform.position = position + offset;
-        damagePopUp.Setup(popUpAmount, isCrit, isMiss);
+        damagePopUp.Setup(popUpAmount, isCrit, isMiss, animationMode);
+        return damagePopUp;
+    }
+
+    /// <summary>
+    /// Creates a text-based popup (for status effects, move names, etc.) with fade-only animation
+    /// </summary>
+    /// <param name="position">World position to spawn the popup</param>
+    /// <param name="text">Text to display</param>
+    /// <param name="color">Color of the text</param>
+    /// <param name="animationMode">Animation style (default: FadeOnly for text announcements)</param>
+    public static DamagePopUp CreateTextPopUp(Vector3 position, string text, Color color, PopUpAnimationMode animationMode = PopUpAnimationMode.FadeOnly)
+    {
+        if (GameAssets.i.pfDamagePopup == null)
+        {
+            Debug.LogError("[DamagePopUp] DamagePopUpPrefab not assigned!");
+            return null;
+        }
+        
+        GameObject damagePopUpObj = Instantiate(GameAssets.i.pfDamagePopup, position, Quaternion.identity);
+        DamagePopUp damagePopUp = damagePopUpObj.GetComponent<DamagePopUp>();
+        if (damagePopUp == null)
+        {
+            Debug.LogWarning("[DamagePopUp] Instantiated prefab is missing the DamagePopUp component.");
+            Destroy(damagePopUpObj);
+            return null;
+        }
+        
+        Vector3 offset = new Vector3(damagePopUp.spawnOffsetX, damagePopUp.spawnOffsetY, 0f);
+        damagePopUpObj.transform.position = position + offset;
+        damagePopUp.SetupText(text, color, animationMode);
         return damagePopUp;
     }
 
@@ -42,6 +97,10 @@ public class DamagePopUp : MonoBehaviour
     
     [Tooltip("Upward movement speed (lower = less movement)")]
     [SerializeField] private float moveSpeed = 8f;
+
+    [Header("Fade Only Mode Settings")]
+    [Tooltip("Duration for fade-only animation mode")]
+    [SerializeField] private float fadeOnlyDuration = 1.2f;
     
     private float disappearTimer;
     private Color textColor;
@@ -50,14 +109,32 @@ public class DamagePopUp : MonoBehaviour
 
     private static int sortingOrder;
     private Vector3 initialScale;
+    
+    /// <summary>
+    /// Current animation mode for this popup instance
+    /// </summary>
+    private PopUpAnimationMode currentAnimationMode = PopUpAnimationMode.ScaleAndFade;
 
     private void Awake()
     {
         initialScale = transform.localScale;
     }
 
+    /// <summary>
+    /// Legacy setup method - uses default ScaleAndFade animation
+    /// </summary>
     public void Setup(int popUpAmount, bool isCrit, bool isMiss)
     {
+        Setup(popUpAmount, isCrit, isMiss, PopUpAnimationMode.ScaleAndFade);
+    }
+
+    /// <summary>
+    /// Setup popup with specified animation mode
+    /// </summary>
+    public void Setup(int popUpAmount, bool isCrit, bool isMiss, PopUpAnimationMode animationMode)
+    {
+        currentAnimationMode = animationMode;
+        
         if (isMiss)
         {
             textMesh.text = "MISS";
@@ -76,7 +153,8 @@ public class DamagePopUp : MonoBehaviour
 
         textMesh.color = textColor;
 
-        disappearTimer = DISAPPEAR_TIMER_MAX;
+        // Set timer based on animation mode
+        disappearTimer = (animationMode == PopUpAnimationMode.FadeOnly) ? fadeOnlyDuration : DISAPPEAR_TIMER_MAX;
 
         sortingOrder++;
         if (canvas != null)
@@ -89,15 +167,84 @@ public class DamagePopUp : MonoBehaviour
         transform.localScale = initialScale;
     }
 
+    /// <summary>
+    /// Setup popup with custom text and color (for status effects, move names, etc.)
+    /// </summary>
+    public void SetupText(string text, Color color, PopUpAnimationMode animationMode = PopUpAnimationMode.FadeOnly)
+    {
+        currentAnimationMode = animationMode;
+        
+        textMesh.text = text;
+        textColor = color;
+        textMesh.color = textColor;
+
+        // Set timer based on animation mode
+        disappearTimer = (animationMode == PopUpAnimationMode.FadeOnly) ? fadeOnlyDuration : DISAPPEAR_TIMER_MAX;
+
+        sortingOrder++;
+        if (canvas != null)
+        {
+            canvas.overrideSorting = true;
+            canvas.sortingOrder = sortingOrder;
+        }
+
+        // Slower movement for text announcements
+        moveVector = Vector3.up * (moveSpeed * 0.5f);
+        transform.localScale = initialScale;
+    }
+
 
 
 
     private void Update()
     {
-        // move
+        // Move upward with deceleration
         transform.position += moveVector * Time.deltaTime;
         moveVector -= moveVector * 8f * Time.deltaTime;
 
+        if (currentAnimationMode == PopUpAnimationMode.FadeOnly)
+        {
+            // FADE ONLY MODE: Just move up and fade out, no scaling
+            UpdateFadeOnlyMode();
+        }
+        else
+        {
+            // SCALE AND FADE MODE: Original behavior with scaling animation
+            UpdateScaleAndFadeMode();
+        }
+    }
+
+    /// <summary>
+    /// Simple fade-only animation - moves up and fades out without scaling
+    /// Used for status effect procs, move names, and announcements
+    /// </summary>
+    private void UpdateFadeOnlyMode()
+    {
+        if (disappearTimer > 0f)
+        {
+            disappearTimer -= Time.deltaTime;
+            
+            // Calculate fade progress (start fading after 50% of duration)
+            float fadeStartTime = fadeOnlyDuration * 0.5f;
+            if (disappearTimer < fadeStartTime)
+            {
+                float fadeProgress = 1f - (disappearTimer / fadeStartTime);
+                textColor.a = Mathf.Lerp(1f, 0f, fadeProgress);
+                textMesh.color = textColor;
+            }
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
+
+    /// <summary>
+    /// Original scale and fade animation - scales up then down before fading
+    /// Used for damage numbers
+    /// </summary>
+    private void UpdateScaleAndFadeMode()
+    {
         // count down scale timer first
         if (disappearTimer > 0f)
         {

@@ -53,8 +53,6 @@ public class RemoveDebuffsGA : GameAction
     {
         StatusEffectType.BURN,
         StatusEffectType.DEFENSE_DOWN,
-        StatusEffectType.BONECRACKED,
-        StatusEffectType.MOONFALL,
         StatusEffectType.DEVOURED,
         StatusEffectType.STUN,
     };

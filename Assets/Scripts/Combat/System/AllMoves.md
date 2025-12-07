@@ -13,7 +13,7 @@ BAGANI (TANK)
 3. Fortify – Gain shield equal to +30% max HP for 2 turns, CD 4
 4. Last Stand – If HP <20%, gain +50% defense for 3 turns, CD 4
 5. Guardian's Oath – Sacrifice 25% current HP, shield all allies (except itself) for amount of 25% current HP for 2 turns, unstackable, CD 4
-   MANDIRIGMA (SUPPORT)
+   Babaylan (SUPPORT)
 
 6. Heal – Restore HP equivalent to 100 (+50% MAG) to ally, and heals self for 50% of the amount, CD 2
 7. Blessing – +20% dmg buff to ally for 2 turns, CD 3

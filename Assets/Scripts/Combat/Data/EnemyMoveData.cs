@@ -54,6 +54,16 @@ public class EnemyMoveData : ScriptableObject
 	public string Information { get; private set; }
 
 
+	[Title("VFX & SFX", "Visual and audio effects for this move", TitleAlignments.Centered)]
+	
+	/// <summary>
+	/// Optional VFX/SFX data for this move's visual and audio effects
+	/// </summary>
+	[field: SerializeField]
+	[field: LabelText("Move VFX/SFX")]
+	[field: InfoBox("Optional: Assign custom VFX and SFX for this move", InfoMessageType.None)]
+	public CardVFXData VFXData { get; private set; }
+
 	[Title("Move Effects", "Define what this move does when used", TitleAlignments.Centered)]
 	[InfoBox("Manual Target Effect: AI chooses the target (like single-target damage)\nOther Effects: Automatic targeting (like area damage, self-buffs)", InfoMessageType.Info)]
 

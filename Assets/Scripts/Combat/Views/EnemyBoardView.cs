@@ -14,12 +14,13 @@ using DG.Tweening;
  * - Reuses slot 0 and health bar UI for each sequential enemy
  * - Tracks the single active enemy on the board
  * - Assigns health bar UI from slot 0 to each enemy at runtime
+ * - Enemies slide in from the right side of the screen
  * 
  * Sequential Spawning Flow:
- * 1. Enemy 1 spawns in slot 0 with slot 0 health bar
+ * 1. Enemy 1 slides in from right to slot 0 with slot 0 health bar
  * 2. Player defeats Enemy 1
  * 3. Enemy 1 is removed from slot 0
- * 4. Enemy 2 spawns in slot 0 with slot 0 health bar (reused)
+ * 4. Enemy 2 slides in from right to slot 0 with health bar 0 (same UI reused)
  * 5. Repeat until all enemies defeated
  * 
  * Integration: Used by EnemySystem to organize sequential enemy placement, works with EnemyViewCreator
@@ -41,30 +42,30 @@ using DG.Tweening;
 /// <item>Always uses slot 0 (the first slot) for enemy placement</item>
 /// <item>Always uses health bar UI components from index 0</item>
 /// <item>When adding an enemy, places it in slot 0 regardless of previous enemies</item>
+/// <item>Enemy slides in from the right side of the screen</item>
 /// <item>Reuses the same UI elements (slider, fill, text) for each sequential enemy</item>
 /// <item>Only tracks one active enemy at a time in the EnemyViews list</item>
 /// <item>Creates smooth wave-based combat flow</item>
 /// </list>
 /// 
-/// <para><strong>Example:</strong> You have 3 enemies in the queue. Enemy 1 spawns in slot 0 with 
-/// health bar 0. After defeat, Enemy 2 spawns in slot 0 with health bar 0 (same UI reused). 
-/// After defeat, Enemy 3 spawns in slot 0 with health bar 0 (same UI reused again).</para>
-/// 
 /// <para><strong>Works with:</strong> EnemySystem for sequential enemy management, EnemyViewCreator for spawning</para>
-/// 
-/// <para><strong>How to use:</strong> Set up at least one Transform slot and one set of health bar UI 
-/// components in Inspector. EnemySystem will automatically spawn enemies sequentially using slot 0.</para>
 /// </remarks>
 public class EnemyBoardView : MonoBehaviour
 {
     /// <summary>
     /// List of positions where enemies can be placed on the battlefield
     /// </summary>
-    /// <remarks>
-    /// These are Transform objects that define where each enemy should appear.
-    /// Set these up in the Inspector to control enemy positioning and spacing.
-    /// </remarks>
     [SerializeField] private List<Transform> slots;
+
+    [Header("Spawn Animation")]
+    [Tooltip("How far off-screen to start the enemy (positive = from right)")]
+    [SerializeField] private float spawnOffsetX = 10f;
+    
+    [Tooltip("Duration of the slide-in animation")]
+    [SerializeField] private float slideInDuration = 0.6f;
+    
+    [Tooltip("Ease type for the slide-in")]
+    [SerializeField] private Ease slideInEase = Ease.OutBack;
 
     /// <summary>
     /// List of health bar UI sliders for each enemy position
@@ -147,11 +148,31 @@ public class EnemyBoardView : MonoBehaviour
         // Get slot 0 (the primary enemy slot for sequential spawning)
         Transform slot = slots[SLOT_INDEX];
         
-        // Create a new enemy view at the slot's position and rotation
-        EnemyView enemyView = EnemyViewCreator.Instance.CreateEnemyView(enemyData, slot.position, slot.rotation);
+        // Calculate spawn position (off-screen to the right)
+        Vector3 targetPosition = slot.position;
+        Vector3 spawnPosition = new Vector3(targetPosition.x + spawnOffsetX, targetPosition.y, targetPosition.z);
+        
+        // Create a new enemy view at the off-screen spawn position
+        EnemyView enemyView = EnemyViewCreator.Instance.CreateEnemyView(enemyData, spawnPosition, slot.rotation);
+        
+        // Validate enemy view was created successfully
+        if (enemyView == null)
+        {
+            Debug.LogError($"[EnemyBoardView] Failed to create EnemyView for {enemyData?.name ?? "unknown enemy"}!", this);
+            return;
+        }
         
         // Make the enemy a child of the slot for organization
         enemyView.transform.parent = slot;
+        
+        // Start transparent for fade-in effect
+        SpriteRenderer spriteRenderer = enemyView.GetComponentInChildren<SpriteRenderer>();
+        if (spriteRenderer != null)
+        {
+            Color startColor = spriteRenderer.color;
+            startColor.a = 0f;
+            spriteRenderer.color = startColor;
+        }
         
         // Add the new enemy to our list of active enemies (should only have 1 in sequential mode)
         EnemyViews.Add(enemyView);
@@ -183,6 +204,26 @@ public class EnemyBoardView : MonoBehaviour
         {
             Debug.LogWarning($"[EnemyBoardView] Health bar components not configured for slot {SLOT_INDEX}. Assign health bar sliders, fills, texts, and name texts in Inspector or enemy '{enemyData.EnemyName}' will not display health.");
         }
+        
+        // Play spawn animation (slide in from right)
+        StartCoroutine(PlaySpawnAnimation(enemyView, targetPosition, spriteRenderer));
+    }
+
+    /// <summary>
+    /// Plays the slide-in spawn animation for an enemy (from the right)
+    /// </summary>
+    private IEnumerator PlaySpawnAnimation(EnemyView enemyView, Vector3 targetPosition, SpriteRenderer spriteRenderer)
+    {
+        // Slide in from right
+        enemyView.transform.DOMove(targetPosition, slideInDuration).SetEase(slideInEase);
+        
+        // Fade in
+        if (spriteRenderer != null)
+        {
+            spriteRenderer.DOFade(1f, slideInDuration * 0.5f);
+        }
+        
+        yield return new WaitForSeconds(slideInDuration);
     }
     
     /// <summary>
