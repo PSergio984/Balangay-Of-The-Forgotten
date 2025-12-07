@@ -334,42 +334,6 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: -0.12200165
       objectReference: {fileID: 0}
-    - target: {fileID: 1540079438297368763, guid: abfc41d4823e2cf41a3f50f9396393e8, type: 3}
-      propertyPath: armorSprite
-      value: 
-      objectReference: {fileID: 21300000, guid: 018e8181c15070f4e91eab8aad84ca64, type: 3}
-    - target: {fileID: 1540079438297368763, guid: abfc41d4823e2cf41a3f50f9396393e8, type: 3}
-      propertyPath: dmgUpSprite
-      value: 
-      objectReference: {fileID: 21300000, guid: ede18cb9593c9b248a045f852eff5709, type: 3}
-    - target: {fileID: 1540079438297368763, guid: abfc41d4823e2cf41a3f50f9396393e8, type: 3}
-      propertyPath: critUpSprite
-      value: 
-      objectReference: {fileID: 21300000, guid: ede18cb9593c9b248a045f852eff5709, type: 3}
-    - target: {fileID: 1540079438297368763, guid: abfc41d4823e2cf41a3f50f9396393e8, type: 3}
-      propertyPath: tempHpSprite
-      value: 
-      objectReference: {fileID: 21300000, guid: 018e8181c15070f4e91eab8aad84ca64, type: 3}
-    - target: {fileID: 1540079438297368763, guid: abfc41d4823e2cf41a3f50f9396393e8, type: 3}
-      propertyPath: attackUpSprite
-      value: 
-      objectReference: {fileID: 21300000, guid: d637a652ae63d6d4a8fc31c80bed944e, type: 3}
-    - target: {fileID: 1540079438297368763, guid: abfc41d4823e2cf41a3f50f9396393e8, type: 3}
-      propertyPath: defenseUpSprite
-      value: 
-      objectReference: {fileID: 21300000, guid: d637a652ae63d6d4a8fc31c80bed944e, type: 3}
-    - target: {fileID: 1540079438297368763, guid: abfc41d4823e2cf41a3f50f9396393e8, type: 3}
-      propertyPath: defenseDownSprite
-      value: 
-      objectReference: {fileID: 21300000, guid: 018e8181c15070f4e91eab8aad84ca64, type: 3}
-    - target: {fileID: 1540079438297368763, guid: abfc41d4823e2cf41a3f50f9396393e8, type: 3}
-      propertyPath: invulnerableSprite
-      value: 
-      objectReference: {fileID: 21300000, guid: ede18cb9593c9b248a045f852eff5709, type: 3}
-    - target: {fileID: 1540079438297368763, guid: abfc41d4823e2cf41a3f50f9396393e8, type: 3}
-      propertyPath: ignoreDefenseSprite
-      value: 
-      objectReference: {fileID: 21300000, guid: d637a652ae63d6d4a8fc31c80bed944e, type: 3}
     - target: {fileID: 1700101302347575646, guid: abfc41d4823e2cf41a3f50f9396393e8, type: 3}
       propertyPath: m_AnchorMax.x
       value: 1
