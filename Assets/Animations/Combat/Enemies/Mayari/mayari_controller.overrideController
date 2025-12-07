@@ -6,14 +6,14 @@ AnimatorOverrideController:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: bathala_overrider
+  m_Name: mayari_controller
   m_Controller: {fileID: 9100000, guid: eb526f05f63d8b84a98125979989d8d5, type: 2}
   m_Clips:
-  - m_OriginalClip: {fileID: 7400000, guid: 4c687edce0260214cb970d53a4d3ac62, type: 2}
-    m_OverrideClip: {fileID: 7400000, guid: 3dff417d82f6d784ab4641167118f2e9, type: 2}
-  - m_OriginalClip: {fileID: 7400000, guid: 04107e30c59e63149963b22866245012, type: 2}
-    m_OverrideClip: {fileID: 7400000, guid: 62d31119b4d3b4d4383f75bb83dadf44, type: 2}
   - m_OriginalClip: {fileID: 7400000, guid: 0160b87c1b7274d4099ab2ca73502f14, type: 2}
-    m_OverrideClip: {fileID: 7400000, guid: 3dff417d82f6d784ab4641167118f2e9, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 1de5e69c5934a6147bd71862997886f1, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: 4c687edce0260214cb970d53a4d3ac62, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: c83e4a1a4c850b44b9b3ff86bc8042f9, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: 04107e30c59e63149963b22866245012, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 947ac548e7d93924780c81e7fc4d8baa, type: 2}
   - m_OriginalClip: {fileID: 7400000, guid: f3407c9dfb3815c468cbf48fa0f5108e, type: 2}
-    m_OverrideClip: {fileID: 7400000, guid: 3f31ef543648dd14cab0cc0c9578baf4, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 1de5e69c5934a6147bd71862997886f1, type: 2}

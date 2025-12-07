@@ -432,6 +432,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemyBoardView
   slots:
   - {fileID: 160960754}
+  spawnOffsetX: 10
+  slideInDuration: 0.6
+  slideInEase: 27
   healthBarSliders:
   - {fileID: 839346363}
   healthBarFills:
@@ -2336,6 +2339,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2f08b2330fe31224f9030c4fb17485c3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::StatusEffectSystem
+  buffColor: {r: 0.4, g: 1, b: 0.4, a: 1}
+  debuffColor: {r: 1, g: 0.4, b: 0.4, a: 1}
+  neutralColor: {r: 1, g: 1, b: 0.4, a: 1}
+  popupOffsetY: 1.5
 --- !u!114 &844015675
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2438,6 +2445,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemySystem
   enemyBoardView: {fileID: 90652668}
+  moveNameColor: {r: 1, g: 0.5, b: 0.5, a: 1}
+  moveNameOffsetY: 2
 --- !u!1 &1008515197
 GameObject:
   m_ObjectHideFlags: 0
@@ -3444,6 +3453,10 @@ MonoBehaviour:
   - {fileID: 214923784}
   - {fileID: 132052509}
   - {fileID: 259983734}
+  spawnOffsetX: -10
+  slideInDuration: 0.6
+  slideInEase: 27
+  spawnDelay: 0.2
 --- !u!1 &1451194844
 GameObject:
   m_ObjectHideFlags: 0
