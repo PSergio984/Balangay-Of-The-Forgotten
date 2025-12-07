@@ -15,6 +15,7 @@ MonoBehaviour:
   <Description>k__BackingField: 'Thunderous Decree '
   <Information>k__BackingField: "\u2022\tDeals 125% MAG on all players.\r\n\u2022\t50%
     chance to stun 2 players for 1 turn.\r\n"
+  <VFXData>k__BackingField: {fileID: 0}
   <ManualTargetEffect>k__BackingField:
     rid: -2
   <OtherEffects>k__BackingField:
@@ -22,6 +23,10 @@ MonoBehaviour:
       rid: 1437264605691248874
     <effects>k__BackingField:
       rid: 1437264605691248861
+  - <targetMode>k__BackingField:
+      rid: 5040687038726930745
+    <effects>k__BackingField:
+      rid: 5040687038726930744
   references:
     version: 2
     RefIds:
@@ -38,5 +43,14 @@ MonoBehaviour:
         AttackAmp: 0
         MagicAmp: 1.25
     - rid: 1437264605691248874
+      type: {class: AllHeroesTM, ns: , asm: Assembly-CSharp}
+      data: 
+    - rid: 5040687038726930744
+      type: {class: StunEffect, ns: , asm: Assembly-CSharp}
+      data:
+        stunChance: 0.5
+        stunDuration: 1
+        maxStunnedTargets: 2
+    - rid: 5040687038726930745
       type: {class: AllHeroesTM, ns: , asm: Assembly-CSharp}
       data: 

@@ -16,6 +16,7 @@ MonoBehaviour:
   <Information>k__BackingField: "\u2022\tDeal 80% MAG to all enemies.\r\n\u2022\tEach
     target that are hit by this gets inflicted by Devoured: for 2 turns, takes DMG
     equal to 20% of MAG (fixed at 60HP).\r\n"
+  <VFXData>k__BackingField: {fileID: 0}
   <ManualTargetEffect>k__BackingField:
     rid: -2
   <OtherEffects>k__BackingField:
@@ -23,6 +24,10 @@ MonoBehaviour:
       rid: 1437264605691248873
     <effects>k__BackingField:
       rid: 1437264605691248861
+  - <targetMode>k__BackingField:
+      rid: 5040687042380169305
+    <effects>k__BackingField:
+      rid: 5040687042380169442
   references:
     version: 2
     RefIds:
@@ -41,3 +46,12 @@ MonoBehaviour:
     - rid: 1437264605691248873
       type: {class: AllHeroesTM, ns: , asm: Assembly-CSharp}
       data: 
+    - rid: 5040687042380169305
+      type: {class: TargetsHitByPreviousEffectTM, ns: , asm: Assembly-CSharp}
+      data: 
+    - rid: 5040687042380169442
+      type: {class: ApplyDevouredEffect, ns: , asm: Assembly-CSharp}
+      data:
+        magDamagePercentage: 20
+        fixedDamage: 0
+        duration: 2

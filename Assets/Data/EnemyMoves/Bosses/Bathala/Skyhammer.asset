@@ -15,6 +15,7 @@ MonoBehaviour:
   <Description>k__BackingField: 'Skyhammer '
   <Information>k__BackingField: "\u2022\tHeals Bakunawa for 50 (+100%) MAG.\r\n\u2022\tDeals
     110% MAG as damage to a single target.\r\n"
+  <VFXData>k__BackingField: {fileID: 0}
   <ManualTargetEffect>k__BackingField:
     rid: -2
   <OtherEffects>k__BackingField:
@@ -22,6 +23,10 @@ MonoBehaviour:
       rid: 1437264605691248871
     <effects>k__BackingField:
       rid: 1437264605691248861
+  - <targetMode>k__BackingField:
+      rid: 5040687038726930740
+    <effects>k__BackingField:
+      rid: 5040687038726930742
   references:
     version: 2
     RefIds:
@@ -40,3 +45,12 @@ MonoBehaviour:
     - rid: 1437264605691248871
       type: {class: RandomTargetTM, ns: , asm: Assembly-CSharp}
       data: 
+    - rid: 5040687038726930740
+      type: {class: RandomTargetTM, ns: , asm: Assembly-CSharp}
+      data: 
+    - rid: 5040687038726930742
+      type: {class: StunEffect, ns: , asm: Assembly-CSharp}
+      data:
+        stunChance: 0.7
+        stunDuration: 1
+        maxStunnedTargets: 1

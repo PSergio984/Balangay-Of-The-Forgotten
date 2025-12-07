@@ -14,28 +14,49 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemyMoveData
   <Description>k__BackingField: Daybreak Fury
   <Information>k__BackingField: Deals 175% ATK to enemy, + 55% CRIT Rate
+  <VFXData>k__BackingField: {fileID: 0}
   <ManualTargetEffect>k__BackingField:
     rid: -2
   <OtherEffects>k__BackingField:
   - <targetMode>k__BackingField:
-      rid: 1437264605691248863
+      rid: 5040687038726930770
     <effects>k__BackingField:
-      rid: 1437264605691248861
+      rid: 5040687038726930779
+  - <targetMode>k__BackingField:
+      rid: 5040687038726930780
+    <effects>k__BackingField:
+      rid: 5040687038726930805
+  - <targetMode>k__BackingField:
+      rid: 5040687038726930783
+    <effects>k__BackingField:
+      rid: 5040687038726930784
   references:
     version: 2
     RefIds:
     - rid: -2
       type: {class: , ns: , asm: }
-    - rid: 1437264605691248861
-      type: {class: DealDamageEffect, ns: , asm: Assembly-CSharp}
-      data:
-        baseDamage: 0
-        damageAmplification: 1.2
-        accuracy: 1
-        critChance: 0.55
-        defenseIgnore: 0
-        AttackAmp: 0.8
-        MagicAmp: 1
-    - rid: 1437264605691248863
-      type: {class: AllHeroesTM, ns: , asm: Assembly-CSharp}
+    - rid: 5040687038726930770
+      type: {class: SelfEnemyTM, ns: , asm: Assembly-CSharp}
       data: 
+    - rid: 5040687038726930779
+      type: {class: ApplyAttackUpEffect, ns: , asm: Assembly-CSharp}
+      data:
+        attackPercentage: 40
+        duration: 1
+    - rid: 5040687038726930780
+      type: {class: SelfEnemyTM, ns: , asm: Assembly-CSharp}
+      data: 
+    - rid: 5040687038726930783
+      type: {class: SelfEnemyTM, ns: , asm: Assembly-CSharp}
+      data: 
+    - rid: 5040687038726930784
+      type: {class: SelfDamageEffect, ns: , asm: Assembly-CSharp}
+      data:
+        flatDamage: 0
+        percentOfCurrentHP: 0.3
+        percentOfMaxHP: 0
+    - rid: 5040687038726930805
+      type: {class: ApplyDefenseIgnoreEffect, ns: , asm: Assembly-CSharp}
+      data:
+        defenseIgnorePercentage: 20
+        duration: 1

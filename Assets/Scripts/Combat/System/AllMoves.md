@@ -70,8 +70,6 @@ Celestial Judgement (Ultimate)
 
 B. Mayari
 Moonlight Grace (Heal)
-B. Mayari
-Moonlight Grace (Heal)
 • Heal herself with a total of 25% max HP.
 • Lunar Strike (Single Target)• Moonfall Spear (Single Target, Debuff)
 • Deals 105% ATK
@@ -79,7 +77,10 @@ Moonlight Grace (Heal)
 • Tide of Night (Buff, Low AoE Damage)
 • Mayari will be invulnerable next turn to all types of damage
 • Removes all debuffs
-• Creates a mist that damages all opponents for 30% of their current HP.• Deals 175% ATK to enemy, + 55% CRIT Rate
+• Creates a mist that damages all opponents for 30% of their current HP.
+
+C. Apolaki
+• Deals 175% ATK to enemy, + 55% CRIT Rate
 • Creates a mist that damages all opponents for 30% of their current HP.
 • Deals 175% ATK to enemy, + 55% CRIT Rate• Deals damage to all enemies
 • Deals 80% ATK + 100% MAG to the hit enemies

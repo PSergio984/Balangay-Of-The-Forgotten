@@ -53,7 +53,8 @@ public class StatusEffectSystem : MonoBehaviour
         StatusEffectType.RAGE,
         StatusEffectType.INVULNERABLE,
         StatusEffectType.ARMOR,
-        StatusEffectType.TEMP_HP
+        StatusEffectType.TEMP_HP,
+        StatusEffectType.DEFENSE_IGNORE
     };
 
     // List of debuff-type status effects (negative effects)

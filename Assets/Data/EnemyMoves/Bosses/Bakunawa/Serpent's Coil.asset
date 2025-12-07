@@ -15,6 +15,7 @@ MonoBehaviour:
   <Description>k__BackingField: Eclipse Fang
   <Information>k__BackingField: "\u2022\tHeals Bakunawa for 50 (+100%) MAG.\r\n\u2022\tDeals
     110% MAG as damage to a single target.\r\n"
+  <VFXData>k__BackingField: {fileID: 0}
   <ManualTargetEffect>k__BackingField:
     rid: -2
   <OtherEffects>k__BackingField:
@@ -22,6 +23,10 @@ MonoBehaviour:
       rid: 1437264605691248871
     <effects>k__BackingField:
       rid: 1437264605691248861
+  - <targetMode>k__BackingField:
+      rid: 5040687038726930810
+    <effects>k__BackingField:
+      rid: 5040687038726930811
   references:
     version: 2
     RefIds:
@@ -40,3 +45,11 @@ MonoBehaviour:
     - rid: 1437264605691248871
       type: {class: RandomTargetTM, ns: , asm: Assembly-CSharp}
       data: 
+    - rid: 5040687038726930810
+      type: {class: RandomTargetTM, ns: , asm: Assembly-CSharp}
+      data: 
+    - rid: 5040687038726930811
+      type: {class: ApplyDefenseDownEffect, ns: , asm: Assembly-CSharp}
+      data:
+        defensePercentage: 15
+        duration: 2

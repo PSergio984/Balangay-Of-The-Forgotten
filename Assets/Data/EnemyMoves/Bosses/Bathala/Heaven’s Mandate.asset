@@ -15,28 +15,37 @@ MonoBehaviour:
   <Description>k__BackingField: "Heaven\u2019s Mandate "
   <Information>k__BackingField: "\u2022\tIncreases DEF for 30% for 3 turns\r\n\u2022\tRemoves
     Debuff.\r\n\u2022\tWon\u2019t work if it gets pick after the previous turn\r\n"
+  <VFXData>k__BackingField: {fileID: 0}
   <ManualTargetEffect>k__BackingField:
     rid: -2
   <OtherEffects>k__BackingField:
   - <targetMode>k__BackingField:
-      rid: 1437264605691248871
+      rid: 5040687038726930736
     <effects>k__BackingField:
-      rid: 1437264605691248861
+      rid: 5040687038726930737
+  - <targetMode>k__BackingField:
+      rid: 5040687038726930738
+    <effects>k__BackingField:
+      rid: 5040687038726930739
   references:
     version: 2
     RefIds:
     - rid: -2
       type: {class: , ns: , asm: }
-    - rid: 1437264605691248861
-      type: {class: DealDamageEffect, ns: , asm: Assembly-CSharp}
-      data:
-        baseDamage: 0
-        damageAmplification: 1
-        accuracy: 1
-        critChance: 0
-        defenseIgnore: 0
-        AttackAmp: 0
-        MagicAmp: 1.1
-    - rid: 1437264605691248871
-      type: {class: RandomTargetTM, ns: , asm: Assembly-CSharp}
+    - rid: 5040687038726930736
+      type: {class: SelfEnemyTM, ns: , asm: Assembly-CSharp}
       data: 
+    - rid: 5040687038726930737
+      type: {class: ApplyDefenseUpEffect, ns: , asm: Assembly-CSharp}
+      data:
+        defensePercentage: 30
+        duration: 3
+    - rid: 5040687038726930738
+      type: {class: SelfEnemyTM, ns: , asm: Assembly-CSharp}
+      data: 
+    - rid: 5040687038726930739
+      type: {class: RemoveDebuffEffect, ns: , asm: Assembly-CSharp}
+      data:
+        removeAllDebuffs: 1
+        specificDebuff: 10
+        includeCaster: 1

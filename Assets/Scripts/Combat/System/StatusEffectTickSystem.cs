@@ -62,13 +62,11 @@ public class StatusEffectTickSystem : Singleton<StatusEffectTickSystem>
 				ActionSystem.Instance.AddReaction(applyBurnGA);
 			}
 			
-			// DEVOURED: apply DoT damage and reduce stack
-			int devouredStacks = combatant.GetStatusEffectStacks(StatusEffectType.DEVOURED);
-			if (devouredStacks > 0)
+			// DEVOURED: tick duration and apply DoT damage (handled by DevouredSystem)
+			DevouredSystem devouredSystem = FindObjectOfType<DevouredSystem>();
+			if (devouredSystem != null)
 			{
-				DealDamageGA dotDamage = new DealDamageGA(devouredStacks, new List<CombatantView> { combatant }, null);
-				ActionSystem.Instance.AddReaction(dotDamage);
-				combatant.RemoveStatusEffect(StatusEffectType.DEVOURED, 1);
+				DevouredSystem.TickDevoured(combatant);
 			}
 			
 			// DEFENSE_UP: tick duration (handled by DefenseUpSystem)
@@ -125,6 +123,13 @@ public class StatusEffectTickSystem : Singleton<StatusEffectTickSystem>
 			if (focusedSystem != null)
 			{
 				focusedSystem.TickFocused(combatant);
+			}
+			
+			// DEFENSE_IGNORE: tick duration (handled by DefenseIgnoreSystem)
+			DefenseIgnoreSystem defenseIgnoreSystem = FindObjectOfType<DefenseIgnoreSystem>();
+			if (defenseIgnoreSystem != null)
+			{
+				DefenseIgnoreSystem.TickDefenseIgnore(combatant);
 			}
 			
 			// Invulnerable: reduce stack by 1

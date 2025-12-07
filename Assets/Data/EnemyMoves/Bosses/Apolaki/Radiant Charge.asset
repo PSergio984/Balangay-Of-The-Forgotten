@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemyMoveData
   <Description>k__BackingField: Radiant Charge
   <Information>k__BackingField: Deals 175% ATK to enemy, + 55% CRIT Rate
+  <VFXData>k__BackingField: {fileID: 0}
   <ManualTargetEffect>k__BackingField:
     rid: -2
   <OtherEffects>k__BackingField:
@@ -21,6 +22,10 @@ MonoBehaviour:
       rid: 1437264605691248863
     <effects>k__BackingField:
       rid: 1437264605691248861
+  - <targetMode>k__BackingField:
+      rid: 5040687038726930768
+    <effects>k__BackingField:
+      rid: 5040687038726930769
   references:
     version: 2
     RefIds:
@@ -30,6 +35,7 @@ MonoBehaviour:
       type: {class: DealDamageEffect, ns: , asm: Assembly-CSharp}
       data:
         baseDamage: 0
+        damageAmplification: 1
         accuracy: 1
         critChance: 0.55
         defenseIgnore: 0
@@ -38,3 +44,12 @@ MonoBehaviour:
     - rid: 1437264605691248863
       type: {class: AllHeroesTM, ns: , asm: Assembly-CSharp}
       data: 
+    - rid: 5040687038726930768
+      type: {class: RandomTargetTM, ns: , asm: Assembly-CSharp}
+      data: 
+    - rid: 5040687038726930769
+      type: {class: StunEffect, ns: , asm: Assembly-CSharp}
+      data:
+        stunChance: 1
+        stunDuration: 1
+        maxStunnedTargets: 1

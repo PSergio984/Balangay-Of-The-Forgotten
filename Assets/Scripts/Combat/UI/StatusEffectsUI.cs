@@ -118,6 +118,7 @@ public class StatusEffectsUI : MonoBehaviour
             StatusEffectType.DEFENSE_UP => defenseUpSprite,
             StatusEffectType.DMG_UP => dmgUpSprite,
             StatusEffectType.FOCUSED => ignoreDefenseSprite,
+            StatusEffectType.DEFENSE_IGNORE => ignoreDefenseSprite,
             StatusEffectType.INVULNERABLE => invulnerableSprite,
             StatusEffectType.RAGE => rageSprite,
             StatusEffectType.TAUNT => tauntSprite,

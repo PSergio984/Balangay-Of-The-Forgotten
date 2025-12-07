@@ -276,6 +276,9 @@ public class EnemySystem : Singleton<EnemySystem>
             string moveName = !string.IsNullOrEmpty(move.Description) ? move.Description : "Unknown Move";
             ShowMoveNamePopup(enemy, moveName);
 
+            // Start tracking hit targets for this move sequence
+            HitTargetTracker.StartMoveSequence(enemy);
+
             // Handle manual target effect (single-target, e.g., attack or debuff)
             if (move.ManualTargetEffect != null)
             {
@@ -291,12 +294,27 @@ public class EnemySystem : Singleton<EnemySystem>
             {
                 foreach (var effectWrapper in move.OtherEffects)
                 {
+                    // Set caster on target mode if it's TargetsHitByPreviousEffectTM
+                    if (effectWrapper.targetMode is TargetsHitByPreviousEffectTM hitTargetMode)
+                    {
+                        hitTargetMode.SetCaster(enemy);
+                    }
+
                     List<CombatantView> targets = effectWrapper.targetMode.GetTargets();
                     PerformEffectGA performEffectGA = new(effectWrapper.effects, targets);
                     ActionSystem.Instance.AddReaction(performEffectGA);
                 }
             }
+
         }
+        
+        // Wait for all actions from all enemies to complete before clearing trackers
+        // This ensures hit targets are available for all effects in all moves
+        yield return new WaitUntil(() => !ActionSystem.Instance.isPerforming);
+        
+        // Clear all hit target trackers after all enemy moves complete
+        HitTargetTracker.ClearAll();
+        
         // Wait one frame before continuing (required for coroutines)
         yield return null;
     }

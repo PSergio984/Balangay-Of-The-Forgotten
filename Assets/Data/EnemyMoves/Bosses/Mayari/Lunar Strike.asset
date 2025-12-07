@@ -15,11 +15,12 @@ MonoBehaviour:
   <Description>k__BackingField: 'Lunar Strike '
   <Information>k__BackingField: "\u2022\tMayari will unleash a powerful strike, dealing
     115% ATK + 20% MAG."
+  <VFXData>k__BackingField: {fileID: 0}
   <ManualTargetEffect>k__BackingField:
     rid: -2
   <OtherEffects>k__BackingField:
   - <targetMode>k__BackingField:
-      rid: 1437264605691248874
+      rid: 5040687038726930759
     <effects>k__BackingField:
       rid: 1437264605691248861
   references:
@@ -37,6 +38,6 @@ MonoBehaviour:
         defenseIgnore: 0
         AttackAmp: 1.15
         MagicAmp: 0.2
-    - rid: 1437264605691248874
-      type: {class: AllHeroesTM, ns: , asm: Assembly-CSharp}
+    - rid: 5040687038726930759
+      type: {class: RandomTargetTM, ns: , asm: Assembly-CSharp}
       data: 

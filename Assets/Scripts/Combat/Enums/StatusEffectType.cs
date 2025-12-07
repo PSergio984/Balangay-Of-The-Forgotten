@@ -105,6 +105,13 @@ public enum StatusEffectType
     /// </summary>
     FOCUSED,
     
+    /// <summary>
+    /// Defense Ignore effect - attacks ignore a percentage of enemy defense
+    /// Used by: Daybreak Fury (Apolaki) - ignores 20% DEF for 1 turn
+    /// Stacks represent duration in turns
+    /// </summary>
+    DEFENSE_IGNORE,
+    
     // ===== DEBUFF EFFECTS =====
     
     /// <summary>

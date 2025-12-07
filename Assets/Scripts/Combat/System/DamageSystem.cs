@@ -125,6 +125,12 @@ public class DamageSystem : MonoBehaviour
             // If DealDamageGA has a crit info, you can extend this logic; for now, assume no crit info, so always false
             bool isCrit = false;
             
+            // Record hit target if damage was dealt (not a miss)
+            if (!isMiss && dealDamageGA.Caster != null)
+            {
+                HitTargetTracker.RecordHit(target, damageAmount, dealDamageGA.Caster);
+            }
+            
             // Show the popup before applying damage for immediate feedback
             DamagePopUp.Create(popupPosition, Mathf.RoundToInt(damageAmount), isCrit, isMiss);
 

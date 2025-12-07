@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemyMoveData
   <Description>k__BackingField: Daybreak Fury
   <Information>k__BackingField: Deals 175% ATK to enemy, + 55% CRIT Rate
+  <VFXData>k__BackingField: {fileID: 0}
   <ManualTargetEffect>k__BackingField:
     rid: -2
   <OtherEffects>k__BackingField:
@@ -21,6 +22,10 @@ MonoBehaviour:
       rid: 1437264605691248863
     <effects>k__BackingField:
       rid: 1437264605691248861
+  - <targetMode>k__BackingField:
+      rid: 5040687038726930785
+    <effects>k__BackingField:
+      rid: 5040687038726930786
   references:
     version: 2
     RefIds:
@@ -39,3 +44,12 @@ MonoBehaviour:
     - rid: 1437264605691248863
       type: {class: AllHeroesTM, ns: , asm: Assembly-CSharp}
       data: 
+    - rid: 5040687038726930785
+      type: {class: SelfEnemyTM, ns: , asm: Assembly-CSharp}
+      data: 
+    - rid: 5040687038726930786
+      type: {class: SkipTurnEffect, ns: , asm: Assembly-CSharp}
+      data:
+        turnsToSkip: 1
+        isCharging: 0
+        chargingMultiplier: 2

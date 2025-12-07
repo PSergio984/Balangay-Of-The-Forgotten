@@ -17,13 +17,18 @@ MonoBehaviour:
     on the highest HP on the group where Bathala will combine his ATK and MAG with
     a multiplier of 3.0.\r\n\u2022\tBathala will rest for 1 turn after doing this
     move.\r\n"
+  <VFXData>k__BackingField: {fileID: 0}
   <ManualTargetEffect>k__BackingField:
     rid: -2
   <OtherEffects>k__BackingField:
   - <targetMode>k__BackingField:
-      rid: 1437264605691248871
+      rid: 5040687038726930754
     <effects>k__BackingField:
       rid: 1437264605691248861
+  - <targetMode>k__BackingField:
+      rid: 5040687038726930755
+    <effects>k__BackingField:
+      rid: 5040687038726930756
   references:
     version: 2
     RefIds:
@@ -37,8 +42,17 @@ MonoBehaviour:
         accuracy: 1
         critChance: 0
         defenseIgnore: 0
-        AttackAmp: 0
-        MagicAmp: 1.1
-    - rid: 1437264605691248871
-      type: {class: RandomTargetTM, ns: , asm: Assembly-CSharp}
+        AttackAmp: 3
+        MagicAmp: 3
+    - rid: 5040687038726930754
+      type: {class: HighestHPTargetTM, ns: , asm: Assembly-CSharp}
       data: 
+    - rid: 5040687038726930755
+      type: {class: SelfEnemyTM, ns: , asm: Assembly-CSharp}
+      data: 
+    - rid: 5040687038726930756
+      type: {class: SkipTurnEffect, ns: , asm: Assembly-CSharp}
+      data:
+        turnsToSkip: 1
+        isCharging: 0
+        chargingMultiplier: 2
