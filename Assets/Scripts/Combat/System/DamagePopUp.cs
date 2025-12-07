@@ -187,7 +187,7 @@ public class DamagePopUp : MonoBehaviour
     /// <param name="color">Color of the text</param>
     /// <param name="animationMode">Animation style (default: FadeOnly for text announcements)</param>
     /// <param name="scaleMultiplier">Scale multiplier for the popup size (default: 0.7 for smaller text popups)</param>
-    public void SetupText(string text, Color color, PopUpAnimationMode animationMode = PopUpAnimationMode.FadeOnly, float scaleMultiplier = 0.1f)
+    public void SetupText(string text, Color color, PopUpAnimationMode animationMode = PopUpAnimationMode.FadeOnly, float scaleMultiplier = 0.7f)
     {
         currentAnimationMode = animationMode;
         

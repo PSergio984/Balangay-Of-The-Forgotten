@@ -204,11 +204,16 @@ public class HandView : MonoBehaviour
     /// </summary>
     /// <param name="card">The card data to search for</param>
     /// <returns>The matching CardView, or null if not found</returns>
+    /// <summary>
+    /// Gets a card view by card data without removing it from the hand
+    /// </summary>
+    /// <param name="card">The card data to find</param>
+    /// <returns>The CardView matching the card, or null if not found</returns>
     /// <remarks>
     /// Uses LINQ to search through all cards in the hand and find the one
-    /// that matches the given card data.
+    /// that matches the given card data. Does not remove the card from hand.
     /// </remarks>
-    private CardView GetCardView(Card card)
+    public CardView GetCardView(Card card)
     {
         // Use LINQ to find the first card view that matches the card data
         return cards.Where(cardView => cardView.Card == card).FirstOrDefault();
@@ -225,7 +230,7 @@ public class HandView : MonoBehaviour
     /// depth layering to create an attractive hand layout.
     /// </remarks>
     // idk, just update positions of the cards when adding
-    private IEnumerator UpdateCardPositions(float duration)
+    public IEnumerator UpdateCardPositions(float duration)
     {
         // Exit early if there are no cards to position
         if (cards.Count == 0)

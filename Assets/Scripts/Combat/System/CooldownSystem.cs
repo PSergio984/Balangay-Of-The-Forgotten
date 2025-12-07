@@ -117,11 +117,24 @@ public class CooldownSystem : Singleton<CooldownSystem>
     /// Handles starting cooldown when a card is played
     /// </summary>
     /// <param name="playCardsGA">The play card action that just completed</param>
+    /// <remarks>
+    /// Only starts cooldown if the card was actually played (not cancelled due to failed conditions).
+    /// If a conditional card's condition fails, it remains in hand, so we check if the card is still
+    /// in hand - if it is, the play was cancelled and we don't set cooldown.
+    /// </remarks>
     private void OnCardPlayed(PlayCardsGA playCardsGA)
     {
         Card card = playCardsGA.Card;
         
-        // Start cooldown if the card has one
+        // Check if card is still in hand - if so, the play was cancelled (condition failed)
+        // Only set cooldown if the card was actually played (removed from hand)
+        if (CardSystem.Instance != null && CardSystem.Instance.IsCardInHand(card))
+        {
+            Debug.Log($"[CooldownSystem] Card '{card.Title}' play was cancelled (condition failed) - not setting cooldown");
+            return; // Card is still in hand, play was cancelled, don't set cooldown
+        }
+        
+        // Card was successfully played (not in hand anymore) - start cooldown if it has one
         if (card.BaseCooldown > 0)
         {
             card.StartCooldown();

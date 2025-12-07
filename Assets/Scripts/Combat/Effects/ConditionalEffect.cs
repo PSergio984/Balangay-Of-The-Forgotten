@@ -121,6 +121,28 @@ public class ConditionalEffect : Effects
     }
     
     /// <summary>
+    /// Public method to check if the condition is met without executing the effect
+    /// Used to validate conditions before playing cards
+    /// </summary>
+    /// <param name="targets">List of potential targets</param>
+    /// <param name="caster">The caster of the effect</param>
+    /// <returns>True if condition is met, false otherwise</returns>
+    public bool IsConditionMet(List<CombatantView> targets, CombatantView caster)
+    {
+        // Determine which combatant to check the condition on
+        CombatantView checkTarget = conditionTarget == ConditionTarget.SELF ? caster : 
+                                     (targets != null && targets.Count > 0 ? targets[0] : caster);
+        
+        if (checkTarget == null)
+        {
+            Debug.LogWarning("[ConditionalEffect] No valid target to check condition on!");
+            return false;
+        }
+        
+        return CheckCondition(checkTarget);
+    }
+    
+    /// <summary>
     /// Checks if the condition is met for the specified combatant
     /// </summary>
     private bool CheckCondition(CombatantView target)

@@ -247,16 +247,33 @@ public class CardSystem : Singleton<CardSystem>
     {
         int heroIndex = CurrentHeroUtil.CurrentHeroIndex;
         var hand = hands[heroIndex];
-        var discardPile = discardPiles[heroIndex];
+        var currentHero = CurrentHeroUtil.GetCurrentHero();
+        
+        // Check if card has conditional effects that will fail BEFORE removing from hand
+        // If condition fails, card stays in hand and play is cancelled
+        bool conditionFailed = CheckIfConditionalEffectsFail(playCardsGA.Card, playCardsGA.ManualTarget, currentHero);
+        
+        if (conditionFailed)
+        {
+            Debug.Log($"[CardSystem] Card '{playCardsGA.Card.Title}' condition not met - card remains in hand");
+            
+            // Card stays in hand - ensure it's properly positioned in hand view
+            // If it was dragged, this will animate it back to its hand position
+            yield return handView.UpdateCardPositions(0.3f);
+            
+            yield break; // Don't play the card, don't remove from hand, don't discard
+        }
+        
+        // Condition passed - proceed with normal play
+        // Remove card from hand and get the card view
         hand.Remove(playCardsGA.Card);
         CardView cardView = handView.RemoveCard(playCardsGA.Card);
+        
+        // Normal flow: discard the card
         yield return DiscardCard(cardView, heroIndex);
         // SpendStaminaGA spendStaminaGA = new (playCardsGA.Card.Stamina);
         // ActionSystem.Instance.AddReaction(spendStaminaGA);
 
-        // Get the current hero for animation
-        var currentHero = CurrentHeroUtil.GetCurrentHero();
-        
         // Determine animation type based on card effects (attack for damage, cast for magic/buffs)
         CombatantAnimState animState = DetermineCardAnimationType(playCardsGA.Card);
         
@@ -277,6 +294,77 @@ public class CardSystem : Singleton<CardSystem>
             List<CombatantView> targets = effectWrapper.targetMode.GetTargets();
             PerformEffectGA performEffectGA = new(effectWrapper.effects,targets);
             ActionSystem.Instance.AddReaction(performEffectGA);
+        }
+    }
+    
+    /// <summary>
+    /// Checks if any conditional effects on the card will fail
+    /// </summary>
+    /// <param name="card">The card to check</param>
+    /// <param name="manualTarget">The manually selected target (if any)</param>
+    /// <param name="caster">The caster of the card</param>
+    /// <returns>True if any conditional effect fails, false if all pass or no conditional effects</returns>
+    private bool CheckIfConditionalEffectsFail(Card card, CombatantView manualTarget, CombatantView caster)
+    {
+        // Check manual target effect if it's a conditional effect
+        if (card.ManualTargetEffect is ConditionalEffect conditionalManual)
+        {
+            List<CombatantView> targets = manualTarget != null ? new List<CombatantView> { manualTarget } : new List<CombatantView>();
+            if (!conditionalManual.IsConditionMet(targets, caster))
+            {
+                Debug.Log($"[CardSystem] Manual target conditional effect failed for card '{card.Title}'");
+                return true; // Condition failed
+            }
+        }
+        
+        // Check other effects for conditional effects
+        // Note: We need to get targets using the target mode, same as when playing the card
+        if (card.OtherEffects != null)
+        {
+            foreach (var effectWrapper in card.OtherEffects)
+            {
+                if (effectWrapper.effects is ConditionalEffect conditionalOther)
+                {
+                    // Get targets using the same target mode that would be used when playing
+                    List<CombatantView> targets = effectWrapper.targetMode != null ? effectWrapper.targetMode.GetTargets() : new List<CombatantView>();
+                    if (!conditionalOther.IsConditionMet(targets, caster))
+                    {
+                        Debug.Log($"[CardSystem] Other effect conditional effect failed for card '{card.Title}'");
+                        return true; // Condition failed
+                    }
+                }
+            }
+        }
+        
+        return false; // All conditions passed or no conditional effects
+    }
+    
+    /// <summary>
+    /// Returns a card to the deck instead of discarding it
+    /// Used when conditional effects fail - card goes back to deck to be drawn again
+    /// </summary>
+    /// <param name="cardView">The visual card to return to deck</param>
+    /// <param name="heroIndex">The hero whose deck to return the card to</param>
+    /// <returns>IEnumerator for coroutine execution during return animation</returns>
+    private IEnumerator ReturnCardToDeck(CardView cardView, int heroIndex)
+    {
+        var drawPile = drawPiles[heroIndex];
+        
+        // Add card back to the bottom of the draw pile (or top - your choice)
+        // Adding to the end means it will be drawn later
+        drawPile.Add(cardView.Card);
+        
+        // Animate card moving back to draw pile position
+        cardView.transform.DOScale(Vector3.zero, 0.15f);
+        Tween tween = cardView.transform.DOMove(drawPilePoint.position, 0.15f);
+        yield return tween.WaitForCompletion();
+        
+        // Clean up the card view
+        if (cardView != null && cardView.gameObject != null)
+        {
+            cardView.transform.DOKill();
+            DOTween.Kill(cardView);
+            Destroy(cardView.gameObject);
         }
     }
     
@@ -450,5 +538,26 @@ public class CardSystem : Singleton<CardSystem>
         }
         
         return allCards;
+    }
+    
+    /// <summary>
+    /// Checks if a card is currently in the hand for the specified hero
+    /// </summary>
+    /// <param name="card">The card to check</param>
+    /// <param name="heroIndex">The hero index to check, or -1 for current hero</param>
+    /// <returns>True if the card is in hand, false otherwise</returns>
+    public bool IsCardInHand(Card card, int heroIndex = -1)
+    {
+        if (heroIndex == -1)
+        {
+            heroIndex = CurrentHeroUtil.CurrentHeroIndex;
+        }
+        
+        if (heroIndex < 0 || heroIndex >= hands.Count)
+        {
+            return false;
+        }
+        
+        return hands[heroIndex].Contains(card);
     }
 }

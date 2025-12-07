@@ -188,10 +188,13 @@ public class MatchSetupSystem : MonoBehaviour
     /// </summary>
     private IEnumerator DelayedInitialCardDraw()
     {
-        // Wait for Battle Start banner (0.5s delay + ~1.9s animation = ~2.4s)
-        // Then wait for Player Turn banner (~1.9s animation)
-        // Total wait: ~4.3s, add buffer for safety
-        float totalBannerDuration = 4.5f;
+        // Calculate actual banner sequence timing from CombatPhaseManager.ShowBattleStartSequence:
+        // - Battle Start delay: 0.5s (battleStartDelay)
+        // - Wait after Battle Start call: 2.5s (this wait starts when Battle Start begins animating)
+        // - Player Turn animation: fadeIn (0.4s) + hold (1.0s) + slideOut (0.5s) = 1.9s
+        // Total: 0.5 + 2.5 + 1.9 = 4.9s
+        // Add small buffer for safety: 5.0s
+        float totalBannerDuration = 5.0f;
         
         yield return new WaitForSeconds(totalBannerDuration);
         
