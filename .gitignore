@@ -1,3 +1,5 @@
+# Ignore all mp4 files in StreamingAssets
+Assets/StreamingAssets/*.mp4
 # This .gitignore file should be placed at the root of your Unity project directory
 #
 # Get latest from https://github.com/github/gitignore/blob/main/Unity.gitignore
