@@ -68,10 +68,44 @@ public class HealEffect : Effects
         /// </remarks>
         public override GameAction GetGameAction(List<CombatantView> targets, CombatantView caster)
         {
+            // Defensive check: Ensure caster is not null
+            if (caster == null)
+            {
+                Debug.LogError($"[HealEffect] Caster is null! Cannot calculate healing. Targets: {(targets != null ? targets.Count.ToString() : "null")}");
+                // Return empty heal action with filtered targets
+                List<HealTarget> emptyHealTargets = new List<HealTarget>();
+                if (targets != null)
+                {
+                    foreach (var target in targets)
+                    {
+                        if (target != null) emptyHealTargets.Add(new HealTarget(target, 0));
+                    }
+                }
+                return new HealGA(emptyHealTargets, null);
+            }
+
+            // Defensive check: Ensure targets list is valid
+            if (targets == null || targets.Count == 0)
+            {
+                Debug.LogWarning($"[HealEffect] No targets provided for healing. Caster: {caster.name}");
+                // Return heal action with only self-heal if applicable
+                List<HealTarget> emptyTargetHealList = new List<HealTarget>();
+                if (selfHealPercent > 0f)
+                {
+                    float selfHealAmount = baseHeal * selfHealPercent;
+                    emptyTargetHealList.Add(new HealTarget(caster, selfHealAmount));
+                }
+                return new HealGA(emptyTargetHealList, caster);
+            }
+
+            Debug.Log($"[HealEffect] Processing heal effect. Caster: {caster.name} (Magic: {caster.MagicPower}), Base Heal: {baseHeal}, Magic Amp: {MagicAmp}, Targets: {targets.Count}");
+            
             // List of healing plans for each target
             List<HealTarget> healTargets = new();
             // Calculate base heal amount (flat + magic scaling)
             float totalHeal = baseHeal + (MagicAmp * caster.MagicPower);
+            
+            Debug.Log($"[HealEffect] Total base heal calculated: {totalHeal} (Base: {baseHeal} + Magic: {MagicAmp * caster.MagicPower})");
 
             // Heal each target
             foreach (var target in targets)

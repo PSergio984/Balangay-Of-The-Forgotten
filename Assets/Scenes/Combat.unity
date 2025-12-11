@@ -1032,6 +1032,7 @@ GameObject:
   m_Component:
   - component: {fileID: 447929219}
   - component: {fileID: 447929220}
+  - component: {fileID: 447929221}
   m_Layer: 0
   m_Name: EffectSystem
   m_TagString: Untagged
@@ -1066,6 +1067,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c7054f12684751547b36f9ec58155e7e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EffectSystem
+--- !u!114 &447929221
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 447929218}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 54084e53289d92549b16bb147618720a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::HealSystem
+  healVFX: {fileID: 1172081452124834319, guid: ac009bb7498fcfb4b96614c4fd1f735c, type: 3}
 --- !u!1 &454954085
 GameObject:
   m_ObjectHideFlags: 0

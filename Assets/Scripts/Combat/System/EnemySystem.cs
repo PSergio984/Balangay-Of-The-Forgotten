@@ -123,8 +123,10 @@ public class EnemySystem : Singleton<EnemySystem>
     {
         // Unregister the enemy turn handler
         ActionSystem.DetachPerformer<EnemyTurnGA>();
-        // Note: UnsubscribeReaction has a known bug and may not work correctly
-        // The reaction will be cleaned up when the GameObject is destroyed
+        // Unsubscribe from POST reaction to prevent accumulation (especially important for Singleton)
+        // Note: UnsubscribeReaction has a known bug but we still call it to attempt cleanup
+        // Other systems (HeroSystem, StaminaSystem, CooldownSystem) follow the same pattern
+        ActionSystem.UnsubscribeReaction<EnemyTurnGA>(EnemyTurnPostReaction, ReactionTiming.POST);
         // Unregister the kill enemy handler
         ActionSystem.DetachPerformer<KillEnemyGA>();
     }
