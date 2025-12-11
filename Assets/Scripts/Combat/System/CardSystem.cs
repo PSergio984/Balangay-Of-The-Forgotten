@@ -231,6 +231,38 @@ public class CardSystem : Singleton<CardSystem>
 
         hand.Clear();
     }
+    
+    /// <summary>
+    /// Discards all cards for all heroes (used when enemy dies to prevent card hovering)
+    /// </summary>
+    /// <returns>Coroutine that completes when all cards are discarded</returns>
+    public IEnumerator DiscardAllCardsForAllHeroes()
+    {
+        int heroCount = CurrentHeroUtil.GetHeroCount();
+        
+        // Discard cards for each hero
+        for (int heroIndex = 0; heroIndex < heroCount; heroIndex++)
+        {
+            if (heroIndex >= hands.Count) continue;
+            
+            var hand = hands[heroIndex];
+            // Copy to avoid modifying collection during iteration
+            var handCopy = new List<Card>(hand);
+            
+            foreach (var card in handCopy)
+            {
+                CardView cardView = handView.RemoveCard(card);
+                if (cardView != null)
+                {
+                    yield return DiscardCard(cardView, heroIndex);
+                }
+            }
+            
+            hand.Clear();
+        }
+        
+        Debug.Log($"[CardSystem] Discarded all cards for all {heroCount} heroes");
+    }
 
     /// <summary>
     /// Handles the complete process of playing a card including effects and targeting

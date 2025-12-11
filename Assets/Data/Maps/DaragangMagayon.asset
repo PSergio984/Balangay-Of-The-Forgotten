@@ -28,3 +28,5 @@ MonoBehaviour:
   combatBackgroundSprite: {fileID: 21300000, guid: 8b52ab8f10e286f4d977d3bf9021e01e, type: 3}
   loadingVideoId: loadingApolaki
   MapMusic: {fileID: 0}
+  minibossReward: {fileID: 11400000, guid: 7476c27cc16d52d4c89df896eeaa16a3, type: 2}
+  mainBossReward: {fileID: 11400000, guid: 4469b53dd9cc24b4a9e71c0d6e26dfa9, type: 2}

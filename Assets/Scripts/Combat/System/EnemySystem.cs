@@ -85,6 +85,25 @@ public class EnemySystem : Singleton<EnemySystem>
     /// Current spawn index (0 = first enemy/miniboss, 1 = second enemy/main boss)
     /// </summary>
     private int currentSpawnIndex = 0;
+
+    /// <summary>
+    /// Reference to the current map data (for accessing reward data)
+    /// </summary>
+    /// <remarks>
+    /// Stored during Setup to access reward data when enemies are defeated.
+    /// Used to determine which reward to show based on which enemy was defeated.
+    /// </remarks>
+    private MapData currentMapData = null;
+
+    /// <summary>
+    /// Fallback reward data for testing when no map data is available
+    /// </summary>
+    /// <remarks>
+    /// Used when testing with fallback enemies and no MapData is provided.
+    /// Allows testing reward system without needing a full map setup.
+    /// </remarks>
+    private RewardData fallbackMinibossReward = null;
+    private RewardData fallbackMainBossReward = null;
     
     /// <summary>
     /// Checks if there are more enemies waiting to spawn
@@ -147,12 +166,15 @@ public class EnemySystem : Singleton<EnemySystem>
     /// Initializes the enemy queue and spawns the first enemy for sequential combat
     /// </summary>
     /// <param name="enemyDatas">List of enemy information in order of appearance</param>
+    /// <param name="mapData">Optional map data for accessing reward information</param>
+    /// <param name="fallbackMinibossReward">Optional fallback reward for first enemy (for testing)</param>
+    /// <param name="fallbackMainBossReward">Optional fallback reward for second enemy (for testing)</param>
     /// <remarks>
     /// SEQUENTIAL SPAWNING: This method queues all enemies but only spawns the first one.
     /// When the first enemy is defeated, the next will spawn automatically via KillEnemyPerformer.
     /// This creates a wave-based combat experience where players face enemies one at a time.
     /// </remarks>
-    public void Setup(List<EnemyData> enemyDatas)
+    public void Setup(List<EnemyData> enemyDatas, MapData mapData = null, RewardData fallbackMinibossReward = null, RewardData fallbackMainBossReward = null)
     {
         // Defensive: Guard against null enemyDatas
         if (enemyDatas == null)
@@ -165,6 +187,11 @@ public class EnemySystem : Singleton<EnemySystem>
         // Clear any previous queue data (in case of battle restart)
         enemyQueue.Clear();
         currentSpawnIndex = 0;
+
+        // Store map data and fallback rewards for reward access
+        currentMapData = mapData;
+        this.fallbackMinibossReward = fallbackMinibossReward;
+        this.fallbackMainBossReward = fallbackMainBossReward;
 
         // Queue all enemies for sequential spawning
         foreach (var enemyData in enemyDatas)
@@ -205,19 +232,25 @@ public class EnemySystem : Singleton<EnemySystem>
             
             // Show overlay before first enemy (miniboss) or second enemy (main boss)
             // Index 0 = first enemy (miniboss), Index 1 = second enemy (main boss)
+            bool showingOverlay = false;
             if (currentSpawnIndex == 0 || (currentSpawnIndex == 1 && totalEnemyCount >= 2))
             {
                 // Show overlay animation with appropriate banner
                 if (EnemySpawnOverlayUI.Instance != null)
                 {
+                    showingOverlay = true;
                     // Index 0 = Mini Boss, Index 1 = Main Boss
                     bool isMainBoss = (currentSpawnIndex == 1 && totalEnemyCount >= 2);
                     EnemySpawnOverlayUI.Instance.ShowEnemySpawnOverlay(isMainBoss);
                     
-                    // Wait for overlay animation to complete
-                    // Overlay duration: fadeIn (0.5s) + slide (0.8s) + bounce (0.3s + 0.15s) + hold (1.5s) + fadeOut (0.5s) ≈ 3.75s
-                    float overlayDuration = 4.0f; // Add small buffer
-                    yield return new WaitForSeconds(overlayDuration);
+                    // Wait for overlay animation to complete (poll IsAnimating for accuracy)
+                    while (EnemySpawnOverlayUI.Instance.IsAnimating)
+                    {
+                        yield return new WaitForSeconds(0.1f); // Check every 0.1 seconds
+                    }
+                    
+                    // Add small buffer after overlay completes
+                    yield return new WaitForSeconds(0.2f);
                 }
                 
                 // For first enemy only: Wait for Battle Start banner to complete before spawning
@@ -245,6 +278,45 @@ public class EnemySystem : Singleton<EnemySystem>
             
             // Increment spawn index for next enemy
             currentSpawnIndex++;
+            
+            // For second enemy (main boss) or any enemy after first: Show player turn UI and draw cards
+            // This happens after enemy spawns (not for first enemy, as CombatPhaseManager handles that)
+            if (currentSpawnIndex > 1)
+            {
+                // Wait for enemy spawn animation to complete
+                yield return new WaitForSeconds(0.6f); // Enemy spawn slide-in duration
+                
+                // Ensure overlay is fully complete before showing player turn
+                if (showingOverlay && EnemySpawnOverlayUI.Instance != null)
+                {
+                    while (EnemySpawnOverlayUI.Instance.IsAnimating)
+                    {
+                        yield return new WaitForSeconds(0.1f);
+                    }
+                }
+                
+                // Show player turn UI
+                if (CombatPhaseUI.Instance != null)
+                {
+                    CombatPhaseUI.Instance.ShowPlayerTurn();
+                    Debug.Log("[EnemySystem] Player turn UI shown after enemy spawn");
+                    
+                    // Wait for player turn banner animation to complete before drawing cards
+                    // Player turn duration: fadeIn (0.4s) + hold (1.0s) + slideOut (0.5s) = 1.9s
+                    while (CombatPhaseUI.Instance.IsAnimating)
+                    {
+                        yield return new WaitForSeconds(0.1f);
+                    }
+                    
+                    // Add small buffer after player turn banner
+                    yield return new WaitForSeconds(0.2f);
+                }
+                
+                // Draw cards for the first hero (current hero is already reset to 0)
+                DrawCardsGA drawCardsGA = new DrawCardsGA(5);
+                ActionSystem.Instance.Perform(drawCardsGA);
+                Debug.Log("[EnemySystem] Drawing 5 cards for first hero after enemy spawn");
+            }
         }
         else
         {
@@ -255,18 +327,18 @@ public class EnemySystem : Singleton<EnemySystem>
     }
     
     /// <summary>
-    /// Handles victory condition when all enemies are defeated
+    /// Handles final victory condition when all enemies are defeated
     /// </summary>
     /// <remarks>
     /// Called automatically when the last enemy is defeated and the queue is empty.
-    /// Shows victory banner and allows player to continue to map selection.
+    /// Shows final victory banner and allows player to continue to map selection.
     /// </remarks>
     private void TriggerVictory()
     {
-        Debug.Log("[EnemySystem] ===== VICTORY =====");
+        Debug.Log("[EnemySystem] ===== FINAL VICTORY =====");
         Debug.Log("[EnemySystem] All enemies have been defeated!");
         
-        // Show victory banner
+        // Show final victory banner (no reward, just continue to map selection)
         if (VictoryDefeatUI.Instance != null)
         {
             VictoryDefeatUI.Instance.ShowVictory();
@@ -541,26 +613,261 @@ public class EnemySystem : Singleton<EnemySystem>
     }
     
     /// <summary>
-    /// Handles the death sequence when an enemy is killed, then spawns the next enemy
+    /// Handles the death sequence when an enemy is killed, then triggers victory reward or spawns next enemy
     /// </summary>
     /// <param name="killEnemyGA">The kill action containing which enemy to remove</param>
     /// <returns>Waits for the removal animation to complete</returns>
     /// <remarks>
-    /// SEQUENTIAL SPAWNING: This method processes enemy deaths and triggers the next spawn.
-    /// 1. Removes the defeated enemy with animation
-    /// 2. Waits for removal to complete
-    /// 3. Spawns the next enemy from the queue (or triggers victory if none remain)
-    /// This creates smooth transitions between enemies in wave-based combat.
+    /// DEATH SEQUENCE: This method handles the full enemy death animation sequence.
+    /// 1. Waits for death animation to complete (already playing from DamageSystem)
+    /// 2. Shows stuck sprite from EnemyData (if available)
+    /// 3. Waits briefly for visual clarity
+    /// 4. Removes the enemy with scaling animation
+    /// 5. Triggers victory reward for the defeated enemy
+    /// 6. After reward is collected, spawns the next enemy (or triggers final victory if none remain)
+    /// This creates smooth transitions with rewards between enemies in wave-based combat.
     /// </remarks>
     private IEnumerator KillEnemyPerformer(KillEnemyGA killEnemyGA)
     {
-        // Use the board view to remove the enemy with animation
-        yield return enemyBoardView.RemoveEnemy(killEnemyGA.EnemyView);
+        EnemyView enemyView = killEnemyGA.EnemyView;
         
-        // Wait a brief moment for visual clarity before spawning next enemy
+        // Defensive check
+        if (enemyView == null)
+        {
+            Debug.LogWarning("[EnemySystem] KillEnemyPerformer called with null enemy view!");
+            yield break;
+        }
+        
+        // Step 1: Wait for death animation to complete (it's already playing from DamageSystem)
+        // The death animation duration is typically around 1 second, but we'll wait for it to finish
+        float deathAnimDuration = enemyView.GetAnimationDuration(CombatantAnimState.Dead);
+        if (deathAnimDuration > 0)
+        {
+            yield return new WaitForSeconds(deathAnimDuration);
+        }
+        else
+        {
+            // Fallback: wait a reasonable duration if animation duration is unknown
+            yield return new WaitForSeconds(1.0f);
+        }
+        
+        // Step 2: Show stuck sprite from EnemyData (if available)
+        if (enemyView.Data != null && enemyView.Data.DeathStuckSprite != null)
+        {
+            // Get the SpriteRenderer to change the sprite
+            SpriteRenderer spriteRenderer = enemyView.GetComponentInChildren<SpriteRenderer>();
+            if (spriteRenderer != null)
+            {
+                // Change to the stuck sprite
+                spriteRenderer.sprite = enemyView.Data.DeathStuckSprite;
+                Debug.Log($"[EnemySystem] Showing death stuck sprite for {enemyView.Data.EnemyName}");
+                
+                // Wait briefly to show the stuck sprite
+                yield return new WaitForSeconds(0.5f);
+            }
+            else
+            {
+                Debug.LogWarning($"[EnemySystem] Could not find SpriteRenderer on {enemyView.name} to show death stuck sprite!");
+            }
+        }
+        
+        // Step 3: Discard all cards for all heroes before enemy removal
+        // This prevents card hovering during reward UI
+        if (CardSystem.Instance != null)
+        {
+            yield return CardSystem.Instance.DiscardAllCardsForAllHeroes();
+        }
+        else
+        {
+            Debug.LogWarning("[EnemySystem] CardSystem.Instance is null, cannot discard cards");
+        }
+        
+        // Step 4: Remove the enemy with scaling animation (this will destroy the GameObject)
+        yield return enemyBoardView.RemoveEnemy(enemyView);
+        
+        // Wait a brief moment for visual clarity before showing reward
         yield return new WaitForSeconds(0.5f);
         
-        // Spawn the next enemy or trigger victory (with overlay if applicable)
-        yield return StartCoroutine(SpawnNextEnemyCoroutine());
+        // Determine which enemy was defeated (currentSpawnIndex - 1, since it increments after spawning)
+        // Index 0 = first enemy (miniboss), Index 1 = second enemy (main boss)
+        int defeatedEnemyIndex = currentSpawnIndex - 1;
+        bool isMainBoss = (defeatedEnemyIndex == 1 && totalEnemyCount >= 2);
+        
+        // Trigger victory reward for this enemy
+        TriggerEnemyDefeatVictory(defeatedEnemyIndex, isMainBoss);
+        
+        // Wait for reward to be collected before spawning next enemy
+        // The reward UI will handle continuing to the next enemy or final victory
     }
+
+    /// <summary>
+    /// Triggers victory reward screen for a defeated enemy
+    /// </summary>
+    /// <param name="defeatedEnemyIndex">Index of the defeated enemy (0 = miniboss, 1 = main boss)</param>
+    /// <param name="isMainBoss">True if this is the main boss, false if miniboss</param>
+    /// <remarks>
+    /// Shows victory banner with reward chest. After reward is collected, continues to next enemy
+    /// or final victory screen depending on whether more enemies remain.
+    /// </remarks>
+    private void TriggerEnemyDefeatVictory(int defeatedEnemyIndex, bool isMainBoss)
+    {
+        Debug.Log($"[EnemySystem] ===== ENEMY DEFEATED (Index: {defeatedEnemyIndex}, Main Boss: {isMainBoss}) =====");
+        Debug.Log($"[EnemySystem] Enemy queue count: {enemyQueue.Count}, Current spawn index: {currentSpawnIndex}, Total enemy count: {totalEnemyCount}");
+        
+        // Get reward data from map data or fallback rewards
+        RewardData rewardData = null;
+        if (currentMapData != null)
+        {
+            // Use reward data from MapData
+            rewardData = isMainBoss ? currentMapData.MainBossReward : currentMapData.MinibossReward;
+        }
+        else
+        {
+            // Use fallback reward data for testing
+            rewardData = isMainBoss ? fallbackMainBossReward : fallbackMinibossReward;
+        }
+        
+        // Show victory banner with reward
+        if (VictoryDefeatUI.Instance != null)
+        {
+            // Check if there are more enemies to spawn
+            // Use both queue count AND spawn index comparison for more reliable checking
+            // defeatedEnemyIndex is 0-based (0 = first, 1 = second)
+            // If we've defeated fewer enemies than total, there are more to come
+            bool hasMoreEnemies = enemyQueue.Count > 0 || (defeatedEnemyIndex + 1 < totalEnemyCount);
+            bool isFirstReward = !isMainBoss; // First enemy (miniboss) = true, second enemy (main boss) = false
+            
+            Debug.Log($"[EnemySystem] Has more enemies: {hasMoreEnemies} (queue: {enemyQueue.Count}, defeated: {defeatedEnemyIndex + 1}, total: {totalEnemyCount})");
+            
+            VictoryDefeatUI.Instance.ShowVictoryWithReward(rewardData, hasMoreEnemies, OnRewardCollected, isFirstReward);
+        }
+        else
+        {
+            Debug.LogWarning("[EnemySystem] VictoryDefeatUI.Instance is null! Cannot show victory reward.", this);
+            // Fallback: continue to next enemy immediately
+            OnRewardCollected();
+        }
+    }
+
+    /// <summary>
+    /// Callback called when reward is collected - continues to next enemy or final victory
+    /// </summary>
+    private void OnRewardCollected()
+    {
+        // Reset combat state for new enemy encounter
+        ResetCombatStateForNewEnemy();
+        
+        // Spawn the next enemy or trigger final victory (with overlay if applicable)
+        StartCoroutine(SpawnNextEnemyCoroutine());
+    }
+    
+    /// <summary>
+    /// Resets combat state when a new enemy spawns (after previous enemy defeat)
+    /// </summary>
+    /// <remarks>
+    /// Resets turn count to 1, sets current hero to first hero, resets all card cooldowns.
+    /// Note: Player turn UI and card drawing are handled in SpawnNextEnemyCoroutine() to ensure proper sequencing.
+    /// </remarks>
+    private void ResetCombatStateForNewEnemy()
+    {
+        Debug.Log("[EnemySystem] Resetting combat state for new enemy encounter...");
+        
+        // Reset turn count to 1
+        if (CombatPhaseManager.Instance != null)
+        {
+            CombatPhaseManager.Instance.ResetForNewBattle();
+            CombatPhaseManager.Instance.SetTurnCount(1);
+        }
+        
+        // Reset current hero to first hero (heroes[0])
+        CurrentHeroUtil.CurrentHeroIndex = 0;
+        Debug.Log($"[EnemySystem] Reset current hero to index 0 (first hero)");
+        
+        // Reset all card cooldowns for all heroes
+        ResetAllCardCooldowns();
+        
+        // Note: Player turn UI and card drawing will be handled in SpawnNextEnemyCoroutine()
+        // after the enemy spawns to ensure proper sequencing
+    }
+    
+    /// <summary>
+    /// Resets all card cooldowns for all heroes
+    /// </summary>
+    private void ResetAllCardCooldowns()
+    {
+        if (CardSystem.Instance == null)
+        {
+            Debug.LogWarning("[EnemySystem] CardSystem.Instance is null, cannot reset cooldowns");
+            return;
+        }
+        
+        int heroCount = CurrentHeroUtil.GetHeroCount();
+        int totalCardsReset = 0;
+        
+        for (int heroIndex = 0; heroIndex < heroCount; heroIndex++)
+        {
+            var allCards = CardSystem.Instance.GetAllCardsForHero(heroIndex);
+            foreach (var card in allCards)
+            {
+                if (card.IsOnCooldown)
+                {
+                    card.ResetCooldown();
+                    totalCardsReset++;
+                }
+            }
+            
+        }
+        
+        // Notify all card views to update after resetting all cooldowns
+        if (CooldownSystem.Instance != null && totalCardsReset > 0)
+        {
+            // Trigger update for all cards across all heroes
+            for (int heroIndex = 0; heroIndex < heroCount; heroIndex++)
+            {
+                foreach (var card in CardSystem.Instance.GetAllCardsForHero(heroIndex))
+                {
+                    CooldownSystem.Instance.NotifyCooldownChanged(card);
+                }
+            }
+        }
+        
+        Debug.Log($"[EnemySystem] Reset cooldowns for {totalCardsReset} cards across {heroCount} heroes");
+    }
+    
+
+    #region Test Functions
+
+    /// <summary>
+    /// TEST FUNCTION: Kills the current enemy immediately for testing reward system
+    /// </summary>
+    /// <remarks>
+    /// <para><strong>Purpose:</strong> Allows quick testing of the reward system without having to fight enemies</para>
+    /// <para><strong>Usage:</strong> Call this from a button or keyboard shortcut during play mode to test rewards</para>
+    /// <para><strong>How it works:</strong> Finds the first active enemy and creates a KillEnemyGA action to defeat it</para>
+    /// </remarks>
+    [ContextMenu("Kill Current Enemy (Test)")]
+    public void KillCurrentEnemy()
+    {
+        // Get the first active enemy
+        if (enemyBoardView == null || enemyBoardView.EnemyViews == null || enemyBoardView.EnemyViews.Count == 0)
+        {
+            Debug.LogWarning("[EnemySystem] No enemies available to kill! Make sure enemies are spawned.", this);
+            return;
+        }
+
+        EnemyView currentEnemy = enemyBoardView.EnemyViews[0];
+        if (currentEnemy == null)
+        {
+            Debug.LogWarning("[EnemySystem] Current enemy is null! Cannot kill.", this);
+            return;
+        }
+
+        Debug.Log($"[EnemySystem] TEST: Killing current enemy: {currentEnemy.name}", this);
+
+        // Create kill action to trigger the reward system
+        KillEnemyGA killEnemyGA = new KillEnemyGA(currentEnemy);
+        ActionSystem.Instance.Perform(killEnemyGA);
+    }
+
+    #endregion
 }

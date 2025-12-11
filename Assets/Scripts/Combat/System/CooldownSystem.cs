@@ -239,4 +239,13 @@ public class CooldownSystem : Singleton<CooldownSystem>
     {
         return !card.IsOnCooldown;
     }
+    
+    /// <summary>
+    /// Notifies listeners that a card's cooldown changed (public method for external systems)
+    /// </summary>
+    /// <param name="card">The card whose cooldown changed</param>
+    public void NotifyCooldownChanged(Card card)
+    {
+        OnCooldownChanged?.Invoke(card);
+    }
 }

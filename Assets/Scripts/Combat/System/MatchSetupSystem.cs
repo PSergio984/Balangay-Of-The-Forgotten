@@ -93,6 +93,26 @@ public class MatchSetupSystem : MonoBehaviour
    [Tooltip("Fallback enemies used when testing combat scene directly without going through level select")]
    [SerializeField] private List<EnemyData> fallbackEnemyDatas;
 
+   /// <summary>
+   /// Fallback reward data for the first enemy (miniboss) when using fallback enemies
+   /// </summary>
+   /// <remarks>
+   /// Used for testing reward system when no map is selected.
+   /// Assign reward data here to test rewards with fallback enemies.
+   /// </remarks>
+   [Tooltip("Reward data for first enemy (miniboss) when using fallback enemies for testing")]
+   [SerializeField] private RewardData fallbackMinibossReward;
+
+   /// <summary>
+   /// Fallback reward data for the second enemy (main boss) when using fallback enemies
+   /// </summary>
+   /// <remarks>
+   /// Used for testing reward system when no map is selected.
+   /// Assign reward data here to test rewards with fallback enemies.
+   /// </remarks>
+   [Tooltip("Reward data for second enemy (main boss) when using fallback enemies for testing")]
+   [SerializeField] private RewardData fallbackMainBossReward;
+
    [SerializeField] private Animator roleTurnAnimator;
    
    /// </remarks>
@@ -203,7 +223,15 @@ public class MatchSetupSystem : MonoBehaviour
         // STEP 3: Initialize sequential enemy spawning (only spawns first enemy, rest spawn on defeat)
         // SEQUENTIAL MODE: Enemies appear one at a time. When defeated, the next spawns automatically.
         // This triggers the enemy spawn overlay and then the battle start sequence
-        EnemySystem.Instance.Setup(enemiesToSpawn);
+        // Pass map data for reward access, or fallback reward data if using fallback enemies
+        MapData rewardMapData = selectedMapData;
+        if (rewardMapData == null && (fallbackMinibossReward != null || fallbackMainBossReward != null))
+        {
+            // Create a temporary MapData-like structure for fallback rewards
+            // We'll pass the fallback rewards directly to EnemySystem instead
+            rewardMapData = null; // Keep as null, we'll handle fallback rewards separately
+        }
+        EnemySystem.Instance.Setup(enemiesToSpawn, rewardMapData, fallbackMinibossReward, fallbackMainBossReward);
 
         // STEP 4: Delay card drawing until after Battle Start and Player Turn banners complete
         // Sequence: Enemy Overlay -> Battle Start -> Player Turn -> Draw Cards (not simultaneously)

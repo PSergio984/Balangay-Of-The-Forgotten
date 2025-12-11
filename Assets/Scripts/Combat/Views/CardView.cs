@@ -132,6 +132,10 @@ public class CardView : MonoBehaviour
     /// </summary>
     [SerializeField] private SpriteRenderer RoleCircleIcon;
 
+    [Header("Hover Settings")]
+    [Tooltip("How far the card moves up when hovered (in world units)")]
+    [SerializeField] private float hoverDistance = 0.2f;
+    
     [Header("Cooldown UI")]
     /// <summary>
     /// The cooldown overlay sprite that appears when the card is on cooldown
@@ -429,12 +433,23 @@ public class CardView : MonoBehaviour
             originalsInitialized = true;
         }
         
+        // Check if victory/defeat/reward UI is showing - block card interactions
+        if (VictoryDefeatUI.Instance != null && VictoryDefeatUI.Instance.IsAnimating)
+        {
+            return; // Block hover when victory/defeat banner is showing
+        }
+        
+        if (RewardChestUI.Instance != null && RewardChestUI.Instance.IsShowing)
+        {
+            return; // Block hover when reward chest is showing
+        }
+        
         isHovering = true;
         transform.DOKill();
         BringCardToFront();
             
         // Perfect card game hover with rotation
-        Vector3 hoverPosition = originalPosition + Vector3.up * 0.2f;
+        Vector3 hoverPosition = originalPosition + Vector3.up * hoverDistance;
         Vector3 hoverScale = originalScale * 1.1f;
         Quaternion straightRotation = Quaternion.identity; // 0 degrees = straight
         // Animate to hover state
@@ -504,6 +519,17 @@ public class CardView : MonoBehaviour
     /// </remarks>
     void OnMouseDown()
     {
+        // Check if victory/defeat/reward UI is showing - block card interactions
+        if (VictoryDefeatUI.Instance != null && VictoryDefeatUI.Instance.IsAnimating)
+        {
+            return; // Block interaction when victory/defeat banner is showing
+        }
+        
+        if (RewardChestUI.Instance != null && RewardChestUI.Instance.IsShowing)
+        {
+            return; // Block interaction when reward chest is showing
+        }
+        
         // CRITICAL: Check cooldown FIRST before any other checks or state changes
         // This prevents any visual feedback or state changes for cards on cooldown
         if (!CanInteract())

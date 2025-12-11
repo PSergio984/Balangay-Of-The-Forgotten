@@ -25,3 +25,4 @@ MonoBehaviour:
   - {fileID: 11400000, guid: c54c22bd650181d4ebcfac6e2fc057ad, type: 2}
   - {fileID: 11400000, guid: 94fbc2768fc9584418a67a4fa7cfba75, type: 2}
   CombatMusic: {fileID: 11400000, guid: fc392867c45deb64b9027c5165526b5e, type: 2}
+  <DeathStuckSprite>k__BackingField: {fileID: 21300000, guid: fe8fe2c98d2fa174581b80c7bcbd16a9, type: 3}

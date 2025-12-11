@@ -59,6 +59,10 @@ public class VictoryDefeatUI : Singleton<VictoryDefeatUI>
     [SerializeField]
     private TMP_Text continueButtonText;
 
+    [Header("Reward System")]
+    [Tooltip("Reference to the RewardChestUI component for showing rewards")]
+    [SerializeField] private RewardChestUI rewardChestUI;
+
     [Header("Animation Settings")]
     [Tooltip("Duration for fade in animation")]
     [SerializeField] private float fadeInDuration = 0.4f;
@@ -80,6 +84,7 @@ public class VictoryDefeatUI : Singleton<VictoryDefeatUI>
     private CanvasGroup victoryImageCanvasGroup;
     private CanvasGroup defeatImageCanvasGroup;
     private CanvasGroup continueButtonCanvasGroup;
+    private CanvasGroup bannerPanelCanvasGroup;
     
     // Original positions for resetting
     private Vector2 bannerPanelOriginalPosition;
@@ -91,6 +96,12 @@ public class VictoryDefeatUI : Singleton<VictoryDefeatUI>
     
     // Current state
     private bool isShowingVictory = false;
+    
+    // Reward state
+    private RewardData pendingRewardData = null;
+    private bool hasMoreEnemies = false;
+    private bool isFirstReward = true;
+    private System.Action rewardCollectedCallback = null;
 
     private void Start()
     {
@@ -140,6 +151,22 @@ public class VictoryDefeatUI : Singleton<VictoryDefeatUI>
         if (bannerPanel != null)
         {
             bannerPanelOriginalPosition = bannerPanel.anchoredPosition;
+            
+            // Setup canvas group for blocking interactions
+            bannerPanelCanvasGroup = bannerPanel.GetComponent<CanvasGroup>();
+            if (bannerPanelCanvasGroup == null)
+            {
+                bannerPanelCanvasGroup = bannerPanel.gameObject.AddComponent<CanvasGroup>();
+            }
+            
+            // Setup blocking image to prevent interactions with elements below
+            Image blockingImage = bannerPanel.GetComponent<Image>();
+            if (blockingImage == null)
+            {
+                blockingImage = bannerPanel.gameObject.AddComponent<Image>();
+                blockingImage.color = new Color(0, 0, 0, 0); // Transparent but still blocks raycasts
+            }
+            blockingImage.raycastTarget = true; // Enable raycast blocking
         }
         
         // Hide initially
@@ -156,11 +183,39 @@ public class VictoryDefeatUI : Singleton<VictoryDefeatUI>
     }
 
     /// <summary>
-    /// Shows the "Victory" banner
+    /// Shows the "Victory" banner (final victory, no reward)
     /// </summary>
     public void ShowVictory()
     {
         isShowingVictory = true;
+        pendingRewardData = null;
+        hasMoreEnemies = false;
+        isFirstReward = true;
+        rewardCollectedCallback = null;
+        
+        // Reset continue button state in case it was disabled
+        if (continueButton != null)
+        {
+            continueButton.interactable = true;
+        }
+        
+        ShowBanner(victorySprite, true);
+    }
+
+    /// <summary>
+    /// Shows the "Victory" banner with reward chest
+    /// </summary>
+    /// <param name="rewardData">The reward data to display (can be null if no reward)</param>
+    /// <param name="hasMoreEnemies">True if there are more enemies to fight, false if this is the final victory</param>
+    /// <param name="onRewardCollected">Callback when reward is collected (to continue to next enemy or final victory)</param>
+    /// <param name="isFirstReward">True if this is the first enemy reward (miniboss), false if second enemy (main boss)</param>
+    public void ShowVictoryWithReward(RewardData rewardData, bool hasMoreEnemies, System.Action onRewardCollected, bool isFirstReward = true)
+    {
+        isShowingVictory = true;
+        pendingRewardData = rewardData;
+        this.hasMoreEnemies = hasMoreEnemies;
+        this.isFirstReward = isFirstReward;
+        rewardCollectedCallback = onRewardCollected;
         ShowBanner(victorySprite, true);
     }
 
@@ -269,6 +324,13 @@ public class VictoryDefeatUI : Singleton<VictoryDefeatUI>
         bannerPanel.gameObject.SetActive(true);
         activeImage.gameObject.SetActive(true);
         
+        // Enable blocking when banner is shown
+        if (bannerPanelCanvasGroup != null)
+        {
+            bannerPanelCanvasGroup.blocksRaycasts = true;
+            bannerPanelCanvasGroup.interactable = true;
+        }
+        
         // Phase 1: Fade in at center (both background and banner image)
         Sequence fadeIn = DOTween.Sequence();
         if (backgroundCanvasGroup != null)
@@ -295,7 +357,7 @@ public class VictoryDefeatUI : Singleton<VictoryDefeatUI>
 
     /// <summary>
     /// Called when continue button is clicked
-    /// Transitions back to map selection scene
+    /// Either shows reward chest or transitions to map selection
     /// </summary>
     private void OnContinueButtonClicked()
     {
@@ -304,6 +366,59 @@ public class VictoryDefeatUI : Singleton<VictoryDefeatUI>
             continueButton.interactable = false; // Prevent multiple clicks
         }
         
+        // If there's a reward to show, display it
+        if (pendingRewardData != null && rewardChestUI != null)
+        {
+            // Hide banner first
+            HideBanner();
+            
+            // Show reward chest with appropriate reward type
+            rewardChestUI.ShowReward(pendingRewardData, OnRewardChestComplete, isFirstReward);
+        }
+        else if (pendingRewardData == null && rewardCollectedCallback == null)
+        {
+            // No reward and no callback = final victory, go to map selection
+            TransitionToMapSelection();
+        }
+        else
+        {
+            // Edge case: reward data is null but callback exists (shouldn't happen, but handle gracefully)
+            Debug.LogWarning("[VictoryDefeatUI] Continue clicked but reward state is inconsistent. Clearing state and going to map selection.", this);
+            pendingRewardData = null;
+            rewardCollectedCallback = null;
+            TransitionToMapSelection();
+        }
+    }
+
+    /// <summary>
+    /// Called when reward chest collection is complete
+    /// </summary>
+    private void OnRewardChestComplete()
+    {
+        // Hide reward UI
+        if (rewardChestUI != null)
+        {
+            rewardChestUI.HideReward();
+        }
+        
+        // Store callback before clearing state
+        System.Action callback = rewardCollectedCallback;
+        
+        // Clear reward state immediately to prevent double-triggering
+        pendingRewardData = null;
+        rewardCollectedCallback = null;
+        hasMoreEnemies = false;
+        isFirstReward = true;
+        
+        // Call the callback (which will either spawn next enemy or trigger final victory)
+        callback?.Invoke();
+    }
+
+    /// <summary>
+    /// Transitions back to map selection scene
+    /// </summary>
+    private void TransitionToMapSelection()
+    {
         // Transition back to map selection using SceneController
         if (SceneController.Instance != null)
         {
@@ -355,6 +470,13 @@ public class VictoryDefeatUI : Singleton<VictoryDefeatUI>
                 if (continueButtonCanvasGroup != null) continueButtonCanvasGroup.alpha = 0f;
                 continueButton.interactable = false;
                 continueButton.gameObject.SetActive(false);
+            }
+            
+            // Disable blocking when banner is hidden
+            if (bannerPanelCanvasGroup != null)
+            {
+                bannerPanelCanvasGroup.blocksRaycasts = false;
+                bannerPanelCanvasGroup.interactable = false;
             }
             
             // Hide panel

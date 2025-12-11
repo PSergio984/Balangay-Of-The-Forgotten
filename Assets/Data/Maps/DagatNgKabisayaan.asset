@@ -28,3 +28,5 @@ MonoBehaviour:
   combatBackgroundSprite: {fileID: 21300000, guid: 91c836ed92cb2d848a27c1265f74b768, type: 3}
   loadingVideoId: loadingBakunawa
   MapMusic: {fileID: 0}
+  minibossReward: {fileID: 11400000, guid: 493e8f2ed1241d549b6d8a706e26e73d, type: 2}
+  mainBossReward: {fileID: 11400000, guid: ed506c304c62a314ca52399220321c45, type: 2}

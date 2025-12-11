@@ -37,12 +37,21 @@ public class CombatPhaseManager : MonoBehaviour
 
     private bool battleStartShown = false;
     private int turnCount = 0;
+    
+    // Static instance for easy access
+    private static CombatPhaseManager instance;
+    public static CombatPhaseManager Instance => instance;
 
     // WORKAROUND: Due to a bug in ActionSystem.UnsubscribeReaction() where it creates a new wrapper
     // that doesn't match the original, we cannot reliably unsubscribe. Instead, we manually check
     // if this component is enabled before processing reactions to prevent stale reactions.
     private bool isActiveAndEnabled = false;
 
+    private void Awake()
+    {
+        instance = this;
+    }
+    
     private void OnEnable()
     {
         isActiveAndEnabled = true;
@@ -174,5 +183,13 @@ public class CombatPhaseManager : MonoBehaviour
     /// Gets the current turn number
     /// </summary>
     public int CurrentTurn => turnCount;
+    
+    /// <summary>
+    /// Sets the turn count (used when resetting for new enemy encounter)
+    /// </summary>
+    public void SetTurnCount(int count)
+    {
+        turnCount = count;
+    }
 }
 

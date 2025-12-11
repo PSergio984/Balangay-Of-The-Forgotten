@@ -75,6 +75,14 @@ public class EnemyData : ScriptableObject
     [Tooltip("Music to play when this enemy appears in combat.")]
     public AudioSystem.SoundData CombatMusic;
 
+    [Header("Death Animation")]
+    [Tooltip("Sprite to show after death animation completes (stuck/frozen sprite before removal)")]
+    [field: SerializeField]
+    [field: PreviewField(100)]
+    [field: LabelText("Death Stuck Sprite")]
+    [field: AssetsOnly]
+    public Sprite DeathStuckSprite { get; private set; }
+
      private bool ValidateMoveset()
     {
         if (Moveset == null || Moveset.Count == 0) return false;

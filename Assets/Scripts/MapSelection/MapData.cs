@@ -172,4 +172,35 @@ public class MapData : ScriptableObject
     /// </summary>
     [Tooltip("Music to play for this map if no enemy-specific music is set.")]
     public AudioSystem.SoundData MapMusic;
+
+    [Header("Rewards")]
+    /// <summary>
+    /// Reward data for the first enemy (miniboss) defeat
+    /// </summary>
+    /// <remarks>
+    /// <para><strong>Why:</strong> Each map can have different rewards for defeating the miniboss</para>
+    /// <para><strong>How:</strong> Assign reward sprites and items in Inspector for the first enemy reward</para>
+    /// </remarks>
+    [Tooltip("Reward data shown when the first enemy (miniboss) is defeated")]
+    [SerializeField] private RewardData minibossReward;
+
+    /// <summary>
+    /// Reward data for the first enemy (miniboss) defeat (public getter)
+    /// </summary>
+    public RewardData MinibossReward => minibossReward;
+
+    /// <summary>
+    /// Reward data for the second enemy (main boss) defeat
+    /// </summary>
+    /// <remarks>
+    /// <para><strong>Why:</strong> Each map can have different rewards for defeating the main boss</para>
+    /// <para><strong>How:</strong> Assign reward sprites and items in Inspector for the main boss reward</para>
+    /// </remarks>
+    [Tooltip("Reward data shown when the second enemy (main boss) is defeated")]
+    [SerializeField] private RewardData mainBossReward;
+
+    /// <summary>
+    /// Reward data for the second enemy (main boss) defeat (public getter)
+    /// </summary>
+    public RewardData MainBossReward => mainBossReward;
 }
