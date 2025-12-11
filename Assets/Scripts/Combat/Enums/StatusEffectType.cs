@@ -177,4 +177,13 @@ public enum StatusEffectType
     /// Used by: Shadow Dive (Bakunawa) - next attack deals double damage
     /// </summary>
     CHARGING,
+    
+    // ===== SPECIAL CARD EFFECTS =====
+    
+    /// <summary>
+    /// No Cooldown effect - all skills have no cooldown for the duration
+    /// Used by: Bundok Pulag Mini-Boss Buff (4 rounds for all players)
+    /// Stacks represent duration in rounds
+    /// </summary>
+    NO_COOLDOWN,
 }

@@ -41,8 +41,8 @@ Dungeon buffs apply to all players on the map for the specified duration or stac
 
 - **Daragang Magayon Mini-Boss Buff**
 
-  - **Effect:** +25% Defense to two players
-  - **Scope:** Any two players (choose)
+  - **Effect:** +25% Defense to all players
+  - **Scope:** All players (choose)
   - **Stacks:** 1
   - **How to Obtain:** Defeat the mini-boss of Daragang Magayon
 

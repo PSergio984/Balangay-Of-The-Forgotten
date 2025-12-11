@@ -41,6 +41,18 @@ public class MapButton : MonoBehaviour
     [Tooltip("Assign the MapData ScriptableObject for this map button. Required for pre-set buttons.")]
     [SerializeField] private MapData _mapData;
     
+    [Header("Completion Indicator")]
+    [Tooltip("Optional checkmark or completion overlay to show when map is completed")]
+    [SerializeField] private GameObject completionIndicator;
+    
+    [Tooltip("Optional color overlay to apply when map is completed")]
+    [SerializeField] private Color completedColor = new Color(0.7f, 1f, 0.7f, 1f); // Light green tint
+    
+    /// <summary>
+    /// Tracks whether this map has been completed
+    /// </summary>
+    public bool IsCompleted { get; private set; }
+    
     /// <summary>
     /// Public property to access MapData (reads from serialized field or runtime-set value)
     /// </summary>
@@ -141,6 +153,20 @@ public class MapButton : MonoBehaviour
     /// </remarks>
     public void Setup(MapData map, bool isUnlocked)
     {
+        Setup(map, isUnlocked, false);
+    }
+    
+    /// <summary>
+    /// Sets up this button with map information, lock/unlock state, and completion state
+    /// </summary>
+    /// <param name="map">The map data (name, enemies, scene, etc.)</param>
+    /// <param name="isUnlocked">Can the player click this map? true = yes, false = locked</param>
+    /// <param name="isCompleted">Has the player already beaten this map?</param>
+    /// <remarks>
+    /// <para><strong>When:</strong> Called by MapSelectManager when creating all the map buttons</para>
+    /// </remarks>
+    public void Setup(MapData map, bool isUnlocked, bool isCompleted)
+    {
         if (map == null)
         {
             Debug.LogError($"[MapButton] Setup called with null MapData on {gameObject.name}. Button will not be configured.", this);
@@ -148,6 +174,7 @@ public class MapButton : MonoBehaviour
         }
         // Store the map information
         MapData = map;
+        IsCompleted = isCompleted;
         
         // Display the map name on the button
         _mapNameText.SetText(map.MapId);
@@ -159,14 +186,43 @@ public class MapButton : MonoBehaviour
         {
             // Map is unlocked - make it white and clickable
             RegisterLoadMapListener();
-            ReturnColor = Color.white;
-            _MapImage.color = ReturnColor;
+            
+            if (isCompleted)
+            {
+                // Map is completed - use completed color (green tint)
+                ReturnColor = completedColor;
+                _MapImage.color = ReturnColor;
+                
+                // Show completion indicator if assigned
+                if (completionIndicator != null)
+                {
+                    completionIndicator.SetActive(true);
+                }
+            }
+            else
+            {
+                // Map is unlocked but not completed - white
+                ReturnColor = Color.white;
+                _MapImage.color = ReturnColor;
+                
+                // Hide completion indicator
+                if (completionIndicator != null)
+                {
+                    completionIndicator.SetActive(false);
+                }
+            }
         }
         else
         {
             // Map is locked - make it gray and not clickable
             ReturnColor = Color.gray;
             _MapImage.color = ReturnColor;
+            
+            // Hide completion indicator
+            if (completionIndicator != null)
+            {
+                completionIndicator.SetActive(false);
+            }
         }
     }
 

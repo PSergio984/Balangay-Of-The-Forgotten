@@ -63,6 +63,19 @@ public class VictoryDefeatUI : Singleton<VictoryDefeatUI>
     [Tooltip("Reference to the RewardChestUI component for showing rewards")]
     [SerializeField] private RewardChestUI rewardChestUI;
 
+    [Header("Collection Systems")]
+    [Tooltip("Reference to the RelicCollectionData for collecting main boss relics")]
+    [SerializeField] private RelicCollectionData relicCollection;
+    
+    [Tooltip("Reference to the SpecialCardCollectionData for collecting mini-boss special cards")]
+    [SerializeField] private SpecialCardCollectionData specialCardCollection;
+    
+    [Tooltip("Reference to the GameProgressData for tracking map completion")]
+    [SerializeField] private GameProgressData gameProgress;
+    
+    [Tooltip("Reference to the LevelTransitionData to get current map ID")]
+    [SerializeField] private LevelTransitionData levelTransitionData;
+
     [Header("Animation Settings")]
     [Tooltip("Duration for fade in animation")]
     [SerializeField] private float fadeInDuration = 0.4f;
@@ -401,6 +414,20 @@ public class VictoryDefeatUI : Singleton<VictoryDefeatUI>
             rewardChestUI.HideReward();
         }
         
+        // Capture reward data BEFORE clearing state
+        RewardData collectedReward = pendingRewardData;
+        bool wasFirstReward = isFirstReward;
+        bool hadMoreEnemies = hasMoreEnemies;
+        
+        // Process reward collection based on type
+        ProcessRewardCollection(collectedReward, wasFirstReward);
+        
+        // If this was the final enemy (no more enemies), mark map as complete
+        if (!hadMoreEnemies)
+        {
+            MarkCurrentMapComplete();
+        }
+        
         // Store callback before clearing state
         System.Action callback = rewardCollectedCallback;
         
@@ -412,6 +439,85 @@ public class VictoryDefeatUI : Singleton<VictoryDefeatUI>
         
         // Call the callback (which will either spawn next enemy or trigger final victory)
         callback?.Invoke();
+    }
+    
+    /// <summary>
+    /// Processes reward collection by adding to appropriate collection (special card or relic)
+    /// </summary>
+    /// <param name="rewardData">The reward data from the chest</param>
+    /// <param name="isMiniBossReward">True if this is a mini-boss reward (special card), false for main boss (relic)</param>
+    private void ProcessRewardCollection(RewardData rewardData, bool isMiniBossReward)
+    {
+        if (rewardData == null)
+        {
+            Debug.LogWarning("[VictoryDefeatUI] Cannot process null reward data.");
+            return;
+        }
+        
+        if (isMiniBossReward)
+        {
+            // Mini-boss reward: collect special card
+            SpecialCardData specialCard = rewardData.SpecialCardReward;
+            if (specialCard != null && specialCardCollection != null)
+            {
+                specialCardCollection.AddSpecialCard(specialCard);
+                Debug.Log($"[VictoryDefeatUI] Collected special card: {specialCard.CardName}");
+            }
+            else if (specialCard != null)
+            {
+                Debug.LogWarning("[VictoryDefeatUI] SpecialCardCollectionData not assigned, cannot save special card!");
+            }
+        }
+        else
+        {
+            // Main boss reward: collect relic
+            RelicData relic = rewardData.AssociatedRelic;
+            if (relic != null && relicCollection != null)
+            {
+                relicCollection.AddRelic(relic);
+                Debug.Log($"[VictoryDefeatUI] Collected relic: {relic.RelicName}");
+            }
+            else if (relic != null)
+            {
+                Debug.LogWarning("[VictoryDefeatUI] RelicCollectionData not assigned, cannot save relic!");
+            }
+        }
+    }
+    
+    /// <summary>
+    /// Marks the current map as complete in the game progress
+    /// </summary>
+    private void MarkCurrentMapComplete()
+    {
+        if (gameProgress == null)
+        {
+            Debug.LogWarning("[VictoryDefeatUI] GameProgressData not assigned, cannot track map completion!");
+            return;
+        }
+        
+        if (levelTransitionData == null || levelTransitionData.SelectedMapData == null)
+        {
+            Debug.LogWarning("[VictoryDefeatUI] LevelTransitionData or SelectedMapData is null, cannot determine current map!");
+            return;
+        }
+        
+        string mapId = levelTransitionData.SelectedMapData.MapId;
+        if (gameProgress.MarkMapComplete(mapId))
+        {
+            Debug.Log($"[VictoryDefeatUI] Map '{mapId}' marked as complete!");
+            
+            // Check if Kaluwalhatian was just unlocked
+            if (gameProgress.CheckKaluwalhatianUnlock())
+            {
+                Debug.Log("[VictoryDefeatUI] Kaluwalhatian has been unlocked!");
+            }
+            
+            // Check if game is now complete (Kaluwalhatian beaten)
+            if (gameProgress.IsGameCompleted)
+            {
+                Debug.Log("[VictoryDefeatUI] Game complete! Player has beaten Kaluwalhatian!");
+            }
+        }
     }
 
     /// <summary>

@@ -65,6 +65,12 @@ public class MapSelectManager2 : MonoBehaviour
     /// </summary>
     [Tooltip("Optional: Assign AreaData to automatically load unlock states. If null, all buttons start unlocked.")]
     [SerializeField] private AreaData _currentArea;
+    
+    /// <summary>
+    /// ScriptableObject for tracking game progress (map completion, Kaluwalhatian unlock)
+    /// </summary>
+    [Tooltip("Assign GameProgressData to track map completion and unlock Kaluwalhatian after 3 maps")]
+    [SerializeField] private GameProgressData _gameProgress;
 
     /// <summary>
     /// Reference to event system handler for selection management
@@ -210,10 +216,18 @@ public class MapSelectManager2 : MonoBehaviour
 
     /// <summary>
     /// Populates UnlockedLevelIDs from CurrentArea.Maps where IsUnlockedByDefault is true
+    /// Also checks GameProgressData for Kaluwalhatian unlock status
     /// If no AreaData is assigned, all buttons start unlocked
     /// </summary>
     private void LoadUnlockedLevels()
     {
+        // Load progress data if available
+        if (_gameProgress != null)
+        {
+            _gameProgress.Load();
+            Debug.Log($"[MapSelectManager2] Loaded game progress: {_gameProgress.CompletedMapCount} maps completed, Kaluwalhatian unlocked: {_gameProgress.IsKaluwalhatianUnlocked}");
+        }
+        
         if (_currentArea == null)
         {
             Debug.LogWarning("[MapSelectManager2] No AreaData assigned. All buttons will start unlocked.", this);
@@ -236,11 +250,34 @@ public class MapSelectManager2 : MonoBehaviour
 
         foreach (var map in _currentArea.Maps)
         {
+            // Check if map is unlocked by default
             if (map.IsUnlockedByDefault)
             {
                 UnlockedLevelIDs.Add(map.MapId);
             }
+            // Special case: Kaluwalhatian is unlocked via progress, not by default
+            else if (map.MapId == GameProgressData.MAP_ID_KALUWALHATIAN && 
+                     _gameProgress != null && 
+                     _gameProgress.IsKaluwalhatianUnlocked)
+            {
+                UnlockedLevelIDs.Add(map.MapId);
+                Debug.Log("[MapSelectManager2] Kaluwalhatian unlocked via game progress!");
+            }
         }
+    }
+    
+    /// <summary>
+    /// Checks if a specific map has been completed using GameProgressData
+    /// </summary>
+    /// <param name="mapId">The map ID to check</param>
+    /// <returns>True if the map has been completed</returns>
+    private bool IsMapCompleted(string mapId)
+    {
+        if (_gameProgress == null || string.IsNullOrEmpty(mapId))
+        {
+            return false;
+        }
+        return _gameProgress.IsMapComplete(mapId);
     }
 
 
@@ -274,8 +311,11 @@ public class MapSelectManager2 : MonoBehaviour
             // Determine if this map is unlocked
             bool isUnlocked = UnlockedLevelIDs.Contains(mapData.MapId);
             
-            // Setup the MapButton with unlock state
-            mapButton.Setup(mapData, isUnlocked);
+            // Determine if this map has been completed
+            bool isCompleted = IsMapCompleted(mapData.MapId);
+            
+            // Setup the MapButton with unlock and completion state
+            mapButton.Setup(mapData, isUnlocked, isCompleted);
 
             // Cache button GameObject for navigation
             _buttonObjects.Add(mapButton.gameObject);

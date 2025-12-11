@@ -121,6 +121,7 @@ public class CooldownSystem : Singleton<CooldownSystem>
     /// Only starts cooldown if the card was actually played (not cancelled due to failed conditions).
     /// If a conditional card's condition fails, it remains in hand, so we check if the card is still
     /// in hand - if it is, the play was cancelled and we don't set cooldown.
+    /// Also skips cooldown if any hero has NO_COOLDOWN status (from Bundok Pulag special card).
     /// </remarks>
     private void OnCardPlayed(PlayCardsGA playCardsGA)
     {
@@ -132,6 +133,13 @@ public class CooldownSystem : Singleton<CooldownSystem>
         {
             Debug.Log($"[CooldownSystem] Card '{card.Title}' play was cancelled (condition failed) - not setting cooldown");
             return; // Card is still in hand, play was cancelled, don't set cooldown
+        }
+        
+        // Check if NO_COOLDOWN status is active for any hero (Bundok Pulag buff affects all heroes)
+        if (NoCooldownSystem.Instance != null && NoCooldownSystem.Instance.HasAnyNoCooldown())
+        {
+            Debug.Log($"[CooldownSystem] Card '{card.Title}' cooldown skipped - NO_COOLDOWN buff active");
+            return; // Skip cooldown due to special card buff
         }
         
         // Card was successfully played (not in hand anymore) - start cooldown if it has one
