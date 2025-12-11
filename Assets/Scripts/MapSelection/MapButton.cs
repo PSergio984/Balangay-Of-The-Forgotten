@@ -35,8 +35,20 @@ public class MapButton : MonoBehaviour
     
     /// <summary>
     /// Information about this map (name, enemies, scene to load, etc.)
+    /// Can be assigned in Inspector for pre-set buttons, or set via Setup() method
     /// </summary>
-    public MapData MapData { get; set; }
+    [Header("Map Configuration")]
+    [Tooltip("Assign the MapData ScriptableObject for this map button. Required for pre-set buttons.")]
+    [SerializeField] private MapData _mapData;
+    
+    /// <summary>
+    /// Public property to access MapData (reads from serialized field or runtime-set value)
+    /// </summary>
+    public MapData MapData 
+    { 
+        get => _mapData; 
+        set => _mapData = value; 
+    }
     
     /// <summary>
     /// The button component that makes this clickable

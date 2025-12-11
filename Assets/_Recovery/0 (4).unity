@@ -309,9 +309,9 @@ MonoBehaviour:
   m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
-  m_ReferenceResolution: {x: 1920, y: 1080}
+  m_ReferenceResolution: {x: 640, y: 360}
   m_ScreenMatchMode: 0
-  m_MatchWidthOrHeight: 1
+  m_MatchWidthOrHeight: 0.5
   m_PhysicalUnit: 3
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
@@ -353,6 +353,13 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1661160582}
+  - {fileID: 323253844}
+  - {fileID: 2064803257}
+  - {fileID: 343537450}
+  - {fileID: 427823164}
+  - {fileID: 1696389069}
+  - {fileID: 1876174308}
+  - {fileID: 1007153660}
   - {fileID: 382360314}
   m_Father: {fileID: 2012708350}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -391,12 +398,12 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1661160582}
+  m_Father: {fileID: 214568338}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 868.99994, y: -170.26}
-  m_SizeDelta: {x: 624.67, y: 121.38}
+  m_AnchoredPosition: {x: 227.5, y: -36.6}
+  m_SizeDelta: {x: 142.6, y: 27.71}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &323253845
 MonoBehaviour:
@@ -445,8 +452,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 48
-  m_fontSizeBase: 48
+  m_fontSize: 12
+  m_fontSizeBase: 12
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -523,17 +530,17 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 343537449}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 1
+  m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1661160582}
+  m_Father: {fileID: 214568338}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 874.4, y: -340.8}
-  m_SizeDelta: {x: 397.22, y: 81.86}
+  m_AnchoredPosition: {x: 227.5, y: -91.8}
+  m_SizeDelta: {x: 96.45, y: 19.88}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &343537451
 MonoBehaviour:
@@ -555,7 +562,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Bathala
+  m_text: Apolaki
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: fa326eb8275ad524ab2b1583392a50ec, type: 2}
   m_sharedMaterial: {fileID: 815727004836710820, guid: fa326eb8275ad524ab2b1583392a50ec, type: 2}
@@ -582,8 +589,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 48
-  m_fontSizeBase: 48
+  m_fontSize: 16
+  m_fontSizeBase: 16
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -672,7 +679,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 1661160582}
+    m_TransformParent: {fileID: 214568338}
     m_Modifications:
     - target: {fileID: 441396865016809182, guid: 70187b3626989284cbeefeb80fd0159f, type: 3}
       propertyPath: m_Name
@@ -704,11 +711,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 985091709033811753, guid: 70187b3626989284cbeefeb80fd0159f, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 9731.7
+      value: 2587
       objectReference: {fileID: 0}
     - target: {fileID: 985091709033811753, guid: 70187b3626989284cbeefeb80fd0159f, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 12695.96
+      value: 3375
       objectReference: {fileID: 0}
     - target: {fileID: 985091709033811753, guid: 70187b3626989284cbeefeb80fd0159f, type: 3}
       propertyPath: m_LocalScale.x
@@ -752,11 +759,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 985091709033811753, guid: 70187b3626989284cbeefeb80fd0159f, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 151.83
+      value: 109.7
       objectReference: {fileID: 0}
     - target: {fileID: 985091709033811753, guid: 70187b3626989284cbeefeb80fd0159f, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 686
+      value: 219.6
       objectReference: {fileID: 0}
     - target: {fileID: 985091709033811753, guid: 70187b3626989284cbeefeb80fd0159f, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -1152,7 +1159,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 1661160582}
+    m_TransformParent: {fileID: 214568338}
     m_Modifications:
     - target: {fileID: 441396865016809182, guid: 70187b3626989284cbeefeb80fd0159f, type: 3}
       propertyPath: m_Name
@@ -1184,11 +1191,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 985091709033811753, guid: 70187b3626989284cbeefeb80fd0159f, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 17912.61
+      value: 4715
       objectReference: {fileID: 0}
     - target: {fileID: 985091709033811753, guid: 70187b3626989284cbeefeb80fd0159f, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 12821.93
+      value: 3375.0928
       objectReference: {fileID: 0}
     - target: {fileID: 985091709033811753, guid: 70187b3626989284cbeefeb80fd0159f, type: 3}
       propertyPath: m_LocalScale.x
@@ -1232,11 +1239,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 985091709033811753, guid: 70187b3626989284cbeefeb80fd0159f, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 481.4
+      value: 195
       objectReference: {fileID: 0}
     - target: {fileID: 985091709033811753, guid: 70187b3626989284cbeefeb80fd0159f, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 549.3
+      value: 183.5
       objectReference: {fileID: 0}
     - target: {fileID: 985091709033811753, guid: 70187b3626989284cbeefeb80fd0159f, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -1283,17 +1290,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0ba30b0de35db5940b03e7d3eb4c3f88, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MapButton
---- !u!114 &1007153662 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 1394634484586655005, guid: 70187b3626989284cbeefeb80fd0159f, type: 3}
-  m_PrefabInstance: {fileID: 1007153659}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Button
 --- !u!1 &1064477868
 GameObject:
   m_ObjectHideFlags: 0
@@ -1463,7 +1459,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -159.3, y: 146.3}
+  m_AnchoredPosition: {x: -163.8, y: 106.3}
   m_SizeDelta: {x: 50.05, y: 16.19}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1161978529
@@ -1574,17 +1570,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Unity.InputSystem::UnityEngine.InputSystem.InputActionReference
   m_Asset: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   m_ActionId: c95b2375-e6d9-4b88-9c4c-c5e76515df4b
---- !u!114 &1242434175 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 1394634484586655005, guid: 70187b3626989284cbeefeb80fd0159f, type: 3}
-  m_PrefabInstance: {fileID: 427823163}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Button
 --- !u!1 &1248298545
 GameObject:
   m_ObjectHideFlags: 0
@@ -1961,26 +1946,19 @@ RectTransform:
   m_GameObject: {fileID: 1661160581}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.81, y: 0.81, z: 0.81}
-  m_ConstrainProportionsScale: 1
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1755786785}
   - {fileID: 1907756605}
   - {fileID: 922482663}
   - {fileID: 908877885}
-  - {fileID: 323253844}
-  - {fileID: 2064803257}
-  - {fileID: 343537450}
-  - {fileID: 427823164}
-  - {fileID: 1696389069}
-  - {fileID: 1876174308}
-  - {fileID: 1007153660}
   m_Father: {fileID: 214568338}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1661160583
 MonoBehaviour:
@@ -2033,9 +2011,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MapSelectManager2
   _preSetMapButtons:
   - {fileID: 427823165}
+  - {fileID: 1696389070}
   - {fileID: 1876174309}
   - {fileID: 1007153661}
-  - {fileID: 1696389070}
   _areaHeaderText: {fileID: 908877886}
   LevelHeaderText: {fileID: 323253845}
   CurrentBossImage: {fileID: 2064803258}
@@ -2053,11 +2031,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 064d5d0c316a84b4595446c1364d0722, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LevelSelectSystemEventHandler2
-  Selectables:
-  - {fileID: 1242434175}
-  - {fileID: 1876174310}
-  - {fileID: 1007153662}
-  - {fileID: 1696389071}
+  Selectables: []
   _navigateReference: {fileID: 1191106490}
   _selectedAnimationScale: 1.1
   _scaleDuration: 0.25
@@ -2069,7 +2043,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 1661160582}
+    m_TransformParent: {fileID: 214568338}
     m_Modifications:
     - target: {fileID: 441396865016809182, guid: 70187b3626989284cbeefeb80fd0159f, type: 3}
       propertyPath: m_Name
@@ -2101,23 +2075,23 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 985091709033811753, guid: 70187b3626989284cbeefeb80fd0159f, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 22500.08
+      value: 6000.0005
       objectReference: {fileID: 0}
     - target: {fileID: 985091709033811753, guid: 70187b3626989284cbeefeb80fd0159f, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 12656.29
+      value: 3375.0002
       objectReference: {fileID: 0}
     - target: {fileID: 985091709033811753, guid: 70187b3626989284cbeefeb80fd0159f, type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.021
+      value: 0.023
       objectReference: {fileID: 0}
     - target: {fileID: 985091709033811753, guid: 70187b3626989284cbeefeb80fd0159f, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.021
+      value: 0.023
       objectReference: {fileID: 0}
     - target: {fileID: 985091709033811753, guid: 70187b3626989284cbeefeb80fd0159f, type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.021
+      value: 0.023
       objectReference: {fileID: 0}
     - target: {fileID: 985091709033811753, guid: 70187b3626989284cbeefeb80fd0159f, type: 3}
       propertyPath: m_LocalPosition.x
@@ -2149,11 +2123,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 985091709033811753, guid: 70187b3626989284cbeefeb80fd0159f, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 994.5
+      value: 332.7
       objectReference: {fileID: 0}
     - target: {fileID: 985091709033811753, guid: 70187b3626989284cbeefeb80fd0159f, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 812.5
+      value: 255.3
       objectReference: {fileID: 0}
     - target: {fileID: 985091709033811753, guid: 70187b3626989284cbeefeb80fd0159f, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -2200,17 +2174,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0ba30b0de35db5940b03e7d3eb4c3f88, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MapButton
---- !u!114 &1696389071 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 1394634484586655005, guid: 70187b3626989284cbeefeb80fd0159f, type: 3}
-  m_PrefabInstance: {fileID: 1696389068}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Button
 --- !u!1 &1755786784
 GameObject:
   m_ObjectHideFlags: 0
@@ -2431,7 +2394,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 1661160582}
+    m_TransformParent: {fileID: 214568338}
     m_Modifications:
     - target: {fileID: 441396865016809182, guid: 70187b3626989284cbeefeb80fd0159f, type: 3}
       propertyPath: m_Name
@@ -2471,15 +2434,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 985091709033811753, guid: 70187b3626989284cbeefeb80fd0159f, type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.13
+      value: 0.035
       objectReference: {fileID: 0}
     - target: {fileID: 985091709033811753, guid: 70187b3626989284cbeefeb80fd0159f, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.13
+      value: 0.035
       objectReference: {fileID: 0}
     - target: {fileID: 985091709033811753, guid: 70187b3626989284cbeefeb80fd0159f, type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.13
+      value: 0.035
       objectReference: {fileID: 0}
     - target: {fileID: 985091709033811753, guid: 70187b3626989284cbeefeb80fd0159f, type: 3}
       propertyPath: m_LocalPosition.x
@@ -2511,11 +2474,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 985091709033811753, guid: 70187b3626989284cbeefeb80fd0159f, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 415
+      value: 179.5
       objectReference: {fileID: 0}
     - target: {fileID: 985091709033811753, guid: 70187b3626989284cbeefeb80fd0159f, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 218
+      value: 93.3
       objectReference: {fileID: 0}
     - target: {fileID: 985091709033811753, guid: 70187b3626989284cbeefeb80fd0159f, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -2562,17 +2525,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0ba30b0de35db5940b03e7d3eb4c3f88, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MapButton
---- !u!114 &1876174310 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 1394634484586655005, guid: 70187b3626989284cbeefeb80fd0159f, type: 3}
-  m_PrefabInstance: {fileID: 1876174307}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Button
 --- !u!1 &1879543528
 GameObject:
   m_ObjectHideFlags: 0
@@ -2701,9 +2653,9 @@ Transform:
   m_GameObject: {fileID: 2012708349}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2.2, y: -1.5, z: 96.37711}
+  m_LocalPosition: {x: 0.10194111, y: -0.27999425, z: 96.37711}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 1
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 214568338}
   - {fileID: 1786923812}
@@ -2734,16 +2686,16 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2064803256}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 4, y: 4, z: 4}
-  m_ConstrainProportionsScale: 1
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1661160582}
+  m_Father: {fileID: 214568338}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 869, y: 166}
+  m_AnchoredPosition: {x: 224.84, y: 55.2}
   m_SizeDelta: {x: 100, y: 150}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2064803258

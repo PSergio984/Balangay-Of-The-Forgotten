@@ -1,0 +1,512 @@
+using UnityEngine;
+using System.Collections.Generic;
+using System.Collections;
+using UnityEngine.UI;
+using UnityEngine.EventSystems;
+using TMPro;
+
+
+/* MAP SELECT MANAGER 2 DOCUMENTATION
+ * 
+ * Purpose: Simplified map selection manager - works with pre-set buttons (no dynamic creation)
+ * 
+ * How it works:
+ * - Uses pre-set MapButton instances assigned in the Inspector
+ * - Manages unlock state via HashSet for O(1) lookup performance
+ * - Configures explicit navigation graph between unlocked buttons
+ * - No LineRenderers, no player marker, no dynamic instantiation
+ * 
+ * Integration: Coordinates MapButton, AreaData, LevelSelectSystemEventHandler2
+ */
+
+
+/// <summary>
+/// Simplified map selection manager - works with pre-set buttons, no animations or dynamic creation
+/// </summary>
+/// <remarks>
+/// <para><strong>Why:</strong> Simplified UX without player marker, line renderers, or dynamic button creation</para>
+/// <para><strong>How:</strong> Uses pre-set buttons from Inspector, configures unlock states and navigation</para>
+/// </remarks>
+public class MapSelectManager2 : MonoBehaviour
+{
+    [Header("Pre-Set Buttons")]
+    /// <summary>
+    /// List of MapButton instances that are pre-set in the Inspector (not created dynamically)
+    /// </summary>
+    [Tooltip("Assign MapButton GameObjects here - they should already exist in the scene")]
+    [SerializeField] private List<MapButton> _preSetMapButtons = new List<MapButton>();
+
+    [Header("UI Text")]
+    /// <summary>
+    /// Displays current area name (e.g., "Forest Region")
+    /// </summary>
+    [SerializeField] private TextMeshProUGUI _areaHeaderText;
+
+    /// <summary>
+    /// Displays currently selected level name (updated by LevelSelectSystemEventHandler2)
+    /// </summary>
+    public TextMeshProUGUI LevelHeaderText;
+
+    /// <summary>
+    /// Image component showing the portrait of the currently selected boss in the level select UI
+    /// Updated by LevelSelectSystemEventHandler2 when a map is selected
+    /// </summary>
+    public Image CurrentBossImage;
+
+    /// <summary>
+    /// Text component displaying the name or label of the currently selected boss in the level select UI
+    /// Updated by LevelSelectSystemEventHandler2 when a map is selected
+    /// </summary>
+    public TextMeshProUGUI CurrentBossImageText;
+
+    [Header("Data")]
+    /// <summary>
+    /// ScriptableObject defining all maps in current area (used for unlock state lookup)
+    /// </summary>
+    [Tooltip("Optional: Assign AreaData to automatically load unlock states. If null, all buttons start unlocked.")]
+    [SerializeField] private AreaData _currentArea;
+
+    /// <summary>
+    /// Reference to event system handler for selection management
+    /// </summary>
+    private LevelSelectSystemEventHandler2 _eventSystemHandler;
+
+    /// <summary>
+    /// HashSet of unlocked map IDs for O(1) lookup (e.g., "Forest_01")
+    /// </summary>
+    public HashSet<string> UnlockedLevelIDs = new HashSet<string>();
+
+    /// <summary>
+    /// List of all MapButton GameObjects for iteration and reference
+    /// </summary>
+    private List<GameObject> _buttonObjects = new List<GameObject>();
+
+
+    /// <summary>
+    /// Caches event handler reference on initialization
+    /// </summary>
+    private void Awake()
+    {
+        _eventSystemHandler = GetComponentInChildren<LevelSelectSystemEventHandler2>(true);
+        if (_eventSystemHandler == null)
+        {
+            Debug.LogError("[MapSelectManager2] LevelSelectSystemEventHandler2 component not found in children", this);
+        }
+    }
+
+
+    /// <summary>
+    /// Validates dependencies and initializes map selection screen
+    /// </summary>
+    private void Start()
+    {
+        // Validate required inspector references
+        if (_preSetMapButtons == null || _preSetMapButtons.Count == 0)
+        {
+            Debug.LogWarning("[MapSelectManager2] No pre-set MapButtons assigned. Map selection will not work.", this);
+            return;
+        }
+
+        // Validate Canvas is active and visible
+        Canvas canvas = GetComponentInParent<Canvas>();
+        if (canvas != null)
+        {
+            if (!canvas.gameObject.activeInHierarchy)
+            {
+                Debug.LogError($"[MapSelectManager2] Canvas '{canvas.gameObject.name}' is not active! UI will not be visible in Game view.", this);
+            }
+            
+            // Check camera assignment for ScreenSpaceCamera mode
+            if (canvas.renderMode == RenderMode.ScreenSpaceCamera)
+            {
+                if (canvas.worldCamera == null)
+                {
+                    Debug.LogError($"[MapSelectManager2] Canvas '{canvas.gameObject.name}' is set to ScreenSpaceCamera but has no camera assigned! UI will not be visible in Game view.", this);
+                }
+                else if (!canvas.worldCamera.gameObject.activeInHierarchy)
+                {
+                    Debug.LogError($"[MapSelectManager2] Canvas camera '{canvas.worldCamera.gameObject.name}' is not active! UI will not be visible in Game view.", this);
+                }
+                else
+                {
+                    Debug.Log($"[MapSelectManager2] Canvas camera '{canvas.worldCamera.gameObject.name}' is active and assigned.", this);
+                }
+            }
+            
+            Debug.Log($"[MapSelectManager2] Canvas found: '{canvas.gameObject.name}', Active: {canvas.gameObject.activeInHierarchy}, RenderMode: {canvas.renderMode}", this);
+        }
+        else
+        {
+            Debug.LogWarning("[MapSelectManager2] No Canvas found in parent hierarchy! UI may not render correctly.", this);
+        }
+
+        // Validate EventSystem exists and has input module
+        if (EventSystem.current == null)
+        {
+            Debug.LogError("[MapSelectManager2] No EventSystem found in scene! Keyboard navigation will not work.", this);
+        }
+        else
+        {
+            Debug.Log($"[MapSelectManager2] EventSystem found: '{EventSystem.current.gameObject.name}'", this);
+            
+            // Check for input modules (required for keyboard navigation)
+            var standaloneModule = EventSystem.current.GetComponent<UnityEngine.EventSystems.StandaloneInputModule>();
+            
+            // Check for InputSystemUIInputModule using reflection (in case Input System package is installed)
+            UnityEngine.Component inputSystemModule = null;
+            var inputSystemModuleType = System.Type.GetType("UnityEngine.InputSystem.UI.InputSystemUIInputModule");
+            if (inputSystemModuleType != null)
+            {
+                inputSystemModule = EventSystem.current.GetComponent(inputSystemModuleType);
+            }
+            
+            // Prefer StandaloneInputModule for reliable keyboard navigation
+            // If InputSystemUIInputModule exists, we'll disable it and use StandaloneInputModule instead
+            if (standaloneModule == null)
+            {
+                // Add StandaloneInputModule if it doesn't exist
+                Debug.Log($"[MapSelectManager2] Adding StandaloneInputModule to '{EventSystem.current.gameObject.name}' for keyboard navigation...", this);
+                standaloneModule = EventSystem.current.gameObject.AddComponent<UnityEngine.EventSystems.StandaloneInputModule>();
+            }
+            
+            // Enable StandaloneInputModule
+            if (!standaloneModule.enabled)
+            {
+                Debug.Log($"[MapSelectManager2] Enabling StandaloneInputModule on '{EventSystem.current.gameObject.name}'...", this);
+                standaloneModule.enabled = true;
+            }
+            
+            // Disable InputSystemUIInputModule if both exist (to avoid conflicts)
+            if (inputSystemModule != null)
+            {
+                var enabledProperty = inputSystemModuleType.GetProperty("enabled");
+                if (enabledProperty != null)
+                {
+                    bool isEnabled = (bool)enabledProperty.GetValue(inputSystemModule);
+                    if (isEnabled)
+                    {
+                        Debug.Log($"[MapSelectManager2] Disabling InputSystemUIInputModule to use StandaloneInputModule for keyboard navigation...", this);
+                        enabledProperty.SetValue(inputSystemModule, false);
+                    }
+                }
+            }
+            
+            Debug.Log($"[MapSelectManager2] StandaloneInputModule is active. Keyboard navigation should work.", this);
+        }
+
+        // Set area header text if available
+        if (_currentArea != null && _areaHeaderText != null)
+        {
+            _areaHeaderText.SetText(_currentArea.AreaName);
+        }
+
+        // Load unlock states from AreaData if available
+        LoadUnlockedLevels();
+
+        // Setup pre-set buttons
+        SetupMapButtons();
+    }
+
+
+    /// <summary>
+    /// Populates UnlockedLevelIDs from CurrentArea.Maps where IsUnlockedByDefault is true
+    /// If no AreaData is assigned, all buttons start unlocked
+    /// </summary>
+    private void LoadUnlockedLevels()
+    {
+        if (_currentArea == null)
+        {
+            Debug.LogWarning("[MapSelectManager2] No AreaData assigned. All buttons will start unlocked.", this);
+            // If no AreaData, unlock all buttons by default
+            foreach (var button in _preSetMapButtons)
+            {
+                if (button != null && button.MapData != null)
+                {
+                    UnlockedLevelIDs.Add(button.MapData.MapId);
+                }
+            }
+            return;
+        }
+
+        if (_currentArea.Maps == null)
+        {
+            Debug.LogError("[MapSelectManager2] CurrentArea.Maps is null!", this);
+            return;
+        }
+
+        foreach (var map in _currentArea.Maps)
+        {
+            if (map.IsUnlockedByDefault)
+            {
+                UnlockedLevelIDs.Add(map.MapId);
+            }
+        }
+    }
+
+
+    /// <summary>
+    /// Configures pre-set MapButton instances with unlock states and registers them with event handler
+    /// </summary>
+    /// <remarks>
+    /// <para><strong>Process:</strong> For each pre-set button → Configure MapButton → Add to event handler → Setup navigation</para>
+    /// </remarks>
+    private void SetupMapButtons()
+    {
+        foreach (var mapButton in _preSetMapButtons)
+        {
+            if (mapButton == null)
+            {
+                Debug.LogWarning("[MapSelectManager2] Found null MapButton in _preSetMapButtons list. Skipping.", this);
+                continue;
+            }
+
+            // Get MapData from button
+            MapData mapData = mapButton.MapData;
+            if (mapData == null)
+            {
+                Debug.LogWarning($"[MapSelectManager2] MapButton '{mapButton.gameObject.name}' has null MapData. Skipping setup.", this);
+                continue;
+            }
+
+            // Note: Button sprite is set manually in Inspector for UI design flexibility
+            // MapData is only used for game logic (unlock state, scene loading, boss info, etc.)
+
+            // Determine if this map is unlocked
+            bool isUnlocked = UnlockedLevelIDs.Contains(mapData.MapId);
+            
+            // Setup the MapButton with unlock state
+            mapButton.Setup(mapData, isUnlocked);
+
+            // Cache button GameObject for navigation
+            _buttonObjects.Add(mapButton.gameObject);
+
+            // Register button with event system handler
+            Selectable sel = mapButton.GetComponent<Selectable>();
+            if (sel != null)
+            {
+                if (_eventSystemHandler != null)
+                {
+                    _eventSystemHandler.AddSelectable(sel);
+                    Debug.Log($"[MapSelectManager2] Registered button '{mapButton.gameObject.name}' with event handler", this);
+                }
+                else
+                {
+                    Debug.LogError($"[MapSelectManager2] EventSystemHandler is null! Cannot register button '{mapButton.gameObject.name}'.", this);
+                }
+            }
+            else
+            {
+                Debug.LogWarning($"[MapSelectManager2] MapButton '{mapButton.gameObject.name}' is missing a Selectable component. Skipping AddSelectable.", this);
+            }
+        }
+
+        // Setup button navigation after all buttons are configured
+        StartCoroutine(SetupButtonNavigation());
+
+        // Initialize event system handler and select first button
+        // Use coroutine to ensure EventSystem is ready
+        StartCoroutine(InitializeEventSystem());
+    }
+
+
+    /// <summary>
+    /// Initializes event system handler and selects first button after a frame delay
+    /// </summary>
+    /// <remarks>
+    /// <para><strong>Why:</strong> Ensures EventSystem is fully initialized before selecting first button</para>
+    /// </remarks>
+    private IEnumerator InitializeEventSystem()
+    {
+        // Wait for EventSystem to be ready
+        yield return null;
+        
+        if (_eventSystemHandler != null)
+        {
+            _eventSystemHandler.InitSelectables();
+            
+            // Wait another frame to ensure selectables are registered
+            yield return null;
+            
+            _eventSystemHandler.SetFirstSelected();
+            
+            Debug.Log("[MapSelectManager2] Event system initialized and first button selected");
+        }
+        else
+        {
+            Debug.LogError("[MapSelectManager2] EventSystemHandler is null! Cannot initialize navigation.", this);
+        }
+    }
+
+    #region Navigation
+
+    /// <summary>
+    /// Configures explicit navigation graph between unlocked buttons based on spatial positions
+    /// </summary>
+    /// <remarks>
+    /// <para><strong>How:</strong> Calculates direction vectors between buttons and links based on position (supports up/down/left/right)</para>
+    /// <para><strong>Why:</strong> Unity's automatic navigation may not work well with custom layouts</para>
+    /// </remarks>
+    private IEnumerator SetupButtonNavigation()
+    {
+        yield return null; // Wait for button positions to be finalized
+
+        // Build list of unlocked buttons with their positions
+        List<(GameObject button, Selectable selectable, MapButton mapButton, Vector2 position)> unlockedButtons = new List<(GameObject, Selectable, MapButton, Vector2)>();
+        
+        foreach (GameObject buttonObj in _buttonObjects)
+        {
+            MapButton mapButton = buttonObj.GetComponent<MapButton>();
+            if (mapButton == null || mapButton.MapData == null)
+                continue;
+            
+            if (!UnlockedLevelIDs.Contains(mapButton.MapData.MapId))
+                continue;
+            
+            Selectable selectable = buttonObj.GetComponent<Selectable>();
+            if (selectable == null)
+                continue;
+            
+            RectTransform rectTransform = buttonObj.GetComponent<RectTransform>();
+            if (rectTransform == null)
+                continue;
+            
+            unlockedButtons.Add((buttonObj, selectable, mapButton, rectTransform.position));
+        }
+
+        // Configure navigation for each unlocked button
+        for (int i = 0; i < unlockedButtons.Count; i++)
+        {
+            var current = unlockedButtons[i];
+            Navigation nav = new Navigation { mode = Navigation.Mode.Explicit };
+            
+            Vector2 currentPos = current.position;
+            float closestLeftDist = float.MaxValue;
+            float closestRightDist = float.MaxValue;
+            float closestUpDist = float.MaxValue;
+            float closestDownDist = float.MaxValue;
+            Selectable closestLeft = null;
+            Selectable closestRight = null;
+            Selectable closestUp = null;
+            Selectable closestDown = null;
+
+            // Find closest buttons in each direction
+            for (int j = 0; j < unlockedButtons.Count; j++)
+            {
+                if (i == j) continue; // Skip self
+                
+                var other = unlockedButtons[j];
+                Vector2 otherPos = other.position;
+                Vector2 direction = otherPos - currentPos;
+                
+                // Check horizontal direction (left/right)
+                if (Mathf.Abs(direction.y) < Mathf.Abs(direction.x) * 0.5f) // More horizontal than vertical
+                {
+                    if (direction.x < 0) // Left
+                    {
+                        float dist = direction.magnitude;
+                        if (dist < closestLeftDist)
+                        {
+                            closestLeftDist = dist;
+                            closestLeft = other.selectable;
+                        }
+                    }
+                    else if (direction.x > 0) // Right
+                    {
+                        float dist = direction.magnitude;
+                        if (dist < closestRightDist)
+                        {
+                            closestRightDist = dist;
+                            closestRight = other.selectable;
+                        }
+                    }
+                }
+                
+                // Check vertical direction (up/down)
+                if (Mathf.Abs(direction.x) < Mathf.Abs(direction.y) * 0.5f) // More vertical than horizontal
+                {
+                    if (direction.y > 0) // Up
+                    {
+                        float dist = direction.magnitude;
+                        if (dist < closestUpDist)
+                        {
+                            closestUpDist = dist;
+                            closestUp = other.selectable;
+                        }
+                    }
+                    else if (direction.y < 0) // Down
+                    {
+                        float dist = direction.magnitude;
+                        if (dist < closestDownDist)
+                        {
+                            closestDownDist = dist;
+                            closestDown = other.selectable;
+                        }
+                    }
+                }
+            }
+
+            // Assign navigation
+            nav.selectOnLeft = closestLeft;
+            nav.selectOnRight = closestRight;
+            nav.selectOnUp = closestUp;
+            nav.selectOnDown = closestDown;
+            
+            current.selectable.navigation = nav;
+        }
+        
+        Debug.Log($"[MapSelectManager2] Navigation configured for {unlockedButtons.Count} unlocked buttons (supports up/down/left/right)", this);
+    }
+
+    #endregion
+
+
+    #region Helper Methods
+
+    /// <summary>
+    /// Unlocks level, updates MapButton visual state, optionally refreshes navigation graph
+    /// </summary>
+    /// <param name="levelID">Map identifier to add to UnlockedLevelIDs</param>
+    /// <param name="mapButton">MapButton instance to unlock</param>
+    /// <param name="updateNavigation">If true, recalculates navigation graph (default: true)</param>
+    public void UnlockLevel(string levelID, MapButton mapButton, bool updateNavigation = true)
+    {
+        UnlockedLevelIDs.Add(levelID);
+        mapButton.Unlock();
+        
+        if (updateNavigation)
+        {
+            StartCoroutine(SetupButtonNavigation());
+        }
+    }
+
+    /// <summary>
+    /// [Debug Method] Unlocks all map buttons via context menu
+    /// </summary>
+    [ContextMenu("Unlock All Levels Example")]
+    public void UnlockAllLevelsExample()
+    {
+        if (_buttonObjects == null)
+        {
+            Debug.LogWarning("[MapSelectManager2] _buttonObjects is null in UnlockAllLevelsExample.", this);
+            return;
+        }
+        
+        foreach (var buttonObj in _buttonObjects)
+        {
+            if (buttonObj == null)
+                continue;
+            
+            MapButton mapButton = buttonObj.GetComponent<MapButton>();
+            if (mapButton == null || mapButton.MapData == null)
+                continue;
+            
+            string levelToUnlock = mapButton.MapData.MapId;
+            UnlockLevel(levelToUnlock, mapButton, false); // Batch unlock without navigation update
+        }
+        
+        StartCoroutine(SetupButtonNavigation()); // Single navigation update after all unlocks
+    }
+
+    #endregion
+}
+
