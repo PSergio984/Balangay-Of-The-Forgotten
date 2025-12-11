@@ -77,6 +77,16 @@ public class EnemySystem : Singleton<EnemySystem>
     private Queue<EnemyData> enemyQueue = new Queue<EnemyData>();
     
     /// <summary>
+    /// Total number of enemies in this battle (for determining miniboss vs main boss)
+    /// </summary>
+    private int totalEnemyCount = 0;
+    
+    /// <summary>
+    /// Current spawn index (0 = first enemy/miniboss, 1 = second enemy/main boss)
+    /// </summary>
+    private int currentSpawnIndex = 0;
+    
+    /// <summary>
     /// Checks if there are more enemies waiting to spawn
     /// </summary>
     public bool HasRemainingEnemies => enemyQueue.Count > 0;
@@ -154,6 +164,7 @@ public class EnemySystem : Singleton<EnemySystem>
 
         // Clear any previous queue data (in case of battle restart)
         enemyQueue.Clear();
+        currentSpawnIndex = 0;
 
         // Queue all enemies for sequential spawning
         foreach (var enemyData in enemyDatas)
@@ -161,33 +172,79 @@ public class EnemySystem : Singleton<EnemySystem>
             enemyQueue.Enqueue(enemyData);
         }
 
+        // Store total count for overlay logic (first = miniboss, second = main boss)
+        totalEnemyCount = enemyDatas.Count;
+
         // Log the setup
         Debug.Log($"[EnemySystem] Queued {enemyQueue.Count} enemies for sequential spawning");
 
-        // Spawn the first enemy to start combat
-        SpawnNextEnemy();
+        // Spawn the first enemy to start combat (with overlay if applicable)
+        StartCoroutine(SpawnNextEnemyCoroutine());
     }
     
     /// <summary>
-    /// Spawns the next enemy from the queue, or triggers victory if none remain
+    /// Coroutine that spawns the next enemy from the queue, or triggers victory if none remain
+    /// Shows overlay before first enemy (miniboss) and second enemy (main boss)
     /// </summary>
     /// <remarks>
     /// SEQUENTIAL SPAWNING: This method is called initially and after each enemy defeat.
     /// If enemies remain in the queue, spawns the next one.
     /// If the queue is empty, all enemies are defeated and victory is triggered.
+    /// 
+    /// OVERLAY INTEGRATION: Shows enemy spawn overlay before:
+    /// - First enemy (index 0) = Miniboss
+    /// - Second enemy (index 1) = Main Boss
     /// </remarks>
-    private void SpawnNextEnemy()
+    private IEnumerator SpawnNextEnemyCoroutine()
     {
         // Check if there are more enemies to spawn
         if (enemyQueue.Count > 0)
         {
-            // Dequeue the next enemy
-            EnemyData nextEnemyData = enemyQueue.Dequeue();
+            // Peek at the next enemy (don't dequeue yet - we need it for overlay)
+            EnemyData nextEnemyData = enemyQueue.Peek();
             
-            // Spawn the enemy on the board
+            // Show overlay before first enemy (miniboss) or second enemy (main boss)
+            // Index 0 = first enemy (miniboss), Index 1 = second enemy (main boss)
+            if (currentSpawnIndex == 0 || (currentSpawnIndex == 1 && totalEnemyCount >= 2))
+            {
+                // Show overlay animation with appropriate banner
+                if (EnemySpawnOverlayUI.Instance != null)
+                {
+                    // Index 0 = Mini Boss, Index 1 = Main Boss
+                    bool isMainBoss = (currentSpawnIndex == 1 && totalEnemyCount >= 2);
+                    EnemySpawnOverlayUI.Instance.ShowEnemySpawnOverlay(isMainBoss);
+                    
+                    // Wait for overlay animation to complete
+                    // Overlay duration: fadeIn (0.5s) + slide (0.8s) + bounce (0.3s + 0.15s) + hold (1.5s) + fadeOut (0.5s) ≈ 3.75s
+                    float overlayDuration = 4.0f; // Add small buffer
+                    yield return new WaitForSeconds(overlayDuration);
+                }
+                
+                // For first enemy only: Wait for Battle Start banner to complete before spawning
+                // Sequence: Overlay -> Battle Start -> Enemy Spawn
+                if (currentSpawnIndex == 0 && CombatPhaseUI.Instance != null)
+                {
+                    // Wait for Battle Start banner to finish animating
+                    // Battle Start duration: fadeIn (0.4s) + hold (1.0s) + slideOut (0.5s) = 1.9s
+                    // But CombatPhaseManager waits 2.5s total, so we'll wait for IsAnimating to be false
+                    while (CombatPhaseUI.Instance.IsAnimating)
+                    {
+                        yield return new WaitForSeconds(0.1f); // Check every 0.1 seconds
+                    }
+                    
+                    // Add small buffer after Battle Start completes
+                    yield return new WaitForSeconds(0.2f);
+                }
+            }
+            
+            // Now dequeue and spawn the enemy
+            enemyQueue.Dequeue();
             enemyBoardView.AddEnemy(nextEnemyData);
             
-            Debug.Log($"[EnemySystem] Spawned enemy: {nextEnemyData.EnemyName}. {enemyQueue.Count} enemies remaining.");
+            Debug.Log($"[EnemySystem] Spawned enemy: {nextEnemyData.EnemyName} (spawn index: {currentSpawnIndex}). {enemyQueue.Count} enemies remaining.");
+            
+            // Increment spawn index for next enemy
+            currentSpawnIndex++;
         }
         else
         {
@@ -202,18 +259,22 @@ public class EnemySystem : Singleton<EnemySystem>
     /// </summary>
     /// <remarks>
     /// Called automatically when the last enemy is defeated and the queue is empty.
-    /// Currently logs victory. In the future, this should trigger victory screen,
-    /// rewards, scene transition, etc.
+    /// Shows victory banner and allows player to continue to map selection.
     /// </remarks>
     private void TriggerVictory()
     {
-        // TODO: Implement victory screen, rewards, scene transition
-        // For now, just log the victory
         Debug.Log("[EnemySystem] ===== VICTORY =====");
         Debug.Log("[EnemySystem] All enemies have been defeated!");
         
-        // Placeholder: You can add victory UI, rewards, etc. here
-        // Example: VictorySystem.Instance.ShowVictoryScreen();
+        // Show victory banner
+        if (VictoryDefeatUI.Instance != null)
+        {
+            VictoryDefeatUI.Instance.ShowVictory();
+        }
+        else
+        {
+            Debug.LogWarning("[EnemySystem] VictoryDefeatUI.Instance is null! Cannot show victory banner.", this);
+        }
     }
 
     [Header("Move Name Display")]
@@ -499,7 +560,7 @@ public class EnemySystem : Singleton<EnemySystem>
         // Wait a brief moment for visual clarity before spawning next enemy
         yield return new WaitForSeconds(0.5f);
         
-        // Spawn the next enemy or trigger victory
-        SpawnNextEnemy();
+        // Spawn the next enemy or trigger victory (with overlay if applicable)
+        yield return StartCoroutine(SpawnNextEnemyCoroutine());
     }
 }

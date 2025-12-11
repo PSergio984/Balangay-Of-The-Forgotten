@@ -67,7 +67,7 @@ public class CombatPhaseManager : MonoBehaviour
 
     private void Start()
     {
-        // Show Battle Start banner after a small delay
+        // Show Battle Start banner after enemy spawn overlay completes (if first enemy)
         if (showBattleStartOnLoad)
         {
             StartCoroutine(ShowBattleStartSequence());
@@ -76,10 +76,38 @@ public class CombatPhaseManager : MonoBehaviour
 
     /// <summary>
     /// Shows Battle Start banner and initial Player Turn
+    /// Waits for first enemy spawn overlay to complete before showing Battle Start
     /// </summary>
     private IEnumerator ShowBattleStartSequence()
     {
-        yield return new WaitForSeconds(battleStartDelay);
+        // Wait for first enemy spawn overlay to complete (if it's showing)
+        // The overlay shows before the first enemy spawns (miniboss)
+        if (EnemySpawnOverlayUI.Instance != null)
+        {
+            // First, wait for the overlay to start animating (in case EnemySystem hasn't started it yet)
+            // Poll until overlay begins animating
+            int waitCount = 0;
+            while (!EnemySpawnOverlayUI.Instance.IsAnimating && waitCount < 100) // Max 10 seconds wait
+            {
+                yield return new WaitForSeconds(0.1f);
+                waitCount++;
+            }
+            
+            // Now wait for overlay animation to complete
+            // Poll IsAnimating property until overlay finishes
+            while (EnemySpawnOverlayUI.Instance.IsAnimating)
+            {
+                yield return new WaitForSeconds(0.1f); // Check every 0.1 seconds
+            }
+            
+            // Add a small buffer after overlay completes
+            yield return new WaitForSeconds(0.2f);
+        }
+        else
+        {
+            // Fallback: if overlay system doesn't exist, use original delay
+            yield return new WaitForSeconds(battleStartDelay);
+        }
         
         if (combatPhaseUI != null)
         {

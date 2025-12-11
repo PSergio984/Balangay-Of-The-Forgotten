@@ -179,10 +179,10 @@ public class DamageSystem : MonoBehaviour
                     // Add the kill action to be processed after damage
                     ActionSystem.Instance.AddReaction(killEnemyGA);
                 }
-                else
+                else if (target is HeroView)
                 {
-                    //nothing here for now
-                    //handles heroes death        
+                    // Hero died - check if all heroes are dead
+                    CheckForDefeat();
                 }
             }
             else if (target != null)
@@ -193,5 +193,52 @@ public class DamageSystem : MonoBehaviour
         }
         // Wait one frame before continuing (required for coroutines)
         yield return null;
+    }
+    
+    /// <summary>
+    /// Checks if all heroes are dead and triggers defeat if so
+    /// </summary>
+    /// <remarks>
+    /// Called after a hero dies. Checks if all heroes in the party have 0 or less health.
+    /// If all heroes are dead, shows defeat banner and allows player to continue.
+    /// </remarks>
+    private void CheckForDefeat()
+    {
+        // Get all heroes from HeroSystem
+        if (HeroSystem.Instance == null || HeroSystem.Instance.HeroViews == null)
+        {
+            Debug.LogWarning("[DamageSystem] HeroSystem.Instance or HeroViews is null! Cannot check for defeat.", this);
+            return;
+        }
+        
+        var heroes = HeroSystem.Instance.HeroViews;
+        
+        // Check if all heroes are dead
+        bool allHeroesDead = true;
+        foreach (var hero in heroes)
+        {
+            if (hero != null && hero.CurrentHealth > 0)
+            {
+                allHeroesDead = false;
+                break;
+            }
+        }
+        
+        // If all heroes are dead, trigger defeat
+        if (allHeroesDead)
+        {
+            Debug.Log("[DamageSystem] ===== DEFEAT =====");
+            Debug.Log("[DamageSystem] All heroes have been defeated!");
+            
+            // Show defeat banner
+            if (VictoryDefeatUI.Instance != null)
+            {
+                VictoryDefeatUI.Instance.ShowDefeat();
+            }
+            else
+            {
+                Debug.LogWarning("[DamageSystem] VictoryDefeatUI.Instance is null! Cannot show defeat banner.", this);
+            }
+        }
     }
 }

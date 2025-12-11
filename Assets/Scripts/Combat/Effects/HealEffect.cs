@@ -1,18 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-/// <summary>
-/// Card and perk effect that heals specified targets and optionally heals the caster (self-heal, lifesteal, etc.)
-/// </summary>
-/// <remarks>
-/// <para><strong>Purpose:</strong> Creates healing actions for cards and perks, supporting ally heal, self-heal, percent heal, and lifesteal.</para>
-/// <para><strong>Examples:</strong></para>
-/// <list type="bullet">
-/// <item>Heal ally for 100 + 50% MAG, heal self for 50% of that amount</item>
-/// <item>Heal all allies for 50 + 100% MAG</item>
-/// <item>Heal self for 25% max HP</item>
-/// <item>Lifesteal: Heal self for a percent of damage dealt</item>
-/// </list>
 /// </remarks>
 /// <summary>
 /// Card and perk effect that heals specified targets and optionally heals the caster (self-heal, lifesteal, etc.).

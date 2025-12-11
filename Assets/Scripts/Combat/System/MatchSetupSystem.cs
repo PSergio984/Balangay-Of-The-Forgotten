@@ -106,6 +106,21 @@ public class MatchSetupSystem : MonoBehaviour
     /// </remarks>
     private void Start()
     {
+        // Start the setup sequence as a coroutine to handle async hero spawning
+        StartCoroutine(SetupSequence());
+    }
+    
+    /// <summary>
+    /// Coroutine that handles the full setup sequence in the correct order
+    /// </summary>
+    /// <remarks>
+    /// Sequence:
+    /// 1. Setup heroes and wait for spawn animations to complete
+    /// 2. Setup cards, perks, etc.
+    /// 3. Setup enemies (triggers overlay and battle start sequence)
+    /// </remarks>
+    private IEnumerator SetupSequence()
+    {
 
 
         // --- Setup variables at top for use throughout method ---
@@ -144,23 +159,30 @@ public class MatchSetupSystem : MonoBehaviour
             Debug.Log($"[MatchSetupSystem] Set combat map icon from level: {selectedMapData.MapId}");
         }
 
-        // Initialize sequential enemy spawning (only spawns first enemy, rest spawn on defeat)
-        // SEQUENTIAL MODE: Enemies appear one at a time. When defeated, the next spawns automatically.
-        EnemySystem.Instance.Setup(enemiesToSpawn);
-
-
         // Defensive: Ensure heroDatas is not null or empty before any use
         if (heroDatas == null || heroDatas.Count == 0)
         {
             Debug.LogWarning("[MatchSetupSystem] heroDatas is null or empty. Cannot setup heroes, cards, or animator override.", this);
-            return;
+            yield break;
         }
 
-        // Spawn all hero entities first (multi-hero support)
+        // STEP 1: Spawn all hero entities first (multi-hero support)
         // This ensures heroes exist before cards are set up
         HeroSystem.Instance.Setup(heroDatas);
+        
+        // Wait for all hero spawn animations to complete
+        // Animation timing: Each hero has staggered spawn with delay
+        // Last hero spawns at: spawnDelay * (heroCount - 1) + slideInDuration
+        // Default values: spawnDelay = 0.2s, slideInDuration = 0.6s
+        // For safety, calculate: (0.2 * (count-1)) + 0.6 + buffer
+        float heroSpawnDelay = 0.2f; // Default from HeroBoardView
+        float heroSlideInDuration = 0.6f; // Default from HeroBoardView
+        float totalHeroSpawnTime = (heroSpawnDelay * (heroDatas.Count - 1)) + heroSlideInDuration + 0.2f; // Add buffer
+        yield return new WaitForSeconds(totalHeroSpawnTime);
+        
+        Debug.Log($"[MatchSetupSystem] All heroes spawned. Waiting {totalHeroSpawnTime}s for animations.");
 
-        // Prepare the card system with all hero decks (multi-hero support)
+        // STEP 2: Prepare the card system with all hero decks (multi-hero support)
         CardSystem.Instance.Setup(heroDatas);
 
         if (heroDatas[0] != null)
@@ -178,8 +200,13 @@ public class MatchSetupSystem : MonoBehaviour
             PerkSystem.Instance.AddPerk(new Perk(perkData));
         }
 
-        // Delay card drawing until after Battle Start and Player Turn banners complete
-        // Sequence: Battle Start -> Player Turn -> Draw Cards (not simultaneously)
+        // STEP 3: Initialize sequential enemy spawning (only spawns first enemy, rest spawn on defeat)
+        // SEQUENTIAL MODE: Enemies appear one at a time. When defeated, the next spawns automatically.
+        // This triggers the enemy spawn overlay and then the battle start sequence
+        EnemySystem.Instance.Setup(enemiesToSpawn);
+
+        // STEP 4: Delay card drawing until after Battle Start and Player Turn banners complete
+        // Sequence: Enemy Overlay -> Battle Start -> Player Turn -> Draw Cards (not simultaneously)
         StartCoroutine(DelayedInitialCardDraw());
     }
     
