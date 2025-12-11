@@ -18,6 +18,7 @@ MonoBehaviour:
   <AttackPower>k__BackingField: 230
   <MagicPower>k__BackingField: 34
   <Defense>k__BackingField: 100
+  <AnimatorOverride>k__BackingField: {fileID: 22100000, guid: 783e47ef0aa550244a7cd7fa89df2cfd, type: 2}
   <Moveset>k__BackingField:
   - {fileID: 11400000, guid: 6d31a1e68608f5a409c475849e9f9aa6, type: 2}
   - {fileID: 11400000, guid: 9e5431cdc8d69074794af05514704120, type: 2}
