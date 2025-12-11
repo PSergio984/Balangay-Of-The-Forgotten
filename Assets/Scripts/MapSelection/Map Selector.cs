@@ -48,4 +48,15 @@ public class MapSelector : MonoBehaviour
             .Perform();
     }
 
+    public void GoToCredits(){
+         SceneController.Instance
+            .NewTransition()
+            .Unload(SceneDatabase.Slots.SessionContent)
+            .Unload(SceneDatabase.Slots.Session)
+            .Load(SceneDatabase.Slots.MainMenu, SceneDatabase.Scenes.MainMenu, setActive: true)
+            .WithMusic(MenuMusic, MusicFadeTime)
+            .WithOverlay()
+            .Perform();
+    }
+
 }
