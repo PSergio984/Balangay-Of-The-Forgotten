@@ -19,6 +19,7 @@ public class DialogueManager : MonoBehaviour
     [Header("Continue Button")]
     [Tooltip("Continue button that appears after typing completes")]
     public GameObject continueButton;
+    private Button continueButtonComponent;
 
     [Header("Animated Portrait")] 
     [Tooltip("Parent transform for animated portrait prefab instance")] 
@@ -28,6 +29,11 @@ public class DialogueManager : MonoBehaviour
     [Header("Glow Component")]
     [Tooltip("Glow GameObject that should be hidden when there's no overlay image")]
     public GameObject glowComponent;
+    
+    [Header("Overlay Management")]
+    [Tooltip("DialogueOverlayManager component that manages all overlay GameObjects")]
+    public DialogueOverlayManager overlayManager;
+    
 
     [Header("Animation Settings")]
     [Tooltip("Duration for dialogue panel slide animation")]
@@ -47,6 +53,7 @@ public class DialogueManager : MonoBehaviour
     
     // Store original scale of overlay objects
     private Dictionary<GameObject, Vector3> overlayOriginalScales = new Dictionary<GameObject, Vector3>();
+    
     
     // Track typing completion
     private bool isTypingComplete = false;
@@ -89,34 +96,62 @@ public class DialogueManager : MonoBehaviour
             dialoguePanel.gameObject.SetActive(false);
         }
         
-        // Store initial positions for UI elements
+        // Store initial positions for UI elements (only if they're valid)
         if (!elementPositionsStored)
         {
             if (characterIcon != null)
             {
                 RectTransform iconRect = characterIcon.GetComponent<RectTransform>();
                 if (iconRect != null)
-                    characterIconInitialPos = iconRect.anchoredPosition;
+                {
+                    Vector2 pos = iconRect.anchoredPosition;
+                    // Only store if position is valid (not NaN)
+                    if (!float.IsNaN(pos.x) && !float.IsNaN(pos.y))
+                    {
+                        characterIconInitialPos = pos;
+                    }
+                }
             }
             if (characterName != null)
             {
                 RectTransform nameRect = characterName.GetComponent<RectTransform>();
                 if (nameRect != null)
-                    characterNameInitialPos = nameRect.anchoredPosition;
+                {
+                    Vector2 pos = nameRect.anchoredPosition;
+                    if (!float.IsNaN(pos.x) && !float.IsNaN(pos.y))
+                    {
+                        characterNameInitialPos = pos;
+                    }
+                }
             }
             if (dialogueArea != null)
             {
                 RectTransform areaRect = dialogueArea.GetComponent<RectTransform>();
                 if (areaRect != null)
-                    dialogueAreaInitialPos = areaRect.anchoredPosition;
+                {
+                    Vector2 pos = areaRect.anchoredPosition;
+                    if (!float.IsNaN(pos.x) && !float.IsNaN(pos.y))
+                    {
+                        dialogueAreaInitialPos = pos;
+                    }
+                }
             }
             elementPositionsStored = true;
         }
         
-        // Hide continue button initially
+        // Setup continue button
         if (continueButton != null)
         {
             continueButton.SetActive(false);
+            // Get or add Button component
+            continueButtonComponent = continueButton.GetComponent<Button>();
+            if (continueButtonComponent == null)
+            {
+                continueButtonComponent = continueButton.AddComponent<Button>();
+            }
+            // Connect onClick event
+            continueButtonComponent.onClick.RemoveAllListeners();
+            continueButtonComponent.onClick.AddListener(OnContinueButtonClicked);
         }
         
         // Hide glow initially
@@ -130,6 +165,12 @@ public class DialogueManager : MonoBehaviour
     {
         isDialogueActive = true;
         currentDialogue = dialogue;
+
+        // Disable all overlay GameObjects initially
+        if (overlayManager != null)
+        {
+            overlayManager.DisableAllOverlays();
+        }
 
         // Animate dialogue panel sliding up from bottom
         ShowDialoguePanel();
@@ -231,10 +272,17 @@ public class DialogueManager : MonoBehaviour
             }
             if (portraitRect != null)
             {
-                Vector2 startPos = portraitRect.anchoredPosition;
+                Vector2 currentPos = portraitRect.anchoredPosition;
+                // Validate position before using
+                if (float.IsNaN(currentPos.x) || float.IsNaN(currentPos.y))
+                {
+                    currentPos = Vector2.zero;
+                }
+                Vector2 startPos = currentPos;
                 startPos.y -= 200f; // Start below
                 portraitRect.anchoredPosition = startPos;
-                portraitRect.DOAnchorPos(Vector2.zero, elementSlideDuration).SetEase(elementSlideEase);
+                // Animate to current position (where it should be)
+                portraitRect.DOAnchorPos(currentPos, elementSlideDuration).SetEase(elementSlideEase);
             }
         }
         else
@@ -248,6 +296,11 @@ public class DialogueManager : MonoBehaviour
                 RectTransform iconRect = characterIcon.GetComponent<RectTransform>();
                 if (iconRect != null)
                 {
+                    // Validate initial position
+                    if (float.IsNaN(characterIconInitialPos.x) || float.IsNaN(characterIconInitialPos.y))
+                    {
+                        characterIconInitialPos = iconRect.anchoredPosition;
+                    }
                     Vector2 startPos = characterIconInitialPos;
                     startPos.y -= 200f; // Start below
                     iconRect.anchoredPosition = startPos;
@@ -269,6 +322,11 @@ public class DialogueManager : MonoBehaviour
             RectTransform nameRect = characterName.GetComponent<RectTransform>();
             if (nameRect != null)
             {
+                // Validate initial position
+                if (float.IsNaN(characterNameInitialPos.x) || float.IsNaN(characterNameInitialPos.y))
+                {
+                    characterNameInitialPos = nameRect.anchoredPosition;
+                }
                 Vector2 startPos = characterNameInitialPos;
                 startPos.y -= 150f; // Start below
                 nameRect.anchoredPosition = startPos;
@@ -283,11 +341,17 @@ public class DialogueManager : MonoBehaviour
     /// </summary>
     private void HandleOverlayImage(DialogueLine line)
     {
-        // Hide previous overlay if any
+        // Hide previous overlay if any (for cleanup)
         if (currentOverlayObject != null)
         {
             HideOverlayObject(currentOverlayObject, 0.2f);
             currentOverlayObject = null;
+        }
+
+        // Disable all overlays except the one for this line
+        if (overlayManager != null)
+        {
+            overlayManager.DisableAllOverlaysExcept(line.overlayImageObject);
         }
 
         // Show overlay if assigned
@@ -317,6 +381,7 @@ public class DialogueManager : MonoBehaviour
             }
         }
     }
+    
     
     /// <summary>
     /// Shows an overlay GameObject with scale animation (0 to original scale)
@@ -389,6 +454,11 @@ public class DialogueManager : MonoBehaviour
             RectTransform areaRect = dialogueArea.GetComponent<RectTransform>();
             if (areaRect != null)
             {
+                // Validate initial position
+                if (float.IsNaN(dialogueAreaInitialPos.x) || float.IsNaN(dialogueAreaInitialPos.y))
+                {
+                    dialogueAreaInitialPos = areaRect.anchoredPosition;
+                }
                 Vector2 startPos = dialogueAreaInitialPos;
                 startPos.y -= 100f; // Start below
                 areaRect.anchoredPosition = startPos;
@@ -408,6 +478,11 @@ public class DialogueManager : MonoBehaviour
         if (continueButton != null)
         {
             continueButton.SetActive(true);
+            // Ensure button is interactable
+            if (continueButtonComponent != null)
+            {
+                continueButtonComponent.interactable = true;
+            }
         }
     }
  
@@ -422,7 +497,13 @@ public class DialogueManager : MonoBehaviour
             continueButton.SetActive(false);
         }
 
-        // Hide overlay if active
+        // Disable all overlays
+        if (overlayManager != null)
+        {
+            overlayManager.DisableAllOverlays();
+        }
+        
+        // Hide overlay if active (for cleanup)
         if (currentOverlayObject != null)
         {
             HideOverlayObject(currentOverlayObject, 0.3f);

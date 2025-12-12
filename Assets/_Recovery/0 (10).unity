@@ -309,7 +309,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 0
+  m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -1463,7 +1463,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 37a45e98ad6272b4198d2ccf8a23b471, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DialogueOverlayManager
-  overlayParent: {fileID: 1064772635}
+  overlayParent: {fileID: 813836645}
   excludedGameObjects:
   - {fileID: 667517309}
   - {fileID: 560800129}
