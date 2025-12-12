@@ -1,15 +1,16 @@
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
 /// <summary>
 /// Displays collected relics as decorative trophies in the combat scene.
 /// Relics are visual representations of defeated main bosses.
+/// Uses fixed slots assigned in the Inspector for easier positioning and layout control.
 /// </summary>
 /// <remarks>
 /// <para><strong>Purpose:</strong> Shows trophy icons for each main boss the player has defeated</para>
-/// <para><strong>Usage:</strong> Assign RelicCollectionData and icon slots in Inspector</para>
+/// <para><strong>Usage:</strong> Assign RelicCollectionData and 4 Image slot references in Inspector</para>
+/// <para><strong>Pattern:</strong> Similar to HeroBoardView - uses fixed slot references instead of dynamic spawning</para>
 /// </remarks>
 public class RelicDisplayUI : MonoBehaviour
 {
@@ -17,25 +18,24 @@ public class RelicDisplayUI : MonoBehaviour
     [Tooltip("Reference to the RelicCollectionData ScriptableObject")]
     [SerializeField] private RelicCollectionData relicCollection;
     
+    [Header("Relic Slots")]
+    [Tooltip("Fixed slots for relic icons. Assign 4 Image components in the Inspector.")]
+    [SerializeField] private List<Image> relicSlots = new List<Image>();
+    
     [Header("Display Settings")]
-    [Tooltip("Container for relic icon slots (HorizontalLayoutGroup recommended)")]
-    [SerializeField] private RectTransform relicContainer;
-    
-    [Tooltip("Prefab for individual relic icon slots")]
-    [SerializeField] private GameObject relicIconPrefab;
-    
-    [Tooltip("Maximum number of relics to display")]
-    [SerializeField] private int maxDisplaySlots = 4;
+    [Tooltip("Container GameObject (optional - used for hiding when empty)")]
+    [SerializeField] private GameObject container;
     
     [Tooltip("Hide the container if no relics are collected")]
     [SerializeField] private bool hideWhenEmpty = true;
     
-    // List of spawned relic icons
-    private List<Image> relicIcons = new List<Image>();
+    private void Awake()
+    {
+        ValidateSlots();
+    }
     
     private void Start()
     {
-        InitializeRelicSlots();
         RefreshDisplay();
     }
     
@@ -46,57 +46,23 @@ public class RelicDisplayUI : MonoBehaviour
     }
     
     /// <summary>
-    /// Creates empty relic icon slots based on maxDisplaySlots
+    /// Validates that slots are properly assigned
     /// </summary>
-    private void InitializeRelicSlots()
+    private void ValidateSlots()
     {
-        if (relicContainer == null)
+        if (relicSlots == null || relicSlots.Count == 0)
         {
-            Debug.LogWarning("[RelicDisplayUI] Relic container not assigned!", this);
+            Debug.LogWarning("[RelicDisplayUI] No relic slots assigned! Please assign 4 Image components in the Inspector.", this);
             return;
         }
         
-        if (relicIconPrefab == null)
+        // Validate each slot is assigned
+        for (int i = 0; i < relicSlots.Count; i++)
         {
-            Debug.LogWarning("[RelicDisplayUI] Relic icon prefab not assigned! Using basic Image components.", this);
-        }
-        
-        // Clear existing icons
-        foreach (Transform child in relicContainer)
-        {
-            Destroy(child.gameObject);
-        }
-        relicIcons.Clear();
-        
-        // Create icon slots
-        for (int i = 0; i < maxDisplaySlots; i++)
-        {
-            GameObject iconObject;
-            
-            if (relicIconPrefab != null)
+            if (relicSlots[i] == null)
             {
-                iconObject = Instantiate(relicIconPrefab, relicContainer);
+                Debug.LogWarning($"[RelicDisplayUI] Relic slot {i} is not assigned!", this);
             }
-            else
-            {
-                // Create basic Image if no prefab
-                iconObject = new GameObject($"RelicSlot_{i}");
-                iconObject.transform.SetParent(relicContainer);
-                Image image = iconObject.AddComponent<Image>();
-                
-                // Set default size
-                RectTransform rect = iconObject.GetComponent<RectTransform>();
-                rect.sizeDelta = new Vector2(64, 64);
-            }
-            
-            Image iconImage = iconObject.GetComponent<Image>();
-            if (iconImage != null)
-            {
-                iconImage.enabled = false; // Hidden until relic is collected
-                relicIcons.Add(iconImage);
-            }
-            
-            iconObject.SetActive(true);
         }
     }
     
@@ -108,10 +74,16 @@ public class RelicDisplayUI : MonoBehaviour
         if (relicCollection == null)
         {
             Debug.LogWarning("[RelicDisplayUI] RelicCollectionData not assigned!", this);
-            if (hideWhenEmpty && relicContainer != null)
+            if (hideWhenEmpty && container != null)
             {
-                relicContainer.gameObject.SetActive(false);
+                container.SetActive(false);
             }
+            return;
+        }
+        
+        if (relicSlots == null || relicSlots.Count == 0)
+        {
+            Debug.LogWarning("[RelicDisplayUI] No relic slots assigned!", this);
             return;
         }
         
@@ -122,30 +94,32 @@ public class RelicDisplayUI : MonoBehaviour
         int relicCount = relics.Count;
         
         // Hide container if empty and hideWhenEmpty is true
-        if (hideWhenEmpty && relicContainer != null)
+        if (hideWhenEmpty && container != null)
         {
-            relicContainer.gameObject.SetActive(relicCount > 0);
+            container.SetActive(relicCount > 0);
         }
         
         // Update each slot
-        for (int i = 0; i < relicIcons.Count; i++)
+        for (int i = 0; i < relicSlots.Count; i++)
         {
+            if (relicSlots[i] == null) continue;
+            
             if (i < relicCount && i < relics.Count)
             {
-                // Show relic
+                // Show relic sprite
                 RelicData relic = relics[i];
-                relicIcons[i].sprite = relic.RelicSprite;
-                relicIcons[i].enabled = true;
-                relicIcons[i].color = Color.white;
+                relicSlots[i].sprite = relic.RelicSprite;
+                relicSlots[i].enabled = true;
+                relicSlots[i].color = Color.white;
             }
             else
             {
-                // Hide empty slot
-                relicIcons[i].enabled = false;
+                // Hide empty slot (keep Image component but disable it)
+                relicSlots[i].enabled = false;
             }
         }
         
-        Debug.Log($"[RelicDisplayUI] Displaying {relicCount} collected relics.");
+        Debug.Log($"[RelicDisplayUI] Displaying {relicCount} collected relics out of {relicSlots.Count} slots.");
     }
     
     /// <summary>

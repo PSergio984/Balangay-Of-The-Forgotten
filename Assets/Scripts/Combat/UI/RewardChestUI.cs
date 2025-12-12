@@ -236,12 +236,6 @@ public class RewardChestUI : Singleton<RewardChestUI>
     /// <param name="isFirstReward">True if this is the first enemy reward (miniboss), false if second enemy (main boss)</param>
     public void ShowReward(RewardData rewardData, System.Action onComplete, bool isFirstReward = true)
     {
-        if (isAnimating)
-        {
-            Debug.LogWarning("[RewardChestUI] Already animating! Ignoring ShowReward call.", this);
-            return;
-        }
-        
         if (rewardData == null)
         {
             Debug.LogWarning("[RewardChestUI] RewardData is null! Cannot show reward.", this);
@@ -249,8 +243,18 @@ public class RewardChestUI : Singleton<RewardChestUI>
             return;
         }
         
+        // If already animating, still process the reward but skip animation
+        if (isAnimating)
+        {
+            Debug.LogWarning("[RewardChestUI] Already animating! Processing reward immediately without animation.", this);
+            // Process reward immediately - don't wait for animation
+            onComplete?.Invoke();
+            return;
+        }
+        
         onCompleteCallback = onComplete;
         chestOpened = false;
+        continueClicked = false;
         currentRewardData = rewardData;
         
         // Setup sprites
@@ -460,9 +464,8 @@ public class RewardChestUI : Singleton<RewardChestUI>
             yield return null;
         }
         
-        // Complete
+        // Complete - callback was already invoked when continue was clicked
         isAnimating = false;
-        onCompleteCallback?.Invoke();
     }
 
     /// <summary>
@@ -485,6 +488,7 @@ public class RewardChestUI : Singleton<RewardChestUI>
 
     /// <summary>
     /// Called when continue button is clicked
+    /// Process reward immediately when continue is clicked, then mark for animation completion
     /// </summary>
     private void OnContinueButtonClicked()
     {
@@ -492,6 +496,15 @@ public class RewardChestUI : Singleton<RewardChestUI>
         {
             continueButton.interactable = false; // Prevent multiple clicks
         }
+        
+        // Process reward immediately when continue is clicked (simple approach)
+        // This ensures reward is collected even if animation gets stuck
+        if (onCompleteCallback != null)
+        {
+            onCompleteCallback.Invoke();
+            onCompleteCallback = null; // Clear to prevent double-call
+        }
+        
         continueClicked = true;
     }
     

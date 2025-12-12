@@ -79,9 +79,6 @@ public class CharacterSelectionManager : MonoBehaviour
             LoadHeroesFromResources();
         }
         
-        // Initialize UI
-        UpdateSelectionUI();
-        
         // Subscribe to preset selection changes
         if (cardPresetManager != null)
         {
@@ -93,8 +90,11 @@ public class CharacterSelectionManager : MonoBehaviour
             Debug.LogError("[CharacterSelectionManager] cardPresetManager is NULL! Cannot subscribe to event!");
         }
         
-        // Generate character cards
+        // Generate character cards (must happen before UpdateSelectionUI)
         GenerateCharacterCards();
+        
+        // Initialize UI after cards are generated
+        UpdateSelectionUI();
 
         // Wire up confirm button event
         if (confirmButton != null)
@@ -243,6 +243,9 @@ public class CharacterSelectionManager : MonoBehaviour
         {
             cardPresetManager.WireUpExistingCards();
         }
+        
+        // Update UI after everything is wired up
+        UpdateSelectionUI();
     }
     
     /// <summary>

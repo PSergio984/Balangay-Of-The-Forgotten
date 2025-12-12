@@ -408,6 +408,8 @@ public class VictoryDefeatUI : Singleton<VictoryDefeatUI>
     /// </summary>
     private void OnRewardChestComplete()
     {
+        Debug.Log($"[VictoryDefeatUI] OnRewardChestComplete called. PendingReward: {(pendingRewardData != null ? pendingRewardData.name : "NULL")}, IsFirstReward: {isFirstReward}");
+        
         // Hide reward UI
         if (rewardChestUI != null)
         {
@@ -448,6 +450,8 @@ public class VictoryDefeatUI : Singleton<VictoryDefeatUI>
     /// <param name="isMiniBossReward">True if this is a mini-boss reward (special card), false for main boss (relic)</param>
     private void ProcessRewardCollection(RewardData rewardData, bool isMiniBossReward)
     {
+        Debug.Log($"[VictoryDefeatUI] ProcessRewardCollection called. RewardData: {(rewardData != null ? rewardData.name : "NULL")}, IsMiniBoss: {isMiniBossReward}");
+        
         if (rewardData == null)
         {
             Debug.LogWarning("[VictoryDefeatUI] Cannot process null reward data.");
@@ -458,10 +462,18 @@ public class VictoryDefeatUI : Singleton<VictoryDefeatUI>
         {
             // Mini-boss reward: collect special card
             SpecialCardData specialCard = rewardData.SpecialCardReward;
+            Debug.Log($"[VictoryDefeatUI] Processing mini-boss reward. SpecialCard: {(specialCard != null ? specialCard.name : "NULL")}, Collection: {(specialCardCollection != null ? "ASSIGNED" : "NULL")}");
+            
             if (specialCard != null && specialCardCollection != null)
             {
-                specialCardCollection.AddSpecialCard(specialCard);
-                Debug.Log($"[VictoryDefeatUI] Collected special card: {specialCard.CardName}");
+                bool added = specialCardCollection.AddSpecialCard(specialCard);
+                Debug.Log($"[VictoryDefeatUI] Collected special card: {specialCard.CardName} (Added: {added})");
+                
+                // Notify SpecialCardPanelUI to refresh if card was successfully added
+                if (added)
+                {
+                    NotifySpecialCardPanelUI();
+                }
             }
             else if (specialCard != null)
             {
@@ -472,15 +484,66 @@ public class VictoryDefeatUI : Singleton<VictoryDefeatUI>
         {
             // Main boss reward: collect relic
             RelicData relic = rewardData.AssociatedRelic;
+            Debug.Log($"[VictoryDefeatUI] Processing main boss reward. Relic: {(relic != null ? relic.name : "NULL")}, Collection: {(relicCollection != null ? "ASSIGNED" : "NULL")}");
+            
             if (relic != null && relicCollection != null)
             {
-                relicCollection.AddRelic(relic);
-                Debug.Log($"[VictoryDefeatUI] Collected relic: {relic.RelicName}");
+                bool added = relicCollection.AddRelic(relic);
+                Debug.Log($"[VictoryDefeatUI] Collected relic: {relic.RelicName} (Added: {added})");
+                
+                // Notify RelicDisplayUI to refresh if relic was successfully added
+                if (added)
+                {
+                    NotifyRelicDisplayUI();
+                }
             }
-            else if (relic != null)
+            else
             {
-                Debug.LogWarning("[VictoryDefeatUI] RelicCollectionData not assigned, cannot save relic!");
+                if (relic == null)
+                {
+                    Debug.LogWarning("[VictoryDefeatUI] RewardData.AssociatedRelic is NULL! Cannot collect relic.");
+                }
+                if (relicCollection == null)
+                {
+                    Debug.LogWarning("[VictoryDefeatUI] RelicCollectionData not assigned, cannot save relic!");
+                }
             }
+        }
+    }
+    
+    /// <summary>
+    /// Notifies RelicDisplayUI to refresh its display when a new relic is collected
+    /// </summary>
+    private void NotifyRelicDisplayUI()
+    {
+        // Find RelicDisplayUI in the scene and notify it
+        RelicDisplayUI relicDisplay = FindObjectOfType<RelicDisplayUI>();
+        if (relicDisplay != null)
+        {
+            relicDisplay.OnRelicCollected();
+            Debug.Log("[VictoryDefeatUI] Notified RelicDisplayUI to refresh display.");
+        }
+        else
+        {
+            Debug.LogWarning("[VictoryDefeatUI] RelicDisplayUI not found in scene! Relic display may not update.");
+        }
+    }
+    
+    /// <summary>
+    /// Notifies SpecialCardPanelUI to refresh its display when a new special card is collected
+    /// </summary>
+    private void NotifySpecialCardPanelUI()
+    {
+        // Find SpecialCardPanelUI in the scene and notify it
+        SpecialCardPanelUI specialCardPanel = FindObjectOfType<SpecialCardPanelUI>();
+        if (specialCardPanel != null)
+        {
+            specialCardPanel.RefreshDisplay();
+            Debug.Log("[VictoryDefeatUI] Notified SpecialCardPanelUI to refresh display.");
+        }
+        else
+        {
+            Debug.LogWarning("[VictoryDefeatUI] SpecialCardPanelUI not found in scene! Special card display may not update.");
         }
     }
     

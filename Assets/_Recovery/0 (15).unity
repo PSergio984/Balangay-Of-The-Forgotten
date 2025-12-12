@@ -668,8 +668,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: f17decc971290bf4fa570e0dcebe4813, type: 2}
   - {fileID: 11400000, guid: 81ff8d327f4eeab49806f93b816055a9, type: 2}
   - {fileID: 11400000, guid: 47ba028629da84246952941a644ef81e, type: 2}
-  fallbackMinibossReward: {fileID: 11400000, guid: a8dbe3d546c827b429f6daba862381ba, type: 2}
-  fallbackMainBossReward: {fileID: 11400000, guid: 5a52b58081dc5a44699d4de8e6d15914, type: 2}
+  fallbackMinibossReward: {fileID: 11400000, guid: 7476c27cc16d52d4c89df896eeaa16a3, type: 2}
+  fallbackMainBossReward: {fileID: 11400000, guid: 78122150924f17d4fb67e2ccce9101e4, type: 2}
   roleTurnAnimator: {fileID: 621209968}
 --- !u!1 &160960753
 GameObject:
@@ -1861,10 +1861,10 @@ Camera:
   m_LensShift: {x: 0, y: 0}
   m_NormalizedViewPortRect:
     serializedVersion: 2
-    x: 0
+    x: -1.5
     y: 0
-    width: 1
-    height: 1
+    width: 3
+    height: 0
   near clip plane: 0.3
   far clip plane: 1000
   field of view: 34
