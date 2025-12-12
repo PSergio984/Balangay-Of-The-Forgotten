@@ -54,6 +54,11 @@ public class MapButton : MonoBehaviour
     public bool IsCompleted { get; private set; }
     
     /// <summary>
+    /// Flag to prevent re-enabling completed maps
+    /// </summary>
+    private bool _isPermanentlyDisabled = false;
+    
+    /// <summary>
     /// Public property to access MapData (reads from serialized field or runtime-set value)
     /// </summary>
     public MapData MapData 
@@ -182,6 +187,18 @@ public class MapButton : MonoBehaviour
         // Make button clickable or not based on unlock state AND completion state
         // If map is completed, it should be disabled (not clickable)
         bool shouldBeInteractable = isUnlocked && !isCompleted;
+        
+        // CRITICAL: Always disable if completed, regardless of unlock state
+        if (isCompleted)
+        {
+            shouldBeInteractable = false;
+            _isPermanentlyDisabled = true; // Mark as permanently disabled
+        }
+        else
+        {
+            _isPermanentlyDisabled = false; // Reset flag if not completed
+        }
+        
         _MapButton.interactable = shouldBeInteractable;
 
         if (isUnlocked)
@@ -189,7 +206,15 @@ public class MapButton : MonoBehaviour
             if (isCompleted)
             {
                 // Map is completed - DISABLE button and show completed visual
-                _MapButton.interactable = false; // Disable completed maps
+                _MapButton.interactable = false; // Force disable completed maps
+                
+                // Also disable the Selectable component to prevent keyboard/gamepad navigation
+                var selectable = GetComponent<UnityEngine.UI.Selectable>();
+                if (selectable != null)
+                {
+                    selectable.interactable = false;
+                }
+                
                 ReturnColor = completedColor;
                 _MapImage.color = ReturnColor;
                 
@@ -199,7 +224,10 @@ public class MapButton : MonoBehaviour
                     completionIndicator.SetActive(true);
                 }
                 
-                Debug.Log($"[MapButton] Map '{map.MapId}' is completed - button disabled.");
+                Debug.Log($"[MapButton] Map '{map.MapId}' is completed - button disabled and made non-interactable.");
+                
+                // Double-check: Ensure button stays disabled
+                ValidateButtonState();
             }
             else
             {
@@ -230,6 +258,41 @@ public class MapButton : MonoBehaviour
             }
         }
     }
+    
+    /// <summary>
+    /// Validates and enforces button state - ensures completed maps stay disabled
+    /// </summary>
+    private void ValidateButtonState()
+    {
+        if (IsCompleted && _MapButton != null)
+        {
+            // Force disable if completed
+            if (_MapButton.interactable)
+            {
+                Debug.LogWarning($"[MapButton] Completed map '{MapData?.MapId ?? "unknown"}' was re-enabled! Forcing disable.");
+                _MapButton.interactable = false;
+            }
+            
+            // Also disable Selectable component
+            var selectable = GetComponent<UnityEngine.UI.Selectable>();
+            if (selectable != null && selectable.interactable)
+            {
+                selectable.interactable = false;
+            }
+        }
+    }
+    
+    /// <summary>
+    /// Called every frame to ensure completed maps stay disabled
+    /// </summary>
+    private void Update()
+    {
+        // Only validate if completed (to avoid unnecessary checks)
+        if (IsCompleted)
+        {
+            ValidateButtonState();
+        }
+    }
 
 
     /// <summary>
@@ -237,9 +300,19 @@ public class MapButton : MonoBehaviour
     /// </summary>
     /// <remarks>
     /// <para><strong>When:</strong> Called when player beats a level and unlocks the next one</para>
+    /// <para><strong>Note:</strong> This method respects completion state - won't enable if map is already completed</para>
     /// </remarks>
     public void Unlock()
     {
+        // CRITICAL: Don't unlock if map is already completed (completed maps should stay disabled)
+        if (IsCompleted || _isPermanentlyDisabled)
+        {
+            Debug.Log($"[MapButton] Cannot unlock map '{MapData?.MapId ?? "unknown"}' - it's already completed and should remain disabled.");
+            // Force disable to be safe
+            _MapButton.interactable = false;
+            return;
+        }
+        
         // Make the button clickable
         _MapButton.interactable = true;
         

@@ -102,16 +102,67 @@ public class MapSelectManager2 : MonoBehaviour
 
 
     /// <summary>
+    /// Flag to track if Start() has been called (to avoid OnEnable running before initialization)
+    /// </summary>
+    private bool _hasStarted = false;
+    
+    /// <summary>
     /// Called when the GameObject is enabled - refreshes button states when returning from combat
     /// </summary>
     private void OnEnable()
     {
-        // Refresh button states when scene becomes active (e.g., returning from combat)
-        // This ensures completed maps are properly disabled
-        if (_preSetMapButtons != null && _preSetMapButtons.Count > 0)
+        Debug.Log($"[MapSelectManager2] OnEnable called - _hasStarted: {_hasStarted}, _shouldTriggerPostCombatDialogue: {_shouldTriggerPostCombatDialogue}");
+        
+        // Only refresh if Start() has already been called (buttons are initialized)
+        // This prevents OnEnable from running before Start() on first load
+        if (_hasStarted && _preSetMapButtons != null && _preSetMapButtons.Count > 0)
         {
+            // Refresh button states when scene becomes active (e.g., returning from combat)
+            // This ensures completed maps are properly disabled
             RefreshMapButtonStates();
+            
+            // Trigger appropriate dialogue based on game progress after returning from combat
+            // Use a small delay to ensure scene is fully loaded
+            if (_shouldTriggerPostCombatDialogue)
+            {
+                Debug.Log("[MapSelectManager2] Starting coroutine to trigger post-combat dialogue");
+                StartCoroutine(TriggerPostCombatDialogueDelayed());
+            }
+            else
+            {
+                Debug.Log("[MapSelectManager2] Not triggering post-combat dialogue - flag not set");
+            }
         }
+        else
+        {
+            Debug.Log($"[MapSelectManager2] OnEnable: Skipping (hasStarted: {_hasStarted}, buttons: {(_preSetMapButtons != null && _preSetMapButtons.Count > 0)})");
+        }
+    }
+    
+    /// <summary>
+    /// Coroutine to trigger post-combat dialogue after a short delay
+    /// </summary>
+    private System.Collections.IEnumerator TriggerPostCombatDialogueDelayed()
+    {
+        Debug.Log("[MapSelectManager2] TriggerPostCombatDialogueDelayed: Waiting one frame...");
+        // Wait a frame to ensure scene is fully loaded
+        yield return null;
+        Debug.Log("[MapSelectManager2] TriggerPostCombatDialogueDelayed: Frame complete, calling TriggerPostCombatDialogue");
+        TriggerPostCombatDialogue();
+    }
+    
+    /// <summary>
+    /// Extended delay version for Start() - waits longer to ensure all systems are initialized
+    /// </summary>
+    private System.Collections.IEnumerator TriggerPostCombatDialogueDelayedExtended()
+    {
+        Debug.Log("[MapSelectManager2] TriggerPostCombatDialogueDelayedExtended: Waiting for initialization...");
+        // Wait a few frames to ensure everything is initialized
+        yield return null;
+        yield return null;
+        yield return null;
+        Debug.Log($"[MapSelectManager2] TriggerPostCombatDialogueDelayedExtended: After wait, flag: {_shouldTriggerPostCombatDialogue}");
+        TriggerPostCombatDialogue();
     }
 
     /// <summary>
@@ -119,8 +170,23 @@ public class MapSelectManager2 : MonoBehaviour
     /// </summary>
     private void Start()
     {
+        _hasStarted = true; // Mark that Start() has been called
+        
+        // Check for post-combat dialogue FIRST (before intro dialogue)
+        // This handles the case where OnEnable ran before Start() and couldn't trigger
+        // IMPORTANT: This handles the case where scene loads fresh and OnEnable hasn't run yet
+        if (_shouldTriggerPostCombatDialogue)
+        {
+            Debug.Log("[MapSelectManager2] Start() detected post-combat dialogue flag. Triggering after initialization...");
+            // Use a longer delay to ensure everything is initialized
+            StartCoroutine(TriggerPostCombatDialogueDelayedExtended());
+        }
         // Trigger intro dialogue if not seen yet (after lore transition)
-        TriggerIntroDialogueIfNeeded();
+        // Only trigger intro if we're NOT returning from combat (to avoid dialogue conflicts)
+        else if (!_shouldTriggerPostCombatDialogue)
+        {
+            TriggerIntroDialogueIfNeeded();
+        }
         
         // Validate required inspector references
         if (_preSetMapButtons == null || _preSetMapButtons.Count == 0)
@@ -635,6 +701,140 @@ public class MapSelectManager2 : MonoBehaviour
         }
         
         Debug.Log("[MapSelectManager2] No DialogueTrigger with IntroScene dialogue found in scene. Skipping intro dialogue.");
+    }
+    
+    /// <summary>
+    /// Flag to track if we should trigger post-combat dialogue (set when returning from combat)
+    /// </summary>
+    private static bool _shouldTriggerPostCombatDialogue = false;
+    
+    /// <summary>
+    /// Static method to mark that post-combat dialogue should be triggered
+    /// Called from VictoryDefeatUI when transitioning back to MapSelection
+    /// </summary>
+    public static void MarkShouldTriggerPostCombatDialogue()
+    {
+        _shouldTriggerPostCombatDialogue = true;
+        Debug.Log("[MapSelectManager2] Marked to trigger post-combat dialogue on next MapSelection load");
+    }
+    
+    /// <summary>
+    /// Triggers post-combat dialogue (PostVictory or PostFinalBoss) when returning from combat
+    /// </summary>
+    private void TriggerPostCombatDialogue()
+    {
+        Debug.Log($"[MapSelectManager2] TriggerPostCombatDialogue called - flag: {_shouldTriggerPostCombatDialogue}");
+        
+        // Only trigger if we marked that we should (i.e., we just returned from combat)
+        if (!_shouldTriggerPostCombatDialogue)
+        {
+            Debug.LogWarning("[MapSelectManager2] Not triggering post-combat dialogue - not marked as returning from combat");
+            return;
+        }
+        
+        Debug.Log("[MapSelectManager2] Flag is set! Proceeding with dialogue trigger...");
+        
+        // Clear the flag so it doesn't trigger again
+        _shouldTriggerPostCombatDialogue = false;
+        
+        if (_gameProgress == null)
+        {
+            Debug.LogWarning("[MapSelectManager2] GameProgressData not assigned, cannot determine dialogue type.");
+            return;
+        }
+        
+        // Reload progress to get latest state
+        _gameProgress.Load();
+        
+        // Determine which dialogue to trigger
+        bool shouldTriggerPostFinalBoss = _gameProgress.IsGameCompleted;
+        bool shouldTriggerPostVictory = !shouldTriggerPostFinalBoss && _gameProgress.CompletedMapCount > 0;
+        
+        Debug.Log($"[MapSelectManager2] Determining dialogue type - PostFinalBoss: {shouldTriggerPostFinalBoss}, PostVictory: {shouldTriggerPostVictory}, Completed maps: {_gameProgress.CompletedMapCount}, IsGameCompleted: {_gameProgress.IsGameCompleted}");
+        
+        // Find DialogueTriggers in the scene
+        DialogueTrigger[] dialogueTriggers = FindObjectsOfType<DialogueTrigger>(true); // Include inactive objects
+        Debug.Log($"[MapSelectManager2] Found {dialogueTriggers.Length} DialogueTrigger(s) in scene (including inactive)");
+        
+        if (shouldTriggerPostFinalBoss)
+        {
+            // Final map completed - trigger PostFinalBoss dialogue
+            bool foundPostFinalBoss = false;
+            foreach (var dialogueTrigger in dialogueTriggers)
+            {
+                if (dialogueTrigger != null)
+                {
+                    Debug.Log($"[MapSelectManager2] Checking DialogueTrigger '{dialogueTrigger.gameObject.name}' - Active: {dialogueTrigger.gameObject.activeInHierarchy}, Has Dialogue: {dialogueTrigger.dialogue != null}");
+                    
+                    if (dialogueTrigger.dialogue != null)
+                    {
+                        Debug.Log($"[MapSelectManager2] DialogueTrigger '{dialogueTrigger.gameObject.name}' - Type: {dialogueTrigger.dialogue.dialogueType} (expected: {DialogueType.PostFinalBoss})");
+                        
+                        // Check both the enum value and the integer value to be safe
+                        if (dialogueTrigger.dialogue.dialogueType == DialogueType.PostFinalBoss || 
+                            (int)dialogueTrigger.dialogue.dialogueType == 3) // PostFinalBoss = 3
+                        {
+                            Debug.Log($"[MapSelectManager2] Found PostFinalBoss dialogue! Triggering on '{dialogueTrigger.gameObject.name}'");
+                            
+                            // Ensure the GameObject is active
+                            if (!dialogueTrigger.gameObject.activeInHierarchy)
+                            {
+                                Debug.LogWarning($"[MapSelectManager2] DialogueTrigger GameObject '{dialogueTrigger.gameObject.name}' is inactive. Activating it.");
+                                dialogueTrigger.gameObject.SetActive(true);
+                            }
+                            
+                            dialogueTrigger.TriggerDialogue();
+                            foundPostFinalBoss = true;
+                            return;
+                        }
+                    }
+                    else
+                    {
+                        Debug.LogWarning($"[MapSelectManager2] DialogueTrigger '{dialogueTrigger.gameObject.name}' has null dialogue field!");
+                    }
+                }
+            }
+            
+            if (!foundPostFinalBoss)
+            {
+                Debug.LogError("[MapSelectManager2] No DialogueTrigger with PostFinalBoss dialogue found! Check that a DialogueTrigger in the MapSelection scene has dialogueType set to PostFinalBoss (value 3).");
+            }
+        }
+        else if (shouldTriggerPostVictory)
+        {
+            // Regular map completed - trigger PostVictory dialogue
+            bool foundPostVictory = false;
+            foreach (var dialogueTrigger in dialogueTriggers)
+            {
+                if (dialogueTrigger != null && dialogueTrigger.dialogue != null)
+                {
+                    Debug.Log($"[MapSelectManager2] Checking DialogueTrigger '{dialogueTrigger.gameObject.name}' - Type: {dialogueTrigger.dialogue.dialogueType}");
+                    
+                    // Check both the enum value and the integer value to be safe
+                    if (dialogueTrigger.dialogue.dialogueType == DialogueType.PostVictory || 
+                        (int)dialogueTrigger.dialogue.dialogueType == 2) // PostVictory = 2
+                    {
+                        Debug.Log($"[MapSelectManager2] Found PostVictory dialogue! Triggering on '{dialogueTrigger.gameObject.name}'");
+                        
+                        // Ensure the GameObject is active
+                        if (!dialogueTrigger.gameObject.activeInHierarchy)
+                        {
+                            Debug.LogWarning($"[MapSelectManager2] DialogueTrigger GameObject '{dialogueTrigger.gameObject.name}' is inactive. Activating it.");
+                            dialogueTrigger.gameObject.SetActive(true);
+                        }
+                        
+                        dialogueTrigger.TriggerDialogue();
+                        foundPostVictory = true;
+                        return;
+                    }
+                }
+            }
+            
+            if (!foundPostVictory)
+            {
+                Debug.LogWarning("[MapSelectManager2] No DialogueTrigger with PostVictory dialogue found. Skipping dialogue.");
+            }
+        }
     }
 
     #endregion

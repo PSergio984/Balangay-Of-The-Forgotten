@@ -363,15 +363,9 @@ public class EnemySystem : Singleton<EnemySystem>
         // Mark map as complete (this is the final enemy, so the map is complete)
         MarkMapCompleteIfNeeded();
         
-        // Determine which dialogue to trigger based on game progress
-        bool isFinalMap = CheckIfFinalMap();
-        if (isFinalMap)
-        {
-            // Final map completed - trigger PostFinalBoss dialogue
-            TriggerPostFinalBossDialogue();
-        }
-        // Note: PostVictory dialogue is triggered after each enemy defeat in KillEnemyPerformer
-        // For final victory, we only trigger PostFinalBoss if it's the final map
+        // Note: PostVictory and PostFinalBoss dialogues are triggered when returning to MapSelection scene
+        // (not during combat, as DialogueTriggers are in MapSelection scene)
+        // MapSelectManager2 will handle triggering the appropriate dialogue based on game progress
         
         // Show final victory banner (no reward, just continue to map selection)
         if (VictoryDefeatUI.Instance != null)
@@ -823,9 +817,8 @@ public class EnemySystem : Singleton<EnemySystem>
         int defeatedEnemyIndex = currentSpawnIndex - 1;
         bool isMainBoss = (defeatedEnemyIndex == 1 && totalEnemyCount >= 2);
         
-        // Trigger post-victory dialogue after each enemy defeat
-        // This happens for every enemy defeat, not just final ones
-        TriggerPostVictoryDialogue();
+        // Note: PostVictory dialogue is triggered when returning to MapSelection scene
+        // (not during combat, as DialogueTriggers are in MapSelection scene)
         
         // Trigger victory reward for this enemy
         TriggerEnemyDefeatVictory(defeatedEnemyIndex, isMainBoss);

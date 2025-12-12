@@ -148,6 +148,21 @@ public class HeroSystem : Singleton<HeroSystem>
     /// </remarks>
     private void EnemyTurnPreReaction(EnemyTurnGA enemyTurnGA)
     {
+        // CRITICAL: Check if this object is still valid before proceeding
+        // This prevents MissingReferenceException if HeroSystem was destroyed during scene transition
+        if (this == null || !this)
+        {
+            Debug.LogWarning("[HeroSystem] EnemyTurnPreReaction called but HeroSystem has been destroyed. Skipping reaction.");
+            return;
+        }
+        
+        // Check if ActionSystem is still valid
+        if (ActionSystem.Instance == null)
+        {
+            Debug.LogWarning("[HeroSystem] ActionSystem.Instance is null. Cannot discard cards.");
+            return;
+        }
+        
         DiscardAllCardsGA discardAllCardsGA = new();
         ActionSystem.Instance.AddReaction(discardAllCardsGA);
     }
@@ -180,12 +195,34 @@ public class HeroSystem : Singleton<HeroSystem>
     /// </remarks>
     private void EnemyTurnPostReaction(EnemyTurnGA enemyTurnGA)
     {
+        // CRITICAL: Check if this object is still valid before proceeding
+        // This prevents MissingReferenceException if HeroSystem was destroyed during scene transition
+        if (this == null || !this)
+        {
+            Debug.LogWarning("[HeroSystem] EnemyTurnPostReaction called but HeroSystem has been destroyed. Skipping reaction.");
+            return;
+        }
+        
+        // Check if HeroBoardView is still valid
+        if (HeroBoardView == null || !HeroBoardView)
+        {
+            Debug.LogWarning("[HeroSystem] HeroBoardView is null or destroyed. Cannot process enemy turn post-reaction.");
+            return;
+        }
+        
         // Use StatusEffectTickSystem to process all enemy status effect ticks
-        StatusEffectTickSystem.Instance.TickStatusEffects(HeroBoardView.HeroViews.ConvertAll(e => (CombatantView)e));
+        if (StatusEffectTickSystem.Instance != null)
+        {
+            StatusEffectTickSystem.Instance.TickStatusEffects(HeroBoardView.HeroViews.ConvertAll(e => (CombatantView)e));
+        }
         
         // Delay card drawing until after player turn banner animation completes
         // This provides better UX by not drawing cards simultaneously with the banner
-        StartCoroutine(DelayedCardDraw());
+        // Only start coroutine if object is still valid
+        if (this != null && this)
+        {
+            StartCoroutine(DelayedCardDraw());
+        }
     }
     
     /// <summary>
@@ -200,6 +237,21 @@ public class HeroSystem : Singleton<HeroSystem>
         
         // Wait for banner to finish animating
         yield return new WaitForSeconds(bannerAnimationDuration);
+        
+        // CRITICAL: Check if this object is still valid before proceeding
+        // This prevents MissingReferenceException if HeroSystem was destroyed during the wait
+        if (this == null || !this)
+        {
+            Debug.LogWarning("[HeroSystem] DelayedCardDraw: HeroSystem was destroyed during wait. Aborting card draw.");
+            yield break;
+        }
+        
+        // Check if ActionSystem is still valid
+        if (ActionSystem.Instance == null)
+        {
+            Debug.LogWarning("[HeroSystem] DelayedCardDraw: ActionSystem.Instance is null. Cannot draw cards.");
+            yield break;
+        }
         
         // Now draw cards after the banner has finished
         // Use Perform() instead of AddReaction() because we're outside of an active action flow

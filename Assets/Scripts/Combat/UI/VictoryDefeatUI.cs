@@ -742,6 +742,10 @@ public class VictoryDefeatUI : Singleton<VictoryDefeatUI>
         if (SceneController.Instance != null)
         {
             Debug.Log("[VictoryDefeatUI] Transitioning to map selection scene");
+            
+            // Mark that we should trigger post-combat dialogue when MapSelection loads
+            MapSelectManager2.MarkShouldTriggerPostCombatDialogue();
+            
             SceneController.Instance
                 .NewTransition()
                 .Unload(SceneDatabase.Slots.SessionContent)
