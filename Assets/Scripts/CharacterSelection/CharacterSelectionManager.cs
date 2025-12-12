@@ -468,7 +468,7 @@ public class CharacterSelectionManager : MonoBehaviour
        SceneController.Instance
             .NewTransition()
             .Unload(SceneDatabase.Scenes.CharacterSelection)
-            .Load(SceneDatabase.Slots.SessionContent, SceneDatabase.Scenes.MapSelection, setActive: true)
+            .Load(SceneDatabase.Slots.SessionContent, SceneDatabase.Scenes.Lore, setActive: true)
             .WithLoadingVideo("loading")
             .Perform();
     }

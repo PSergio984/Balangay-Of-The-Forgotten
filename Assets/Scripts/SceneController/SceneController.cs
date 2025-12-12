@@ -82,6 +82,45 @@ public class SceneController : MonoBehaviour
     {
         return new SceneTransitionPlan();
     }
+    
+    #region Manual Music Control (Option B)
+    
+    /// <summary>
+    /// Manually pause music for transition (Option B - Manual Control).
+    /// Call this before starting a scene transition, then call ResumeMusicAfterTransition() after.
+    /// </summary>
+    /// <param name="fadeTime">Fade out time for music pause (uses MusicManager default if not specified)</param>
+    public static void PauseMusicForTransition(float fadeTime = -1f)
+    {
+        if (MusicManager.Instance != null)
+        {
+            MusicManager.Instance.PauseMusicForTransition(fadeTime);
+        }
+    }
+    
+    /// <summary>
+    /// Manually resume music after transition (Option B - Manual Control).
+    /// Call this after a scene transition completes to resume the paused music.
+    /// </summary>
+    /// <param name="fadeTime">Fade in time for music resume (uses MusicManager default if not specified)</param>
+    public static void ResumeMusicAfterTransition(float fadeTime = -1f)
+    {
+        if (MusicManager.Instance != null)
+        {
+            MusicManager.Instance.ResumePausedMusic(fadeTime);
+        }
+    }
+    
+    /// <summary>
+    /// Check if music is currently paused and waiting to resume.
+    /// </summary>
+    /// <returns>True if music is paused, false otherwise</returns>
+    public static bool IsMusicPaused()
+    {
+        return MusicManager.Instance != null && MusicManager.Instance.IsPaused;
+    }
+    
+    #endregion
 
     /// <summary>
     /// Executes a scene transition plan.
@@ -105,16 +144,23 @@ public class SceneController : MonoBehaviour
     {
         Debug.Log($"[Frame {Time.frameCount}] ===== TRANSITION START =====");
 
-        // PHASE 1: Change music
+        // PHASE 1: Change music (if new music specified)
         if (plan.TransitionMusic != null && MusicManager.Instance != null)
         {
             Debug.Log($"[Frame {Time.frameCount}] PHASE 1: Starting music fade");
             MusicManager.Instance.PlayMusic(plan.TransitionMusic, plan.MusicFadeTime);
         }
 
-        // PHASE 2: Fade to black/white (with optional video)
+        // PHASE 2: Fade to black/white (with optional video) and pause music if requested
         if(plan.Overlay && loadingOverlay != null)
         {
+            // Pause music simultaneously with overlay fade in
+            if (plan.PauseMusicDuringTransition && MusicManager.Instance != null)
+            {
+                Debug.Log($"[Frame {Time.frameCount}] PHASE 2: Pausing music for transition");
+                MusicManager.Instance.PauseMusicForTransition(plan.MusicFadeTime);
+            }
+            
             if (plan.UseWhiteFade)
             {
                 Debug.Log($"[Frame {Time.frameCount}] PHASE 2: Starting fade in to white");
@@ -134,6 +180,12 @@ public class SceneController : MonoBehaviour
                 yield return loadingOverlay.FadeInBlack();
             }
             yield return new WaitForSeconds(1f);
+        }
+        else if (plan.PauseMusicDuringTransition && MusicManager.Instance != null)
+        {
+            // If no overlay, still pause music
+            Debug.Log($"[Frame {Time.frameCount}] PHASE 2: Pausing music for transition (no overlay)");
+            MusicManager.Instance.PauseMusicForTransition(plan.MusicFadeTime);
         }
 
         // PHASE 3: Unload old scenes
@@ -196,6 +248,13 @@ public class SceneController : MonoBehaviour
                 yield return loadingOverlay.FadeOutBlack();
                 Debug.Log($"[Frame {Time.frameCount}] PHASE 6: Fade from black COMPLETE");
             }
+        }
+        
+        // PHASE 7: Resume paused music (after fade out completes)
+        if (plan.PauseMusicDuringTransition && MusicManager.Instance != null)
+        {
+            Debug.Log($"[Frame {Time.frameCount}] PHASE 7: Resuming paused music");
+            MusicManager.Instance.ResumePausedMusic(plan.MusicFadeTime);
         }
         
         Debug.Log($"[Frame {Time.frameCount}] ===== TRANSITION COMPLETE =====");
@@ -356,6 +415,12 @@ public class SceneController : MonoBehaviour
         /// Duration of music fade in/out during transition.
         /// </summary>
         public float MusicFadeTime { get; private set; } = 2f;
+        
+        /// <summary>
+        /// Whether to pause current music during transition and resume it after.
+        /// Music stops when overlay fades in (PHASE 2) and resumes when overlay fades out (PHASE 6).
+        /// </summary>
+        public bool PauseMusicDuringTransition { get; private set; } = false;
 
         /// <summary>
         /// Adds a scene to load into a specific slot.
@@ -433,6 +498,23 @@ public class SceneController : MonoBehaviour
         {
             TransitionMusic = music;
             MusicFadeTime = fadeTime;
+            return this;
+        }
+        
+        /// <summary>
+        /// Pauses current music during transition and resumes it after.
+        /// Music stops when overlay fades in and resumes when overlay fades out.
+        /// Use this when you want the same music to continue playing in the next scene.
+        /// </summary>
+        /// <param name="fadeTime">Fade time for pause/resume (uses MusicFadeTime if not specified)</param>
+        /// <returns>This plan for method chaining.</returns>
+        public SceneTransitionPlan WithPauseMusic(float fadeTime = -1f)
+        {
+            PauseMusicDuringTransition = true;
+            if (fadeTime > 0)
+            {
+                MusicFadeTime = fadeTime;
+            }
             return this;
         }
 

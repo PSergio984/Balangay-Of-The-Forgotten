@@ -17,7 +17,7 @@ public class LoreController : VideoControllerBase
     {
         SceneController.Instance
             .NewTransition()
-            .Unload(SceneDatabase.Slots.MainMenu)
+            .Unload(SceneDatabase.Slots.SessionContent)
             .Load(SceneDatabase.Slots.SessionContent, SceneDatabase.Scenes.MapSelection, setActive: true) 
             .WithLoadingVideo("loading")
             .Perform();
