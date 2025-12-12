@@ -235,6 +235,12 @@ public class DamageSystem : MonoBehaviour
             Debug.Log("[DamageSystem] ===== DEFEAT =====");
             Debug.Log("[DamageSystem] All heroes have been defeated!");
             
+            // Discard all cards for all heroes when defeat happens
+            if (CardSystem.Instance != null)
+            {
+                StartCoroutine(DiscardCardsOnDefeat());
+            }
+            
             // Show defeat banner
             if (VictoryDefeatUI.Instance != null)
             {
@@ -244,6 +250,18 @@ public class DamageSystem : MonoBehaviour
             {
                 Debug.LogWarning("[DamageSystem] VictoryDefeatUI.Instance is null! Cannot show defeat banner.", this);
             }
+        }
+    }
+    
+    /// <summary>
+    /// Coroutine to discard all cards when defeat occurs
+    /// </summary>
+    private IEnumerator DiscardCardsOnDefeat()
+    {
+        if (CardSystem.Instance != null)
+        {
+            yield return CardSystem.Instance.DiscardAllCardsForAllHeroes();
+            Debug.Log("[DamageSystem] All cards discarded on defeat");
         }
     }
 }

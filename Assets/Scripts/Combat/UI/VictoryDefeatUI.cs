@@ -381,8 +381,9 @@ public class VictoryDefeatUI : Singleton<VictoryDefeatUI>
             continueButton.gameObject.SetActive(true);
             
             // CRITICAL: Check if enemies are still active before enabling button
+            // Exception: On defeat, always enable the button (player has lost, let them continue)
             bool canProceed = true;
-            if (EnemySystem.Instance != null && EnemySystem.Instance.EnemyViews != null)
+            if (isVictory && EnemySystem.Instance != null && EnemySystem.Instance.EnemyViews != null)
             {
                 int activeEnemies = EnemySystem.Instance.EnemyViews.Count;
                 if (activeEnemies > 0)
@@ -391,6 +392,7 @@ public class VictoryDefeatUI : Singleton<VictoryDefeatUI>
                     canProceed = false;
                 }
             }
+            // On defeat (!isVictory), always enable the button regardless of enemies
             
             continueButton.interactable = canProceed;
             yield return continueButtonCanvasGroup.DOFade(1f, buttonFadeInDuration).SetEase(buttonFadeInEase).WaitForCompletion();
