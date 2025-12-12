@@ -15,7 +15,7 @@ MonoBehaviour:
   <Description>k__BackingField: Moonfall Spear
   <Information>k__BackingField: "\u2022\tDeals 125% MAG on all players.\r\n\u2022\t50%
     chance to stun 2 players for 1 turn.\r\n"
-  <VFXData>k__BackingField: {fileID: 0}
+  <SoundData>k__BackingField: {fileID: 11400000, guid: 02a068d0706b2b943a9c1c0181e284a5, type: 2}
   <ManualTargetEffect>k__BackingField:
     rid: -2
   <OtherEffects>k__BackingField:

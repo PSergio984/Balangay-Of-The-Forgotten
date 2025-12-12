@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Sirenix.OdinInspector;
+using AudioSystem;
 
 /* ENEMY MOVE DATA DOCUMENTATION
  *
@@ -54,15 +55,20 @@ public class EnemyMoveData : ScriptableObject
 	public string Information { get; private set; }
 
 
-	[Title("VFX & SFX", "Visual and audio effects for this move", TitleAlignments.Centered)]
+	[Title("Audio", "Sound effect for this move", TitleAlignments.Centered)]
 	
 	/// <summary>
-	/// Optional VFX/SFX data for this move's visual and audio effects
+	/// Sound effect played when this enemy move is executed
 	/// </summary>
+	/// <remarks>
+	/// Optional sound that plays when the enemy uses this move.
+	/// If left empty, no sound will play for this move.
+	/// </remarks>
 	[field: SerializeField]
-	[field: LabelText("Move VFX/SFX")]
-	[field: InfoBox("Optional: Assign custom VFX and SFX for this move", InfoMessageType.None)]
-	public CardVFXData VFXData { get; private set; }
+	[field: LabelText("Move Sound Effect")]
+	[field: InfoBox("Optional: Assign a sound effect to play when this move is used", InfoMessageType.None)]
+	[field: AssetsOnly]
+	public SoundData SoundData { get; private set; }
 
 	[Title("Move Effects", "Define what this move does when used", TitleAlignments.Centered)]
 	[InfoBox("Manual Target Effect: AI chooses the target (like single-target damage)\nOther Effects: Automatic targeting (like area damage, self-buffs)", InfoMessageType.Info)]

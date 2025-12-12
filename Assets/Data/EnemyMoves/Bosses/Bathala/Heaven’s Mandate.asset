@@ -15,7 +15,7 @@ MonoBehaviour:
   <Description>k__BackingField: "Heaven\u2019s Mandate "
   <Information>k__BackingField: "\u2022\tIncreases DEF for 30% for 3 turns\r\n\u2022\tRemoves
     Debuff.\r\n\u2022\tWon\u2019t work if it gets pick after the previous turn\r\n"
-  <VFXData>k__BackingField: {fileID: 0}
+  <SoundData>k__BackingField: {fileID: 11400000, guid: 6c23c56399307a64ca235822577c6e3e, type: 2}
   <ManualTargetEffect>k__BackingField:
     rid: -2
   <OtherEffects>k__BackingField:

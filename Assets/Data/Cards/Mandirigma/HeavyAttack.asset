@@ -20,7 +20,7 @@ MonoBehaviour:
   <BackgroundArt>k__BackingField: {fileID: 21300000, guid: 4a639004020b7db49b5c72376628a912, type: 3}
   <RoleData>k__BackingField: {fileID: 11400000, guid: a0daa321f3e42da4481eea6b7e5f4a54, type: 2}
   <Cooldown>k__BackingField: 2
-  <VFXData>k__BackingField: {fileID: 0}
+  <SoundData>k__BackingField: {fileID: 11400000, guid: 4a5039bb9cf08314c9d8550d211bb1cb, type: 2}
   <ManualTargetEffect>k__BackingField:
     rid: -2
   <OtherEffects>k__BackingField:

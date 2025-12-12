@@ -15,7 +15,7 @@ MonoBehaviour:
   <Description>k__BackingField: 'Thunderous Decree '
   <Information>k__BackingField: "\u2022\tDeals 125% MAG on all players.\r\n\u2022\t50%
     chance to stun 2 players for 1 turn.\r\n"
-  <VFXData>k__BackingField: {fileID: 0}
+  <SoundData>k__BackingField: {fileID: 11400000, guid: 1804318aaddc4024a82ba42457778894, type: 2}
   <ManualTargetEffect>k__BackingField:
     rid: -2
   <OtherEffects>k__BackingField:

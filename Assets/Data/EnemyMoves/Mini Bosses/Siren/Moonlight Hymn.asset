@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemyMoveData
   <Description>k__BackingField: Moonlight Hymn
   <Information>k__BackingField: "\u2022\tDeals 1.6 x MAG to all enemies"
+  <SoundData>k__BackingField: {fileID: 11400000, guid: 85075af16c2d5af42a616b6912b3f30d, type: 2}
   <ManualTargetEffect>k__BackingField:
     rid: -2
   <OtherEffects>k__BackingField:

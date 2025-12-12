@@ -711,7 +711,7 @@ MonoBehaviour:
   combatBackgroundRenderer: {fileID: 584423950}
   mapIcon: {fileID: 1869751228}
   fallbackEnemyDatas:
-  - {fileID: 11400000, guid: f17decc971290bf4fa570e0dcebe4813, type: 2}
+  - {fileID: 11400000, guid: a7649951d27a5f24ca254cadfc31a4e0, type: 2}
   - {fileID: 11400000, guid: 81ff8d327f4eeab49806f93b816055a9, type: 2}
   - {fileID: 11400000, guid: 47ba028629da84246952941a644ef81e, type: 2}
   fallbackMinibossReward: {fileID: 11400000, guid: a8dbe3d546c827b429f6daba862381ba, type: 2}
@@ -1907,9 +1907,9 @@ Camera:
   m_LensShift: {x: 0, y: 0}
   m_NormalizedViewPortRect:
     serializedVersion: 2
-    x: 0
+    x: -1
     y: 0
-    width: 1
+    width: 3
     height: 1
   near clip plane: 0.3
   far clip plane: 1000
@@ -2798,6 +2798,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EndTurnButtonUI
   mapSelectionMusic: {fileID: 0}
   MusicFadeTime: 2
+  loadingVideoId: loading
 --- !u!114 &747210482
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4098,6 +4099,8 @@ MonoBehaviour:
   buttonFadeInDuration: 0.3
   fadeInEase: 1
   buttonFadeInEase: 0
+  mapSelectionMusic: {fileID: 0}
+  MusicFadeTime: 2
 --- !u!114 &930427737
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4485,6 +4488,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EndTurnButtonUI
   mapSelectionMusic: {fileID: 11400000, guid: f63134034c71633408e2c786644a6ac8, type: 2}
   MusicFadeTime: 2
+  loadingVideoId: loading
 --- !u!1 &1045538463
 GameObject:
   m_ObjectHideFlags: 0

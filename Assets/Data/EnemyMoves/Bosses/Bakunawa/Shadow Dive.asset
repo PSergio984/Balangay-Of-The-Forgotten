@@ -15,7 +15,7 @@ MonoBehaviour:
   <Description>k__BackingField: Shadow Dive
   <Information>k__BackingField: "\u2022\tBakunawa will recharge its inner magical
     power, skip 1 turn.\r\n\u2022\tNext attack deals double damage.\r\n"
-  <VFXData>k__BackingField: {fileID: 0}
+  <SoundData>k__BackingField: {fileID: 11400000, guid: c380516a2802ab54085a2deedac1c734, type: 2}
   <ManualTargetEffect>k__BackingField:
     rid: -2
   <OtherEffects>k__BackingField:

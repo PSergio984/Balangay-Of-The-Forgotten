@@ -15,7 +15,7 @@ MonoBehaviour:
   <Description>k__BackingField: Tide of Night
   <Information>k__BackingField: "\u2022\tDeals 125% MAG on all players.\r\n\u2022\t50%
     chance to stun 2 players for 1 turn.\r\n"
-  <VFXData>k__BackingField: {fileID: 0}
+  <SoundData>k__BackingField: {fileID: 11400000, guid: 379205a4dfb201a4ea637ed2038d4ab2, type: 2}
   <ManualTargetEffect>k__BackingField:
     rid: -2
   <OtherEffects>k__BackingField:

@@ -17,7 +17,7 @@ MonoBehaviour:
     on the highest HP on the group where Bathala will combine his ATK and MAG with
     a multiplier of 3.0.\r\n\u2022\tBathala will rest for 1 turn after doing this
     move.\r\n"
-  <VFXData>k__BackingField: {fileID: 0}
+  <SoundData>k__BackingField: {fileID: 11400000, guid: 18d4286de89ef044ca755820a91b47ea, type: 2}
   <ManualTargetEffect>k__BackingField:
     rid: -2
   <OtherEffects>k__BackingField:

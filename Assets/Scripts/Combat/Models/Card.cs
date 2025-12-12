@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using AudioSystem;
 
 /* CARD MODEL DOCUMENTATION
  * 
@@ -109,6 +110,15 @@ public class Card
     public Sprite LowerBorder => data?.RoleData?.LowerBorderSprite;
 
 
+    /// <summary>
+    /// Sound effect played when this card is played
+    /// </summary>
+    /// <remarks>
+    /// Returns the card's sound effect from the underlying CardData.
+    /// Plays when the card is cast/played during gameplay.
+    /// </remarks>
+    public SoundData SoundData => data?.SoundData;
+    
     /// <summary>
     /// The main effect that requires manual target selection (if any)
     /// </summary>

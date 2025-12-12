@@ -6,6 +6,7 @@ using DG.Tweening;
 using System;
 using UnityEngine;
 using Random = UnityEngine.Random;
+using AudioSystem;
 
 /* ENEMY SYSTEM DOCUMENTATION
  *
@@ -125,6 +126,8 @@ public class EnemySystem : Singleton<EnemySystem>
     /// </remarks>
     // Reference to the visual board where enemies are displayed - assigned in Unity Inspector
     [SerializeField] private EnemyBoardView enemyBoardView;
+    
+    private SoundBuilder soundBuilder;
 
     //performers - these are methods that execute specific game actions
 
@@ -138,6 +141,16 @@ public class EnemySystem : Singleton<EnemySystem>
     // Called when this GameObject becomes active - sets up action listeners
     void OnEnable()
     {
+        // Initialize sound builder for playing enemy move sounds
+        if (SoundManager.Instance != null)
+        {
+            soundBuilder = SoundManager.Instance.CreateSoundBuilder();
+        }
+        else
+        {
+            Debug.LogWarning("[EnemySystem] SoundManager not available. Enemy move sounds will be disabled.");
+        }
+        
         // Register a method to handle when it's the enemy's turn
         ActionSystem.AttachPerformer<EnemyTurnGA>(EnemyTurnPerformer);
         // Register a POST reaction to clean up after enemy turn completes
@@ -566,6 +579,12 @@ public class EnemySystem : Singleton<EnemySystem>
             string moveName = !string.IsNullOrEmpty(move.Description) ? move.Description : "Unknown Move";
             Debug.Log($"[EnemySystem] {enemy.name} selected move: '{moveName}' (Move has ManualTargetEffect: {move.ManualTargetEffect != null}, OtherEffects count: {move.OtherEffects?.Count ?? 0})");
             ShowMoveNamePopup(enemy, moveName);
+
+            // Play move sound effect if available
+            if (move.SoundData != null && soundBuilder != null)
+            {
+                soundBuilder.WithPosition(enemy.transform.position).Play(move.SoundData);
+            }
 
             // Start tracking hit targets for this move sequence
             HitTargetTracker.StartMoveSequence(enemy);

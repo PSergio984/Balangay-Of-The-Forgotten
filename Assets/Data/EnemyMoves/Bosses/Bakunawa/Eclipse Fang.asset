@@ -15,7 +15,7 @@ MonoBehaviour:
   <Description>k__BackingField: Eclipse Fang
   <Information>k__BackingField: "\u2022\tHeals Bakunawa for 50 (+100%) MAG.\r\n\u2022\tDeals
     110% MAG as damage to a single target.\r\n"
-  <VFXData>k__BackingField: {fileID: 0}
+  <SoundData>k__BackingField: {fileID: 11400000, guid: f36b89eeafd69024cbd07823f7ec9ba7, type: 2}
   <ManualTargetEffect>k__BackingField:
     rid: -2
   <OtherEffects>k__BackingField:

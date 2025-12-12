@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using Sirenix.OdinInspector;
+using AudioSystem;
 /* CARD DATA DOCUMENTATION
  * 
  * Purpose: ScriptableObject that defines the design-time properties and data for cards
@@ -165,20 +166,20 @@ public class CardData : ScriptableObject
     public int Cooldown { get; private set; } = 0;
 
 
-    [Title("VFX & SFX", "Visual and audio effects for this card", TitleAlignments.Centered)]
+    [Title("Audio", "Sound effect for this card", TitleAlignments.Centered)]
     
     /// <summary>
-    /// Optional VFX/SFX data for this card's visual and audio effects
+    /// Sound effect played when this card is played
     /// </summary>
     /// <remarks>
-    /// Assign a CardVFXData asset to give this card custom visual and sound effects.
-    /// If left empty, default effects will be used based on the effect type.
+    /// Optional sound that plays when the card is cast/played.
+    /// If left empty, no sound will play for this card.
     /// </remarks>
     [field: SerializeField]
-    [field: LabelText("Card VFX/SFX")]
-    [field: InfoBox("Optional: Assign custom VFX and SFX for this card", InfoMessageType.None)]
+    [field: LabelText("Card Sound Effect")]
+    [field: InfoBox("Optional: Assign a sound effect to play when this card is played", InfoMessageType.None)]
     [field: AssetsOnly]
-    public CardVFXData VFXData { get; private set; }
+    public SoundData SoundData { get; private set; }
 
     [Title("Card Effects", "Define what this card does when played", TitleAlignments.Centered)]
     [InfoBox("Manual Target Effect: Player chooses the target (like single-target damage)\n" +

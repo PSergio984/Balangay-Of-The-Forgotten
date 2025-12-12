@@ -335,6 +335,12 @@ public class CardSystem : Singleton<CardSystem>
         hand.Remove(playCardsGA.Card);
         CardView cardView = handView.RemoveCard(playCardsGA.Card);
         
+        // Play card sound effect if available
+        if (playCardsGA.Card.SoundData != null && soundBuilder != null && currentHero != null)
+        {
+            soundBuilder.WithPosition(currentHero.transform.position).Play(playCardsGA.Card.SoundData);
+        }
+        
         // Normal flow: discard the card
         yield return DiscardCard(cardView, heroIndex);
         // SpendStaminaGA spendStaminaGA = new (playCardsGA.Card.Stamina);

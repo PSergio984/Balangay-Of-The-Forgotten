@@ -15,7 +15,7 @@ MonoBehaviour:
   <Description>k__BackingField: 'Lunar Strike '
   <Information>k__BackingField: "\u2022\tMayari will unleash a powerful strike, dealing
     115% ATK + 20% MAG."
-  <VFXData>k__BackingField: {fileID: 0}
+  <SoundData>k__BackingField: {fileID: 11400000, guid: 45b7de1a292c64f48982a5df965ebe9e, type: 2}
   <ManualTargetEffect>k__BackingField:
     rid: -2
   <OtherEffects>k__BackingField:

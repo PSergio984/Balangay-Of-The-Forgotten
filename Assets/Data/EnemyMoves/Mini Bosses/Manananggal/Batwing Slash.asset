@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemyMoveData
   <Description>k__BackingField: Batwing Slash
   <Information>k__BackingField: "\u2022\tDeals 1.2 x ATK to one enemy"
+  <SoundData>k__BackingField: {fileID: 11400000, guid: ef1895e5b9028484cb75278127ac65a2, type: 2}
   <ManualTargetEffect>k__BackingField:
     rid: -2
   <OtherEffects>k__BackingField:

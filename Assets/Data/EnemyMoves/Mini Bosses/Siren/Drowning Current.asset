@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemyMoveData
   <Description>k__BackingField: Drowning Current
   <Information>k__BackingField: "\u2022\tDeals 1.2 x MAG to one enemy"
+  <SoundData>k__BackingField: {fileID: 11400000, guid: d4cf11e9b8cf3474ba897b27db18ea04, type: 2}
   <ManualTargetEffect>k__BackingField:
     rid: -2
   <OtherEffects>k__BackingField:

@@ -16,7 +16,7 @@ MonoBehaviour:
   <Information>k__BackingField: "\u2022\tDeal 80% MAG to all enemies.\r\n\u2022\tEach
     target that are hit by this gets inflicted by Devoured: for 2 turns, takes DMG
     equal to 20% of MAG (fixed at 60HP).\r\n"
-  <VFXData>k__BackingField: {fileID: 0}
+  <SoundData>k__BackingField: {fileID: 11400000, guid: 6c8ca04b9cf873a47b31e231c7ab108a, type: 2}
   <ManualTargetEffect>k__BackingField:
     rid: -2
   <OtherEffects>k__BackingField:

@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemyMoveData
   <Description>k__BackingField: Radiant Charge
   <Information>k__BackingField: Deals 175% ATK to enemy, + 55% CRIT Rate
-  <VFXData>k__BackingField: {fileID: 0}
+  <SoundData>k__BackingField: {fileID: 11400000, guid: a25ecea276b15d44ea8be2ae1ce96b20, type: 2}
   <ManualTargetEffect>k__BackingField:
     rid: -2
   <OtherEffects>k__BackingField:

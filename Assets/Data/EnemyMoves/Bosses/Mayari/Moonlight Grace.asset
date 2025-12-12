@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemyMoveData
   <Description>k__BackingField: 'Moonlight Grace '
   <Information>k__BackingField: "\u2022\tHeal herself with a total of 25% max HP."
-  <VFXData>k__BackingField: {fileID: 0}
+  <SoundData>k__BackingField: {fileID: 11400000, guid: 0bd52e7083c083646ad92b6ca8f931cb, type: 2}
   <ManualTargetEffect>k__BackingField:
     rid: -2
   <OtherEffects>k__BackingField:
