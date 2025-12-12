@@ -4,6 +4,7 @@ using UnityEngine.UI;
 using TMPro;
 using DG.Tweening;
 using Sirenix.OdinInspector;
+using AudioSystem;
 
 /// <summary>
 /// Handles victory and defeat UI banners with continue button
@@ -91,6 +92,13 @@ public class VictoryDefeatUI : Singleton<VictoryDefeatUI>
     
     [Tooltip("Ease type for button fade in")]
     [SerializeField] private Ease buttonFadeInEase = Ease.OutQuad;
+
+    [Header("Music Settings")]
+    [Tooltip("Music to play when transitioning to map selection/main menu")]
+    [SerializeField] private SoundData mapSelectionMusic;
+    
+    [Tooltip("Fade time for music transition")]
+    [SerializeField] private float MusicFadeTime = 2f;
 
     // Canvas groups for fading
     private CanvasGroup backgroundCanvasGroup;
@@ -746,11 +754,19 @@ public class VictoryDefeatUI : Singleton<VictoryDefeatUI>
             // Mark that we should trigger post-combat dialogue when MapSelection loads
             MapSelectManager2.MarkShouldTriggerPostCombatDialogue();
             
-            SceneController.Instance
+            var transition = SceneController.Instance
                 .NewTransition()
                 .Unload(SceneDatabase.Slots.SessionContent)
                 .Load(SceneDatabase.Slots.SessionContent, SceneDatabase.Scenes.MapSelection, setActive: true)
-                .WithLoadingVideo("loading")
+                .WithLoadingVideo("loading");
+            
+            // Play main menu music near the end of transition (music fades in as transition completes)
+            if (mapSelectionMusic != null)
+            {
+                transition = transition.WithMusic(mapSelectionMusic, MusicFadeTime);
+            }
+            
+            transition
                 .WithPauseMusic(9)
                 .Perform();
         }

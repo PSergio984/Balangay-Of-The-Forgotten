@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine.UI;
+using AudioSystem;
 
 /* CHARACTER SELECTION MANAGER
  * 
@@ -79,6 +80,9 @@ public class CharacterSelectionManager : MonoBehaviour
             LoadHeroesFromResources();
         }
         
+        // Initialize UI
+        UpdateSelectionUI();
+        
         // Subscribe to preset selection changes
         if (cardPresetManager != null)
         {
@@ -90,11 +94,8 @@ public class CharacterSelectionManager : MonoBehaviour
             Debug.LogError("[CharacterSelectionManager] cardPresetManager is NULL! Cannot subscribe to event!");
         }
         
-        // Generate character cards (must happen before UpdateSelectionUI)
+        // Generate character cards
         GenerateCharacterCards();
-        
-        // Initialize UI after cards are generated
-        UpdateSelectionUI();
 
         // Wire up confirm button event
         if (confirmButton != null)
@@ -468,12 +469,17 @@ public class CharacterSelectionManager : MonoBehaviour
     /// </summary>
     private void LoadMapScene()
     {
+        // Stop music entirely before transitioning to next scene
+        if (MusicManager.Instance != null)
+        {
+            MusicManager.Instance.StopMusic(1f); // Fade out over 1 second
+        }
+        
        SceneController.Instance
             .NewTransition()
             .Unload(SceneDatabase.Scenes.CharacterSelection)
             .Load(SceneDatabase.Slots.SessionContent, SceneDatabase.Scenes.Lore, setActive: true)
             .WithLoadingVideo("loading")
-            .WithPauseMusic()
             .Perform();
     }
     

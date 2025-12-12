@@ -1,4 +1,5 @@
 using UnityEngine;
+using AudioSystem;
 
 /// <summary>
 /// Video controller for lore cutscenes
@@ -10,6 +11,13 @@ using UnityEngine;
 /// </remarks>
 public class LoreController : VideoControllerBase
 {
+    [Header("Music Settings")]
+    [Tooltip("Music to play when transitioning to map selection")]
+    [SerializeField] private SoundData mapSelectionMusic;
+    
+    [Tooltip("Fade time for music transition")]
+    [SerializeField] private float MusicFadeTime = 2f;
+    
     protected override void Awake()
     {
         base.Awake();
@@ -21,11 +29,18 @@ public class LoreController : VideoControllerBase
     /// </summary>
     protected override void LoadNextScene()
     {
-        SceneController.Instance
+        var transition = SceneController.Instance
             .NewTransition()
             .Unload(SceneDatabase.Slots.SessionContent)
-            .Load(SceneDatabase.Slots.SessionContent, SceneDatabase.Scenes.MapSelection, setActive: true) 
-            .WithLoadingVideo("loading")
+            .Load(SceneDatabase.Slots.SessionContent, SceneDatabase.Scenes.MapSelection, setActive: true);
+        
+        // Play main menu music near the end of transition (music fades in as transition completes)
+        if (mapSelectionMusic != null)
+        {
+            transition = transition.WithMusic(mapSelectionMusic, MusicFadeTime);
+        }
+        
+        transition
             .WithPauseMusic(9)
             .Perform();
     }

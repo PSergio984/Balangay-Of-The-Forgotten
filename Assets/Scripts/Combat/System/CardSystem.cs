@@ -60,6 +60,11 @@ public class CardSystem : Singleton<CardSystem>
     private List<List<Card>> discardPiles = new();
     private List<List<Card>> hands = new();
 
+    /// <summary>
+    /// Stores original position of current hero at the start of their turn (for returning after turn ends)
+    /// </summary>
+    private Dictionary<int, Vector3> heroTurnStartPositions = new Dictionary<int, Vector3>();
+
     [Header("🎵 Card Audio")]
     [SerializeField] private SoundData cardDiscardSound;
 
@@ -177,6 +182,20 @@ public class CardSystem : Singleton<CardSystem>
         int heroIndex = CurrentHeroUtil.CurrentHeroIndex;
         Debug.Log($"[CardSystem] Drawing cards for hero index: {heroIndex}");
 
+        // Move current hero slightly to the right to show they're preparing to act
+        HeroView currentHero = CurrentHeroUtil.GetCurrentHero();
+        if (currentHero != null)
+        {
+            // Store original position before moving
+            heroTurnStartPositions[heroIndex] = currentHero.transform.position;
+            float moveDistance = 0.3f; // Small movement distance
+            float moveDuration = 0.2f; // Quick movement
+            // Move right (positive X direction)
+            currentHero.transform.DOMoveX(currentHero.transform.position.x + moveDistance, moveDuration);
+            // Wait for movement to complete
+            yield return new WaitForSeconds(moveDuration);
+        }
+
         // Update the turn profile animator to match the current hero
         if (HeroSystem.Instance == null)
         {
@@ -219,6 +238,21 @@ public class CardSystem : Singleton<CardSystem>
     private IEnumerator DiscardAllCardsPerformer(DiscardAllCardsGA discardAllCardsGA)
     {
         int heroIndex = CurrentHeroUtil.CurrentHeroIndex;
+        
+        // Return current hero to their original position (they moved right at turn start)
+        if (heroTurnStartPositions.ContainsKey(heroIndex))
+        {
+            HeroView currentHero = CurrentHeroUtil.GetCurrentHero();
+            if (currentHero != null)
+            {
+                float returnDuration = 0.2f;
+                // Return to the exact original position stored at turn start
+                currentHero.transform.DOMove(heroTurnStartPositions[heroIndex], returnDuration);
+                // Remove from dictionary after returning
+                heroTurnStartPositions.Remove(heroIndex);
+            }
+        }
+        
         var hand = hands[heroIndex];
         // Copy to avoid modifying collection during iteration
         var handCopy = new List<Card>(hand);

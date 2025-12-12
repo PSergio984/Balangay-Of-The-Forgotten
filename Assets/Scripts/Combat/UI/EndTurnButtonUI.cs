@@ -54,6 +54,10 @@ public class EndTurnButtonUI : MonoBehaviour
     
     [SerializeField] private SoundData mapSelectionMusic;
     [SerializeField] private float MusicFadeTime = 2f;
+    
+    [Header("Loading Overlay")]
+    [Tooltip("Optional loading video ID. If empty, scene will load without loading overlay")]
+    [SerializeField] private string loadingVideoId = "loading";
 
     public void OnClick()
     {
@@ -87,11 +91,24 @@ public class EndTurnButtonUI : MonoBehaviour
 
     public void goBackToMainMenu()
     {
-        SceneController.Instance
+        var transition = SceneController.Instance
             .NewTransition()
             .Load(SceneDatabase.Slots.Session, SceneDatabase.Scenes.MapSelection, setActive: true)
-            .Unload(SceneDatabase.Slots.SessionContent)
-            .WithLoadingVideo("loading")
+            .Unload(SceneDatabase.Slots.SessionContent);
+        
+        // Only add loading video if provided
+        if (!string.IsNullOrEmpty(loadingVideoId))
+        {
+            transition = transition.WithLoadingVideo(loadingVideoId);
+        }
+        
+        // Play main menu music near the end of transition (music fades in as transition completes)
+        if (mapSelectionMusic != null)
+        {
+            transition = transition.WithMusic(mapSelectionMusic, MusicFadeTime);
+        }
+        
+        transition
             .WithPauseMusic(9)
             .Perform();
     }

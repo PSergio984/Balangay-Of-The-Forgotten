@@ -408,18 +408,14 @@ public class MapButton : MonoBehaviour
             transition = transition.WithMusic(selectedMusic, MusicFadeTime); // Start playing selected combat music
         }
         
-        // Use map-specific loading video if available, otherwise use default loading overlay
+        // Only add loading video if provided - skip if null or empty
         string loadingVideoId = MapData.LoadingVideoId;
         if (!string.IsNullOrEmpty(loadingVideoId))
         {
-            transition.WithLoadingVideo(loadingVideoId);  // Show map-specific loading video
-        }
-        else
-        {
-            transition.WithLoadingVideo();  // Show default loading video
+            transition = transition.WithLoadingVideo(loadingVideoId);  // Show map-specific loading video
         }
 
-        transition.WithPauseMusic(9);
+        transition = transition.WithPauseMusic(9);
         
         transition.Perform();  // Actually do all the above actions
     }

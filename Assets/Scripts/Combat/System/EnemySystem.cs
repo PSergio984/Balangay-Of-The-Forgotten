@@ -106,6 +106,11 @@ public class EnemySystem : Singleton<EnemySystem>
     private RewardData fallbackMainBossReward = null;
     
     /// <summary>
+    /// Stores original positions of enemies at the start of their turn (for returning after turn ends)
+    /// </summary>
+    private Dictionary<EnemyView, Vector3> enemyTurnStartPositions = new Dictionary<EnemyView, Vector3>();
+    
+    /// <summary>
     /// Checks if there are more enemies waiting to spawn
     /// </summary>
     public bool HasRemainingEnemies => enemyQueue.Count > 0;
@@ -505,6 +510,25 @@ public class EnemySystem : Singleton<EnemySystem>
         // Wait for banner to finish animating
         yield return new WaitForSeconds(bannerAnimationDuration);
 
+        // Move all enemies slightly to the left to show they're preparing to attack
+        enemyTurnStartPositions.Clear(); // Clear previous turn's positions
+        float moveDistance = 0.3f; // Small movement distance
+        float moveDuration = 0.2f; // Quick movement
+        
+        foreach (var enemy in enemyBoardView.EnemyViews)
+        {
+            if (enemy != null && enemy.CurrentHealth > 0)
+            {
+                // Store original position before moving
+                enemyTurnStartPositions[enemy] = enemy.transform.position;
+                // Move left (negative X direction)
+                enemy.transform.DOMoveX(enemy.transform.position.x - moveDistance, moveDuration);
+            }
+        }
+        
+        // Wait for movement to complete
+        yield return new WaitForSeconds(moveDuration);
+
         // Use StatusEffectTickSystem to process all enemy status effect ticks
         StatusEffectTickSystem.Instance.TickStatusEffects(enemyBoardView.EnemyViews.ConvertAll(e => (CombatantView)e));
 
@@ -644,6 +668,7 @@ public class EnemySystem : Singleton<EnemySystem>
     /// <remarks>
     /// This runs after all PerformEffectGA reactions have been processed.
     /// Used to clean up hit target trackers and perform any final enemy turn cleanup.
+    /// Also returns enemies to their original positions after the turn.
     /// </remarks>
     private void EnemyTurnPostReaction(EnemyTurnGA enemyTurnGA)
     {
@@ -651,6 +676,19 @@ public class EnemySystem : Singleton<EnemySystem>
         // Clear all hit target trackers after all enemy moves complete
         // This happens after all reactions (PerformEffectGA -> DealDamageGA, etc.) are processed
         HitTargetTracker.ClearAll();
+        
+        // Return all enemies to their original positions (they moved left at turn start)
+        float returnDuration = 0.2f;
+        foreach (var enemy in enemyBoardView.EnemyViews)
+        {
+            if (enemy != null && enemy.CurrentHealth > 0 && enemyTurnStartPositions.ContainsKey(enemy))
+            {
+                // Return to the exact original position stored at turn start
+                enemy.transform.DOMove(enemyTurnStartPositions[enemy], returnDuration);
+            }
+        }
+        // Clear stored positions after returning
+        enemyTurnStartPositions.Clear();
     }
 
     /// <summary>

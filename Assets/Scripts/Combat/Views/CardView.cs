@@ -559,7 +559,9 @@ public class CardView : MonoBehaviour
             BringCardToFront();
             
             // Start targeting mode - shows arrow from card to mouse cursor
-            ManualTargetingSystem.Instance.StartTargeting(transform.position);
+            // Use originalPosition instead of transform.position to ensure arrow starts from
+            // the card's actual hand position, not the hovered position
+            ManualTargetingSystem.Instance.StartTargeting(originalPosition);
         }
         else
         {

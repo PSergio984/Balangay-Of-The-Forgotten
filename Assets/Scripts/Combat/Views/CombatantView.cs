@@ -415,9 +415,9 @@ public class CombatantView : MonoBehaviour
             Debug.LogWarning($"[CombatantView] Damage called on {gameObject.name}, but AnimationController is NULL! Check if CombatantAnimationController component exists.", this);
         }
 
-        // Play a screen shake animation when taking damage (0.2 seconds, 0.5 intensity)
-        // Then return to original position to fix animation issue
-        transform.DOShakePosition(0.2f, 0.5f);
+        // Play a subtle screen shake animation when taking damage (0.15 seconds, 0.15 intensity)
+        // Reduced intensity for better UX - just a small shake to indicate hit
+        transform.DOShakePosition(0.15f, 0.15f);
         
         // Update the health display to show the new health value (animated)
         UpdateHealth();
