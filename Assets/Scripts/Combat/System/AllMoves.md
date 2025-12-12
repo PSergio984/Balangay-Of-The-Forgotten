@@ -104,3 +104,15 @@ Lunar Devour (AoE, Debuff)
 Shadow Dive (Counter)
 • Bakunawa will recharge its inner magical power, skip 1 turn.
 • Next attack deals double damage.
+
+1. Bonecracked: Reduce target DEF by 10% for next turn.
+2. Rage / Enraged: +50% DMG, attacks ignore 20% of enemy DEF, +20% hit for 3 turns (unless the number of turns are stated)
+3. On Guard: Gain +40% defense for 3 turns
+4. Blessing: +20% dmg buff for 2 turns
+5. Focused Aim: Next 2 turns +30% hit chance and attacks ignore 20% of enemy DEF
+6. Overexplosion: Deal 10% of attacking damage dealt to all allies, immediate
+7. Moonfall: Reduces the hit enemies DEF by 20% for 2 turns
+8. Invulnerable: Reduce incoming DMG by its entirety (100%).
+9. Stun: Affected targets cannot attack.
+10. Devoured: for 2 turns, takes DMG equal to 20% of MAG (fixed at 60HP).
+11. Bind: reduce target DEF by 15% for 2 turns.

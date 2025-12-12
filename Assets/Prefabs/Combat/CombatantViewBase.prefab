@@ -615,15 +615,21 @@ MonoBehaviour:
   defenseUpSprite: {fileID: 21300000, guid: 65574a08036e0494588ffb3a0736afef, type: 3}
   dmgUpSprite: {fileID: 21300000, guid: 018e8181c15070f4e91eab8aad84ca64, type: 3}
   ignoreDefenseSprite: {fileID: 21300000, guid: d637a652ae63d6d4a8fc31c80bed944e, type: 3}
-  invulnerableSprite: {fileID: 21300000, guid: 018e8181c15070f4e91eab8aad84ca64, type: 3}
+  invulnerableSprite: {fileID: 21300000, guid: 20ecd34ff7c4c3d4f98d923315fe9041, type: 3}
   rageSprite: {fileID: 21300000, guid: 73dc1ecceb7afb042993660c571e1bcb, type: 3}
   shieldSprite: {fileID: 21300000, guid: 9d8bdf71c3e4b944c8f2eb11af9dd6ba, type: 3}
-  stunSprite: {fileID: 21300000, guid: 90384e5722192e148abc61d4536abbff, type: 3}
-  devouredSprite: {fileID: 21300000, guid: 8a2121e47ad39c44fac5904225c9e958, type: 3}
+  stunSprite: {fileID: 21300000, guid: c1763a75530d99c4fb29746a637bafed, type: 3}
+  devouredSprite: {fileID: 21300000, guid: 7d3201f05b62e34469f5ca75739dc4d0, type: 3}
   tauntSprite: {fileID: 21300000, guid: 3a407efcaee3ff947985fafa1017759e, type: 3}
   tempHpSprite: {fileID: 21300000, guid: d637a652ae63d6d4a8fc31c80bed944e, type: 3}
   restingSprite: {fileID: 21300000, guid: 39a58a7546975d3418e850ba88162d15, type: 3}
   chargingSprite: {fileID: 21300000, guid: 8127cda091eeaf94e91f4cdad906ca9b, type: 3}
+  bonecrackedSprite: {fileID: 21300000, guid: 677c568010594cd4288fb298f134bbf1, type: 3}
+  bindSprite: {fileID: 21300000, guid: 6962c0cfffd4bd746a4e406f44f5fe9b, type: 3}
+  moonfallSprite: {fileID: 21300000, guid: 6c03852947e82c64dad6209444e3ebb1, type: 3}
+  focusedSprite: {fileID: 21300000, guid: e247106dabe01dc49acde08a6af5c079, type: 3}
+  onGuardSprite: {fileID: 21300000, guid: c1a9a575618660a46a83b290a6559695, type: 3}
+  blessingSprite: {fileID: 21300000, guid: 4089a7e61d815ac41bff82431a3015e9, type: 3}
 --- !u!114 &7886810224053934251
 MonoBehaviour:
   m_ObjectHideFlags: 0

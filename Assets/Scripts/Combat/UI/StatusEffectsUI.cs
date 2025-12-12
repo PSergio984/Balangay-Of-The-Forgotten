@@ -52,6 +52,15 @@ public class StatusEffectsUI : MonoBehaviour
     /// </remarks>
     [SerializeField] private Sprite armorSprite, attackUpSprite, attackDownSprite, burnSprite, critUpSprite, critDownSprite, defenseDownSprite, defenseUpSprite, dmgUpSprite, ignoreDefenseSprite, invulnerableSprite, rageSprite, shieldSprite, stunSprite, devouredSprite, tauntSprite, tempHpSprite, restingSprite, chargingSprite;
     
+    [Header("Consolidated Move Sprites")]
+    [Tooltip("Sprites for consolidated moves that combine multiple effects. These override the default effect sprites when a custom name is used.")]
+    [SerializeField] private Sprite bonecrackedSprite;
+    [SerializeField] private Sprite bindSprite;
+    [SerializeField] private Sprite moonfallSprite;
+    [SerializeField] private Sprite focusedSprite; // For "Focused Aim"
+    [SerializeField] private Sprite onGuardSprite; // For "On Guard" (DEFENSE_UP)
+    [SerializeField] private Sprite blessingSprite; // For "Blessing" (DMG_UP)
+    
     /// <summary>
     /// Dictionary tracking all currently displayed status effect UIs
     /// </summary>
@@ -128,11 +137,11 @@ public class StatusEffectsUI : MonoBehaviour
                 // Add it to our tracking dictionary
                 statusEffectUIs.Add(statusEffectType, statusEffectUI);
             }
-            // Get the appropriate sprite for this effect type
-            Sprite sprite = GetSpriteByType(statusEffectType);
-            
             // Try to get a custom name for this effect type and stack count
             string effectName = GetEffectDisplayName(statusEffectType, stackCount);
+            
+            // Get the appropriate sprite for this effect type (with consolidated sprite override if name exists)
+            Sprite sprite = GetSpriteByType(statusEffectType, effectName);
             
             // Update the UI with name if available
             if (!string.IsNullOrEmpty(effectName))
@@ -190,12 +199,12 @@ public class StatusEffectsUI : MonoBehaviour
                 // Add it to our tracking dictionary
                 statusEffectUIs.Add(statusEffectType, statusEffectUI);
             }
-            // Get the appropriate sprite for this effect type
-            Sprite sprite = GetSpriteByType(statusEffectType);
-            
             // Use the provided name or the stored active name
             string displayName = !string.IsNullOrEmpty(effectName) ? effectName : 
                                  activeEffectNames.TryGetValue(statusEffectType, out var storedName) ? storedName : null;
+            
+            // Get the appropriate sprite for this effect type (with consolidated sprite override if name exists)
+            Sprite sprite = GetSpriteByType(statusEffectType, displayName);
             
             // Update the UI with name
             if (!string.IsNullOrEmpty(displayName))
@@ -260,17 +269,30 @@ public class StatusEffectsUI : MonoBehaviour
     }
     
     /// <summary>
-    /// Gets the correct sprite image for a given status effect type
+    /// Gets the correct sprite image for a given status effect type, with optional consolidated move sprite override
     /// </summary>
     /// <param name="statusEffectType">The type of effect to get a sprite for</param>
+    /// <param name="effectName">Optional custom effect name (e.g., "Bonecracked", "Rage") that may have a consolidated sprite</param>
     /// <returns>The sprite that represents this effect type visually</returns>
     /// <remarks>
     /// This maps each status effect type to its visual representation.
+    /// If a custom effect name is provided, checks for consolidated move sprites first.
     /// Add new cases here when adding new status effect types to the enum.
     /// Returns null for unknown types to avoid crashes.
     /// </remarks>
-    private Sprite GetSpriteByType(StatusEffectType statusEffectType)
+    private Sprite GetSpriteByType(StatusEffectType statusEffectType, string effectName = null)
     {
+        // First check if we have a consolidated sprite for this specific move name
+        if (!string.IsNullOrEmpty(effectName))
+        {
+            Sprite consolidatedSprite = GetConsolidatedMoveSprite(effectName);
+            if (consolidatedSprite != null)
+            {
+                return consolidatedSprite;
+            }
+        }
+        
+        // Otherwise use the default sprite for this effect type
         return statusEffectType switch
         {
             StatusEffectType.ARMOR => armorSprite,
@@ -285,7 +307,7 @@ public class StatusEffectsUI : MonoBehaviour
             StatusEffectType.DEFENSE_IGNORE => ignoreDefenseSprite,
             StatusEffectType.DEVOURED => devouredSprite,
             StatusEffectType.DMG_UP => dmgUpSprite,
-            StatusEffectType.FOCUSED => ignoreDefenseSprite,
+            StatusEffectType.FOCUSED => focusedSprite ?? ignoreDefenseSprite,
             StatusEffectType.INVULNERABLE => invulnerableSprite,
             StatusEffectType.RAGE => rageSprite,
             StatusEffectType.RESTING => restingSprite,
@@ -294,6 +316,35 @@ public class StatusEffectsUI : MonoBehaviour
             StatusEffectType.TAUNT => tauntSprite,
             StatusEffectType.TEMP_HP => tempHpSprite,
             _ => null,
+        };
+    }
+    
+    /// <summary>
+    /// Gets the consolidated sprite for a specific move name
+    /// </summary>
+    /// <param name="moveName">The name of the move (e.g., "Bonecracked", "Rage", "Moonfall")</param>
+    /// <returns>The consolidated sprite for this move, or null if no consolidated sprite exists</returns>
+    /// <remarks>
+    /// Consolidated moves combine multiple status effects into a single visual icon.
+    /// This method maps move names to their consolidated sprites.
+    /// </remarks>
+    private Sprite GetConsolidatedMoveSprite(string moveName)
+    {
+        if (string.IsNullOrEmpty(moveName)) return null;
+        
+        // Normalize the move name for comparison (case-insensitive, trim whitespace)
+        string normalizedName = moveName.Trim().ToLowerInvariant();
+        
+        return normalizedName switch
+        {
+            "bonecracked" => bonecrackedSprite,
+            "bind" => bindSprite,
+            "moonfall" => moonfallSprite,
+            "focused aim" or "focused" => focusedSprite,
+            "on guard" or "onguard" => onGuardSprite,
+            "blessing" => blessingSprite,
+            "rage" or "enraged" => rageSprite, // Rage already has its own sprite, use it
+            _ => null, // No consolidated sprite for this move name
         };
     }
 
