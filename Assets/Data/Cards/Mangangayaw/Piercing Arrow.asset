@@ -21,7 +21,7 @@ MonoBehaviour:
   <Cooldown>k__BackingField: 3
   <VFXData>k__BackingField: {fileID: 0}
   <ManualTargetEffect>k__BackingField:
-    rid: 8634069038218609607
+    rid: -2
   <OtherEffects>k__BackingField:
   - <targetMode>k__BackingField:
       rid: 8634069038218609608
@@ -30,16 +30,8 @@ MonoBehaviour:
   references:
     version: 2
     RefIds:
-    - rid: 8634069038218609607
-      type: {class: DealDamageEffect, ns: , asm: Assembly-CSharp}
-      data:
-        baseDamage: 0
-        damageAmplification: 1
-        accuracy: 0.8
-        critChance: 0
-        defenseIgnore: 1
-        AttackAmp: 2.25
-        MagicAmp: 1
+    - rid: -2
+      type: {class: , ns: , asm: }
     - rid: 8634069038218609608
       type: {class: RandomTargetTM, ns: , asm: Assembly-CSharp}
       data: 

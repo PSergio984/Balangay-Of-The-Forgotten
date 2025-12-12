@@ -59,6 +59,7 @@ MonoBehaviour:
   LowerBorder: {fileID: 5642074075289601798}
   RoleIcon: {fileID: 4365808079887279785}
   RoleCircleIcon: {fileID: 594944840159868534}
+  hoverDistance: 2
   cooldownOverlay: {fileID: 8957682729711767957}
   cooldownBadge: {fileID: 7500051430518851712}
   cooldownText: {fileID: 4365942150825558076}
