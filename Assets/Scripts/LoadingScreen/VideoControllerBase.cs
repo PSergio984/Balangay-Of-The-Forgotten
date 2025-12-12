@@ -14,6 +14,9 @@ using AudioSystem;
 /// </remarks>
 public abstract class VideoControllerBase : MonoBehaviour
 {
+    [Header("Loop Settings")]
+    [Tooltip("If true, the last video in the sequence will loop instead of ending. Useful for screens that should not auto-advance.")]
+    [SerializeField] protected bool loopLastVideo = false;
     [Header("Playback Mode")]
     [Tooltip("If true, use URL/StreamingAssets for video playback (WebGL/experimental). If false, use native VideoClip (PC/Android). Automatically set at runtime.")]
     protected bool useWebGLVideoPlayer = false;
@@ -463,8 +466,17 @@ public abstract class VideoControllerBase : MonoBehaviour
         bool isLastVideo = (currentVideoIndex >= GetTotalVideoCount() - 1);
         if (isLastVideo)
         {
-            LogDebug("Last video detected - showing Press To Continue");
-            StartCoroutine(ShowPressToContinue());
+            if (loopLastVideo && vp != null)
+            {
+                vp.isLooping = true;
+                LogDebug("Last video detected - looping enabled");
+            }
+            else
+            {
+                if (vp != null) vp.isLooping = false;
+                LogDebug("Last video detected - showing Press To Continue");
+                StartCoroutine(ShowPressToContinue());
+            }
         }
         
         // Allow skipping after minimum time

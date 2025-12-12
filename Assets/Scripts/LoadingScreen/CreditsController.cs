@@ -10,6 +10,12 @@ using UnityEngine;
 /// </remarks>
 public class CreditsController : VideoControllerBase
 {
+    protected override void Awake()
+    {
+        base.Awake();
+        // Credits videos should not loop the last video
+        loopLastVideo = false;
+    }
     /// <summary>
     /// Load the next scene - transitions to MainMenu after credits finish
     /// </summary>

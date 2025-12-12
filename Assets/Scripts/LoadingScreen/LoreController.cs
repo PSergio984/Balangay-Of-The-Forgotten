@@ -10,6 +10,12 @@ using UnityEngine;
 /// </remarks>
 public class LoreController : VideoControllerBase
 {
+    protected override void Awake()
+    {
+        base.Awake();
+        // Lore videos should not loop the last video
+        loopLastVideo = false;
+    }
     /// <summary>
     /// Load the next scene - transitions to MainMenu after lore videos finish
     /// </summary>
