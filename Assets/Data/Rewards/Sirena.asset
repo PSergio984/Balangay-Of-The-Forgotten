@@ -16,3 +16,5 @@ MonoBehaviour:
   openChestSprite: {fileID: -1960940825, guid: e114e6c106b02a74f9a44dc4d26bfba1, type: 3}
   glowSprite: {fileID: 21300000, guid: ffbb2af54a1b03c46b8aac181297cd0d, type: 3}
   rewardItemSprite: {fileID: 21300000, guid: 8f803d4f1f23bf547a2ee02023af2186, type: 3}
+  associatedRelic: {fileID: 0}
+  specialCardReward: {fileID: 11400000, guid: 38f85c406dfb6624fb2add304f9559d8, type: 2}

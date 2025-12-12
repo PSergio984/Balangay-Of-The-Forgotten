@@ -6,6 +6,10 @@ public class DialogueCharacter
 {
     public string name;
     public Sprite icon;
+
+    [Header("Animated Portrait (Optional)")]
+    [Tooltip("Prefab with Animator/Animation for animated portrait. If set, will be used instead of static icon.")]
+    public GameObject animatedPortraitPrefab;
 }
  
 [System.Serializable]
@@ -15,14 +19,18 @@ public class DialogueLine
     [TextArea(3, 10)]
     public string line;
     
+    [Header("Typing Settings")]
+    [Tooltip("Typing speed for this line (seconds per character). If 0, uses DialogueManager default.")]
+    public float typingSpeed = 0f;
+    
     [Header("Image Overlay (Optional)")]
-    [Tooltip("Optional image to display as an overlay during this dialogue line")]
-    public Sprite overlayImage;
+    [Tooltip("Reference to the overlay GameObject in hierarchy. You manually place and size this in Unity.")]
+    public GameObject overlayImageObject;
     
     [Tooltip("Duration to display the overlay image (0 = until next line)")]
     public float overlayDuration = 0f;
     
-    [Tooltip("Fade in/out duration for the overlay")]
+    [Tooltip("Scale animation duration for the overlay")]
     public float overlayFadeDuration = 0.3f;
 }
  

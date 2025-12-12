@@ -15,6 +15,7 @@ public class LoadingOverlay : MonoBehaviour
 {
     [Header("Fade Settings")]
     [SerializeField] private CanvasGroup canvasGroup;
+    [SerializeField] private Image overlayImage;  // The Image component that shows the overlay color
     [SerializeField] private float fadeInTime = 0.5f;
     [SerializeField] private float fadeOutTime = 0.8f;  // Slightly longer for smoother video-to-scene transition
     
@@ -95,12 +96,32 @@ public class LoadingOverlay : MonoBehaviour
             LogDebug("WARNING: No Canvas found - overlay may not display correctly!");
         }
         
+        // Auto-find Image component if not assigned
+        if (overlayImage == null)
+        {
+            overlayImage = GetComponentInChildren<Image>();
+            if (overlayImage == null && canvasGroup != null)
+            {
+                overlayImage = canvasGroup.GetComponent<Image>();
+            }
+            if (overlayImage != null)
+            {
+                LogDebug($"Auto-found overlay Image: {overlayImage.gameObject.name}");
+            }
+        }
+        
         // Start with overlay invisible
         if (canvasGroup != null)
         {
             canvasGroup.alpha = 0f;
             canvasGroup.blocksRaycasts = false;
             canvasGroup.interactable = false;
+        }
+        
+        // Ensure overlay starts black
+        if (overlayImage != null)
+        {
+            overlayImage.color = Color.black;
         }
         
         // Hide video elements initially
@@ -307,6 +328,48 @@ public class LoadingOverlay : MonoBehaviour
             canvasGroup.interactable = false;
         }
         LogDebug("Fade out complete");
+    }
+    
+    /// <summary>
+    /// Fades in to white (for credits transition)
+    /// </summary>
+    public IEnumerator FadeInWhite()
+    {
+        LogDebug("Fading in to white...");
+        if (overlayImage != null)
+        {
+            overlayImage.color = Color.white;
+        }
+        if (canvasGroup != null)
+        {
+            canvasGroup.blocksRaycasts = true;
+            canvasGroup.interactable = true;
+        }
+        yield return FadeTo(1f, fadeInTime);
+        LogDebug("Fade in to white complete");
+    }
+    
+    /// <summary>
+    /// Fades out from white to black (for credits transition)
+    /// First fades out white, then changes to black and fades in
+    /// </summary>
+    public IEnumerator FadeOutWhiteToBlack()
+    {
+        LogDebug("Fading out from white to black...");
+        
+        // First fade out white
+        yield return FadeTo(0f, fadeOutTime);
+        
+        // Change color to black while invisible
+        if (overlayImage != null)
+        {
+            overlayImage.color = Color.black;
+        }
+        
+        // Now fade in black
+        yield return FadeTo(1f, fadeInTime);
+        
+        LogDebug("Fade out white to black complete");
     }
     
     /// <summary>

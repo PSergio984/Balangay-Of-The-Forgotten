@@ -409,6 +409,56 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 139523434}
   m_CullTransparentMesh: 1
+--- !u!1 &154211168
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 154211169}
+  - component: {fileID: 154211170}
+  m_Layer: 0
+  m_Name: OverlayFilter
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &154211169
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 154211168}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1905545705}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &154211170
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 154211168}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 86710e43de46f6f4bac7c8e50813a599, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.AspectRatioFitter
+  m_AspectMode: 4
+  m_AspectRatio: 1
 --- !u!1 &214568334
 GameObject:
   m_ObjectHideFlags: 0
@@ -914,20 +964,20 @@ MonoBehaviour:
         animatedPortraitPrefab: {fileID: 1114359062913147111, guid: 321c4266e4bc3d74a96a467dd1c649e0, type: 3}
       line: Nabuo mo ang lahat ng pira-pirasong alaala, at sa paglagas ng huling
         dilim, winakasan mo ang pamamayani ng anino.
-      typingSpeed: 0.05
-      overlayImageObject: {fileID: 560800129}
+      overlayImage: {fileID: 21300000, guid: 20ac3132db4f898499218c5917f86f22, type: 3}
       overlayDuration: 0
       overlayFadeDuration: 0.3
+      animatedOverlayPrefab: {fileID: 0}
     - character:
         name: 
         icon: {fileID: 0}
         animatedPortraitPrefab: {fileID: 0}
       line: Ngayon, nagwawakas ang ating paglalakbay. Ihahatid na kita pabalik sa
         iyong mundo, bitbit ko ang isang paalam na puno ng pasasalamat at pag-asa.
-      typingSpeed: 0.05
-      overlayImageObject: {fileID: 0}
+      overlayImage: {fileID: 0}
       overlayDuration: 0
       overlayFadeDuration: 0.3
+      animatedOverlayPrefab: {fileID: 1114359062913147111, guid: 321c4266e4bc3d74a96a467dd1c649e0, type: 3}
     onCompleteEventName: Post Final Boss
     dialogueType: 3
 --- !u!1 &382360313
@@ -1188,12 +1238,12 @@ GameObject:
   - component: {fileID: 547227611}
   - component: {fileID: 547227610}
   m_Layer: 0
-  m_Name: AllBosses
+  m_Name: OverlayImages
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &547227610
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1251,161 +1301,6 @@ RectTransform:
   m_AnchoredPosition: {x: 49, y: 98}
   m_SizeDelta: {x: 6000.0005, y: 3375.0002}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!1 &560800129
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 560800130}
-  - component: {fileID: 560800132}
-  - component: {fileID: 560800131}
-  m_Layer: 0
-  m_Name: Orig Relics
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!224 &560800130
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 560800129}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1905545705}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 46}
-  m_SizeDelta: {x: 640, y: 640}
-  m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &560800131
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 560800129}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
-  m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
-  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
-  m_Maskable: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 20ac3132db4f898499218c5917f86f22, type: 3}
-  m_Type: 0
-  m_PreserveAspect: 0
-  m_FillCenter: 1
-  m_FillMethod: 4
-  m_FillAmount: 1
-  m_FillClockwise: 1
-  m_FillOrigin: 0
-  m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 1
---- !u!222 &560800132
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 560800129}
-  m_CullTransparentMesh: 1
---- !u!1 &659438599 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1114359062913147111, guid: 321c4266e4bc3d74a96a467dd1c649e0, type: 3}
-  m_PrefabInstance: {fileID: 440844636}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &667517309
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 667517310}
-  - component: {fileID: 667517312}
-  - component: {fileID: 667517311}
-  m_Layer: 0
-  m_Name: Kaluwalhatian
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!224 &667517310
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 667517309}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.10000001, y: 0.10000001, z: 0.10000001}
-  m_ConstrainProportionsScale: 1
-  m_Children: []
-  m_Father: {fileID: 1905545705}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 6000.0005, y: 3375.0002}
-  m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &667517311
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 667517309}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
-  m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
-  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
-  m_Maskable: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 4307709138b712242bb62328eb894c2a, type: 3}
-  m_Type: 0
-  m_PreserveAspect: 0
-  m_FillCenter: 1
-  m_FillMethod: 4
-  m_FillAmount: 1
-  m_FillClockwise: 1
-  m_FillOrigin: 0
-  m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 1
---- !u!222 &667517312
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 667517309}
-  m_CullTransparentMesh: 1
 --- !u!1 &908877884
 GameObject:
   m_ObjectHideFlags: 0
@@ -1672,10 +1567,10 @@ MonoBehaviour:
         animatedPortraitPrefab: {fileID: 1114359062913147111, guid: 321c4266e4bc3d74a96a467dd1c649e0, type: 3}
       line: Naniniwala ka bang kapahamakan ang idudulot ng muling pagsasama ng mga
         pira-pirasong alaala?
-      typingSpeed: 0.05
-      overlayImageObject: {fileID: 0}
+      overlayImage: {fileID: 0}
       overlayDuration: 0
       overlayFadeDuration: 0.3
+      animatedOverlayPrefab: {fileID: 0}
     - character:
         name: Nuno sa Punso
         icon: {fileID: 0}
@@ -1685,10 +1580,10 @@ MonoBehaviour:
 
         piliin mong iligtas sila sa pamamagitan ng
         pagbubuo ng kanilang mga nawaglit na alaala.'
-      typingSpeed: 0.05
-      overlayImageObject: {fileID: 560800129}
+      overlayImage: {fileID: 21300000, guid: 20ac3132db4f898499218c5917f86f22, type: 3}
       overlayDuration: 0
       overlayFadeDuration: 0.3
+      animatedOverlayPrefab: {fileID: 0}
     - character:
         name: Nuno sa Punso
         icon: {fileID: 0}
@@ -1696,33 +1591,23 @@ MonoBehaviour:
       line: Ngayon, ang mga hinirang mong tagapagligtas ang siyang tutupad sa pagbuo
         ng mga memory fragments na ito. Simulan mo ang paglalakbay sa daigdig sa
         kabila, sakay ng balangay ng mga nalimot.
-      typingSpeed: 0.05
-      overlayImageObject: {fileID: 2144998295}
+      overlayImage: {fileID: 0}
       overlayDuration: 0
       overlayFadeDuration: 0.3
+      animatedOverlayPrefab: {fileID: 5620703184470429330, guid: 4003e8284bae23a4fbf71d3d06e3117d, type: 3}
     - character:
-        name: Nuno sa Punso
+        name: 
         icon: {fileID: 0}
-        animatedPortraitPrefab: {fileID: 547227609}
+        animatedPortraitPrefab: {fileID: 0}
       line: 'Harapin at talunin ang mga halimaw at diyos na nagtago sa alaala ng
         sanlibutan,upang muling magising ang mga kuwentong matagal nang natabunan
         ng dilim.
 
 '
-      typingSpeed: 0.05
-      overlayImageObject: {fileID: 0}
+      overlayImage: {fileID: 21300000, guid: 472c19658897bbb4fb9e677f1493d3fe, type: 3}
       overlayDuration: 0
       overlayFadeDuration: 0.3
-    - character:
-        name: Nuno sa Punso
-        icon: {fileID: 0}
-        animatedPortraitPrefab: {fileID: 659438599}
-      line: Piliin mo ang unang destinasyon, ngunit ang Kaluwalhatian ay magbubukas
-        lamang kapag natalo mo ang mga lupain ng halimaw at diyos.
-      typingSpeed: 0.05
-      overlayImageObject: {fileID: 667517309}
-      overlayDuration: 0
-      overlayFadeDuration: 0.3
+      animatedOverlayPrefab: {fileID: 0}
     onCompleteEventName: Intro
     dialogueType: 1
 --- !u!1 &980514137
@@ -2002,84 +1887,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Button
---- !u!1001 &1063535690
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 1905545705}
-    m_Modifications:
-    - target: {fileID: 5620703184470429330, guid: 4003e8284bae23a4fbf71d3d06e3117d, type: 3}
-      propertyPath: m_Name
-      value: BalangayShip
-      objectReference: {fileID: 0}
-    - target: {fileID: 5620703184470429330, guid: 4003e8284bae23a4fbf71d3d06e3117d, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5867807098039513410, guid: 4003e8284bae23a4fbf71d3d06e3117d, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 1356.5187
-      objectReference: {fileID: 0}
-    - target: {fileID: 5867807098039513410, guid: 4003e8284bae23a4fbf71d3d06e3117d, type: 3}
-      propertyPath: m_LocalScale.y
-      value: 1356.5187
-      objectReference: {fileID: 0}
-    - target: {fileID: 5867807098039513410, guid: 4003e8284bae23a4fbf71d3d06e3117d, type: 3}
-      propertyPath: m_LocalScale.z
-      value: 1356.5187
-      objectReference: {fileID: 0}
-    - target: {fileID: 5867807098039513410, guid: 4003e8284bae23a4fbf71d3d06e3117d, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 37
-      objectReference: {fileID: 0}
-    - target: {fileID: 5867807098039513410, guid: 4003e8284bae23a4fbf71d3d06e3117d, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 33
-      objectReference: {fileID: 0}
-    - target: {fileID: 5867807098039513410, guid: 4003e8284bae23a4fbf71d3d06e3117d, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -9637.71
-      objectReference: {fileID: 0}
-    - target: {fileID: 5867807098039513410, guid: 4003e8284bae23a4fbf71d3d06e3117d, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5867807098039513410, guid: 4003e8284bae23a4fbf71d3d06e3117d, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5867807098039513410, guid: 4003e8284bae23a4fbf71d3d06e3117d, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5867807098039513410, guid: 4003e8284bae23a4fbf71d3d06e3117d, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5867807098039513410, guid: 4003e8284bae23a4fbf71d3d06e3117d, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5867807098039513410, guid: 4003e8284bae23a4fbf71d3d06e3117d, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5867807098039513410, guid: 4003e8284bae23a4fbf71d3d06e3117d, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 4003e8284bae23a4fbf71d3d06e3117d, type: 3}
---- !u!4 &1063535691 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 5867807098039513410, guid: 4003e8284bae23a4fbf71d3d06e3117d, type: 3}
-  m_PrefabInstance: {fileID: 1063535690}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1064477868
 GameObject:
   m_ObjectHideFlags: 0
@@ -2212,138 +2019,6 @@ CanvasRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1064477868}
-  m_CullTransparentMesh: 1
---- !u!1 &1064772634
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1064772635}
-  - component: {fileID: 1064772638}
-  - component: {fileID: 1064772637}
-  - component: {fileID: 1064772636}
-  m_Layer: 0
-  m_Name: Continue
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!224 &1064772635
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1064772634}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.3, y: 0.3, z: 0.3}
-  m_ConstrainProportionsScale: 1
-  m_Children: []
-  m_Father: {fileID: 1905545705}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 612, y: -501}
-  m_SizeDelta: {x: 580, y: 240}
-  m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1064772636
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1064772634}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Button
-  m_Navigation:
-    m_Mode: 3
-    m_WrapAround: 0
-    m_SelectOnUp: {fileID: 0}
-    m_SelectOnDown: {fileID: 0}
-    m_SelectOnLeft: {fileID: 0}
-    m_SelectOnRight: {fileID: 0}
-  m_Transition: 1
-  m_Colors:
-    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
-    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
-    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
-    m_ColorMultiplier: 1
-    m_FadeDuration: 0.1
-  m_SpriteState:
-    m_HighlightedSprite: {fileID: 0}
-    m_PressedSprite: {fileID: 0}
-    m_SelectedSprite: {fileID: 0}
-    m_DisabledSprite: {fileID: 0}
-  m_AnimationTriggers:
-    m_NormalTrigger: Normal
-    m_HighlightedTrigger: Highlighted
-    m_PressedTrigger: Pressed
-    m_SelectedTrigger: Selected
-    m_DisabledTrigger: Disabled
-  m_Interactable: 1
-  m_TargetGraphic: {fileID: 1064772637}
-  m_OnClick:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1178277645}
-        m_TargetAssemblyTypeName: DialogueManager, Assembly-CSharp
-        m_MethodName: DisplayNextDialogueLine
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
---- !u!114 &1064772637
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1064772634}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
-  m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
-  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
-  m_Maskable: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 97a4bc9c2e58a2d4c9f08d429968048a, type: 3}
-  m_Type: 0
-  m_PreserveAspect: 0
-  m_FillCenter: 1
-  m_FillMethod: 4
-  m_FillAmount: 1
-  m_FillClockwise: 1
-  m_FillOrigin: 0
-  m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 1
---- !u!222 &1064772638
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1064772634}
   m_CullTransparentMesh: 1
 --- !u!1 &1161978527
 GameObject:
@@ -2527,15 +2202,15 @@ MonoBehaviour:
   characterIcon: {fileID: 0}
   characterName: {fileID: 1922876106}
   dialogueArea: {fileID: 1486920569}
-  continueButton: {fileID: 1064772634}
   animatedPortraitParent: {fileID: 440844637}
-  glowComponent: {fileID: 105205095}
+  overlayImage: {fileID: 547227610}
+  overlayAspectFitter: {fileID: 154211170}
+  overlayCanvasGroup: {fileID: 1899043071}
+  overlayPanel: {fileID: 1905545704}
   dialogueSlideDuration: 0.5
   dialogueSlideEase: 27
-  elementSlideDuration: 0.4
-  elementSlideEase: 9
   isDialogueActive: 0
-  typingSpeed: 0.05
+  typingSpeed: 0.2
 --- !u!114 &1178277646
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2549,7 +2224,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DialogueTestTools
   dialogueManagerTrigger: {fileID: 0}
-  dialogueIntroTrigger: {fileID: 979369743}
+  dialogueIntroTrigger: {fileID: 365201967}
   dialoguePostVictoryTrigger: {fileID: 1714442203}
   dialogueEndingTrigger: {fileID: 365201967}
 --- !u!114 &1191106490
@@ -3396,10 +3071,10 @@ MonoBehaviour:
         icon: {fileID: 0}
         animatedPortraitPrefab: {fileID: 1114359062913147111, guid: 321c4266e4bc3d74a96a467dd1c649e0, type: 3}
       line: Piliin mo na ang susunod mong destinasyon...
-      typingSpeed: 0.05
-      overlayImageObject: {fileID: 0}
+      overlayImage: {fileID: 0}
       overlayDuration: 0
       overlayFadeDuration: 0.3
+      animatedOverlayPrefab: {fileID: 0}
     onCompleteEventName: Post Victory
     dialogueType: 2
 --- !u!1 &1755786784
@@ -3979,15 +3654,12 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 154211169}
   - {fileID: 105205096}
   - {fileID: 440844637}
   - {fileID: 307965714}
   - {fileID: 139523435}
-  - {fileID: 1063535691}
   - {fileID: 547227612}
-  - {fileID: 560800130}
-  - {fileID: 667517310}
-  - {fileID: 1064772635}
   m_Father: {fileID: 1899043067}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -4316,11 +3988,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2064803256}
   m_CullTransparentMesh: 1
---- !u!1 &2144998295 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5620703184470429330, guid: 4003e8284bae23a4fbf71d3d06e3117d, type: 3}
-  m_PrefabInstance: {fileID: 1063535690}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

@@ -112,19 +112,24 @@ public class SceneController : MonoBehaviour
             MusicManager.Instance.PlayMusic(plan.TransitionMusic, plan.MusicFadeTime);
         }
 
-        // PHASE 2: Fade to black (with optional video)
-        // Fade to black
+        // PHASE 2: Fade to black/white (with optional video)
         if(plan.Overlay && loadingOverlay != null)
         {
-            Debug.Log($"[Frame {Time.frameCount}] PHASE 2: Starting fade to black");
-            
-            if (plan.UseVideoLoading)
+            if (plan.UseWhiteFade)
             {
+                Debug.Log($"[Frame {Time.frameCount}] PHASE 2: Starting fade in to white");
+                yield return loadingOverlay.FadeInWhite();
+                yield return new WaitForSeconds(0.5f);
+            }
+            else if (plan.UseVideoLoading)
+            {
+                Debug.Log($"[Frame {Time.frameCount}] PHASE 2: Starting fade to black with video");
                 // Use video loading screen
                 yield return loadingOverlay.FadeInWithVideo(plan.LoadingMapId);
             }
             else
             {
+                Debug.Log($"[Frame {Time.frameCount}] PHASE 2: Starting fade to black");
                 // Standard black fade
                 yield return loadingOverlay.FadeInBlack();
             }
@@ -167,23 +172,30 @@ public class SceneController : MonoBehaviour
             yield return LoadAdditiveRoutine(kvp.Key, kvp.Value, plan.ActiveSceneName == kvp.Value);
         }
         
-        // PHASE 6: Fade from black
+        // PHASE 6: Fade from black/white
         if (plan.Overlay && loadingOverlay != null)
         {
-            Debug.Log($"[Frame {Time.frameCount}] PHASE 6: Waiting for loading video to finish...");
-            
-            if (plan.UseVideoLoading)
+            if (plan.UseWhiteFade)
             {
+                Debug.Log($"[Frame {Time.frameCount}] PHASE 6: Starting fade out white to black");
+                yield return loadingOverlay.FadeOutWhiteToBlack();
+                Debug.Log($"[Frame {Time.frameCount}] PHASE 6: Fade white to black COMPLETE");
+            }
+            else if (plan.UseVideoLoading)
+            {
+                Debug.Log($"[Frame {Time.frameCount}] PHASE 6: Waiting for loading video to finish...");
                 // Wait for video to finish, then fade out
                 // minimumDisplayTime ensures scene has time to initialize
                 yield return loadingOverlay.FadeOutAfterVideo(1f);
+                Debug.Log($"[Frame {Time.frameCount}] PHASE 6: Fade from black COMPLETE");
             }
             else
             {
+                Debug.Log($"[Frame {Time.frameCount}] PHASE 6: Starting fade from black");
                 // Standard fade out
                 yield return loadingOverlay.FadeOutBlack();
+                Debug.Log($"[Frame {Time.frameCount}] PHASE 6: Fade from black COMPLETE");
             }
-            Debug.Log($"[Frame {Time.frameCount}] PHASE 6: Fade from black COMPLETE");
         }
         
         Debug.Log($"[Frame {Time.frameCount}] ===== TRANSITION COMPLETE =====");
@@ -329,6 +341,12 @@ public class SceneController : MonoBehaviour
         public bool UseVideoLoading { get; private set; } = false;
         
         /// <summary>
+        /// Whether to use white fade transition (fade in to white, then fade out to black).
+        /// Used for credits scene transitions.
+        /// </summary>
+        public bool UseWhiteFade { get; private set; } = false;
+        
+        /// <summary>
         /// Map ID for map-specific loading video (e.g., "Apolaki" → "loadingApolaki.mp4").
         /// If null or empty, uses default loading video.
         /// </summary>
@@ -392,6 +410,19 @@ public class SceneController : MonoBehaviour
             Overlay = true;
             UseVideoLoading = true;
             LoadingMapId = mapId;
+            return this;
+        }
+        
+        /// <summary>
+        /// Enables white fade transition (fade in to white, then fade out to black).
+        /// Used for credits scene transitions.
+        /// Automatically enables Overlay if not already enabled.
+        /// </summary>
+        /// <returns>This plan for method chaining.</returns>
+        public SceneTransitionPlan WithWhiteFade()
+        {
+            Overlay = true;
+            UseWhiteFade = true;
             return this;
         }
 
