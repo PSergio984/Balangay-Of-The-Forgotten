@@ -343,7 +343,7 @@ public class EnemySystem : Singleton<EnemySystem>
     /// <remarks>
     /// Called automatically when the last enemy is defeated and the queue is empty.
     /// Shows final victory banner and allows player to continue to map selection.
-    /// Triggers post-victory dialogue if available.
+    /// Marks map as complete and triggers appropriate dialogue.
     /// </remarks>
     private void TriggerVictory()
     {
@@ -360,8 +360,18 @@ public class EnemySystem : Singleton<EnemySystem>
         Debug.Log("[EnemySystem] ===== FINAL VICTORY =====");
         Debug.Log("[EnemySystem] All enemies have been defeated! No enemies in queue and no enemies on board.");
         
-        // Trigger post-victory dialogue before showing victory UI
-        TriggerPostVictoryDialogue();
+        // Mark map as complete (this is the final enemy, so the map is complete)
+        MarkMapCompleteIfNeeded();
+        
+        // Determine which dialogue to trigger based on game progress
+        bool isFinalMap = CheckIfFinalMap();
+        if (isFinalMap)
+        {
+            // Final map completed - trigger PostFinalBoss dialogue
+            TriggerPostFinalBossDialogue();
+        }
+        // Note: PostVictory dialogue is triggered after each enemy defeat in KillEnemyPerformer
+        // For final victory, we only trigger PostFinalBoss if it's the final map
         
         // Show final victory banner (no reward, just continue to map selection)
         if (VictoryDefeatUI.Instance != null)
@@ -375,29 +385,92 @@ public class EnemySystem : Singleton<EnemySystem>
     }
     
     /// <summary>
-    /// Triggers post-victory dialogue if DialogueTrigger is available in the scene
+    /// Marks the current map as complete if not already marked
     /// </summary>
-    private void TriggerPostVictoryDialogue()
+    private void MarkMapCompleteIfNeeded()
     {
-        // Find DialogueTrigger in the scene
-        DialogueTrigger dialogueTrigger = FindObjectOfType<DialogueTrigger>();
-        if (dialogueTrigger != null && dialogueTrigger.dialogue != null)
+        if (VictoryDefeatUI.Instance != null)
         {
-            // Check if dialogue is marked as PostVictory type
-            if (dialogueTrigger.dialogue.dialogueType == DialogueType.PostVictory)
-            {
-                Debug.Log("[EnemySystem] Triggering post-victory dialogue");
-                dialogueTrigger.TriggerDialogue();
-            }
-            else
-            {
-                Debug.Log($"[EnemySystem] DialogueTrigger found but type is {dialogueTrigger.dialogue.dialogueType}, not PostVictory. Skipping dialogue.");
-            }
+            // Use VictoryDefeatUI's method to mark map complete (it has access to GameProgressData and LevelTransitionData)
+            VictoryDefeatUI.Instance.MarkCurrentMapCompleteInternal();
         }
         else
         {
-            Debug.Log("[EnemySystem] No DialogueTrigger with PostVictory dialogue found in scene. Skipping dialogue.");
+            Debug.LogWarning("[EnemySystem] VictoryDefeatUI.Instance is null, cannot mark map complete.", this);
         }
+    }
+    
+    /// <summary>
+    /// Checks if the current map is the final map (Kaluwalhatian)
+    /// </summary>
+    private bool CheckIfFinalMap()
+    {
+        // Try to get current map ID from LevelTransitionData
+        if (currentMapData != null)
+        {
+            // Check if this is Kaluwalhatian
+            return currentMapData.MapId == GameProgressData.MAP_ID_KALUWALHATIAN;
+        }
+        
+        // Fallback: Check if game is completed (which means Kaluwalhatian was just beaten)
+        // This requires access to GameProgressData, which we don't have directly
+        // So we'll check via VictoryDefeatUI if available
+        if (VictoryDefeatUI.Instance != null)
+        {
+            return VictoryDefeatUI.Instance.IsGameCompleted();
+        }
+        
+        return false;
+    }
+    
+    /// <summary>
+    /// Triggers post-victory dialogue after each enemy defeat (not final map)
+    /// </summary>
+    private void TriggerPostVictoryDialogue()
+    {
+        // Find all DialogueTriggers in the scene
+        DialogueTrigger[] dialogueTriggers = FindObjectsOfType<DialogueTrigger>();
+        
+        foreach (var dialogueTrigger in dialogueTriggers)
+        {
+            if (dialogueTrigger != null && dialogueTrigger.dialogue != null)
+            {
+                // Check if dialogue is marked as PostVictory type
+                if (dialogueTrigger.dialogue.dialogueType == DialogueType.PostVictory)
+                {
+                    Debug.Log("[EnemySystem] Triggering post-victory dialogue");
+                    dialogueTrigger.TriggerDialogue();
+                    return; // Only trigger the first one found
+                }
+            }
+        }
+        
+        Debug.Log("[EnemySystem] No DialogueTrigger with PostVictory dialogue found in scene. Skipping dialogue.");
+    }
+    
+    /// <summary>
+    /// Triggers post-final boss dialogue when the final map (Kaluwalhatian) is completed
+    /// </summary>
+    private void TriggerPostFinalBossDialogue()
+    {
+        // Find all DialogueTriggers in the scene
+        DialogueTrigger[] dialogueTriggers = FindObjectsOfType<DialogueTrigger>();
+        
+        foreach (var dialogueTrigger in dialogueTriggers)
+        {
+            if (dialogueTrigger != null && dialogueTrigger.dialogue != null)
+            {
+                // Check if dialogue is marked as PostFinalBoss type
+                if (dialogueTrigger.dialogue.dialogueType == DialogueType.PostFinalBoss)
+                {
+                    Debug.Log("[EnemySystem] Triggering post-final boss dialogue");
+                    dialogueTrigger.TriggerDialogue();
+                    return; // Only trigger the first one found
+                }
+            }
+        }
+        
+        Debug.Log("[EnemySystem] No DialogueTrigger with PostFinalBoss dialogue found in scene. Skipping dialogue.");
     }
 
     [Header("Move Name Display")]
@@ -749,6 +822,10 @@ public class EnemySystem : Singleton<EnemySystem>
         // Index 0 = first enemy (miniboss), Index 1 = second enemy (main boss)
         int defeatedEnemyIndex = currentSpawnIndex - 1;
         bool isMainBoss = (defeatedEnemyIndex == 1 && totalEnemyCount >= 2);
+        
+        // Trigger post-victory dialogue after each enemy defeat
+        // This happens for every enemy defeat, not just final ones
+        TriggerPostVictoryDialogue();
         
         // Trigger victory reward for this enemy
         TriggerEnemyDefeatVictory(defeatedEnemyIndex, isMainBoss);

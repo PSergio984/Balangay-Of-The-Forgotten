@@ -37,6 +37,9 @@ public class DialogueManager : MonoBehaviour
     [Tooltip("DialogueOverlayManager component that manages all overlay GameObjects")]
     public DialogueOverlayManager overlayManager;
     
+    [Header("Game Progress")]
+    [Tooltip("Reference to GameProgressData for tracking intro dialogue completion")]
+    [SerializeField] private GameProgressData gameProgress;
 
     [Header("Animation Settings")]
     [Tooltip("Duration for dialogue panel slide animation")]
@@ -557,7 +560,16 @@ public class DialogueManager : MonoBehaviour
         {
             case DialogueType.IntroScene:
                 Debug.Log("[DialogueManager] Intro dialogue completed.");
-                // Could trigger scene transition here
+                // Mark intro dialogue as seen in GameProgressData
+                if (gameProgress != null)
+                {
+                    gameProgress.MarkIntroDialogueSeen();
+                    Debug.Log("[DialogueManager] Intro dialogue marked as seen in GameProgressData.");
+                }
+                else
+                {
+                    Debug.LogWarning("[DialogueManager] GameProgressData not assigned, cannot mark intro dialogue as seen.");
+                }
                 break;
                 
             case DialogueType.PostVictory:

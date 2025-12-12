@@ -102,10 +102,26 @@ public class MapSelectManager2 : MonoBehaviour
 
 
     /// <summary>
+    /// Called when the GameObject is enabled - refreshes button states when returning from combat
+    /// </summary>
+    private void OnEnable()
+    {
+        // Refresh button states when scene becomes active (e.g., returning from combat)
+        // This ensures completed maps are properly disabled
+        if (_preSetMapButtons != null && _preSetMapButtons.Count > 0)
+        {
+            RefreshMapButtonStates();
+        }
+    }
+
+    /// <summary>
     /// Validates dependencies and initializes map selection screen
     /// </summary>
     private void Start()
     {
+        // Trigger intro dialogue if not seen yet (after lore transition)
+        TriggerIntroDialogueIfNeeded();
+        
         // Validate required inspector references
         if (_preSetMapButtons == null || _preSetMapButtons.Count == 0)
         {
@@ -282,6 +298,36 @@ public class MapSelectManager2 : MonoBehaviour
 
 
     /// <summary>
+    /// Refreshes map button states based on current game progress (called when returning from combat)
+    /// </summary>
+    private void RefreshMapButtonStates()
+    {
+        if (_gameProgress == null)
+        {
+            Debug.LogWarning("[MapSelectManager2] GameProgressData not assigned, cannot refresh button states.");
+            return;
+        }
+        
+        // Reload progress to ensure we have latest data
+        _gameProgress.Load();
+        
+        foreach (var mapButton in _preSetMapButtons)
+        {
+            if (mapButton == null || mapButton.MapData == null)
+                continue;
+            
+            MapData mapData = mapButton.MapData;
+            bool isUnlocked = UnlockedLevelIDs.Contains(mapData.MapId);
+            bool isCompleted = IsMapCompleted(mapData.MapId);
+            
+            // Re-setup button with updated completion state
+            mapButton.Setup(mapData, isUnlocked, isCompleted);
+            
+            Debug.Log($"[MapSelectManager2] Refreshed button '{mapData.MapId}': Unlocked={isUnlocked}, Completed={isCompleted}, Interactable={!isCompleted && isUnlocked}");
+        }
+    }
+    
+    /// <summary>
     /// Configures pre-set MapButton instances with unlock states and registers them with event handler
     /// </summary>
     /// <remarks>
@@ -313,6 +359,8 @@ public class MapSelectManager2 : MonoBehaviour
             
             // Determine if this map has been completed
             bool isCompleted = IsMapCompleted(mapData.MapId);
+            
+            Debug.Log($"[MapSelectManager2] Setting up button '{mapData.MapId}': Unlocked={isUnlocked}, Completed={isCompleted}");
             
             // Setup the MapButton with unlock and completion state
             mapButton.Setup(mapData, isUnlocked, isCompleted);
@@ -545,6 +593,48 @@ public class MapSelectManager2 : MonoBehaviour
         }
         
         StartCoroutine(SetupButtonNavigation()); // Single navigation update after all unlocks
+    }
+    
+    /// <summary>
+    /// Triggers intro dialogue if it hasn't been seen yet (after lore transition)
+    /// </summary>
+    private void TriggerIntroDialogueIfNeeded()
+    {
+        // Check if GameProgressData is assigned
+        if (_gameProgress == null)
+        {
+            Debug.LogWarning("[MapSelectManager2] GameProgressData not assigned, cannot check intro dialogue status.");
+            return;
+        }
+        
+        // Check if intro dialogue has already been seen
+        if (_gameProgress.HasSeenIntroDialogue)
+        {
+            Debug.Log("[MapSelectManager2] Intro dialogue already seen, skipping.");
+            return;
+        }
+        
+        // Find DialogueTrigger with IntroScene type in the scene
+        DialogueTrigger[] dialogueTriggers = FindObjectsOfType<DialogueTrigger>();
+        
+        foreach (var dialogueTrigger in dialogueTriggers)
+        {
+            if (dialogueTrigger != null && dialogueTrigger.dialogue != null)
+            {
+                // Check if dialogue is marked as IntroScene type
+                if (dialogueTrigger.dialogue.dialogueType == DialogueType.IntroScene)
+                {
+                    Debug.Log("[MapSelectManager2] Triggering intro dialogue after lore transition");
+                    dialogueTrigger.TriggerDialogue();
+                    
+                    // Mark intro dialogue as seen (will be saved when dialogue completes)
+                    // Note: DialogueManager should call MarkIntroDialogueSeen when dialogue completes
+                    return; // Only trigger the first one found
+                }
+            }
+        }
+        
+        Debug.Log("[MapSelectManager2] No DialogueTrigger with IntroScene dialogue found in scene. Skipping intro dialogue.");
     }
 
     #endregion

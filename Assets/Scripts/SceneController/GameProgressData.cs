@@ -30,10 +30,10 @@ public class GameProgressData : ScriptableObject
 {
     #region Constants
     
-    // Map IDs - these should match MapData.MapId values
-    public const string MAP_ID_DAGAT = "Dagat_ng_Kabisayaan";
-    public const string MAP_ID_DARAGANG = "Daragang_Magayon";
-    public const string MAP_ID_BUNDOK = "Bundok_Pulag";
+    // Map IDs - these should match MapData.MapId values (with spaces as they appear in MapData assets)
+    public const string MAP_ID_DAGAT = "Dagat Ng Kabisayaan";
+    public const string MAP_ID_DARAGANG = "Daragang Magayon";
+    public const string MAP_ID_BUNDOK = "Bundok Pulag";
     public const string MAP_ID_KALUWALHATIAN = "Kaluwalhatian";
     
     // PlayerPrefs keys for persistence
@@ -210,11 +210,16 @@ public class GameProgressData : ScriptableObject
     /// </summary>
     public void Save()
     {
-        // Save each map's completion status
-        PlayerPrefs.SetInt(GetMapPrefsKey(MAP_ID_DAGAT), IsMapComplete(MAP_ID_DAGAT) ? 1 : 0);
-        PlayerPrefs.SetInt(GetMapPrefsKey(MAP_ID_DARAGANG), IsMapComplete(MAP_ID_DARAGANG) ? 1 : 0);
-        PlayerPrefs.SetInt(GetMapPrefsKey(MAP_ID_BUNDOK), IsMapComplete(MAP_ID_BUNDOK) ? 1 : 0);
-        PlayerPrefs.SetInt(GetMapPrefsKey(MAP_ID_KALUWALHATIAN), IsMapComplete(MAP_ID_KALUWALHATIAN) ? 1 : 0);
+        // Save each map's completion status based on what's actually in completedMapIds
+        int dagatComplete = completedMapIds.Contains(MAP_ID_DAGAT) ? 1 : 0;
+        int daragangComplete = completedMapIds.Contains(MAP_ID_DARAGANG) ? 1 : 0;
+        int bundokComplete = completedMapIds.Contains(MAP_ID_BUNDOK) ? 1 : 0;
+        int kaluwalhatianComplete = completedMapIds.Contains(MAP_ID_KALUWALHATIAN) ? 1 : 0;
+        
+        PlayerPrefs.SetInt(GetMapPrefsKey(MAP_ID_DAGAT), dagatComplete);
+        PlayerPrefs.SetInt(GetMapPrefsKey(MAP_ID_DARAGANG), daragangComplete);
+        PlayerPrefs.SetInt(GetMapPrefsKey(MAP_ID_BUNDOK), bundokComplete);
+        PlayerPrefs.SetInt(GetMapPrefsKey(MAP_ID_KALUWALHATIAN), kaluwalhatianComplete);
         
         // Save unlock and completion states
         PlayerPrefs.SetInt(PREFS_PREFIX + PREFS_KALUWALHATIAN_UNLOCKED, isKaluwalhatianUnlocked ? 1 : 0);
@@ -222,7 +227,12 @@ public class GameProgressData : ScriptableObject
         PlayerPrefs.SetInt(PREFS_PREFIX + PREFS_INTRO_SEEN, hasSeenIntroDialogue ? 1 : 0);
         
         PlayerPrefs.Save();
-        Debug.Log($"[GameProgressData] Progress saved. Completed maps: {CompletedMapCount}, Kaluwalhatian unlocked: {isKaluwalhatianUnlocked}");
+        
+        // Enhanced debug logging to verify save
+        Debug.Log($"[GameProgressData] Progress saved. Completed maps: {CompletedMapCount}");
+        Debug.Log($"[GameProgressData] Map completion status - Dagat: {dagatComplete}, Daragang: {daragangComplete}, Bundok: {bundokComplete}, Kaluwalhatian: {kaluwalhatianComplete}");
+        Debug.Log($"[GameProgressData] Kaluwalhatian unlocked: {isKaluwalhatianUnlocked}, Game completed: {isGameCompleted}");
+        Debug.Log($"[GameProgressData] Completed map IDs: {string.Join(", ", completedMapIds)}");
     }
     
     /// <summary>
@@ -233,13 +243,18 @@ public class GameProgressData : ScriptableObject
         completedMapIds.Clear();
         
         // Load each map's completion status
-        if (PlayerPrefs.GetInt(GetMapPrefsKey(MAP_ID_DAGAT), 0) == 1)
+        int dagatValue = PlayerPrefs.GetInt(GetMapPrefsKey(MAP_ID_DAGAT), 0);
+        int daragangValue = PlayerPrefs.GetInt(GetMapPrefsKey(MAP_ID_DARAGANG), 0);
+        int bundokValue = PlayerPrefs.GetInt(GetMapPrefsKey(MAP_ID_BUNDOK), 0);
+        int kaluwalhatianValue = PlayerPrefs.GetInt(GetMapPrefsKey(MAP_ID_KALUWALHATIAN), 0);
+        
+        if (dagatValue == 1)
             completedMapIds.Add(MAP_ID_DAGAT);
-        if (PlayerPrefs.GetInt(GetMapPrefsKey(MAP_ID_DARAGANG), 0) == 1)
+        if (daragangValue == 1)
             completedMapIds.Add(MAP_ID_DARAGANG);
-        if (PlayerPrefs.GetInt(GetMapPrefsKey(MAP_ID_BUNDOK), 0) == 1)
+        if (bundokValue == 1)
             completedMapIds.Add(MAP_ID_BUNDOK);
-        if (PlayerPrefs.GetInt(GetMapPrefsKey(MAP_ID_KALUWALHATIAN), 0) == 1)
+        if (kaluwalhatianValue == 1)
             completedMapIds.Add(MAP_ID_KALUWALHATIAN);
         
         // Load unlock and completion states
@@ -247,7 +262,10 @@ public class GameProgressData : ScriptableObject
         isGameCompleted = PlayerPrefs.GetInt(PREFS_PREFIX + PREFS_GAME_COMPLETED, 0) == 1;
         hasSeenIntroDialogue = PlayerPrefs.GetInt(PREFS_PREFIX + PREFS_INTRO_SEEN, 0) == 1;
         
+        // Enhanced debug logging to verify load
         Debug.Log($"[GameProgressData] Progress loaded. Completed maps: {CompletedMapCount}, Kaluwalhatian unlocked: {isKaluwalhatianUnlocked}");
+        Debug.Log($"[GameProgressData] Loaded from PlayerPrefs - Dagat: {dagatValue}, Daragang: {daragangValue}, Bundok: {bundokValue}, Kaluwalhatian: {kaluwalhatianValue}");
+        Debug.Log($"[GameProgressData] Loaded completed map IDs: {string.Join(", ", completedMapIds)}");
     }
     
     /// <summary>

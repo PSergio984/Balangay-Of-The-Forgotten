@@ -2594,8 +2594,11 @@ MonoBehaviour:
   animatedPortraitParent: {fileID: 0}
   glowComponent: {fileID: 105205095}
   overlayManager: {fileID: 813836646}
+  gameProgress: {fileID: 11400000, guid: 22d92ffcfdb12394c9716c076b746e65, type: 2}
   dialogueSlideDuration: 0.5
   dialogueSlideEase: 27
+  dialogueFadeOutDuration: 0.4
+  dialogueFadeOutEase: 8
   elementSlideDuration: 0.4
   elementSlideEase: 9
   isDialogueActive: 0

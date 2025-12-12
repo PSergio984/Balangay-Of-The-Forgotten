@@ -653,6 +653,14 @@ public class VictoryDefeatUI : Singleton<VictoryDefeatUI>
     /// </summary>
     private void MarkCurrentMapComplete()
     {
+        MarkCurrentMapCompleteInternal();
+    }
+    
+    /// <summary>
+    /// Internal method to mark map complete (can be called from EnemySystem)
+    /// </summary>
+    public void MarkCurrentMapCompleteInternal()
+    {
         if (gameProgress == null)
         {
             Debug.LogWarning("[VictoryDefeatUI] GameProgressData not assigned, cannot track map completion!");
@@ -666,6 +674,19 @@ public class VictoryDefeatUI : Singleton<VictoryDefeatUI>
         }
         
         string mapId = levelTransitionData.SelectedMapData.MapId;
+        Debug.Log($"[VictoryDefeatUI] Attempting to mark map complete. MapId: '{mapId}'");
+        
+        // Verify mapId matches expected format (with spaces as they appear in MapData)
+        bool isValidMapId = mapId == GameProgressData.MAP_ID_DAGAT || 
+                           mapId == GameProgressData.MAP_ID_DARAGANG || 
+                           mapId == GameProgressData.MAP_ID_BUNDOK || 
+                           mapId == GameProgressData.MAP_ID_KALUWALHATIAN;
+        
+        if (!isValidMapId)
+        {
+            Debug.LogWarning($"[VictoryDefeatUI] MapId '{mapId}' does not match expected format! Expected: '{GameProgressData.MAP_ID_DAGAT}', '{GameProgressData.MAP_ID_DARAGANG}', '{GameProgressData.MAP_ID_BUNDOK}', or '{GameProgressData.MAP_ID_KALUWALHATIAN}'");
+        }
+        
         if (gameProgress.MarkMapComplete(mapId))
         {
             Debug.Log($"[VictoryDefeatUI] Map '{mapId}' marked as complete!");
@@ -682,6 +703,18 @@ public class VictoryDefeatUI : Singleton<VictoryDefeatUI>
                 Debug.Log("[VictoryDefeatUI] Game complete! Player has beaten Kaluwalhatian!");
             }
         }
+    }
+    
+    /// <summary>
+    /// Checks if the game is completed (Kaluwalhatian defeated)
+    /// </summary>
+    public bool IsGameCompleted()
+    {
+        if (gameProgress == null)
+        {
+            return false;
+        }
+        return gameProgress.IsGameCompleted;
     }
 
     /// <summary>

@@ -179,17 +179,17 @@ public class MapButton : MonoBehaviour
         // Display the map name on the button
         _mapNameText.SetText(map.MapId);
         
-        // Make button clickable or not based on unlock state
-        _MapButton.interactable = isUnlocked;
+        // Make button clickable or not based on unlock state AND completion state
+        // If map is completed, it should be disabled (not clickable)
+        bool shouldBeInteractable = isUnlocked && !isCompleted;
+        _MapButton.interactable = shouldBeInteractable;
 
         if (isUnlocked)
         {
-            // Map is unlocked - make it white and clickable
-            RegisterLoadMapListener();
-            
             if (isCompleted)
             {
-                // Map is completed - use completed color (green tint)
+                // Map is completed - DISABLE button and show completed visual
+                _MapButton.interactable = false; // Disable completed maps
                 ReturnColor = completedColor;
                 _MapImage.color = ReturnColor;
                 
@@ -198,10 +198,15 @@ public class MapButton : MonoBehaviour
                 {
                     completionIndicator.SetActive(true);
                 }
+                
+                Debug.Log($"[MapButton] Map '{map.MapId}' is completed - button disabled.");
             }
             else
             {
-                // Map is unlocked but not completed - white
+                // Map is unlocked but not completed - enable button and register listener
+                _MapButton.interactable = true;
+                RegisterLoadMapListener();
+                
                 ReturnColor = Color.white;
                 _MapImage.color = ReturnColor;
                 
