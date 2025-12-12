@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 /* HERO SYSTEM DOCUMENTATION
@@ -211,9 +212,14 @@ public class HeroSystem : Singleton<HeroSystem>
         }
         
         // Use StatusEffectTickSystem to process all enemy status effect ticks
+        // Only tick status effects for living heroes (dead heroes don't process status effects)
         if (StatusEffectTickSystem.Instance != null)
         {
-            StatusEffectTickSystem.Instance.TickStatusEffects(HeroBoardView.HeroViews.ConvertAll(e => (CombatantView)e));
+            var livingHeroes = HeroBoardView.HeroViews
+                .Where(h => h != null && !h.IsDead)
+                .Cast<CombatantView>()
+                .ToList();
+            StatusEffectTickSystem.Instance.TickStatusEffects(livingHeroes);
         }
         
         // Delay card drawing until after player turn banner animation completes

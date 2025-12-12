@@ -166,10 +166,14 @@ public class DamageSystem : MonoBehaviour
             yield return new WaitForSeconds(hitAnimDuration + 0.1f);
 
             // Check if the target died from the damage and handle death
-            if(target != null && target.CurrentHealth <= 0)
+            if(target != null && target.CurrentHealth <= 0 && !target.IsDead)
             {
+                // Mark the target as dead (applies visual greying and stops animation)
+                target.MarkAsDead();
+                
                 // Play death animation and wait for it to complete
-                yield return target.PlayAnimationAndWait(CombatantAnimState.Dead, returnToIdle: false);
+                // NOTE: Death animation is commented out in MarkAsDead() until animations are ready
+                // yield return target.PlayAnimationAndWait(CombatantAnimState.Dead, returnToIdle: false);
 
                 // If the target is an enemy that died, create a kill enemy action
                 if (target is EnemyView enemyView)
@@ -179,9 +183,10 @@ public class DamageSystem : MonoBehaviour
                     // Add the kill action to be processed after damage
                     ActionSystem.Instance.AddReaction(killEnemyGA);
                 }
-                else if (target is HeroView)
+                else if (target is HeroView heroView)
                 {
-                    // Hero died - check if all heroes are dead
+                    // Hero died - mark as dead and check if all heroes are dead
+                    Debug.Log($"[DamageSystem] Hero {heroView.gameObject.name} has died!");
                     CheckForDefeat();
                 }
             }
@@ -199,7 +204,7 @@ public class DamageSystem : MonoBehaviour
     /// Checks if all heroes are dead and triggers defeat if so
     /// </summary>
     /// <remarks>
-    /// Called after a hero dies. Checks if all heroes in the party have 0 or less health.
+    /// Called after a hero dies. Checks if all heroes in the party are marked as dead.
     /// If all heroes are dead, shows defeat banner and allows player to continue.
     /// </remarks>
     private void CheckForDefeat()
@@ -213,11 +218,11 @@ public class DamageSystem : MonoBehaviour
         
         var heroes = HeroSystem.Instance.HeroViews;
         
-        // Check if all heroes are dead
+        // Check if all heroes are dead using IsDead property
         bool allHeroesDead = true;
         foreach (var hero in heroes)
         {
-            if (hero != null && hero.CurrentHealth > 0)
+            if (hero != null && !hero.IsDead)
             {
                 allHeroesDead = false;
                 break;

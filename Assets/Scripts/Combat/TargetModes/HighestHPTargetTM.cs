@@ -68,12 +68,15 @@ public class HighestHPTargetTM : TargetMode
             return new List<CombatantView>();
         }
         
-        // Find the hero with the highest current HP
-        var highestHPHero = heroes.OrderByDescending(hero => hero.CurrentHealth).FirstOrDefault();
+        // Filter out dead heroes - only target living heroes
+        var livingHeroes = heroes.Where(h => h != null && !h.IsDead);
+        
+        // Find the living hero with the highest current HP
+        var highestHPHero = livingHeroes.OrderByDescending(hero => hero.CurrentHealth).FirstOrDefault();
         
         if (highestHPHero == null)
         {
-            Debug.LogWarning("[HighestHPTargetTM] Could not find a valid hero target!");
+            Debug.LogWarning("[HighestHPTargetTM] Could not find a valid living hero target!");
             return new List<CombatantView>();
         }
         

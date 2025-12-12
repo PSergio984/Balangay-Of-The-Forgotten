@@ -153,12 +153,20 @@ public class MatchSetupSystem : MonoBehaviour
     /// </summary>
     /// <remarks>
     /// Sequence:
-    /// 1. Setup heroes and wait for spawn animations to complete
-    /// 2. Setup cards, perks, etc.
-    /// 3. Setup enemies (triggers overlay and battle start sequence)
+    /// 1. Reset combat state from any previous encounter
+    /// 2. Setup heroes and wait for spawn animations to complete
+    /// 3. Setup cards, perks, etc.
+    /// 4. Setup enemies (triggers overlay and battle start sequence)
     /// </remarks>
     private IEnumerator SetupSequence()
     {
+        // STEP 0: Reset combat state from any previous encounter
+        // This ensures a clean slate for the new fight (fixes bug where attack doesn't work after returning from boss)
+        if (ActionSystem.Instance != null)
+        {
+            ActionSystem.Instance.ResetCombatState();
+            Debug.Log("[MatchSetupSystem] ActionSystem combat state reset for new encounter");
+        }
 
 
         // --- Setup variables at top for use throughout method ---

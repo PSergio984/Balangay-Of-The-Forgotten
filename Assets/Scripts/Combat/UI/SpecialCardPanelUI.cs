@@ -337,16 +337,16 @@ public class SpecialCardPanelUI : MonoBehaviour
     }
     
     /// <summary>
-    /// Gets all player combatants currently in combat
+    /// Gets all living player combatants currently in combat
     /// </summary>
     private List<CombatantView> GetPlayerCombatants()
     {
         List<CombatantView> players = new List<CombatantView>();
         
-        // Get player heroes from HeroSystem
+        // Get player heroes from HeroSystem (filter out dead heroes)
         if (HeroSystem.Instance != null && HeroSystem.Instance.HeroViews != null)
         {
-            players.AddRange(HeroSystem.Instance.HeroViews);
+            players.AddRange(HeroSystem.Instance.HeroViews.Where(h => h != null && !h.IsDead));
         }
         
         return players;

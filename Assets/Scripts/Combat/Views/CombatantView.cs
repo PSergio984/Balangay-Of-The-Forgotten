@@ -136,6 +136,25 @@ public class CombatantView : MonoBehaviour
     public int CurrentHealth { get; private set; }
 
     /// <summary>
+    /// Whether this combatant has been defeated (health reached zero)
+    /// </summary>
+    /// <remarks>
+    /// When true, the combatant cannot be targeted, does not process status effects,
+    /// and is visually greyed out. Use MarkAsDead() to set this and Revive() to reset.
+    /// </remarks>
+    public bool IsDead { get; private set; } = false;
+    
+    /// <summary>
+    /// Cached original sprite color for restoring after revival
+    /// </summary>
+    private Color originalSpriteColor = Color.white;
+    
+    /// <summary>
+    /// Whether the original sprite color has been cached
+    /// </summary>
+    private bool hasOriginalColor = false;
+
+    /// <summary>
     /// UI Slider component for health bar visualization
     /// </summary>
     /// <remarks>
@@ -434,11 +453,138 @@ public class CombatantView : MonoBehaviour
     /// </remarks>
     public void Heal(int healAmount)
     {
+        // Cannot heal if dead
+        if (IsDead) return;
+        
         // Apply healing (clamped to MaxHealth)
         CurrentHealth = Mathf.Min(CurrentHealth + healAmount, MaxHealth);
         
         // Update the health display (animation will detect this is healing)
         UpdateHealth();
+    }
+
+    /// <summary>
+    /// Marks this combatant as dead, applying visual effects and preventing further targeting
+    /// </summary>
+    /// <remarks>
+    /// Called when health reaches zero. Greys out the sprite, stops animations,
+    /// and sets the IsDead flag. Dead combatants cannot be targeted, do not process
+    /// status effect ticks, and skip card discard/draw logic.
+    /// 
+    /// NOTE: Death animation is commented out as it's not yet implemented.
+    /// When animation is ready, uncomment the animator.SetTrigger("Death") line.
+    /// </remarks>
+    public void MarkAsDead()
+    {
+        if (IsDead) return; // Already dead
+        
+        IsDead = true;
+        
+        Debug.Log($"[CombatantView] {gameObject.name} has been marked as DEAD", this);
+        
+        // Cache original sprite color if not yet cached
+        if (spriteRenderer != null && !hasOriginalColor)
+        {
+            originalSpriteColor = spriteRenderer.color;
+            hasOriginalColor = true;
+        }
+        
+        // Grey out the sprite to show death state visually
+        if (spriteRenderer != null)
+        {
+            // Set to grey with some transparency
+            spriteRenderer.color = new Color(0.4f, 0.4f, 0.4f, 0.7f);
+        }
+        
+        // Stop the animator to freeze animation
+        if (animationController != null)
+        {
+            // Disable animator to freeze animation in current frame
+            var animator = animationController.GetComponent<Animator>();
+            if (animator != null)
+            {
+                animator.enabled = false;
+                // NOTE: Death animation not yet implemented - commented out for now
+                // When animation is ready, enable animator and play death:
+                // animator.enabled = true;
+                // animator.SetTrigger("Death");
+            }
+        }
+    }
+
+    /// <summary>
+    /// Revives this combatant from death, restoring visual state
+    /// </summary>
+    /// <remarks>
+    /// Used for resurrection mechanics or when resetting combat state.
+    /// Restores original sprite color and re-enables animations.
+    /// Does not restore health - call ResetToMaxHP() or Heal() separately.
+    /// </remarks>
+    public void Revive()
+    {
+        if (!IsDead) return; // Not dead
+        
+        IsDead = false;
+        
+        Debug.Log($"[CombatantView] {gameObject.name} has been REVIVED", this);
+        
+        // Restore original sprite color
+        if (spriteRenderer != null && hasOriginalColor)
+        {
+            spriteRenderer.color = originalSpriteColor;
+        }
+        
+        // Re-enable animator
+        if (animationController != null)
+        {
+            var animator = animationController.GetComponent<Animator>();
+            if (animator != null)
+            {
+                animator.enabled = true;
+                animationController.PlayIdle();
+            }
+        }
+    }
+
+    /// <summary>
+    /// Resets this combatant's health to maximum (for combat reset between fights)
+    /// </summary>
+    /// <remarks>
+    /// Called when initializing a new combat or resetting after previous fight.
+    /// Sets CurrentHealth to MaxHealth and updates the health display.
+    /// </remarks>
+    public void ResetToMaxHP()
+    {
+        CurrentHealth = MaxHealth;
+        SetHealthImmediate();
+        Debug.Log($"[CombatantView] {gameObject.name} HP reset to max: {MaxHealth}", this);
+    }
+
+    /// <summary>
+    /// Clears all active status effects from this combatant
+    /// </summary>
+    /// <remarks>
+    /// Called when resetting combat state between fights.
+    /// Removes all status effects and updates the UI to reflect the cleared state.
+    /// </remarks>
+    public void ClearAllStatusEffects()
+    {
+        // Get all effect types currently active
+        var effectTypes = new List<StatusEffectType>(statusEffects.Keys);
+        
+        // Clear the dictionary
+        statusEffects.Clear();
+        
+        // Update UI for each cleared effect (sets stack to 0, which removes the icon)
+        foreach (var type in effectTypes)
+        {
+            if (statusEffectsUI != null)
+            {
+                statusEffectsUI.UpdateStatusEffectUI(type, 0);
+            }
+        }
+        
+        Debug.Log($"[CombatantView] {gameObject.name} cleared all status effects", this);
     }
 
     /// <summary>

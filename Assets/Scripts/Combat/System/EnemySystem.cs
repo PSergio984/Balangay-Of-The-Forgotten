@@ -1,6 +1,7 @@
 
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using DG.Tweening;
 using System;
 using UnityEngine;
@@ -572,11 +573,13 @@ public class EnemySystem : Singleton<EnemySystem>
             // Handle manual target effect (single-target, e.g., attack or debuff)
             if (move.ManualTargetEffect != null)
             {
-                // For now, target a random hero (could be improved with AI logic)
-                var heroTargets = HeroSystem.Instance.HeroViews;
+                // Get living heroes only (filter out dead heroes)
+                var allHeroes = HeroSystem.Instance.HeroViews;
+                var heroTargets = allHeroes?.Where(h => h != null && !h.IsDead).ToList();
+                
                 if (heroTargets == null || heroTargets.Count == 0)
                 {
-                    Debug.LogWarning($"[EnemySystem] {enemy.name} tried to use move '{moveName}' but no heroes are available to target!");
+                    Debug.LogWarning($"[EnemySystem] {enemy.name} tried to use move '{moveName}' but no living heroes are available to target!");
                     continue;
                 }
                 var target = heroTargets[Random.Range(0, heroTargets.Count)];

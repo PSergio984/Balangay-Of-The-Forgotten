@@ -413,4 +413,52 @@ public class ActionSystem : Singleton<ActionSystem>
             subs[typeof(T)].Remove(wrappedReaction);
         }
     }
+    
+    /// <summary>
+    /// Resets the ActionSystem state for a clean combat start.
+    /// Call this when transitioning between combat encounters to ensure a fresh state.
+    /// </summary>
+    /// <remarks>
+    /// This method clears:
+    /// - The isPerforming flag (in case a previous fight ended mid-action)
+    /// - The reactions list (clear any pending reactions)
+    /// - All active coroutines on this MonoBehaviour
+    /// 
+    /// This does NOT clear:
+    /// - Performers (action logic stays registered)
+    /// - Pre/Post subscriptions (passive abilities stay registered - they will be re-registered anyway)
+    /// 
+    /// Call this at the start of each combat encounter to prevent state carry-over bugs.
+    /// </remarks>
+    public void ResetCombatState()
+    {
+        Debug.Log("[ActionSystem] Resetting combat state for new encounter");
+        
+        // Stop any running coroutines to prevent lingering action processing
+        StopAllCoroutines();
+        
+        // Reset the performing flag to allow new actions
+        isPerforming = false;
+        
+        // Clear any pending reactions
+        reactions = null;
+        
+        Debug.Log("[ActionSystem] Combat state reset complete - ready for new encounter");
+    }
+    
+    /// <summary>
+    /// Clears all reaction subscriptions (PRE and POST).
+    /// Use this when completely resetting the game state, not just between fights.
+    /// </summary>
+    /// <remarks>
+    /// This clears all global passive ability subscriptions.
+    /// Only use this for full game resets, not between combat encounters.
+    /// Systems will need to re-subscribe their reactions after calling this.
+    /// </remarks>
+    public static void ClearAllReactionSubscriptions()
+    {
+        Debug.Log("[ActionSystem] Clearing all reaction subscriptions");
+        preSubs.Clear();
+        postSubs.Clear();
+    }
 }
