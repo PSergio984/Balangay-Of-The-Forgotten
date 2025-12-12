@@ -356,15 +356,28 @@ public class VictoryDefeatUI : Singleton<VictoryDefeatUI>
         // Phase 2: Hold
         yield return new WaitForSeconds(holdDuration);
         
-        // Phase 3: Show continue button
+        // Phase 3: Show continue button (but check if enemies are still active first)
         if (continueButton != null)
         {
             continueButton.gameObject.SetActive(true);
-            continueButton.interactable = true;
+            
+            // CRITICAL: Check if enemies are still active before enabling button
+            bool canProceed = true;
+            if (EnemySystem.Instance != null && EnemySystem.Instance.EnemyViews != null)
+            {
+                int activeEnemies = EnemySystem.Instance.EnemyViews.Count;
+                if (activeEnemies > 0)
+                {
+                    Debug.LogWarning($"[VictoryDefeatUI] Cannot enable continue button! {activeEnemies} enemy(ies) still active on board.");
+                    canProceed = false;
+                }
+            }
+            
+            continueButton.interactable = canProceed;
             yield return continueButtonCanvasGroup.DOFade(1f, buttonFadeInDuration).SetEase(buttonFadeInEase).WaitForCompletion();
         }
         
-        // Animation complete - button is now clickable
+        // Animation complete - button is now clickable (if no enemies are active)
         isAnimating = false;
     }
 
@@ -379,6 +392,21 @@ public class VictoryDefeatUI : Singleton<VictoryDefeatUI>
             continueButton.interactable = false; // Prevent multiple clicks
         }
         
+        // CRITICAL SAFETY CHECK: Verify no enemies are active before proceeding
+        if (EnemySystem.Instance != null && EnemySystem.Instance.EnemyViews != null)
+        {
+            int activeEnemies = EnemySystem.Instance.EnemyViews.Count;
+            if (activeEnemies > 0)
+            {
+                Debug.LogWarning($"[VictoryDefeatUI] CRITICAL: Cannot proceed! {activeEnemies} enemy(ies) still active on board. Re-enabling continue button.");
+                if (continueButton != null)
+                {
+                    continueButton.interactable = true; // Re-enable button
+                }
+                return;
+            }
+        }
+        
         // If there's a reward to show, display it
         if (pendingRewardData != null && rewardChestUI != null)
         {
@@ -391,15 +419,52 @@ public class VictoryDefeatUI : Singleton<VictoryDefeatUI>
         else if (pendingRewardData == null && rewardCollectedCallback == null)
         {
             // No reward and no callback = final victory, go to map selection
+            // BUT: Double-check that there are truly no enemies before transitioning
+            bool hasEnemiesRemaining = false;
+            if (EnemySystem.Instance != null)
+            {
+                bool hasEnemiesInQueue = EnemySystem.Instance.HasRemainingEnemies;
+                int activeEnemiesOnBoard = (EnemySystem.Instance.EnemyViews != null) ? EnemySystem.Instance.EnemyViews.Count : 0;
+                hasEnemiesRemaining = hasEnemiesInQueue || activeEnemiesOnBoard > 0;
+                
+                if (hasEnemiesRemaining)
+                {
+                    Debug.LogWarning($"[VictoryDefeatUI] CRITICAL: Attempted final victory transition but enemies still exist! Queue: {hasEnemiesInQueue}, Active: {activeEnemiesOnBoard}. Aborting transition.");
+                    if (continueButton != null)
+                    {
+                        continueButton.interactable = true; // Re-enable button
+                    }
+                    return;
+                }
+            }
+            
+            // Safe to transition - all enemies defeated
             TransitionToMapSelection();
+        }
+        else if (pendingRewardData == null && rewardCollectedCallback != null)
+        {
+            // No reward data but callback exists = more enemies to spawn
+            // This should NOT transition - instead call the callback to spawn next enemy
+            Debug.Log("[VictoryDefeatUI] No reward data but callback exists - spawning next enemy instead of transitioning");
+            
+            // Store callback before clearing
+            System.Action callback = rewardCollectedCallback;
+            
+            // Clear state
+            rewardCollectedCallback = null;
+            hasMoreEnemies = false;
+            isFirstReward = true;
+            
+            // Call callback to spawn next enemy (NOT transition!)
+            callback?.Invoke();
         }
         else
         {
-            // Edge case: reward data is null but callback exists (shouldn't happen, but handle gracefully)
-            Debug.LogWarning("[VictoryDefeatUI] Continue clicked but reward state is inconsistent. Clearing state and going to map selection.", this);
+            // Edge case: reward data exists but no rewardChestUI (shouldn't happen)
+            Debug.LogWarning("[VictoryDefeatUI] Continue clicked but reward state is inconsistent. Reward data exists but no rewardChestUI.", this);
+            // Don't transition - just clear state
             pendingRewardData = null;
             rewardCollectedCallback = null;
-            TransitionToMapSelection();
         }
     }
 
@@ -409,6 +474,17 @@ public class VictoryDefeatUI : Singleton<VictoryDefeatUI>
     private void OnRewardChestComplete()
     {
         Debug.Log($"[VictoryDefeatUI] OnRewardChestComplete called. PendingReward: {(pendingRewardData != null ? pendingRewardData.name : "NULL")}, IsFirstReward: {isFirstReward}");
+        
+        // CRITICAL SAFETY CHECK: Verify no enemies are active before proceeding
+        if (EnemySystem.Instance != null && EnemySystem.Instance.EnemyViews != null)
+        {
+            int activeEnemies = EnemySystem.Instance.EnemyViews.Count;
+            if (activeEnemies > 0)
+            {
+                Debug.LogWarning($"[VictoryDefeatUI] CRITICAL: Cannot proceed after reward collection! {activeEnemies} enemy(ies) still active on board.");
+                return;
+            }
+        }
         
         // Hide reward UI
         if (rewardChestUI != null)
@@ -433,6 +509,22 @@ public class VictoryDefeatUI : Singleton<VictoryDefeatUI>
         // Store callback before clearing state
         System.Action callback = rewardCollectedCallback;
         
+        // CRITICAL: Double-check that there are no enemies before clearing state
+        // If callback exists, it means more enemies should spawn - don't clear it yet
+        bool actuallyHasMoreEnemies = hadMoreEnemies;
+        if (EnemySystem.Instance != null)
+        {
+            // Check queue and active enemies
+            bool hasEnemiesInQueue = EnemySystem.Instance.HasRemainingEnemies;
+            int activeEnemiesOnBoard = (EnemySystem.Instance.EnemyViews != null) ? EnemySystem.Instance.EnemyViews.Count : 0;
+            actuallyHasMoreEnemies = hasEnemiesInQueue || activeEnemiesOnBoard > 0;
+            
+            if (actuallyHasMoreEnemies && callback == null)
+            {
+                Debug.LogWarning($"[VictoryDefeatUI] CRITICAL: More enemies detected (queue: {hasEnemiesInQueue}, active: {activeEnemiesOnBoard}) but no callback! This should not happen.");
+            }
+        }
+        
         // Clear reward state immediately to prevent double-triggering
         pendingRewardData = null;
         rewardCollectedCallback = null;
@@ -440,7 +532,16 @@ public class VictoryDefeatUI : Singleton<VictoryDefeatUI>
         isFirstReward = true;
         
         // Call the callback (which will either spawn next enemy or trigger final victory)
-        callback?.Invoke();
+        // Only call if callback exists - if it doesn't exist and there are more enemies, something is wrong
+        if (callback != null)
+        {
+            Debug.Log($"[VictoryDefeatUI] Calling reward collected callback to spawn next enemy or trigger final victory");
+            callback.Invoke();
+        }
+        else if (actuallyHasMoreEnemies)
+        {
+            Debug.LogError($"[VictoryDefeatUI] CRITICAL: More enemies exist but no callback to spawn them! This is a bug.");
+        }
     }
     
     /// <summary>
@@ -588,19 +689,38 @@ public class VictoryDefeatUI : Singleton<VictoryDefeatUI>
     /// </summary>
     private void TransitionToMapSelection()
     {
+        // CRITICAL SAFETY CHECK: Verify no enemies are active before transitioning
+        if (EnemySystem.Instance != null && EnemySystem.Instance.EnemyViews != null)
+        {
+            int activeEnemies = EnemySystem.Instance.EnemyViews.Count;
+            if (activeEnemies > 0)
+            {
+                Debug.LogWarning($"[VictoryDefeatUI] CRITICAL: Cannot transition! {activeEnemies} enemy(ies) still active on board. Aborting transition.");
+                // Re-enable continue button so player can try again
+                if (continueButton != null)
+                {
+                    continueButton.interactable = true;
+                }
+                return;
+            }
+        }
+        
         // Transition back to map selection using SceneController
         if (SceneController.Instance != null)
         {
+            Debug.Log("[VictoryDefeatUI] Transitioning to map selection scene");
             SceneController.Instance
                 .NewTransition()
-                .Load(SceneDatabase.Slots.Session, SceneDatabase.Scenes.MapSelection, setActive: true)
+                .Unload(SceneDatabase.Slots.SessionContent)
+                .Load(SceneDatabase.Slots.SessionContent, SceneDatabase.Scenes.MapSelection, setActive: true)
                 .WithLoadingVideo("loading")
                 .WithPauseMusic(9)
                 .Perform();
         }
         else
         {
-            Debug.LogError("[VictoryDefeatUI] SceneController.Instance is null! Cannot transition to map selection.", this);
+            Debug.LogWarning("[VictoryDefeatUI] SceneController.Instance is null! Cannot transition to map selection. (This is expected during testing phase)", this);
+            // During testing, just log a warning instead of error
         }
     }
 

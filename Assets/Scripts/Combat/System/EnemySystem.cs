@@ -320,9 +320,20 @@ public class EnemySystem : Singleton<EnemySystem>
         }
         else
         {
-            // No more enemies - trigger victory
-            Debug.Log("[EnemySystem] All enemies defeated! Victory!");
-            TriggerVictory();
+            // No more enemies in queue - check if any enemies are still active on board
+            int activeEnemiesOnBoard = (enemyBoardView != null && enemyBoardView.EnemyViews != null) ? enemyBoardView.EnemyViews.Count : 0;
+            
+            if (activeEnemiesOnBoard > 0)
+            {
+                Debug.LogWarning($"[EnemySystem] Queue is empty but {activeEnemiesOnBoard} enemy(ies) still active on board! Cannot trigger victory yet.");
+                // Don't trigger victory - wait for all enemies to be defeated
+            }
+            else
+            {
+                // No more enemies - trigger victory
+                Debug.Log("[EnemySystem] All enemies defeated! Victory!");
+                TriggerVictory();
+            }
         }
     }
     
@@ -332,11 +343,25 @@ public class EnemySystem : Singleton<EnemySystem>
     /// <remarks>
     /// Called automatically when the last enemy is defeated and the queue is empty.
     /// Shows final victory banner and allows player to continue to map selection.
+    /// Triggers post-victory dialogue if available.
     /// </remarks>
     private void TriggerVictory()
     {
+        // CRITICAL SAFETY CHECK: Verify no enemies are active on the board AND no enemies in queue
+        int activeEnemiesOnBoard = (enemyBoardView != null && enemyBoardView.EnemyViews != null) ? enemyBoardView.EnemyViews.Count : 0;
+        bool hasEnemiesInQueue = enemyQueue.Count > 0;
+        
+        if (activeEnemiesOnBoard > 0 || hasEnemiesInQueue)
+        {
+            Debug.LogWarning($"[EnemySystem] CRITICAL: Cannot trigger final victory! Active enemies on board: {activeEnemiesOnBoard}, Queue count: {enemyQueue.Count}");
+            return;
+        }
+        
         Debug.Log("[EnemySystem] ===== FINAL VICTORY =====");
-        Debug.Log("[EnemySystem] All enemies have been defeated!");
+        Debug.Log("[EnemySystem] All enemies have been defeated! No enemies in queue and no enemies on board.");
+        
+        // Trigger post-victory dialogue before showing victory UI
+        TriggerPostVictoryDialogue();
         
         // Show final victory banner (no reward, just continue to map selection)
         if (VictoryDefeatUI.Instance != null)
@@ -346,6 +371,32 @@ public class EnemySystem : Singleton<EnemySystem>
         else
         {
             Debug.LogWarning("[EnemySystem] VictoryDefeatUI.Instance is null! Cannot show victory banner.", this);
+        }
+    }
+    
+    /// <summary>
+    /// Triggers post-victory dialogue if DialogueTrigger is available in the scene
+    /// </summary>
+    private void TriggerPostVictoryDialogue()
+    {
+        // Find DialogueTrigger in the scene
+        DialogueTrigger dialogueTrigger = FindObjectOfType<DialogueTrigger>();
+        if (dialogueTrigger != null && dialogueTrigger.dialogue != null)
+        {
+            // Check if dialogue is marked as PostVictory type
+            if (dialogueTrigger.dialogue.dialogueType == DialogueType.PostVictory)
+            {
+                Debug.Log("[EnemySystem] Triggering post-victory dialogue");
+                dialogueTrigger.TriggerDialogue();
+            }
+            else
+            {
+                Debug.Log($"[EnemySystem] DialogueTrigger found but type is {dialogueTrigger.dialogue.dialogueType}, not PostVictory. Skipping dialogue.");
+            }
+        }
+        else
+        {
+            Debug.Log("[EnemySystem] No DialogueTrigger with PostVictory dialogue found in scene. Skipping dialogue.");
         }
     }
 
@@ -638,20 +689,25 @@ public class EnemySystem : Singleton<EnemySystem>
             yield break;
         }
         
-        // Step 1: Wait for death animation to complete (it's already playing from DamageSystem)
-        // The death animation duration is typically around 1 second, but we'll wait for it to finish
+        // Step 1: Play death animation FIRST (ensure it plays even if DamageSystem didn't trigger it properly)
+        Debug.Log($"[EnemySystem] Playing death animation for {enemyView.Data?.EnemyName ?? enemyView.name}");
+        enemyView.PlayAnimation(CombatantAnimState.Dead);
+        
+        // Step 2: Wait for death animation to complete
         float deathAnimDuration = enemyView.GetAnimationDuration(CombatantAnimState.Dead);
         if (deathAnimDuration > 0)
         {
+            Debug.Log($"[EnemySystem] Waiting {deathAnimDuration} seconds for death animation to complete");
             yield return new WaitForSeconds(deathAnimDuration);
         }
         else
         {
             // Fallback: wait a reasonable duration if animation duration is unknown
+            Debug.LogWarning($"[EnemySystem] Death animation duration unknown, using fallback 1.0s");
             yield return new WaitForSeconds(1.0f);
         }
         
-        // Step 2: Show stuck sprite from EnemyData (if available)
+        // Step 3: Show death stuck sprite from EnemyData (if available)
         if (enemyView.Data != null && enemyView.Data.DeathStuckSprite != null)
         {
             // Get the SpriteRenderer to change the sprite
@@ -671,7 +727,7 @@ public class EnemySystem : Singleton<EnemySystem>
             }
         }
         
-        // Step 3: Discard all cards for all heroes before enemy removal
+        // Step 4: Discard all cards for all heroes before enemy removal
         // This prevents card hovering during reward UI
         if (CardSystem.Instance != null)
         {
@@ -682,7 +738,8 @@ public class EnemySystem : Singleton<EnemySystem>
             Debug.LogWarning("[EnemySystem] CardSystem.Instance is null, cannot discard cards");
         }
         
-        // Step 4: Remove the enemy with scaling animation (this will destroy the GameObject)
+        // Step 5: Remove the enemy with scaling animation (this will destroy the GameObject)
+        Debug.Log($"[EnemySystem] Removing enemy {enemyView.Data?.EnemyName ?? enemyView.name} from board");
         yield return enemyBoardView.RemoveEnemy(enemyView);
         
         // Wait a brief moment for visual clarity before showing reward
@@ -730,14 +787,25 @@ public class EnemySystem : Singleton<EnemySystem>
         // Show victory banner with reward
         if (VictoryDefeatUI.Instance != null)
         {
-            // Check if there are more enemies to spawn
-            // Use both queue count AND spawn index comparison for more reliable checking
-            // defeatedEnemyIndex is 0-based (0 = first, 1 = second)
-            // If we've defeated fewer enemies than total, there are more to come
-            bool hasMoreEnemies = enemyQueue.Count > 0 || (defeatedEnemyIndex + 1 < totalEnemyCount);
+            // Check if there are more enemies to spawn OR if there are any enemies currently on the board
+            // CRITICAL: Also check EnemyViews to ensure no active enemies remain before transitioning
+            int activeEnemiesOnBoard = (enemyBoardView != null && enemyBoardView.EnemyViews != null) ? enemyBoardView.EnemyViews.Count : 0;
+            bool hasEnemiesInQueue = enemyQueue.Count > 0;
+            bool hasMoreEnemiesToSpawn = (defeatedEnemyIndex + 1 < totalEnemyCount);
+            
+            // Only transition if: no enemies on board AND (no enemies in queue AND no more enemies to spawn)
+            bool hasMoreEnemies = hasEnemiesInQueue || hasMoreEnemiesToSpawn || activeEnemiesOnBoard > 0;
             bool isFirstReward = !isMainBoss; // First enemy (miniboss) = true, second enemy (main boss) = false
             
-            Debug.Log($"[EnemySystem] Has more enemies: {hasMoreEnemies} (queue: {enemyQueue.Count}, defeated: {defeatedEnemyIndex + 1}, total: {totalEnemyCount})");
+            Debug.Log($"[EnemySystem] Has more enemies: {hasMoreEnemies} (active on board: {activeEnemiesOnBoard}, queue: {enemyQueue.Count}, defeated: {defeatedEnemyIndex + 1}, total: {totalEnemyCount})");
+            
+            // CRITICAL SAFETY CHECK: If there are still enemies on the board, do NOT transition
+            if (activeEnemiesOnBoard > 0)
+            {
+                Debug.LogWarning($"[EnemySystem] CRITICAL: {activeEnemiesOnBoard} enemy(ies) still active on board! Cannot transition to next scene. Waiting for all enemies to be defeated.");
+                // Don't show victory yet - wait for all enemies to be defeated
+                return;
+            }
             
             VictoryDefeatUI.Instance.ShowVictoryWithReward(rewardData, hasMoreEnemies, OnRewardCollected, isFirstReward);
         }
@@ -754,6 +822,15 @@ public class EnemySystem : Singleton<EnemySystem>
     /// </summary>
     private void OnRewardCollected()
     {
+        // CRITICAL SAFETY CHECK: Verify no enemies are active on the board before proceeding
+        int activeEnemiesOnBoard = (enemyBoardView != null && enemyBoardView.EnemyViews != null) ? enemyBoardView.EnemyViews.Count : 0;
+        
+        if (activeEnemiesOnBoard > 0)
+        {
+            Debug.LogWarning($"[EnemySystem] CRITICAL: Cannot proceed after reward collection! {activeEnemiesOnBoard} enemy(ies) still active on board. Queue count: {enemyQueue.Count}");
+            return;
+        }
+        
         // Reset combat state for new enemy encounter
         ResetCombatStateForNewEnemy();
         
