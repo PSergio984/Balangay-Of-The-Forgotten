@@ -246,6 +246,17 @@ public class VictoryDefeatUI : Singleton<VictoryDefeatUI>
     public void ShowDefeat()
     {
         isShowingVictory = false;
+        pendingRewardData = null;
+        hasMoreEnemies = false;
+        isFirstReward = true;
+        rewardCollectedCallback = null;
+        
+        // Reset continue button state in case it was disabled
+        if (continueButton != null)
+        {
+            continueButton.interactable = true;
+        }
+        
         ShowBanner(defeatSprite, false);
     }
 
