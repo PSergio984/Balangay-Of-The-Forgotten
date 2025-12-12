@@ -16,6 +16,9 @@ public class DialogueManager : MonoBehaviour
     public TextMeshProUGUI characterName;
     public TextMeshProUGUI dialogueArea;
     
+    // CanvasGroup for fade animation (auto-found from dialoguePanel)
+    private CanvasGroup dialoguePanelCanvasGroup;
+    
     [Header("Continue Button")]
     [Tooltip("Continue button that appears after typing completes")]
     public GameObject continueButton;
@@ -41,6 +44,12 @@ public class DialogueManager : MonoBehaviour
     
     [Tooltip("Ease type for dialogue panel animation")]
     [SerializeField] private Ease dialogueSlideEase = Ease.OutBack;
+    
+    [Tooltip("Duration for dialogue panel fade out animation")]
+    [SerializeField] private float dialogueFadeOutDuration = 0.4f;
+    
+    [Tooltip("Ease type for dialogue panel fade out")]
+    [SerializeField] private Ease dialogueFadeOutEase = Ease.InCubic;
     
     [Tooltip("Duration for individual UI elements (portrait, name, text) slide-up animation")]
     [SerializeField] private float elementSlideDuration = 0.4f;
@@ -606,6 +615,16 @@ public class DialogueManager : MonoBehaviour
             return;
         }
 
+        // Get or add CanvasGroup for fade animation
+        if (dialoguePanelCanvasGroup == null)
+        {
+            dialoguePanelCanvasGroup = dialoguePanel.GetComponent<CanvasGroup>();
+            if (dialoguePanelCanvasGroup == null)
+            {
+                dialoguePanelCanvasGroup = dialoguePanel.gameObject.AddComponent<CanvasGroup>();
+            }
+        }
+
         // Store the target position (where you manually positioned it)
         if (!dialoguePanelPositionStored)
         {
@@ -621,6 +640,12 @@ public class DialogueManager : MonoBehaviour
         // Set initial position and activate
         dialoguePanel.anchoredPosition = startPosition;
         dialoguePanel.gameObject.SetActive(true);
+        
+        // Ensure alpha is 1 when showing
+        if (dialoguePanelCanvasGroup != null)
+        {
+            dialoguePanelCanvasGroup.alpha = 1f;
+        }
 
         // Animate slide up to your manually set position
         dialoguePanel.DOAnchorPos(dialoguePanelInitialPosition, dialogueSlideDuration)
@@ -628,7 +653,7 @@ public class DialogueManager : MonoBehaviour
     }
     
     /// <summary>
-    /// Hides the dialogue panel with slide-down animation
+    /// Hides the dialogue panel with fade-out animation
     /// </summary>
     private void HideDialoguePanel()
     {
@@ -637,18 +662,36 @@ public class DialogueManager : MonoBehaviour
             return;
         }
 
-        // Calculate end position below screen
-        Vector2 endPosition = dialoguePanelInitialPosition;
-        float panelHeight = dialoguePanel.rect.height;
-        endPosition.y = dialoguePanelInitialPosition.y - panelHeight - 100f;
-
-        // Animate slide down
-        dialoguePanel.DOAnchorPos(endPosition, dialogueSlideDuration)
-            .SetEase(Ease.InBack)
-            .OnComplete(() =>
+        // Get or add CanvasGroup for fade animation
+        if (dialoguePanelCanvasGroup == null)
+        {
+            dialoguePanelCanvasGroup = dialoguePanel.GetComponent<CanvasGroup>();
+            if (dialoguePanelCanvasGroup == null)
             {
-                dialoguePanel.gameObject.SetActive(false);
-            });
+                dialoguePanelCanvasGroup = dialoguePanel.gameObject.AddComponent<CanvasGroup>();
+            }
+        }
+
+        // Ensure alpha starts at 1
+        if (dialoguePanelCanvasGroup != null)
+        {
+            dialoguePanelCanvasGroup.alpha = 1f;
+            
+            // Animate fade out
+            dialoguePanelCanvasGroup.DOFade(0f, dialogueFadeOutDuration)
+                .SetEase(dialogueFadeOutEase)
+                .OnComplete(() =>
+                {
+                    dialoguePanel.gameObject.SetActive(false);
+                    // Reset alpha for next time
+                    dialoguePanelCanvasGroup.alpha = 1f;
+                });
+        }
+        else
+        {
+            // Fallback: just deactivate if CanvasGroup fails
+            dialoguePanel.gameObject.SetActive(false);
+        }
     }
     
     /// <summary>
