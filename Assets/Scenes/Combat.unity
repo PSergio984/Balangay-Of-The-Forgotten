@@ -655,6 +655,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f350334aac0a66044ba174ec9a96a92a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MatchSetupSystem
+  characterTransitionData: {fileID: 11400000, guid: e04adea72c86def4cbc2441bf19bc4d3, type: 2}
   heroDatas:
   - {fileID: 11400000, guid: ecd70fead39c604478465b5740ce1be9, type: 2}
   - {fileID: 11400000, guid: 00604324e0069ad408f4fd447ca991d4, type: 2}
@@ -1861,10 +1862,10 @@ Camera:
   m_LensShift: {x: 0, y: 0}
   m_NormalizedViewPortRect:
     serializedVersion: 2
-    x: 0
+    x: -0.33333334
     y: 0
     width: 1
-    height: 1
+    height: 0.44444445
   near clip plane: 0.3
   far clip plane: 1000
   field of view: 34

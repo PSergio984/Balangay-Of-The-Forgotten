@@ -2,8 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-
-
 /// <summary>
 /// System that gets everything ready when a battle starts
 /// </summary>
@@ -32,7 +30,10 @@ using UnityEngine.UI;
 /// </remarks>
 public class MatchSetupSystem : MonoBehaviour
 {
-   [Header("Fixed Data (Hero & Perks)")]
+    [Header("Fixed Data (Hero & Perks)")]
+    [Header("Character Selection Data")]
+    [Tooltip("Reference to the ScriptableObject that stores selected heroes and presets from character selection.")]
+    [SerializeField] private CharacterTransitionData characterTransitionData;
    
    /// <summary>
    /// Information about the hero character (health, cards, etc.)
@@ -126,6 +127,23 @@ public class MatchSetupSystem : MonoBehaviour
     /// </remarks>
     private void Start()
     {
+        // If characterTransitionData has valid data, use it to populate heroDatas
+        if (characterTransitionData != null && characterTransitionData.HasValidData())
+        {
+            var slots = characterTransitionData.GetCompleteSlots();
+            heroDatas = new List<HeroData>();
+            foreach (var slot in slots)
+            {
+                if (slot.Hero != null)
+                {
+                    // Optionally, you can also store the preset somewhere if needed for later
+                    heroDatas.Add(slot.Hero);
+                }
+            }
+#if UNITY_EDITOR
+            characterTransitionData.Clear();
+#endif
+        }
         // Start the setup sequence as a coroutine to handle async hero spawning
         StartCoroutine(SetupSequence());
     }
