@@ -88,6 +88,7 @@ public class MainMenu : MonoBehaviour
             .Unload(SceneDatabase.Slots.MainMenu)
             .Load(SceneDatabase.Slots.SessionContent, SceneDatabase.Scenes.CharacterSelection, setActive: true)
             .WithLoadingVideo("loading")
+            .WithPauseMusic()
             .Perform();
     }
 

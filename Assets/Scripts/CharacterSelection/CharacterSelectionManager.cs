@@ -470,6 +470,7 @@ public class CharacterSelectionManager : MonoBehaviour
             .Unload(SceneDatabase.Scenes.CharacterSelection)
             .Load(SceneDatabase.Slots.SessionContent, SceneDatabase.Scenes.Lore, setActive: true)
             .WithLoadingVideo("loading")
+            .WithPauseMusic()
             .Perform();
     }
     

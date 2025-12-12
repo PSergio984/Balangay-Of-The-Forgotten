@@ -531,8 +531,8 @@ public class VictoryDefeatUI : Singleton<VictoryDefeatUI>
             SceneController.Instance
                 .NewTransition()
                 .Load(SceneDatabase.Slots.Session, SceneDatabase.Scenes.MapSelection, setActive: true)
-                .Unload(SceneDatabase.Slots.SessionContent)
-                .WithOverlay()
+                .WithLoadingVideo("loading")
+                .WithPauseMusic(9)
                 .Perform();
         }
         else

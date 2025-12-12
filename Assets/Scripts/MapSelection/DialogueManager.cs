@@ -712,6 +712,7 @@ public class DialogueManager : MonoBehaviour
             .Unload(SceneDatabase.Slots.Session)
             .Load(SceneDatabase.Slots.LoadingScreen, SceneDatabase.Scenes.Credits, setActive: true)
             .WithWhiteFade()
+            .WithPauseMusic(180)
             .Perform();
     }
 }

@@ -31,8 +31,8 @@ public class MapSelector : MonoBehaviour
         SceneController.Instance
             .NewTransition()
             .Load(SceneDatabase.Slots.SessionContent, SceneDatabase.Scenes.Combat, setActive: true)
-            .WithMusic(CombatMusic, MusicFadeTime)
             .WithOverlay()
+            .WithPauseMusic()
             .Perform();
     }
 

@@ -340,6 +340,8 @@ public class MapButton : MonoBehaviour
         {
             transition.WithLoadingVideo();  // Show default loading video
         }
+
+        transition.WithPauseMusic(9);
         
         transition.Perform();  // Actually do all the above actions
     }

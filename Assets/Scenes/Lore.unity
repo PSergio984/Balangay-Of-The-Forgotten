@@ -520,7 +520,7 @@ MonoBehaviour:
   - game_lore.mp4
   videoBackgroundMusic: []
   musicFadeTime: 1.5
-  skipOnClick: 0
+  skipOnClick: 1
   skipOnAnyKey: 0
   minimumPlayTime: 1
   pressToContinueObject: {fileID: 0}

@@ -20,6 +20,7 @@ public class LoreController : VideoControllerBase
             .Unload(SceneDatabase.Slots.SessionContent)
             .Load(SceneDatabase.Slots.SessionContent, SceneDatabase.Scenes.MapSelection, setActive: true) 
             .WithLoadingVideo("loading")
+            .WithPauseMusic(9)
             .Perform();
     }
 }
