@@ -66,7 +66,17 @@ namespace AudioSystem
         /// </summary>
         public void PlayMusic(SoundData musicData, float fadeTime = -1f)
         {
-            if (musicData?.clip == null) return;
+            if (musicData == null)
+            {
+                Debug.LogWarning("[MusicManager] PlayMusic called with null musicData - ignoring");
+                return;
+            }
+            
+            if (musicData.clip == null)
+            {
+                Debug.LogWarning($"[MusicManager] PlayMusic called with SoundData '{musicData.name}' but clip is null - ignoring");
+                return;
+            }
             
             float actualFadeTime = fadeTime > 0 ? fadeTime : defaultFadeTime;
             
@@ -80,7 +90,10 @@ namespace AudioSystem
             // Clear paused state when playing new music
             isPaused = false;
             pausedMusicData = null;
-            // currentMusicData will be set in CrossFadeToClip
+            
+            // IMPORTANT: Set currentMusicData immediately so PauseMusicForTransition() can correctly store the new music
+            // This prevents the issue where pause happens before crossfade completes and stores old music instead
+            currentMusicData = musicData;
 
             if (currentFadeCoroutine != null)
             {

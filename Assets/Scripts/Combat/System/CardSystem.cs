@@ -391,6 +391,12 @@ public class CardSystem : Singleton<CardSystem>
             heroTurnStartPositions.Remove(heroIndex); // Clean up
         }
 
+        // Start hit tracking for this move sequence (allows subsequent effects to check if damage hit)
+        if (currentHero != null)
+        {
+            HitTargetTracker.StartMoveSequence(currentHero);
+        }
+
         if (playCardsGA.Card.ManualTargetEffect != null)
         {
             PerformEffectGA performEffectGA = new(playCardsGA.Card.ManualTargetEffect, new() { playCardsGA.ManualTarget }, currentHero);

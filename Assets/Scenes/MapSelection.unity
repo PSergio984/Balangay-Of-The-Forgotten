@@ -1077,6 +1077,10 @@ PrefabInstance:
       propertyPath: _mapData
       value: 
       objectReference: {fileID: 11400000, guid: 42209e799130fbb47b26e3c5ce29f5fe, type: 2}
+    - target: {fileID: 8073402903794223457, guid: 70187b3626989284cbeefeb80fd0159f, type: 3}
+      propertyPath: CombatMusic
+      value: 
+      objectReference: {fileID: 11400000, guid: e968f5fcbae4b7f44af0c27328f3c816, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1867,56 +1871,6 @@ MonoBehaviour:
   m_PointerBehavior: 0
   m_CursorLockBehavior: 0
   m_ScrollDeltaPerTick: 6
---- !u!1 &983055710
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 983055711}
-  - component: {fileID: 983055712}
-  m_Layer: 0
-  m_Name: SoundManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &983055711
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 983055710}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1883235733}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &983055712
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 983055710}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 48c1e8780e7587447ad41c66f29e6414, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::AudioSystem.SoundManager
-  AutoUnparentOnAwake: 1
-  soundEmitterPrefab: {fileID: 1829272931446052323, guid: cc5682f9d694f8342be00d6eae409983, type: 3}
-  collectionCheck: 1
-  defaultCapacity: 10
-  maxPoolSize: 100
-  maxSoundInstances: 30
 --- !u!1001 &1007153659
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2033,6 +1987,10 @@ PrefabInstance:
       propertyPath: _mapData
       value: 
       objectReference: {fileID: 11400000, guid: 0100dc3db198a9842b458eb46ff33770, type: 2}
+    - target: {fileID: 8073402903794223457, guid: 70187b3626989284cbeefeb80fd0159f, type: 3}
+      propertyPath: CombatMusic
+      value: 
+      objectReference: {fileID: 11400000, guid: 642db3ae22897b44b8f76016392bf53d, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2418,8 +2376,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1096662337}
   - component: {fileID: 1096662338}
-  - component: {fileID: 1096662340}
-  - component: {fileID: 1096662339}
   m_Layer: 0
   m_Name: SceneControlller
   m_TagString: Untagged
@@ -2455,64 +2411,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SceneController
   loadingOverlay: {fileID: 0}
---- !u!114 &1096662339
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1096662336}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 489a9402b639c704184887cf9066e8e7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::AudioSystem.MusicManager
-  AutoUnparentOnAwake: 1
-  musicMixerGroup: {fileID: 4271439559464837993, guid: 1d8e109cc8751d241b1a0f5629757c92, type: 2}
-  maxAudioSources: 2
-  defaultFadeTime: 2
-  fadeCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 1
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
---- !u!114 &1096662340
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1096662336}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 48c1e8780e7587447ad41c66f29e6414, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::AudioSystem.SoundManager
-  AutoUnparentOnAwake: 1
-  soundEmitterPrefab: {fileID: 1829272931446052323, guid: cc5682f9d694f8342be00d6eae409983, type: 3}
-  collectionCheck: 1
-  defaultCapacity: 10
-  maxPoolSize: 100
-  maxSoundInstances: 30
 --- !u!1 &1161978527
 GameObject:
   m_ObjectHideFlags: 0
@@ -3485,6 +3383,10 @@ PrefabInstance:
       propertyPath: _mapData
       value: 
       objectReference: {fileID: 11400000, guid: c0a151d5c6edef94eadd021c82d9075d, type: 2}
+    - target: {fileID: 8073402903794223457, guid: 70187b3626989284cbeefeb80fd0159f, type: 3}
+      propertyPath: CombatMusic
+      value: 
+      objectReference: {fileID: 11400000, guid: 8ca20d8b94d72ee4994a1a806cb2e890, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -3904,6 +3806,10 @@ PrefabInstance:
       propertyPath: _mapData
       value: 
       objectReference: {fileID: 11400000, guid: 2cb96aae01e74f143b2c592a1d8f1774, type: 2}
+    - target: {fileID: 8073402903794223457, guid: 70187b3626989284cbeefeb80fd0159f, type: 3}
+      propertyPath: CombatMusic
+      value: 
+      objectReference: {fileID: 11400000, guid: 0a233204ae12be148b9043005ff1564e, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -3999,7 +3905,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1343263219}
-  - {fileID: 983055711}
   - {fileID: 1178277643}
   - {fileID: 979369741}
   - {fileID: 1714442201}

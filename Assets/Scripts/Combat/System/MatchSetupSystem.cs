@@ -127,9 +127,43 @@ public class MatchSetupSystem : MonoBehaviour
     /// </remarks>
     private void Start()
     {
+        // Try to find CharacterTransitionData if not assigned
+        if (characterTransitionData == null)
+        {
+            Debug.LogWarning("[MatchSetupSystem] CharacterTransitionData not assigned in Inspector. Attempting to find asset automatically...");
+            
+            // Try to load from Resources first
+            characterTransitionData = Resources.Load<CharacterTransitionData>("CharacterTransitionData");
+            
+            // If not in Resources, try to find it in the project (Editor only)
+            if (characterTransitionData == null)
+            {
+                #if UNITY_EDITOR
+                // Use UnityEditor API to find the asset
+                string[] guids = UnityEditor.AssetDatabase.FindAssets("t:CharacterTransitionData");
+                if (guids.Length > 0)
+                {
+                    string path = UnityEditor.AssetDatabase.GUIDToAssetPath(guids[0]);
+                    characterTransitionData = UnityEditor.AssetDatabase.LoadAssetAtPath<CharacterTransitionData>(path);
+                    Debug.Log($"[MatchSetupSystem] Found CharacterTransitionData at: {path}");
+                }
+                #endif
+            }
+            
+            if (characterTransitionData == null)
+            {
+                Debug.LogError("[MatchSetupSystem] CharacterTransitionData could not be found! Please assign it in the Inspector or create it in Resources/CharacterTransitionData.asset");
+            }
+            else
+            {
+                Debug.Log("[MatchSetupSystem] CharacterTransitionData found and assigned automatically.");
+            }
+        }
+        
         // If characterTransitionData has valid data, use it to populate heroDatas
         if (characterTransitionData != null && characterTransitionData.HasValidData())
         {
+            Debug.Log("[MatchSetupSystem] Reading character data from CharacterTransitionData...");
             var slots = characterTransitionData.GetCompleteSlots();
             heroDatas = new List<HeroData>();
             foreach (var slot in slots)
@@ -138,12 +172,23 @@ public class MatchSetupSystem : MonoBehaviour
                 {
                     // Optionally, you can also store the preset somewhere if needed for later
                     heroDatas.Add(slot.Hero);
+                    Debug.Log($"[MatchSetupSystem] Added hero to setup: {slot.Hero.HeroName} (Preset: {slot.SelectedPreset?.PresetName ?? "None"})");
                 }
             }
-#if UNITY_EDITOR
-            characterTransitionData.Clear();
-#endif
+            Debug.Log($"[MatchSetupSystem] Loaded {heroDatas.Count} heroes from CharacterTransitionData");
+            // NOTE: We do NOT clear characterTransitionData here so it persists between maps
+            // The data will persist across multiple combat scenes, allowing the same heroes to be used
+            // Data is only cleared when starting a new game session (in MainMenu.StartSession)
         }
+        else if (characterTransitionData != null)
+        {
+            Debug.LogWarning("[MatchSetupSystem] CharacterTransitionData exists but has no valid data. Using fallback heroDatas from Inspector.");
+        }
+        else
+        {
+            Debug.LogWarning("[MatchSetupSystem] CharacterTransitionData is null. Using fallback heroDatas from Inspector.");
+        }
+        
         // Start the setup sequence as a coroutine to handle async hero spawning
         StartCoroutine(SetupSequence());
     }

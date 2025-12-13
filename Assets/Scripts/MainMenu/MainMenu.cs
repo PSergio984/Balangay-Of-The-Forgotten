@@ -65,6 +65,10 @@ public class MainMenu : MonoBehaviour
 
     [SerializeField] private SoundData mapSelectionMusic;
     [SerializeField] private float MusicFadeTime = 2f;
+    
+    [Header("Character Data")]
+    [Tooltip("Reference to CharacterTransitionData - will be cleared when starting a new game session")]
+    [SerializeField] private CharacterTransitionData characterTransitionData;
 
 
     /// <summary>
@@ -74,6 +78,8 @@ public class MainMenu : MonoBehaviour
     /// Performs a complex scene transition that loads the session infrastructure and map selection,
     /// unloads the menu, and applies transition effects. This should be called when the player
     /// clicks the start button.
+    /// 
+    /// Also clears CharacterTransitionData to ensure a fresh start for character selection.
     /// </remarks>
     public void StartSession()
     {
@@ -81,6 +87,36 @@ public class MainMenu : MonoBehaviour
         {
             Debug.LogError("SceneController.Instance is null. Cannot start session.");
             return;
+        }
+        
+        // Clear character transition data when starting a new game session
+        // This ensures old character selections don't persist into a new game
+        if (characterTransitionData == null)
+        {
+            // Try to find it automatically
+            #if UNITY_EDITOR
+            string[] guids = UnityEditor.AssetDatabase.FindAssets("t:CharacterTransitionData");
+            if (guids.Length > 0)
+            {
+                string path = UnityEditor.AssetDatabase.GUIDToAssetPath(guids[0]);
+                characterTransitionData = UnityEditor.AssetDatabase.LoadAssetAtPath<CharacterTransitionData>(path);
+            }
+            #endif
+            
+            if (characterTransitionData == null)
+            {
+                characterTransitionData = Resources.Load<CharacterTransitionData>("CharacterTransitionData");
+            }
+        }
+        
+        if (characterTransitionData != null)
+        {
+            characterTransitionData.Clear();
+            Debug.Log("[MainMenu] Cleared CharacterTransitionData for new game session");
+        }
+        else
+        {
+            Debug.LogWarning("[MainMenu] CharacterTransitionData not found - cannot clear old data. This is okay if starting first game.");
         }
         
         SceneController.Instance

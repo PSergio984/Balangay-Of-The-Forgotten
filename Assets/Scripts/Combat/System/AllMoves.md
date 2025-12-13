@@ -1,7 +1,7 @@
 ## ARCHER (RANGED)MANDIRIGMA (SWORD)
 
 1. Attack – Deals 50 (+150% ATK), 100% hit, CD 1
-2. Heavy Attack – Deals 334% ATK, 80% hit, CD 2, 50% chance to inflict Bonecracked on enemy: Reduce target DEF by 10% for next turn.
+2. Heavy Attack – Deals 334% ATK, 80% hit, CD 2, inflict Bonecracked on enemy: Reduce target DEF by 10% for next turn.
 3. Rest – Removes negative status effects for self, CD 3
 4. All-in Attack – Deals 834% ATK, 40% hit, CD 3
 5. Berserk State – Rage (3 turns): +50% DMG, attacks ignore 20% of enemy DEF, +20% hit Requirement: HP at 50%, CD 4

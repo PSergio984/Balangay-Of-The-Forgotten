@@ -160,4 +160,26 @@ public static class HitTargetTracker
         }
         return count;
     }
+
+    /// <summary>
+    /// Checks if a specific target was hit by the caster's damage in the current move sequence
+    /// </summary>
+    /// <param name="caster">The caster who dealt the damage</param>
+    /// <param name="target">The target to check if it was hit</param>
+    /// <returns>True if the target was successfully hit (damage > 0), false otherwise</returns>
+    public static bool WasTargetHit(CombatantView caster, CombatantView target)
+    {
+        if (caster == null || target == null)
+        {
+            return false;
+        }
+
+        if (!hitTargetsByCaster.ContainsKey(caster))
+        {
+            return false;
+        }
+
+        // Check if target is in the hit set (and is still valid)
+        return hitTargetsByCaster[caster].Contains(target) && target != null && target;
+    }
 }

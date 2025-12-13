@@ -59,13 +59,9 @@ public class CharacterSelectionManager : MonoBehaviour
 
     private void Start()
     {
-        // Clear previous session data (Editor state pollution prevention)
-        #if UNITY_EDITOR
-        if (transitionData != null)
-        {
-            transitionData.Clear();
-        }
-        #endif
+        // NOTE: Do NOT clear transitionData here - it may contain valid data from a previous scene transition
+        // Only clear after it's been read by MatchSetupSystem (which already handles this)
+        // Clearing here would cause data to be lost if transitioning from another scene with valid data
         
         // Validate references
         if (transitionData == null)

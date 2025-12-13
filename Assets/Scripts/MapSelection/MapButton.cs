@@ -383,11 +383,31 @@ public class MapButton : MonoBehaviour
             .Unload(SceneDatabase.Slots.SessionContent)                                          // Close the current map select screen
             .Load(SceneDatabase.Slots.SessionContent, SceneDatabase.Scenes.Combat, setActive: true); // Open the combat scene
 
-        // Add map music - it will be paused during loading and resume near the finish
-        // WithMusic plays in PHASE 1, WithPauseMusic pauses it in PHASE 2, then resumes in PHASE 7 (near end)
-        if (MapData.MapMusic != null)
+        // Determine which music to use: MapData.MapMusic (preferred) or fallback to CombatMusic field
+        SoundData musicToPlay = MapData.MapMusic;
+        if (musicToPlay == null)
         {
-            transition = transition.WithMusic(MapData.MapMusic, MusicFadeTime);
+            Debug.LogWarning($"[MapButton] MapData.MapMusic is null for map '{MapData.MapId}'. Trying fallback CombatMusic field...");
+            musicToPlay = CombatMusic;
+        }
+        
+        if (musicToPlay == null)
+        {
+            Debug.LogError($"[MapButton] No music assigned for map '{MapData.MapId}'! Neither MapData.MapMusic nor CombatMusic field is set. Music will not play.", this);
+        }
+        else if (musicToPlay.clip == null)
+        {
+            Debug.LogError($"[MapButton] Music asset '{musicToPlay.name}' has no AudioClip assigned! Music will not play.", this);
+        }
+        else
+        {
+            Debug.Log($"[MapButton] Using music: {musicToPlay.name} (Clip: {musicToPlay.clip.name}) for map '{MapData.MapId}'");
+        }
+        
+        // Add map music with smooth fade
+        if (musicToPlay != null)
+        {
+            transition = transition.WithMusic(musicToPlay, MusicFadeTime);
         }
         
         // Only add loading video if provided - skip if null or empty
@@ -396,9 +416,6 @@ public class MapButton : MonoBehaviour
         {
             transition = transition.WithLoadingVideo(loadingVideoId);  // Show map-specific loading video
         }
-
-        // Pause music during loading - MusicManager will resume it after fade out completes (near end of loading)
-        transition = transition.WithPauseMusic(7);
         
         transition.Perform();  // Actually do all the above actions
     }

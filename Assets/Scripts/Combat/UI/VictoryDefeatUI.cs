@@ -475,6 +475,8 @@ public class VictoryDefeatUI : Singleton<VictoryDefeatUI>
             rewardCollectedCallback = null;
             hasMoreEnemies = false;
             isFirstReward = true;
+            isShowingVictory = false; // Reset flag to allow card interactions again
+            HideBanner(); // Ensure banner is fully hidden
             
             // Call callback to spawn next enemy (NOT transition!)
             callback?.Invoke();
@@ -552,6 +554,15 @@ public class VictoryDefeatUI : Singleton<VictoryDefeatUI>
         hasMoreEnemies = false;
         isFirstReward = true;
         
+        // CRITICAL: Reset victory flag when continuing to fight next enemy
+        // If callback exists, we're continuing combat - reset the flag so cards can be used again
+        if (callback != null)
+        {
+            isShowingVictory = false; // Reset flag to allow card interactions again
+            HideBanner(); // Ensure banner is fully hidden
+            Debug.Log("[VictoryDefeatUI] Reset victory flag - continuing to fight next enemy");
+        }
+        
         // Call the callback (which will either spawn next enemy or trigger final victory)
         // Only call if callback exists - if it doesn't exist and there are more enemies, something is wrong
         if (callback != null)
@@ -562,6 +573,9 @@ public class VictoryDefeatUI : Singleton<VictoryDefeatUI>
         else if (actuallyHasMoreEnemies)
         {
             Debug.LogError($"[VictoryDefeatUI] CRITICAL: More enemies exist but no callback to spawn them! This is a bug.");
+            // Even if callback is null, if we're continuing combat, reset the flag
+            isShowingVictory = false;
+            HideBanner();
         }
     }
     
@@ -773,15 +787,13 @@ public class VictoryDefeatUI : Singleton<VictoryDefeatUI>
                 .Load(SceneDatabase.Slots.SessionContent, SceneDatabase.Scenes.MapSelection, setActive: true)
                 .WithLoadingVideo("loading");
             
-            // Play main menu music near the end of transition (music fades in as transition completes)
+            // Play map selection music with smooth fade
             if (mapSelectionMusic != null)
             {
                 transition = transition.WithMusic(mapSelectionMusic, MusicFadeTime);
             }
             
-            transition
-                .WithPauseMusic(9)
-                .Perform();
+            transition.Perform();
         }
         else
         {
@@ -795,6 +807,9 @@ public class VictoryDefeatUI : Singleton<VictoryDefeatUI>
     /// </summary>
     private void HideBanner()
     {
+        // Reset animation flag to ensure clean state
+        isAnimating = false;
+        
         if (bannerPanel != null)
         {
             // Reset background

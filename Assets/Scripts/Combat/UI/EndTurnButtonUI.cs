@@ -172,14 +172,12 @@ public class EndTurnButtonUI : MonoBehaviour
             transition = transition.WithLoadingVideo(loadingVideoId);
         }
         
-        // Play main menu music near the end of transition (music fades in as transition completes)
+        // Play map selection music with smooth fade
         if (mapSelectionMusic != null)
         {
             transition = transition.WithMusic(mapSelectionMusic, MusicFadeTime);
         }
         
-        transition
-            .WithPauseMusic(9)
-            .Perform();
+        transition.Perform();
     }
 }

@@ -87,6 +87,60 @@ public class ConditionalEffect : Effects
 
     public override GameAction GetGameAction(List<CombatantView> targets, CombatantView caster)
     {
+        // Special handling for DAMAGE_HIT condition (needs caster context and checks each target)
+        if (conditionType == ConditionType.DAMAGE_HIT)
+        {
+            if (caster == null)
+            {
+                Debug.LogWarning("[ConditionalEffect] DAMAGE_HIT condition requires a caster, but caster is null!");
+                return null;
+            }
+            
+            if (targets == null || targets.Count == 0)
+            {
+                Debug.LogWarning("[ConditionalEffect] DAMAGE_HIT condition requires targets, but targets list is empty!");
+                return null;
+            }
+            
+            // Filter targets to only those that were hit by the caster's damage
+            List<CombatantView> hitTargets = new List<CombatantView>();
+            foreach (var target in targets)
+            {
+                if (target == null) continue;
+                
+                if (HitTargetTracker.WasTargetHit(caster, target))
+                {
+                    hitTargets.Add(target);
+                    Debug.Log($"[ConditionalEffect] Damage Hit Check: {target.name} was HIT by {caster.name} - INCLUDED");
+                }
+                else
+                {
+                    Debug.Log($"[ConditionalEffect] Damage Hit Check: {target.name} was MISSED by {caster.name} - EXCLUDED");
+                }
+            }
+            
+            // If no targets were hit, don't execute the effect
+            if (hitTargets.Count == 0)
+            {
+                if (showWarningIfFailed)
+                {
+                    Debug.Log($"[ConditionalEffect] {failureMessage} - No targets were hit by damage");
+                }
+                return null;
+            }
+            
+            // Condition met for at least some targets, execute inner effect with only hit targets
+            if (innerEffect == null)
+            {
+                Debug.LogWarning("[ConditionalEffect] Inner effect is null!");
+                return null;
+            }
+            
+            Debug.Log($"[ConditionalEffect] Condition met for {hitTargets.Count}/{targets.Count} targets, executing inner effect");
+            return innerEffect.GetGameAction(hitTargets, caster);
+        }
+        
+        // For other condition types, use standard checking on a single target
         // Determine which combatant to check the condition on
         CombatantView checkTarget = conditionTarget == ConditionTarget.SELF ? caster : 
                                      (targets != null && targets.Count > 0 ? targets[0] : caster);
@@ -97,7 +151,7 @@ public class ConditionalEffect : Effects
             return null;
         }
         
-        // Check if condition is met
+        // Check if condition is met using standard condition checking
         bool conditionMet = CheckCondition(checkTarget);
         
         if (!conditionMet)
@@ -164,6 +218,13 @@ public class ConditionalEffect : Effects
             case ConditionType.ALWAYS:
                 return true;
                 
+            case ConditionType.DAMAGE_HIT:
+                // This condition requires both target and caster to be available
+                // We need to get the caster from the GetGameAction call context
+                // For now, we'll check this in GetGameAction where we have access to caster
+                Debug.LogWarning("[ConditionalEffect] DAMAGE_HIT condition should be checked in GetGameAction with caster context");
+                return false;
+                
             default:
                 Debug.LogWarning($"[ConditionalEffect] Unknown condition type: {conditionType}");
                 return false;
@@ -183,7 +244,10 @@ public enum ConditionType
     HP_BELOW,
     
     /// <summary>Execute only if HP is above threshold</summary>
-    HP_ABOVE
+    HP_ABOVE,
+    
+    /// <summary>Execute only if the target was hit by the caster's damage in the current move sequence</summary>
+    DAMAGE_HIT
 }
 
 /// <summary>

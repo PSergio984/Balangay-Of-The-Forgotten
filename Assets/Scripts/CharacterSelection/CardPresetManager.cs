@@ -168,6 +168,7 @@ public class CardPresetManager : MonoBehaviour
 
     /// <summary>
     /// Collects all selected cards with their presets and prepares transition data
+    /// Cards are ordered by their visual position (left to right) based on sibling index
     /// </summary>
     /// <returns>Number of valid card-preset pairs</returns>
     public int PrepareTransitionData()
@@ -184,9 +185,36 @@ public class CardPresetManager : MonoBehaviour
             return 0;
         }
         
+        // Sort cards by their visual position (left to right) using sibling index
+        // This ensures the order matches what the user sees on screen
+        List<CharacterCard> sortedCards = new List<CharacterCard>(cardHolder.characterCards);
+        sortedCards.Sort((a, b) =>
+        {
+            if (a == null || b == null) return 0;
+            
+            // Get the parent transform's sibling index (represents left-to-right position)
+            Transform parentA = a.transform.parent;
+            Transform parentB = b.transform.parent;
+            
+            if (parentA == null || parentB == null) return 0;
+            
+            // If parents are siblings, compare their sibling indices
+            if (parentA.parent == parentB.parent && parentA.parent != null)
+            {
+                int indexA = parentA.GetSiblingIndex();
+                int indexB = parentB.GetSiblingIndex();
+                return indexA.CompareTo(indexB);
+            }
+            
+            // Fallback: compare world X position (left to right)
+            return a.transform.position.x.CompareTo(b.transform.position.x);
+        });
+        
+        Debug.Log($"[CardPresetManager] Sorted {sortedCards.Count} cards by visual position (left to right)");
+        
         List<CharacterSlotData> slots = new List<CharacterSlotData>();
-        // Collect selected cards with presets
-        foreach (CharacterCard card in cardHolder.characterCards)
+        // Collect selected cards with presets in visual order (left to right)
+        foreach (CharacterCard card in sortedCards)
         {
             if (card != null && card.BoundHeroData != null)
             {
@@ -200,6 +228,7 @@ public class CardPresetManager : MonoBehaviour
                         SelectedPreset = preset
                     };
                     slots.Add(slot);
+                    Debug.Log($"[CardPresetManager] Added slot {slots.Count}: {card.BoundHeroData.HeroName} with preset {preset.PresetName}");
                 }
             }
         }

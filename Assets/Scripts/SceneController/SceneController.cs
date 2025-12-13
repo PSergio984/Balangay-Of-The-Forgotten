@@ -145,9 +145,17 @@ public class SceneController : MonoBehaviour
         Debug.Log($"[Frame {Time.frameCount}] ===== TRANSITION START =====");
 
         // PHASE 1: Change music (if new music specified)
-        if (plan.TransitionMusic != null && MusicManager.Instance != null)
+        if (plan.TransitionMusic == null)
         {
-            Debug.Log($"[Frame {Time.frameCount}] PHASE 1: Starting music fade");
+            Debug.LogWarning($"[Frame {Time.frameCount}] PHASE 1: plan.TransitionMusic is NULL - no music will play during this transition");
+        }
+        else if (MusicManager.Instance == null)
+        {
+            Debug.LogError($"[Frame {Time.frameCount}] PHASE 1: MusicManager.Instance is NULL - cannot play music");
+        }
+        else
+        {
+            Debug.Log($"[Frame {Time.frameCount}] PHASE 1: Starting music fade - Music: {plan.TransitionMusic.name}, Clip: {(plan.TransitionMusic.clip != null ? plan.TransitionMusic.clip.name : "NULL")}, FadeTime: {plan.MusicFadeTime}");
             MusicManager.Instance.PlayMusic(plan.TransitionMusic, plan.MusicFadeTime);
         }
 

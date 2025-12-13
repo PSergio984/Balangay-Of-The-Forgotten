@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CardData
   <Title>k__BackingField: Heavy Attack
   <Target>k__BackingField: 4
-  <Description>k__BackingField: Deals 334% ATK, 80% hit, CD 2, 50% chance to inflict
-    Bonecracked on enemy.
+  <Description>k__BackingField: Deals 334% ATK, 80% hit, CD 2, inflict Bonecracked
+    on enemy.
   <Art>k__BackingField: {fileID: 21300000, guid: 2abdd3ce7dcad3d47a9c6c619e3ad23a, type: 3}
   <BackgroundArt>k__BackingField: {fileID: 21300000, guid: 4a639004020b7db49b5c72376628a912, type: 3}
   <RoleData>k__BackingField: {fileID: 11400000, guid: a0daa321f3e42da4481eea6b7e5f4a54, type: 2}
@@ -31,7 +31,7 @@ MonoBehaviour:
   - <targetMode>k__BackingField:
       rid: 5040687034078331144
     <effects>k__BackingField:
-      rid: 5040687034078331145
+      rid: 5040687169801552597
   references:
     version: 2
     RefIds:
@@ -53,9 +53,19 @@ MonoBehaviour:
     - rid: 5040687034078331144
       type: {class: AllEnemiesTM, ns: , asm: Assembly-CSharp}
       data: 
-    - rid: 5040687034078331145
+    - rid: 5040687169801552597
+      type: {class: ConditionalEffect, ns: , asm: Assembly-CSharp}
+      data:
+        conditionType: 3
+        hpThreshold: 0.2
+        conditionTarget: 1
+        innerEffect:
+          rid: 5040687169801552598
+        showWarningIfFailed: 1
+        failureMessage: Condition not met!
+    - rid: 5040687169801552598
       type: {class: ApplyDefenseDownEffect, ns: , asm: Assembly-CSharp}
       data:
         defensePercentage: 10
-        duration: 1
-        customName: bonecracked
+        duration: 2
+        customName: Bonecracked

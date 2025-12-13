@@ -4134,7 +4134,7 @@ MonoBehaviour:
   fadeInEase: 1
   buttonFadeInEase: 0
   mapSelectionMusic: {fileID: 11400000, guid: ee085cfef2764e244b3af8925cfb2023, type: 2}
-  MusicFadeTime: 2
+  MusicFadeTime: 4
 --- !u!114 &930427737
 MonoBehaviour:
   m_ObjectHideFlags: 0
