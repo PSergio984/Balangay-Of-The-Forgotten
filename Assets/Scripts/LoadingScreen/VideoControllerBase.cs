@@ -32,6 +32,8 @@ public abstract class VideoControllerBase : MonoBehaviour
     [SerializeField] protected GameObject pcVideoRoot;
     [Tooltip("Root GameObject for all WebGL video objects (e.g., VideoPlayer, mesh, UI)")]
     [SerializeField] protected GameObject webglVideoRoot;
+    [Tooltip("The UI RawImage GameObject that displays the PC video RenderTexture (separate from pcVideoRoot, like MainMenuVideoController)")]
+    [SerializeField] protected GameObject videoDisplayScreen;
     
     [Header("Video Sequence - PC/Standalone")]
     [Tooltip("List of VideoClips to play in sequence for PC/Standalone/Android builds")]
@@ -80,6 +82,10 @@ public abstract class VideoControllerBase : MonoBehaviour
     
     // Cached RenderTexture for clearing
     protected RenderTexture webglRenderTexture;
+    
+    // Cached display components for PC video
+    protected UnityEngine.UI.RawImage pcVideoRawImage;
+    protected Renderer pcVideoMeshRenderer;
 
     protected virtual void Awake()
     {
@@ -90,6 +96,8 @@ public abstract class VideoControllerBase : MonoBehaviour
         // This runs before ANY rendering happens, ensuring no stale video frames appear
         if (pcVideoRoot != null) pcVideoRoot.SetActive(false);
         if (webglVideoRoot != null) webglVideoRoot.SetActive(false);
+        // Also hide the video display screen (RawImage) to prevent showing stale RenderTexture content
+        if (videoDisplayScreen != null) videoDisplayScreen.SetActive(false);
         
         // Fix video flipping issue for WebGL: Use multiple methods to ensure video displays correctly
         // Method 1: RawImage UVRect flip (most reliable for UI-based video display)
@@ -207,6 +215,49 @@ public abstract class VideoControllerBase : MonoBehaviour
             webglRenderTexture = webglVideoPlayer.targetTexture;
             ClearRenderTexture(webglRenderTexture);
         }
+        
+        // Find and cache PC video display components
+        if (!useWebGLVideoPlayer)
+        {
+            // First, try to find RawImage in the separate videoDisplayScreen GameObject (like MainMenuVideoController)
+            if (videoDisplayScreen != null)
+            {
+                pcVideoRawImage = videoDisplayScreen.GetComponent<UnityEngine.UI.RawImage>();
+                if (pcVideoRawImage == null)
+                {
+                    pcVideoRawImage = videoDisplayScreen.GetComponentInChildren<UnityEngine.UI.RawImage>(true);
+                }
+                if (pcVideoRawImage != null)
+                {
+                    LogDebug($"Found PC video RawImage in videoDisplayScreen: {pcVideoRawImage.gameObject.name}");
+                }
+            }
+            
+            // Fallback: Find RawImage in pcVideoRoot if videoDisplayScreen doesn't have one
+            if (pcVideoRawImage == null && pcVideoRoot != null)
+            {
+                pcVideoRawImage = pcVideoRoot.GetComponentInChildren<UnityEngine.UI.RawImage>(true);
+                if (pcVideoRawImage != null)
+                {
+                    LogDebug($"Found PC video RawImage in pcVideoRoot: {pcVideoRawImage.gameObject.name}");
+                }
+            }
+            
+            // Find MeshRenderer for 3D mesh video display (like VideoCube) - only if no RawImage found
+            if (pcVideoRawImage == null && pcVideoRoot != null)
+            {
+                Renderer[] renderers = pcVideoRoot.GetComponentsInChildren<Renderer>(true);
+                foreach (Renderer renderer in renderers)
+                {
+                    if (renderer.GetComponent<VideoPlayer>() == null) // Skip VideoPlayer's own renderer
+                    {
+                        pcVideoMeshRenderer = renderer;
+                        LogDebug($"Found PC video MeshRenderer: {renderer.gameObject.name}");
+                        break;
+                    }
+                }
+            }
+        }
     }
     
     protected virtual void Start()
@@ -214,7 +265,49 @@ public abstract class VideoControllerBase : MonoBehaviour
         // Initialize Press To Continue (only if configured - specific to LoadingScreenController)
         InitializePressToContinue();
         
-        // Enable only the relevant video root
+        // CRITICAL: Reset and configure video players BEFORE activating roots
+        // This prevents VideoPlayer from trying to play with wrong settings
+        if (!useWebGLVideoPlayer && pcVideoPlayer != null)
+        {
+            // Stop any playback that might have started
+            if (pcVideoPlayer.isPlaying)
+            {
+                pcVideoPlayer.Stop();
+            }
+            // Clear any existing clip assignment (prevents "Missing" clip issues)
+            pcVideoPlayer.clip = null;
+            // Ensure playOnAwake is false (set early to prevent auto-play)
+            pcVideoPlayer.playOnAwake = false;
+            // Reset source to VideoClip (in case prefab had it set differently)
+            pcVideoPlayer.source = VideoSource.VideoClip;
+            
+            // CRITICAL: Preserve the RenderTexture from prefab - don't clear it!
+            // The RenderTexture must be set in the prefab for video to be visible
+            if (pcVideoPlayer.targetTexture == null)
+            {
+                LogError("PC VideoPlayer targetTexture is null! Video will not be visible. Ensure RenderTexture is assigned in prefab.");
+            }
+            else
+            {
+                LogDebug($"PC VideoPlayer RenderTexture preserved: {pcVideoPlayer.targetTexture.name}");
+            }
+        }
+        else if (useWebGLVideoPlayer && webglVideoPlayer != null)
+        {
+            // Stop any playback that might have started
+            if (webglVideoPlayer.isPlaying)
+            {
+                webglVideoPlayer.Stop();
+            }
+            // Clear any existing URL (prevents conflicts)
+            webglVideoPlayer.url = "";
+            // Ensure playOnAwake is false
+            webglVideoPlayer.playOnAwake = false;
+            // Reset source to Url
+            webglVideoPlayer.source = VideoSource.Url;
+        }
+        
+        // Enable only the relevant video root (AFTER configuring the player)
         if (pcVideoRoot != null) pcVideoRoot.SetActive(!useWebGLVideoPlayer);
         if (webglVideoRoot != null) webglVideoRoot.SetActive(useWebGLVideoPlayer);
 
@@ -274,6 +367,11 @@ public abstract class VideoControllerBase : MonoBehaviour
         {
             webglVideoRoot.SetActive(false);
         }
+        // Also hide the video display screen (RawImage) to prevent showing stale RenderTexture content
+        if (videoDisplayScreen != null)
+        {
+            videoDisplayScreen.SetActive(false);
+        }
         
         // Stop Press To Continue animations
         HidePressToContinue();
@@ -316,6 +414,11 @@ public abstract class VideoControllerBase : MonoBehaviour
         if (webglVideoRoot != null)
         {
             webglVideoRoot.SetActive(false);
+        }
+        // Also hide the video display screen
+        if (videoDisplayScreen != null)
+        {
+            videoDisplayScreen.SetActive(false);
         }
     }
 
@@ -376,20 +479,62 @@ public abstract class VideoControllerBase : MonoBehaviour
             return;
         }
 
-        // Set up video events
+        // CRITICAL: Stop any existing playback and clear state before reconfiguring
+        if (pcVideoPlayer.isPlaying)
+        {
+            pcVideoPlayer.Stop();
+        }
+        
+        // Unsubscribe from events first to prevent duplicate subscriptions
         pcVideoPlayer.loopPointReached -= OnVideoFinished;
         pcVideoPlayer.errorReceived -= OnVideoError;
         pcVideoPlayer.prepareCompleted -= OnVideoPrepared;
         
+        // Configure video player settings BEFORE assigning clip
+        pcVideoPlayer.source = VideoSource.VideoClip;
+        pcVideoPlayer.playOnAwake = false;
+        pcVideoPlayer.isLooping = false;
+        
+        // CRITICAL: Ensure RenderTexture is set and connected to display
+        // The prefab should have a RenderTexture assigned, but we verify it here
+        if (pcVideoPlayer.targetTexture == null)
+        {
+            LogError("PC VideoPlayer targetTexture is null! Video will not be visible. Check prefab configuration.");
+        }
+        else
+        {
+            LogDebug($"PC VideoPlayer using RenderTexture: {pcVideoPlayer.targetTexture.name}");
+            
+            // Connect RenderTexture to RawImage display (UI-based)
+            // Note: We connect it here, but activate the display screen in OnVideoPrepared (like MainMenuVideoController)
+            if (pcVideoRawImage != null)
+            {
+                pcVideoRawImage.texture = pcVideoPlayer.targetTexture;
+                LogDebug($"Connected RenderTexture to PC RawImage: {pcVideoRawImage.gameObject.name}");
+            }
+            // Connect RenderTexture to MeshRenderer display (3D mesh)
+            else if (pcVideoMeshRenderer != null)
+            {
+                Material mat = pcVideoMeshRenderer.material;
+                if (mat != null)
+                {
+                    mat.mainTexture = pcVideoPlayer.targetTexture;
+                    LogDebug($"Connected RenderTexture to PC MeshRenderer: {pcVideoMeshRenderer.gameObject.name}");
+                }
+            }
+            else
+            {
+                LogError("No display component found for PC video! Video will play but not be visible. Assign videoDisplayScreen GameObject with RawImage component (like MainMenuVideoController).");
+            }
+        }
+        
+        // Now assign the clip
+        pcVideoPlayer.clip = clip;
+        
+        // Subscribe to events AFTER configuration
         pcVideoPlayer.loopPointReached += OnVideoFinished;
         pcVideoPlayer.errorReceived += OnVideoError;
         pcVideoPlayer.prepareCompleted += OnVideoPrepared;
-
-        // Configure video player
-        pcVideoPlayer.source = VideoSource.VideoClip;
-        pcVideoPlayer.clip = clip;
-        pcVideoPlayer.playOnAwake = false;
-        pcVideoPlayer.isLooping = false;
         
         // Prepare and play
         pcVideoPlayer.Prepare();
@@ -448,14 +593,41 @@ public abstract class VideoControllerBase : MonoBehaviour
     protected virtual void OnVideoPrepared(VideoPlayer vp)
     {
         LogDebug("Video prepared, starting playback");
+        
+        // Show the video display screen now that video is ready to play
+        // This prevents showing stale RenderTexture content from previous scenes (like MainMenuVideoController)
+        if (!useWebGLVideoPlayer && videoDisplayScreen != null)
+        {
+            videoDisplayScreen.SetActive(true);
+            LogDebug("Activated videoDisplayScreen for PC video");
+        }
+        
+        // Validate that the VideoPlayer is still valid and matches our expected player
         if (useWebGLVideoPlayer)
         {
-            if (webglVideoPlayer != null) webglVideoPlayer.Play();
+            if (webglVideoPlayer != null && webglVideoPlayer == vp)
+            {
+                webglVideoPlayer.Play();
+            }
+            else
+            {
+                LogError("WebGL VideoPlayer mismatch or null in OnVideoPrepared!");
+                return;
+            }
         }
         else
         {
-            if (pcVideoPlayer != null) pcVideoPlayer.Play();
+            if (pcVideoPlayer != null && pcVideoPlayer == vp)
+            {
+                pcVideoPlayer.Play();
+            }
+            else
+            {
+                LogError("PC VideoPlayer mismatch or null in OnVideoPrepared!");
+                return;
+            }
         }
+        
         videoStarted = true;
         videoStartTime = Time.time;
         
@@ -588,16 +760,19 @@ public abstract class VideoControllerBase : MonoBehaviour
             return;
         }
 
-        // Set up video events
+        // CRITICAL: Stop any existing playback and clear state before reconfiguring
+        if (webglVideoPlayer.isPlaying)
+        {
+            webglVideoPlayer.Stop();
+        }
+        
+        // Unsubscribe from events first to prevent duplicate subscriptions
         webglVideoPlayer.loopPointReached -= OnVideoFinished;
         webglVideoPlayer.errorReceived -= OnVideoError;
         webglVideoPlayer.prepareCompleted -= OnVideoPrepared;
-        
-        webglVideoPlayer.loopPointReached += OnVideoFinished;
-        webglVideoPlayer.errorReceived += OnVideoError;
-        webglVideoPlayer.prepareCompleted += OnVideoPrepared;
 
-        // Configure video player
+        // Configure video player settings BEFORE setting URL
+        webglVideoPlayer.source = VideoSource.Url;
         webglVideoPlayer.playOnAwake = false;
         webglVideoPlayer.isLooping = false;
 
@@ -611,6 +786,11 @@ public abstract class VideoControllerBase : MonoBehaviour
 #endif
         LogDebug($"[WebGLVideo] Using video URL: {videoPath}");
         webglVideoPlayer.url = videoPath;
+
+        // Subscribe to events AFTER configuration
+        webglVideoPlayer.loopPointReached += OnVideoFinished;
+        webglVideoPlayer.errorReceived += OnVideoError;
+        webglVideoPlayer.prepareCompleted += OnVideoPrepared;
 
         // Prepare and play
         webglVideoPlayer.Prepare();
