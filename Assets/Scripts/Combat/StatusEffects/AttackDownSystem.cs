@@ -81,9 +81,13 @@ public class AttackDownSystem : MonoBehaviour
                     attackPercentages[instanceId] = action.AttackPercentage;
                     attackDurations[instanceId] = action.Duration;
                     
-                    // Update visual stacks to new value
-                    int diff = action.AttackPercentage - existingPercent;
-                    target.AddStatusEffect(StatusEffectType.ATTACK_DOWN, diff);
+                    // Remove old stacks and set to new duration (UI shows duration, not percentage)
+                    int currentStacks = target.GetStatusEffectStacks(StatusEffectType.ATTACK_DOWN);
+                    if (currentStacks > 0)
+                    {
+                        target.RemoveStatusEffect(StatusEffectType.ATTACK_DOWN, currentStacks);
+                    }
+                    target.AddStatusEffect(StatusEffectType.ATTACK_DOWN, action.Duration);
                     
                     Debug.Log($"[AttackDownSystem] {target.name}'s attack debuff worsened to -{action.AttackPercentage}% for {action.Duration} turns");
                 }
@@ -91,6 +95,13 @@ public class AttackDownSystem : MonoBehaviour
                 {
                     // Refresh duration if same or lower percentage
                     attackDurations[instanceId] = Mathf.Max(attackDurations[instanceId], action.Duration);
+                    // Remove old stacks and set to new duration
+                    int currentStacks = target.GetStatusEffectStacks(StatusEffectType.ATTACK_DOWN);
+                    if (currentStacks > 0)
+                    {
+                        target.RemoveStatusEffect(StatusEffectType.ATTACK_DOWN, currentStacks);
+                    }
+                    target.AddStatusEffect(StatusEffectType.ATTACK_DOWN, attackDurations[instanceId]);
                     Debug.Log($"[AttackDownSystem] {target.name}'s attack debuff duration refreshed to {attackDurations[instanceId]} turns");
                 }
             }
@@ -101,8 +112,8 @@ public class AttackDownSystem : MonoBehaviour
                 attackDurations[instanceId] = action.Duration;
                 combatantLookup[instanceId] = target;
                 
-                // Apply status effect with percentage as stacks (for UI display)
-                target.AddStatusEffect(StatusEffectType.ATTACK_DOWN, action.AttackPercentage);
+                // Apply status effect with duration as stacks (for UI display) - shows remaining turns
+                target.AddStatusEffect(StatusEffectType.ATTACK_DOWN, action.Duration);
                 
                 Debug.Log($"[AttackDownSystem] {target.name} receives -{action.AttackPercentage}% attack for {action.Duration} turns");
             }
@@ -171,13 +182,25 @@ public class AttackDownSystem : MonoBehaviour
             attackDurations.Remove(instanceId);
             combatantLookup.Remove(instanceId);
             
-            // Remove all stacks from visual display
-            combatant.RemoveStatusEffect(StatusEffectType.ATTACK_DOWN, attackPercent);
+            // Remove status effect from visual display (use current stack count, not percentage)
+            int currentStacks = combatant.GetStatusEffectStacks(StatusEffectType.ATTACK_DOWN);
+            if (currentStacks > 0)
+            {
+                combatant.RemoveStatusEffect(StatusEffectType.ATTACK_DOWN, currentStacks);
+            }
             
             Debug.Log($"[AttackDownSystem] {combatant.name}'s -{attackPercent}% attack debuff expired");
         }
         else
         {
+            // Update UI to show remaining duration (not percentage)
+            // Remove old stacks first, then set to new duration
+            int currentStacks = combatant.GetStatusEffectStacks(StatusEffectType.ATTACK_DOWN);
+            if (currentStacks > 0)
+            {
+                combatant.RemoveStatusEffect(StatusEffectType.ATTACK_DOWN, currentStacks);
+            }
+            combatant.AddStatusEffect(StatusEffectType.ATTACK_DOWN, attackDurations[instanceId]);
             Debug.Log($"[AttackDownSystem] {combatant.name}'s attack debuff duration: {attackDurations[instanceId]} turns remaining");
         }
     }

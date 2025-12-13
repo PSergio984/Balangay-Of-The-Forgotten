@@ -396,5 +396,82 @@ public class CombatTestTools
 
     [MenuItem("Tools/Combat Test/Apply Status Effects/Apply Taunt", true)]
     public static bool ValidateApplyTaunt() => Application.isPlaying;
+
+    // ========== DAMAGE TEST FUNCTIONS ==========
+
+    /// <summary>
+    /// TEST FUNCTION: Deal 1000 damage to the current enemy for testing
+    /// </summary>
+    [MenuItem("Tools/Combat Test/Deal Damage/Deal 1000 Damage to Enemy", false, 1)]
+    public static void Deal1000DamageToEnemy()
+    {
+        // Check if we're in play mode
+        if (!Application.isPlaying)
+        {
+            EditorUtility.DisplayDialog(
+                "Not in Play Mode",
+                "This function only works during Play Mode.\n\nPlease enter Play Mode first.",
+                "OK"
+            );
+            return;
+        }
+
+        // Check if EnemySystem exists
+        if (EnemySystem.Instance == null)
+        {
+            EditorUtility.DisplayDialog(
+                "EnemySystem Not Found",
+                "EnemySystem.Instance is null!\n\nMake sure you're in a combat scene with EnemySystem set up.",
+                "OK"
+            );
+            Debug.LogWarning("[CombatTestTools] EnemySystem.Instance is null! Cannot deal damage to enemy.");
+            return;
+        }
+
+        // Get enemies directly from EnemySystem (which accesses EnemyBoardView)
+        var enemyViews = EnemySystem.Instance.EnemyViews;
+        if (enemyViews == null || enemyViews.Count == 0)
+        {
+            EditorUtility.DisplayDialog(
+                "No Enemy Found",
+                "No enemies are available in the scene!\n\nMake sure an enemy is spawned.",
+                "OK"
+            );
+            Debug.LogWarning("[CombatTestTools] No enemies found! Cannot deal damage.");
+            return;
+        }
+
+        // Get the first active enemy
+        var enemy = enemyViews[0];
+        if (enemy == null)
+        {
+            EditorUtility.DisplayDialog(
+                "Enemy is Null",
+                "The enemy reference is null!\n\nMake sure the enemy is properly spawned.",
+                "OK"
+            );
+            Debug.LogWarning("[CombatTestTools] Enemy is null! Cannot deal damage.");
+            return;
+        }
+
+        // Create damage action to deal 1000 damage
+        var targets = new List<CombatantView> { enemy };
+        var damageAction = new DealDamageGA(1000f, targets, null);
+        
+        // Perform the damage action through ActionSystem
+        ActionSystem.Instance.Perform(damageAction);
+        
+        Debug.Log($"[CombatTestTools] Dealt 1000 damage to {enemy.name}");
+    }
+
+    /// <summary>
+    /// Validates if the menu item should be enabled
+    /// </summary>
+    [MenuItem("Tools/Combat Test/Deal Damage/Deal 1000 Damage to Enemy", true)]
+    public static bool ValidateDeal1000DamageToEnemy()
+    {
+        // Only enable in play mode
+        return Application.isPlaying;
+    }
 }
 

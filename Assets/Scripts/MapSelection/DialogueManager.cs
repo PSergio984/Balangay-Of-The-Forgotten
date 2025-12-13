@@ -4,6 +4,7 @@ using UnityEngine.UI;
 using UnityEngine;
 using TMPro;
 using DG.Tweening;
+using AudioSystem;
  
 public class DialogueManager : MonoBehaviour
 {
@@ -717,6 +718,14 @@ public class DialogueManager : MonoBehaviour
             return;
         }
         
+        // Stop current music before transitioning to credits
+        // Credits scene will handle its own music/audio
+        if (AudioSystem.MusicManager.Instance != null)
+        {
+            AudioSystem.MusicManager.Instance.StopMusic(2f); // Fade out over 2 seconds
+            Debug.Log("[DialogueManager] Stopping music before credits transition");
+        }
+        
         // Use SceneController to transition to credits with white fade
         SceneController.Instance
             .NewTransition()
@@ -724,7 +733,6 @@ public class DialogueManager : MonoBehaviour
             .Unload(SceneDatabase.Slots.Session)
             .Load(SceneDatabase.Slots.LoadingScreen, SceneDatabase.Scenes.Credits, setActive: true)
             .WithWhiteFade()
-            .WithPauseMusic(180)
             .Perform();
     }
 }

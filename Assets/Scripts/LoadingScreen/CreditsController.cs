@@ -29,6 +29,13 @@ public class CreditsController : VideoControllerBase
         // Clear all game saves and player prefs before returning to main menu
         ClearAllGameData();
         
+        // Check SceneController before using it
+        if (SceneController.Instance == null)
+        {
+            Debug.LogError("[CreditsController] SceneController.Instance is NULL! Cannot transition to next scene. Ensure SceneController exists in the scene.", this);
+            return; // Exit early to prevent NullReferenceException
+        }
+        
         // Transition to MainMenu
         SceneController.Instance
             .NewTransition()

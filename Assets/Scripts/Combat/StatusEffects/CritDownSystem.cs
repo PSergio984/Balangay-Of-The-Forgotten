@@ -75,9 +75,13 @@ public class CritDownSystem : MonoBehaviour
                     critPercentages[instanceId] = action.CritPercentage;
                     critDurations[instanceId] = action.Duration;
                     
-                    // Update visual stacks to new value
-                    int diff = action.CritPercentage - existingPercent;
-                    target.AddStatusEffect(StatusEffectType.CRIT_DOWN, diff);
+                    // Remove old stacks and set to new duration (UI shows duration, not percentage)
+                    int currentStacks = target.GetStatusEffectStacks(StatusEffectType.CRIT_DOWN);
+                    if (currentStacks > 0)
+                    {
+                        target.RemoveStatusEffect(StatusEffectType.CRIT_DOWN, currentStacks);
+                    }
+                    target.AddStatusEffect(StatusEffectType.CRIT_DOWN, action.Duration);
                     
                     Debug.Log($"[CritDownSystem] {target.name}'s crit debuff worsened to -{action.CritPercentage}% for {action.Duration} turns");
                 }
@@ -85,6 +89,13 @@ public class CritDownSystem : MonoBehaviour
                 {
                     // Refresh duration if same or lower percentage
                     critDurations[instanceId] = Mathf.Max(critDurations[instanceId], action.Duration);
+                    // Remove old stacks and set to new duration
+                    int currentStacks = target.GetStatusEffectStacks(StatusEffectType.CRIT_DOWN);
+                    if (currentStacks > 0)
+                    {
+                        target.RemoveStatusEffect(StatusEffectType.CRIT_DOWN, currentStacks);
+                    }
+                    target.AddStatusEffect(StatusEffectType.CRIT_DOWN, critDurations[instanceId]);
                     Debug.Log($"[CritDownSystem] {target.name}'s crit debuff duration refreshed to {critDurations[instanceId]} turns");
                 }
             }
@@ -95,8 +106,8 @@ public class CritDownSystem : MonoBehaviour
                 critDurations[instanceId] = action.Duration;
                 combatantLookup[instanceId] = target;
                 
-                // Apply status effect with percentage as stacks (for UI display)
-                target.AddStatusEffect(StatusEffectType.CRIT_DOWN, action.CritPercentage);
+                // Apply status effect with duration as stacks (for UI display) - shows remaining turns
+                target.AddStatusEffect(StatusEffectType.CRIT_DOWN, action.Duration);
                 
                 Debug.Log($"[CritDownSystem] {target.name} receives -{action.CritPercentage}% crit chance for {action.Duration} turns");
             }
@@ -129,13 +140,25 @@ public class CritDownSystem : MonoBehaviour
             critDurations.Remove(instanceId);
             combatantLookup.Remove(instanceId);
             
-            // Remove all stacks from visual display
-            combatant.RemoveStatusEffect(StatusEffectType.CRIT_DOWN, critPercent);
+            // Remove status effect from visual display (use current stack count, not percentage)
+            int currentStacks = combatant.GetStatusEffectStacks(StatusEffectType.CRIT_DOWN);
+            if (currentStacks > 0)
+            {
+                combatant.RemoveStatusEffect(StatusEffectType.CRIT_DOWN, currentStacks);
+            }
             
             Debug.Log($"[CritDownSystem] {combatant.name}'s -{critPercent}% crit debuff expired");
         }
         else
         {
+            // Update UI to show remaining duration (not percentage)
+            // Remove old stacks first, then set to new duration
+            int currentStacks = combatant.GetStatusEffectStacks(StatusEffectType.CRIT_DOWN);
+            if (currentStacks > 0)
+            {
+                combatant.RemoveStatusEffect(StatusEffectType.CRIT_DOWN, currentStacks);
+            }
+            combatant.AddStatusEffect(StatusEffectType.CRIT_DOWN, critDurations[instanceId]);
             Debug.Log($"[CritDownSystem] {combatant.name}'s crit debuff duration: {critDurations[instanceId]} turns remaining");
         }
     }

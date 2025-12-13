@@ -47,6 +47,11 @@ public class DamageUpSystem : MonoBehaviour
     /// Lookup to get combatant reference from instance ID
     /// </summary>
     private Dictionary<int, CombatantView> combatantLookup = new Dictionary<int, CombatantView>();
+    
+    /// <summary>
+    /// Tracks custom names for each combatant's DMG_UP effect (for consolidated sprite display)
+    /// </summary>
+    private Dictionary<int, string> customNames = new Dictionary<int, string>();
 
     private void OnEnable()
     {
@@ -77,15 +82,70 @@ public class DamageUpSystem : MonoBehaviour
             
             int instanceId = target.GetInstanceID();
             
-            // Store or update damage data
-            damagePercentages[instanceId] = action.DamagePercentage;
-            damageDurations[instanceId] = action.Duration;
-            combatantLookup[instanceId] = target;
-            
-            // Apply status effect with percentage as stacks (for UI display) and custom name for consolidated sprite
-            target.AddStatusEffect(StatusEffectType.DMG_UP, action.DamagePercentage, action.CustomName);
-            
-            Debug.Log($"[DamageUpSystem] {target.name} gains +{action.DamagePercentage}% damage for {action.Duration} turns");
+            // Check if already has damage up - take the higher percentage
+            if (damagePercentages.TryGetValue(instanceId, out int existingPercent))
+            {
+                if (action.DamagePercentage > existingPercent)
+                {
+                    damagePercentages[instanceId] = action.DamagePercentage;
+                    damageDurations[instanceId] = action.Duration;
+                    
+                    // Store custom name if provided
+                    if (!string.IsNullOrEmpty(action.CustomName))
+                    {
+                        customNames[instanceId] = action.CustomName;
+                    }
+                    
+                    // Remove old stacks and set to new duration (UI shows duration, not percentage)
+                    int currentStacks = target.GetStatusEffectStacks(StatusEffectType.DMG_UP);
+                    if (currentStacks > 0)
+                    {
+                        target.RemoveStatusEffect(StatusEffectType.DMG_UP, currentStacks);
+                    }
+                    target.AddStatusEffect(StatusEffectType.DMG_UP, action.Duration, action.CustomName);
+                    
+                    Debug.Log($"[DamageUpSystem] {target.name}'s damage buff upgraded to +{action.DamagePercentage}% for {action.Duration} turns");
+                }
+                else
+                {
+                    // Refresh duration if same or lower percentage
+                    damageDurations[instanceId] = Mathf.Max(damageDurations[instanceId], action.Duration);
+                    
+                    // Update custom name if provided
+                    if (!string.IsNullOrEmpty(action.CustomName))
+                    {
+                        customNames[instanceId] = action.CustomName;
+                    }
+                    
+                    // Remove old stacks and set to new duration
+                    int currentStacks = target.GetStatusEffectStacks(StatusEffectType.DMG_UP);
+                    if (currentStacks > 0)
+                    {
+                        target.RemoveStatusEffect(StatusEffectType.DMG_UP, currentStacks);
+                    }
+                    string nameToUse = customNames.TryGetValue(instanceId, out string storedName) ? storedName : action.CustomName;
+                    target.AddStatusEffect(StatusEffectType.DMG_UP, damageDurations[instanceId], nameToUse);
+                    Debug.Log($"[DamageUpSystem] {target.name}'s damage buff duration refreshed to {damageDurations[instanceId]} turns");
+                }
+            }
+            else
+            {
+                // New damage buff
+                damagePercentages[instanceId] = action.DamagePercentage;
+                damageDurations[instanceId] = action.Duration;
+                combatantLookup[instanceId] = target;
+                
+                // Store custom name if provided
+                if (!string.IsNullOrEmpty(action.CustomName))
+                {
+                    customNames[instanceId] = action.CustomName;
+                }
+                
+                // Apply status effect with duration as stacks (for UI display) - shows remaining turns
+                target.AddStatusEffect(StatusEffectType.DMG_UP, action.Duration, action.CustomName);
+                
+                Debug.Log($"[DamageUpSystem] {target.name} gains +{action.DamagePercentage}% damage for {action.Duration} turns");
+            }
         }
         
         yield return null;
@@ -150,17 +210,32 @@ public class DamageUpSystem : MonoBehaviour
         if (damageDurations[instanceId] <= 0)
         {
             // Damage buff expired, remove it
-            int damagePercent = damagePercentages[instanceId];
-            combatant.RemoveStatusEffect(StatusEffectType.DMG_UP, damagePercent);
-            
             damagePercentages.Remove(instanceId);
             damageDurations.Remove(instanceId);
             combatantLookup.Remove(instanceId);
+            customNames.Remove(instanceId);
             
-            Debug.Log($"[DamageUpSystem] {combatant.name}'s +{damagePercent}% damage buff expired");
+            // Remove status effect from visual display (use current stack count, not percentage)
+            int currentStacks = combatant.GetStatusEffectStacks(StatusEffectType.DMG_UP);
+            if (currentStacks > 0)
+            {
+                combatant.RemoveStatusEffect(StatusEffectType.DMG_UP, currentStacks);
+            }
+            
+            Debug.Log($"[DamageUpSystem] {combatant.name}'s damage buff expired");
         }
         else
         {
+            // Update UI to show remaining duration (not percentage)
+            // Remove old stacks first, then set to new duration
+            int currentStacks = combatant.GetStatusEffectStacks(StatusEffectType.DMG_UP);
+            if (currentStacks > 0)
+            {
+                combatant.RemoveStatusEffect(StatusEffectType.DMG_UP, currentStacks);
+            }
+            // Preserve custom name if it exists
+            string customName = customNames.TryGetValue(instanceId, out string storedName) ? storedName : null;
+            combatant.AddStatusEffect(StatusEffectType.DMG_UP, damageDurations[instanceId], customName);
             Debug.Log($"[DamageUpSystem] {combatant.name}'s damage buff duration: {damageDurations[instanceId]} turns remaining");
         }
     }

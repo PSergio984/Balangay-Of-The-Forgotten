@@ -81,9 +81,13 @@ public class AttackUpSystem : MonoBehaviour
                     attackPercentages[instanceId] = action.AttackPercentage;
                     attackDurations[instanceId] = action.Duration;
                     
-                    // Update visual stacks to new value
-                    int diff = action.AttackPercentage - existingPercent;
-                    target.AddStatusEffect(StatusEffectType.ATTACK_UP, diff);
+                    // Remove old stacks and set to new duration (UI shows duration, not percentage)
+                    int currentStacks = target.GetStatusEffectStacks(StatusEffectType.ATTACK_UP);
+                    if (currentStacks > 0)
+                    {
+                        target.RemoveStatusEffect(StatusEffectType.ATTACK_UP, currentStacks);
+                    }
+                    target.AddStatusEffect(StatusEffectType.ATTACK_UP, action.Duration);
                     
                     Debug.Log($"[AttackUpSystem] {target.name}'s attack buff upgraded to +{action.AttackPercentage}% for {action.Duration} turns");
                 }
@@ -91,6 +95,13 @@ public class AttackUpSystem : MonoBehaviour
                 {
                     // Refresh duration if same or lower percentage
                     attackDurations[instanceId] = Mathf.Max(attackDurations[instanceId], action.Duration);
+                    // Remove old stacks and set to new duration
+                    int currentStacks = target.GetStatusEffectStacks(StatusEffectType.ATTACK_UP);
+                    if (currentStacks > 0)
+                    {
+                        target.RemoveStatusEffect(StatusEffectType.ATTACK_UP, currentStacks);
+                    }
+                    target.AddStatusEffect(StatusEffectType.ATTACK_UP, attackDurations[instanceId]);
                     Debug.Log($"[AttackUpSystem] {target.name}'s attack buff duration refreshed to {attackDurations[instanceId]} turns");
                 }
             }
@@ -101,8 +112,8 @@ public class AttackUpSystem : MonoBehaviour
                 attackDurations[instanceId] = action.Duration;
                 combatantLookup[instanceId] = target;
                 
-                // Apply status effect with percentage as stacks (for UI display)
-                target.AddStatusEffect(StatusEffectType.ATTACK_UP, action.AttackPercentage);
+                // Apply status effect with duration as stacks (for UI display) - shows remaining turns
+                target.AddStatusEffect(StatusEffectType.ATTACK_UP, action.Duration);
                 
                 Debug.Log($"[AttackUpSystem] {target.name} gains +{action.AttackPercentage}% attack for {action.Duration} turns");
             }
@@ -170,13 +181,25 @@ public class AttackUpSystem : MonoBehaviour
             attackDurations.Remove(instanceId);
             combatantLookup.Remove(instanceId);
             
-            // Remove all stacks from visual display
-            combatant.RemoveStatusEffect(StatusEffectType.ATTACK_UP, attackPercent);
+            // Remove status effect from visual display (use current stack count, not percentage)
+            int currentStacks = combatant.GetStatusEffectStacks(StatusEffectType.ATTACK_UP);
+            if (currentStacks > 0)
+            {
+                combatant.RemoveStatusEffect(StatusEffectType.ATTACK_UP, currentStacks);
+            }
             
             Debug.Log($"[AttackUpSystem] {combatant.name}'s +{attackPercent}% attack buff expired");
         }
         else
         {
+            // Update UI to show remaining duration (not percentage)
+            // Remove old stacks first, then set to new duration
+            int currentStacks = combatant.GetStatusEffectStacks(StatusEffectType.ATTACK_UP);
+            if (currentStacks > 0)
+            {
+                combatant.RemoveStatusEffect(StatusEffectType.ATTACK_UP, currentStacks);
+            }
+            combatant.AddStatusEffect(StatusEffectType.ATTACK_UP, attackDurations[instanceId]);
             Debug.Log($"[AttackUpSystem] {combatant.name}'s attack buff duration: {attackDurations[instanceId]} turns remaining");
         }
     }

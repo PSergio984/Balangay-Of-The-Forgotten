@@ -316,62 +316,68 @@ public class CombatantView : MonoBehaviour
     private int previousHealth = -1;
 
     /// <summary>
-    /// Updates health UI with smooth animation
+    /// Updates health UI immediately without animation
     /// </summary>
     private void UpdateHealth()
     {
-        // Determine if this is healing or damage
-        bool isHealing = previousHealth >= 0 && CurrentHealth > previousHealth;
         previousHealth = CurrentHealth;
         
-        AnimateHealthBar(isHealing);
-        AnimateHealthText();
-    }
-
-    /// <summary>
-    /// Animates the health bar slider smoothly from current to new value
-    /// </summary>
-    private void AnimateHealthBar(bool isHealing)
-    {
-        if (sliderHealth == null) return;
+        if (sliderHealth != null)
+        {
+            DOTween.Kill(sliderHealth);
+            
+            // Set slider values
+            sliderHealth.maxValue = MaxHealth;
+            sliderHealth.minValue = 0;
+            sliderHealth.value = CurrentHealth;
+            
+            // Make Fill completely independent - properly configured to stretch based on health
+            if (sliderHealth.fillRect != null)
+            {
+                float normalized = Mathf.Clamp01((float)CurrentHealth / MaxHealth);
+                var fillRect = sliderHealth.fillRect;
+                
+                // Make Fill completely independent with left-to-right stretch based on health
+                // Set anchors to stretch from left (0) to normalized value (health percentage)
+                fillRect.anchorMin = Vector2.zero;
+                fillRect.anchorMax = new Vector2(normalized, 1f);
+                
+                // Clear all offsets to ensure it fills exactly from left edge
+                fillRect.offsetMin = Vector2.zero;
+                fillRect.offsetMax = Vector2.zero;
+                
+                // Set pivot to left edge so it scales from left
+                fillRect.pivot = new Vector2(0f, 0.5f);
+                
+                // Force layout rebuild to apply changes immediately
+                UnityEngine.UI.LayoutRebuilder.ForceRebuildLayoutImmediate(fillRect);
+                
+                // Also rebuild parent to ensure proper layout
+                if (fillRect.parent != null)
+                {
+                    UnityEngine.UI.LayoutRebuilder.ForceRebuildLayoutImmediate(fillRect.parent as RectTransform);
+                }
+            }
+        }
         
-        // Kill any existing health bar animation
-        DOTween.Kill(sliderHealth);
-        
-        // Choose ease based on whether healing or taking damage
-        Ease ease = isHealing ? healthIncreaseEase : healthDecreaseEase;
-        
-        // Animate slider value
-        sliderHealth.DOValue(CurrentHealth, healthAnimDuration).SetEase(ease);
-        
-        // Animate fill color
         if (fillHealth != null && gradientHealth != null)
         {
-            float targetNormalized = (float)CurrentHealth / MaxHealth;
-            Color targetColor = gradientHealth.Evaluate(targetNormalized);
-            fillHealth.DOColor(targetColor, healthAnimDuration).SetEase(ease);
+            float normalized = (float)CurrentHealth / MaxHealth;
+            if (CurrentHealth <= 0 || normalized < 0.01f)
+            {
+                fillHealth.color = new Color(0, 0, 0, 0);
+            }
+            else
+            {
+                fillHealth.color = gradientHealth.Evaluate(normalized);
+            }
         }
-    }
-
-    /// <summary>
-    /// Animates the health text with a subtle pulse effect
-    /// </summary>
-    private void AnimateHealthText()
-    {
-        if (healthText == null) return;
         
-        // Update text immediately
-        healthText.text = CurrentHealth + "/" + MaxHealth;
-        
-        // Apply pulse animation if enabled
-        if (enableHealthPulse)
+        if (healthText != null)
         {
-            // Kill any existing text animation
             DOTween.Kill(healthText.transform);
-            
-            // Pulse animation: scale up then back to normal
             healthText.transform.localScale = Vector3.one;
-            healthText.transform.DOPunchScale(Vector3.one * (healthPulseScale - 1f), 0.3f, 1, 0.5f);
+            healthText.text = $"{CurrentHealth}/{MaxHealth}";
         }
     }
 
@@ -384,16 +390,55 @@ public class CombatantView : MonoBehaviour
         
         if (sliderHealth != null)
         {
+            sliderHealth.maxValue = MaxHealth;
+            sliderHealth.minValue = 0;
             sliderHealth.value = CurrentHealth;
+            
+            // Make Fill completely independent - properly configured to stretch based on health
+            if (sliderHealth.fillRect != null)
+            {
+                float normalized = Mathf.Clamp01((float)CurrentHealth / MaxHealth);
+                var fillRect = sliderHealth.fillRect;
+                
+                // Make Fill completely independent with left-to-right stretch based on health
+                // Set anchors to stretch from left (0) to normalized value (health percentage)
+                fillRect.anchorMin = Vector2.zero;
+                fillRect.anchorMax = new Vector2(normalized, 1f);
+                
+                // Clear all offsets to ensure it fills exactly from left edge
+                fillRect.offsetMin = Vector2.zero;
+                fillRect.offsetMax = Vector2.zero;
+                
+                // Set pivot to left edge so it scales from left
+                fillRect.pivot = new Vector2(0f, 0.5f);
+                
+                // Force layout rebuild to apply changes immediately
+                UnityEngine.UI.LayoutRebuilder.ForceRebuildLayoutImmediate(fillRect);
+                
+                // Also rebuild parent to ensure proper layout
+                if (fillRect.parent != null)
+                {
+                    UnityEngine.UI.LayoutRebuilder.ForceRebuildLayoutImmediate(fillRect.parent as RectTransform);
+                }
+            }
+            
             if (fillHealth != null && gradientHealth != null)
             {
-                fillHealth.color = gradientHealth.Evaluate(sliderHealth.normalizedValue);
+                float normalized = (float)CurrentHealth / MaxHealth;
+                if (CurrentHealth <= 0 || normalized < 0.01f)
+                {
+                    fillHealth.color = new Color(0, 0, 0, 0);
+                }
+                else
+                {
+                    fillHealth.color = gradientHealth.Evaluate(normalized);
+                }
             }
         }
         
         if (healthText != null)
         {
-            healthText.text = CurrentHealth + "/" + MaxHealth;
+            healthText.text = $"{CurrentHealth}/{MaxHealth}";
         }
     }
 
@@ -499,9 +544,9 @@ public class CombatantView : MonoBehaviour
     /// Marks this combatant as dead, applying visual effects and preventing further targeting
     /// </summary>
     /// <remarks>
-    /// Called when health reaches zero. Greys out the sprite, stops animations,
-    /// and sets the IsDead flag. Dead combatants cannot be targeted, do not process
-    /// status effect ticks, and skip card discard/draw logic.
+    /// Called when health reaches zero. For heroes, greys out the sprite and stops animations.
+    /// For enemies, only sets the IsDead flag (enemies have separate death logic and should not turn gray).
+    /// Dead combatants cannot be targeted, do not process status effect ticks, and skip card discard/draw logic.
     /// 
     /// NOTE: Death animation is commented out as it's not yet implemented.
     /// When animation is ready, uncomment the animator.SetTrigger("Death") line.
@@ -514,34 +559,41 @@ public class CombatantView : MonoBehaviour
         
         Debug.Log($"[CombatantView] {gameObject.name} has been marked as DEAD", this);
         
-        // Cache original sprite color if not yet cached
-        if (spriteRenderer != null && !hasOriginalColor)
+        // Only apply graying visual effect to heroes, not enemies
+        // Enemies have separate death logic (death animation, stuck sprite, etc.) and should not turn gray
+        if (this is HeroView)
         {
-            originalSpriteColor = spriteRenderer.color;
-            hasOriginalColor = true;
-        }
-        
-        // Grey out the sprite to show death state visually
-        if (spriteRenderer != null)
-        {
-            // Set to grey with some transparency
-            spriteRenderer.color = new Color(0.4f, 0.4f, 0.4f, 0.7f);
-        }
-        
-        // Stop the animator to freeze animation
-        if (animationController != null)
-        {
-            // Disable animator to freeze animation in current frame
-            var animator = animationController.GetComponent<Animator>();
-            if (animator != null)
+            // Cache original sprite color if not yet cached
+            if (spriteRenderer != null && !hasOriginalColor)
             {
-                animator.enabled = false;
-                // NOTE: Death animation not yet implemented - commented out for now
-                // When animation is ready, enable animator and play death:
-                // animator.enabled = true;
-                // animator.SetTrigger("Death");
+                originalSpriteColor = spriteRenderer.color;
+                hasOriginalColor = true;
+            }
+            
+            // Grey out the sprite to show death state visually (heroes only)
+            if (spriteRenderer != null)
+            {
+                // Set to grey with some transparency
+                spriteRenderer.color = new Color(0.4f, 0.4f, 0.4f, 0.7f);
+            }
+            
+            // Stop the animator to freeze animation (heroes only)
+            if (animationController != null)
+            {
+                // Disable animator to freeze animation in current frame
+                var animator = animationController.GetComponent<Animator>();
+                if (animator != null)
+                {
+                    animator.enabled = false;
+                    // NOTE: Death animation not yet implemented - commented out for now
+                    // When animation is ready, enable animator and play death:
+                    // animator.enabled = true;
+                    // animator.SetTrigger("Death");
+                }
             }
         }
+        // For enemies, IsDead flag is set but no visual graying is applied
+        // Enemy death visuals are handled by EnemySystem (death animation, stuck sprite, etc.)
     }
 
     /// <summary>

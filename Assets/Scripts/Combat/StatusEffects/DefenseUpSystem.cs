@@ -47,6 +47,11 @@ public class DefenseUpSystem : MonoBehaviour
     /// Lookup to get combatant reference from instance ID
     /// </summary>
     private Dictionary<int, CombatantView> combatantLookup = new Dictionary<int, CombatantView>();
+    
+    /// <summary>
+    /// Tracks custom names for each combatant's DEFENSE_UP effect (for consolidated sprite display)
+    /// </summary>
+    private Dictionary<int, string> customNames = new Dictionary<int, string>();
 
     private void OnEnable()
     {
@@ -77,15 +82,70 @@ public class DefenseUpSystem : MonoBehaviour
             
             int instanceId = target.GetInstanceID();
             
-            // Store or update defense data
-            defensePercentages[instanceId] = action.DefensePercentage;
-            defenseDurations[instanceId] = action.Duration;
-            combatantLookup[instanceId] = target;
-            
-            // Apply status effect with percentage as stacks (for UI display) and custom name for consolidated sprite
-            target.AddStatusEffect(StatusEffectType.DEFENSE_UP, action.DefensePercentage, action.CustomName);
-            
-            Debug.Log($"[DefenseUpSystem] {target.name} gains +{action.DefensePercentage}% defense for {action.Duration} turns");
+            // Check if already has defense up - take the higher percentage
+            if (defensePercentages.TryGetValue(instanceId, out int existingPercent))
+            {
+                if (action.DefensePercentage > existingPercent)
+                {
+                    defensePercentages[instanceId] = action.DefensePercentage;
+                    defenseDurations[instanceId] = action.Duration;
+                    
+                    // Store custom name if provided
+                    if (!string.IsNullOrEmpty(action.CustomName))
+                    {
+                        customNames[instanceId] = action.CustomName;
+                    }
+                    
+                    // Remove old stacks and set to new duration (UI shows duration, not percentage)
+                    int currentStacks = target.GetStatusEffectStacks(StatusEffectType.DEFENSE_UP);
+                    if (currentStacks > 0)
+                    {
+                        target.RemoveStatusEffect(StatusEffectType.DEFENSE_UP, currentStacks);
+                    }
+                    target.AddStatusEffect(StatusEffectType.DEFENSE_UP, action.Duration, action.CustomName);
+                    
+                    Debug.Log($"[DefenseUpSystem] {target.name}'s defense buff upgraded to +{action.DefensePercentage}% for {action.Duration} turns");
+                }
+                else
+                {
+                    // Refresh duration if same or lower percentage
+                    defenseDurations[instanceId] = Mathf.Max(defenseDurations[instanceId], action.Duration);
+                    
+                    // Update custom name if provided
+                    if (!string.IsNullOrEmpty(action.CustomName))
+                    {
+                        customNames[instanceId] = action.CustomName;
+                    }
+                    
+                    // Remove old stacks and set to new duration
+                    int currentStacks = target.GetStatusEffectStacks(StatusEffectType.DEFENSE_UP);
+                    if (currentStacks > 0)
+                    {
+                        target.RemoveStatusEffect(StatusEffectType.DEFENSE_UP, currentStacks);
+                    }
+                    string nameToUse = customNames.TryGetValue(instanceId, out string storedName) ? storedName : action.CustomName;
+                    target.AddStatusEffect(StatusEffectType.DEFENSE_UP, defenseDurations[instanceId], nameToUse);
+                    Debug.Log($"[DefenseUpSystem] {target.name}'s defense buff duration refreshed to {defenseDurations[instanceId]} turns");
+                }
+            }
+            else
+            {
+                // New defense buff
+                defensePercentages[instanceId] = action.DefensePercentage;
+                defenseDurations[instanceId] = action.Duration;
+                combatantLookup[instanceId] = target;
+                
+                // Store custom name if provided
+                if (!string.IsNullOrEmpty(action.CustomName))
+                {
+                    customNames[instanceId] = action.CustomName;
+                }
+                
+                // Apply status effect with duration as stacks (for UI display) - shows remaining turns
+                target.AddStatusEffect(StatusEffectType.DEFENSE_UP, action.Duration, action.CustomName);
+                
+                Debug.Log($"[DefenseUpSystem] {target.name} gains +{action.DefensePercentage}% defense for {action.Duration} turns");
+            }
         }
         
         yield return null;
@@ -180,17 +240,32 @@ public class DefenseUpSystem : MonoBehaviour
         if (defenseDurations[instanceId] <= 0)
         {
             // Defense buff expired, remove it
-            int defensePercent = defensePercentages[instanceId];
-            combatant.RemoveStatusEffect(StatusEffectType.DEFENSE_UP, defensePercent);
-            
             defensePercentages.Remove(instanceId);
             defenseDurations.Remove(instanceId);
             combatantLookup.Remove(instanceId);
+            customNames.Remove(instanceId);
             
-            Debug.Log($"[DefenseUpSystem] {combatant.name}'s +{defensePercent}% defense buff expired");
+            // Remove status effect from visual display (use current stack count, not percentage)
+            int currentStacks = combatant.GetStatusEffectStacks(StatusEffectType.DEFENSE_UP);
+            if (currentStacks > 0)
+            {
+                combatant.RemoveStatusEffect(StatusEffectType.DEFENSE_UP, currentStacks);
+            }
+            
+            Debug.Log($"[DefenseUpSystem] {combatant.name}'s defense buff expired");
         }
         else
         {
+            // Update UI to show remaining duration (not percentage)
+            // Remove old stacks first, then set to new duration
+            int currentStacks = combatant.GetStatusEffectStacks(StatusEffectType.DEFENSE_UP);
+            if (currentStacks > 0)
+            {
+                combatant.RemoveStatusEffect(StatusEffectType.DEFENSE_UP, currentStacks);
+            }
+            // Preserve custom name if it exists
+            string customName = customNames.TryGetValue(instanceId, out string storedName) ? storedName : null;
+            combatant.AddStatusEffect(StatusEffectType.DEFENSE_UP, defenseDurations[instanceId], customName);
             Debug.Log($"[DefenseUpSystem] {combatant.name}'s defense buff duration: {defenseDurations[instanceId]} turns remaining");
         }
     }

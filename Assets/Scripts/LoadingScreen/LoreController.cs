@@ -142,6 +142,13 @@ public class LoreController : VideoControllerBase
             Debug.Log("[LoreController] MusicManager.Instance is available");
         }
         
+        // Check SceneController before using it
+        if (SceneController.Instance == null)
+        {
+            Debug.LogError("[LoreController] SceneController.Instance is NULL! Cannot transition to next scene. Ensure SceneController exists in the scene.", this);
+            return; // Exit early to prevent NullReferenceException
+        }
+        
         // Transition with smooth music crossfade
         var transition = SceneController.Instance
             .NewTransition()

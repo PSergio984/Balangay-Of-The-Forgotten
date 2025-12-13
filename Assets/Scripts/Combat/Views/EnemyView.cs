@@ -106,21 +106,138 @@ public class EnemyView : CombatantView
         this.healthText = healthBarText;
         this.NameText = nameText;
         
+        // Debug: Check visibility issues
+        if (sliderHealth != null)
+        {
+            // Ensure GameObject is active
+            if (!sliderHealth.gameObject.activeInHierarchy)
+            {
+                Debug.LogWarning($"[EnemyView] Health bar GameObject '{sliderHealth.gameObject.name}' is inactive! Activating it...", sliderHealth);
+                sliderHealth.gameObject.SetActive(true);
+            }
+            
+            // Check Canvas
+            Canvas canvas = sliderHealth.GetComponentInParent<Canvas>();
+            if (canvas == null)
+            {
+                Debug.LogError($"[EnemyView] Health bar '{sliderHealth.gameObject.name}' is not under a Canvas! It won't render.", sliderHealth);
+            }
+            else
+            {
+                // Ensure Canvas is active and enabled
+                if (!canvas.gameObject.activeInHierarchy)
+                {
+                    Debug.LogWarning($"[EnemyView] Canvas '{canvas.gameObject.name}' is inactive! Activating it...", canvas);
+                    canvas.gameObject.SetActive(true);
+                }
+                
+                // Check Canvas Group (might be blocking rendering)
+                CanvasGroup canvasGroup = canvas.GetComponent<CanvasGroup>();
+                if (canvasGroup != null && (!canvasGroup.interactable || canvasGroup.alpha <= 0.01f))
+                {
+                    Debug.LogWarning($"[EnemyView] CanvasGroup on '{canvas.gameObject.name}' might be blocking visibility (alpha: {canvasGroup.alpha}, interactable: {canvasGroup.interactable})", canvasGroup);
+                }
+                
+                Debug.Log($"[EnemyView] Health bar assigned to Canvas '{canvas.gameObject.name}' (Render Mode: {canvas.renderMode}, Active: {canvas.gameObject.activeInHierarchy})", sliderHealth);
+            }
+            
+            RectTransform parentRect = sliderHealth.GetComponent<RectTransform>();
+            if (parentRect != null)
+            {
+                // Debug: Log current state
+                Debug.Log($"[EnemyView] Health bar RectTransform - Position: {parentRect.position}, LocalPosition: {parentRect.localPosition}, Scale: {parentRect.localScale}, SizeDelta: {parentRect.sizeDelta}, Active: {parentRect.gameObject.activeInHierarchy}", parentRect);
+                
+                // Fix parent scale issue: Reset parent scale to (1,1,1) to prevent children from scaling
+                if (parentRect.localScale != Vector3.one)
+                {
+                    // Store the desired size before resetting scale
+                    Vector2 currentSize = parentRect.sizeDelta;
+                    Vector3 currentScale = parentRect.localScale;
+                    
+                    // Calculate what the size should be at scale 1
+                    Vector2 targetSize = new Vector2(
+                        currentSize.x * currentScale.x,
+                        currentSize.y * currentScale.y
+                    );
+                    
+                    Debug.Log($"[EnemyView] Resetting scale from {currentScale} to (1,1,1), adjusting size from {currentSize} to {targetSize}", parentRect);
+                    
+                    // Reset scale to (1,1,1) - this prevents children from scaling
+                    parentRect.localScale = Vector3.one;
+                    
+                    // Resize parent using sizeDelta instead of scale
+                    if (parentRect.anchorMin == parentRect.anchorMax)
+                    {
+                        // If using fixed anchors, adjust sizeDelta
+                        parentRect.sizeDelta = targetSize;
+                    }
+                    else
+                    {
+                        // If using stretch anchors, adjust Left/Top/Right/Bottom offsets
+                        float left = parentRect.offsetMin.x;
+                        float bottom = parentRect.offsetMin.y;
+                        float right = parentRect.offsetMax.x;
+                        float top = parentRect.offsetMax.y;
+                        
+                        // Scale the offsets to match the desired size
+                        parentRect.offsetMin = new Vector2(left * currentScale.x, bottom * currentScale.y);
+                        parentRect.offsetMax = new Vector2(right * currentScale.x, top * currentScale.y);
+                    }
+                }
+                
+                // Ensure the healthbar is visible (not zero size)
+                if (parentRect.sizeDelta.x <= 0.1f || parentRect.sizeDelta.y <= 0.1f)
+                {
+                    Debug.LogWarning($"[EnemyView] Health bar has very small or zero size: {parentRect.sizeDelta}. This might make it invisible!", parentRect);
+                }
+            }
+        }
+        
         // Update all components immediately with current values
         if (sliderHealth != null)
         {
             sliderHealth.maxValue = MaxHealth;
+            sliderHealth.minValue = 0;
             sliderHealth.value = CurrentHealth;
+            
+            // Make Fill completely independent - properly configured to stretch based on health
+            if (sliderHealth.fillRect != null)
+            {
+                float normalized = Mathf.Clamp01((float)CurrentHealth / MaxHealth);
+                var fillRect = sliderHealth.fillRect;
+                
+                // Make Fill completely independent with left-to-right stretch based on health
+                // Set anchors to stretch from left (0) to normalized value (health percentage)
+                fillRect.anchorMin = Vector2.zero;
+                fillRect.anchorMax = new Vector2(normalized, 1f);
+                
+                // Clear all offsets to ensure it fills exactly from left edge
+                fillRect.offsetMin = Vector2.zero;
+                fillRect.offsetMax = Vector2.zero;
+                
+                // Set pivot to left edge so it scales from left
+                fillRect.pivot = new Vector2(0f, 0.5f);
+                
+                // Force layout rebuild to apply changes immediately
+                UnityEngine.UI.LayoutRebuilder.ForceRebuildLayoutImmediate(fillRect);
+                
+                // Also rebuild parent to ensure proper layout
+                if (fillRect.parent != null)
+                {
+                    UnityEngine.UI.LayoutRebuilder.ForceRebuildLayoutImmediate(fillRect.parent as RectTransform);
+                }
+            }
         }
         
         if (fillHealth != null && gradientHealth != null)
         {
-            fillHealth.color = gradientHealth.Evaluate(1f);
+            float normalized = (float)CurrentHealth / MaxHealth;
+            fillHealth.color = gradientHealth.Evaluate(normalized);
         }
         
         if (healthText != null)
         {
-            healthText.text = CurrentHealth + "/" + MaxHealth;
+            healthText.text = $"{CurrentHealth}/{MaxHealth}";
         }
         
         if (NameText != null && Data != null)
