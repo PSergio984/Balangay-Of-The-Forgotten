@@ -44,6 +44,15 @@ public class ApplyDefenseDownEffect : Effects
     [Range(1, 10)]
     [InfoBox("@\"Defense debuff lasts for \" + duration + \" turn(s)\"", InfoMessageType.None)]
     private int duration = 2;
+    
+    /// <summary>
+    /// Optional custom name for consolidated sprite display (e.g., "Bonecracked", "Moonfall", "Bind")
+    /// Leave empty to use default DEFENSE_DOWN sprite. Set to a name to use consolidated move sprite.
+    /// </summary>
+    [SerializeField]
+    [LabelText("Custom Effect Name (Optional)")]
+    [InfoBox("If set, this name will be used to display a consolidated move sprite instead of the default DEFENSE_DOWN sprite. Examples: 'Bonecracked', 'Moonfall', 'Bind'", InfoMessageType.None)]
+    private string customName;
 
     /// <summary>
     /// Creates a game action that applies defense debuff to targets
@@ -59,6 +68,6 @@ public class ApplyDefenseDownEffect : Effects
             return null;
         }
 
-        return new ApplyDefenseDownGA(targets, defensePercentage, duration);
+        return new ApplyDefenseDownGA(targets, defensePercentage, duration, customName);
     }
 }

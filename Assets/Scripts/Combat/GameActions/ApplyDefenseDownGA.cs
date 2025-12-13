@@ -37,6 +37,12 @@ public class ApplyDefenseDownGA : GameAction
     /// How many turns the defense debuff lasts before expiring
     /// </summary>
     public int Duration { get; private set; }
+    
+    /// <summary>
+    /// Optional custom name for this effect (e.g., "Bonecracked", "Moonfall", "Bind")
+    /// Used to display consolidated move sprites instead of default effect sprites
+    /// </summary>
+    public string CustomName { get; private set; }
 
     /// <summary>
     /// Creates a new defense down action
@@ -44,7 +50,8 @@ public class ApplyDefenseDownGA : GameAction
     /// <param name="targets">Who should receive the defense debuff</param>
     /// <param name="defensePercentage">Percentage of defense decrease (1-90)</param>
     /// <param name="duration">How many turns it lasts</param>
-    public ApplyDefenseDownGA(List<CombatantView> targets, int defensePercentage, int duration)
+    /// <param name="customName">Optional custom name for consolidated sprite display (e.g., "Bonecracked", "Moonfall")</param>
+    public ApplyDefenseDownGA(List<CombatantView> targets, int defensePercentage, int duration, string customName = null)
     {
         if (targets == null || targets.Count == 0)
             throw new System.ArgumentException("Targets cannot be null or empty", nameof(targets));
@@ -56,5 +63,6 @@ public class ApplyDefenseDownGA : GameAction
         Targets = new List<CombatantView>(targets);
         DefensePercentage = defensePercentage;
         Duration = duration;
+        CustomName = customName;
     }
 }

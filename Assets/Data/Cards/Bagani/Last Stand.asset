@@ -47,6 +47,7 @@ MonoBehaviour:
       data:
         defensePercentage: 50
         duration: 3
+        customName: On Guard
     - rid: 5040687034078331174
       type: {class: HeroTM, ns: , asm: Assembly-CSharp}
       data: 

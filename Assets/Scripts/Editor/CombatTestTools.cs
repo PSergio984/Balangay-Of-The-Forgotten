@@ -141,5 +141,260 @@ public class CombatTestTools
         // Only enable in play mode
         return Application.isPlaying;
     }
+
+    // ========== STATUS EFFECT TEST FUNCTIONS ==========
+
+    /// <summary>
+    /// Helper method to get current hero and show error if not available
+    /// </summary>
+    private static HeroView GetCurrentHeroForTest()
+    {
+        if (HeroSystem.Instance == null)
+        {
+            EditorUtility.DisplayDialog(
+                "HeroSystem Not Found",
+                "HeroSystem.Instance is null!\n\nMake sure you're in a combat scene with HeroSystem set up.",
+                "OK"
+            );
+            Debug.LogWarning("[CombatTestTools] HeroSystem.Instance is null!");
+            return null;
+        }
+
+        var currentHero = CurrentHeroUtil.GetCurrentHero();
+        if (currentHero == null)
+        {
+            EditorUtility.DisplayDialog(
+                "No Current Hero",
+                "Could not get current hero!\n\nMake sure a hero turn is active.",
+                "OK"
+            );
+            Debug.LogWarning("[CombatTestTools] CurrentHeroUtil.GetCurrentHero() returned null!");
+            return null;
+        }
+
+        return currentHero;
+    }
+
+    /// <summary>
+    /// TEST FUNCTION: Apply Bonecracked (DEFENSE_DOWN 10% for 1 turn) to current hero
+    /// </summary>
+    [MenuItem("Tools/Combat Test/Apply Status Effects/Apply Bonecracked", false, 10)]
+    public static void ApplyBonecracked()
+    {
+        if (!Application.isPlaying) { EditorUtility.DisplayDialog("Not in Play Mode", "This function only works during Play Mode.", "OK"); return; }
+
+        var hero = GetCurrentHeroForTest();
+        if (hero == null) return;
+
+        var targets = new List<CombatantView> { hero };
+        var action = new ApplyDefenseDownGA(targets, 10, 1, "Bonecracked");
+        ActionSystem.Instance.Perform(action);
+        Debug.Log($"[CombatTestTools] Applied Bonecracked to {hero.name}");
+    }
+
+    [MenuItem("Tools/Combat Test/Apply Status Effects/Apply Bonecracked", true)]
+    public static bool ValidateApplyBonecracked() => Application.isPlaying;
+
+    /// <summary>
+    /// TEST FUNCTION: Apply Rage (+50% DMG, +20% def ignore, +20% hit for 3 turns) to current hero
+    /// </summary>
+    [MenuItem("Tools/Combat Test/Apply Status Effects/Apply Rage", false, 11)]
+    public static void ApplyRage()
+    {
+        if (!Application.isPlaying) { EditorUtility.DisplayDialog("Not in Play Mode", "This function only works during Play Mode.", "OK"); return; }
+
+        var hero = GetCurrentHeroForTest();
+        if (hero == null) return;
+
+        RageStatusEffectSystem.ApplyRage(hero, 3);
+        Debug.Log($"[CombatTestTools] Applied Rage to {hero.name}");
+    }
+
+    [MenuItem("Tools/Combat Test/Apply Status Effects/Apply Rage", true)]
+    public static bool ValidateApplyRage() => Application.isPlaying;
+
+    /// <summary>
+    /// TEST FUNCTION: Apply On Guard (+40% defense for 3 turns) to current hero
+    /// </summary>
+    [MenuItem("Tools/Combat Test/Apply Status Effects/Apply On Guard", false, 12)]
+    public static void ApplyOnGuard()
+    {
+        if (!Application.isPlaying) { EditorUtility.DisplayDialog("Not in Play Mode", "This function only works during Play Mode.", "OK"); return; }
+
+        var hero = GetCurrentHeroForTest();
+        if (hero == null) return;
+
+        var targets = new List<CombatantView> { hero };
+        var action = new ApplyDefenseUpGA(targets, 40, 3, "On Guard");
+        ActionSystem.Instance.Perform(action);
+        Debug.Log($"[CombatTestTools] Applied On Guard to {hero.name}");
+    }
+
+    [MenuItem("Tools/Combat Test/Apply Status Effects/Apply On Guard", true)]
+    public static bool ValidateApplyOnGuard() => Application.isPlaying;
+
+    /// <summary>
+    /// TEST FUNCTION: Apply Blessing (+20% dmg buff for 2 turns) to current hero
+    /// </summary>
+    [MenuItem("Tools/Combat Test/Apply Status Effects/Apply Blessing", false, 13)]
+    public static void ApplyBlessing()
+    {
+        if (!Application.isPlaying) { EditorUtility.DisplayDialog("Not in Play Mode", "This function only works during Play Mode.", "OK"); return; }
+
+        var hero = GetCurrentHeroForTest();
+        if (hero == null) return;
+
+        // For DMG_UP, stacks represent percentage. Use AddStatusEffectGA with custom name via direct call
+        var targets = new List<CombatantView> { hero };
+        hero.AddStatusEffect(StatusEffectType.DMG_UP, 20, "Blessing");
+        Debug.Log($"[CombatTestTools] Applied Blessing to {hero.name}");
+    }
+
+    [MenuItem("Tools/Combat Test/Apply Status Effects/Apply Blessing", true)]
+    public static bool ValidateApplyBlessing() => Application.isPlaying;
+
+    /// <summary>
+    /// TEST FUNCTION: Apply Focused Aim (+30% hit, +20% def ignore for 2 turns) to current hero
+    /// </summary>
+    [MenuItem("Tools/Combat Test/Apply Status Effects/Apply Focused Aim", false, 14)]
+    public static void ApplyFocusedAim()
+    {
+        if (!Application.isPlaying) { EditorUtility.DisplayDialog("Not in Play Mode", "This function only works during Play Mode.", "OK"); return; }
+
+        var hero = GetCurrentHeroForTest();
+        if (hero == null) return;
+
+        var targets = new List<CombatantView> { hero };
+        var action = new AddStatusEffectGA(StatusEffectType.FOCUSED, 2, targets);
+        ActionSystem.Instance.Perform(action);
+        Debug.Log($"[CombatTestTools] Applied Focused Aim to {hero.name}");
+    }
+
+    [MenuItem("Tools/Combat Test/Apply Status Effects/Apply Focused Aim", true)]
+    public static bool ValidateApplyFocusedAim() => Application.isPlaying;
+
+    /// <summary>
+    /// TEST FUNCTION: Apply Moonfall (DEFENSE_DOWN 20% for 2 turns) to current hero
+    /// </summary>
+    [MenuItem("Tools/Combat Test/Apply Status Effects/Apply Moonfall", false, 15)]
+    public static void ApplyMoonfall()
+    {
+        if (!Application.isPlaying) { EditorUtility.DisplayDialog("Not in Play Mode", "This function only works during Play Mode.", "OK"); return; }
+
+        var hero = GetCurrentHeroForTest();
+        if (hero == null) return;
+
+        var targets = new List<CombatantView> { hero };
+        var action = new ApplyDefenseDownGA(targets, 20, 2, "Moonfall");
+        ActionSystem.Instance.Perform(action);
+        Debug.Log($"[CombatTestTools] Applied Moonfall to {hero.name}");
+    }
+
+    [MenuItem("Tools/Combat Test/Apply Status Effects/Apply Moonfall", true)]
+    public static bool ValidateApplyMoonfall() => Application.isPlaying;
+
+    /// <summary>
+    /// TEST FUNCTION: Apply Invulnerable (100% damage reduction) to current hero
+    /// </summary>
+    [MenuItem("Tools/Combat Test/Apply Status Effects/Apply Invulnerable", false, 16)]
+    public static void ApplyInvulnerable()
+    {
+        if (!Application.isPlaying) { EditorUtility.DisplayDialog("Not in Play Mode", "This function only works during Play Mode.", "OK"); return; }
+
+        var hero = GetCurrentHeroForTest();
+        if (hero == null) return;
+
+        // Invulnerable uses stacks to represent duration (typically 1-2 turns for testing)
+        var targets = new List<CombatantView> { hero };
+        var action = new AddStatusEffectGA(StatusEffectType.INVULNERABLE, 3, targets);
+        ActionSystem.Instance.Perform(action);
+        Debug.Log($"[CombatTestTools] Applied Invulnerable (3 stacks) to {hero.name}");
+    }
+
+    [MenuItem("Tools/Combat Test/Apply Status Effects/Apply Invulnerable", true)]
+    public static bool ValidateApplyInvulnerable() => Application.isPlaying;
+
+    /// <summary>
+    /// TEST FUNCTION: Apply Stun (cannot attack) to current hero
+    /// </summary>
+    [MenuItem("Tools/Combat Test/Apply Status Effects/Apply Stun", false, 17)]
+    public static void ApplyStun()
+    {
+        if (!Application.isPlaying) { EditorUtility.DisplayDialog("Not in Play Mode", "This function only works during Play Mode.", "OK"); return; }
+
+        var hero = GetCurrentHeroForTest();
+        if (hero == null) return;
+
+        // Stun uses stacks to represent duration
+        var targets = new List<CombatantView> { hero };
+        var action = new AddStatusEffectGA(StatusEffectType.STUN, 2, targets);
+        ActionSystem.Instance.Perform(action);
+        Debug.Log($"[CombatTestTools] Applied Stun (2 stacks) to {hero.name}");
+    }
+
+    [MenuItem("Tools/Combat Test/Apply Status Effects/Apply Stun", true)]
+    public static bool ValidateApplyStun() => Application.isPlaying;
+
+    /// <summary>
+    /// TEST FUNCTION: Apply Devoured (60HP fixed damage per turn for 2 turns) to current hero
+    /// </summary>
+    [MenuItem("Tools/Combat Test/Apply Status Effects/Apply Devoured", false, 18)]
+    public static void ApplyDevoured()
+    {
+        if (!Application.isPlaying) { EditorUtility.DisplayDialog("Not in Play Mode", "This function only works during Play Mode.", "OK"); return; }
+
+        var hero = GetCurrentHeroForTest();
+        if (hero == null) return;
+
+        var targets = new List<CombatantView> { hero };
+        // Fixed damage 60HP, 0% MAG, 2 turns duration, null caster for test
+        var action = new ApplyDevouredGA(targets, 0, 60, 2, null);
+        ActionSystem.Instance.Perform(action);
+        Debug.Log($"[CombatTestTools] Applied Devoured (60HP per turn for 2 turns) to {hero.name}");
+    }
+
+    [MenuItem("Tools/Combat Test/Apply Status Effects/Apply Devoured", true)]
+    public static bool ValidateApplyDevoured() => Application.isPlaying;
+
+    /// <summary>
+    /// TEST FUNCTION: Apply Bind (DEFENSE_DOWN 15% for 2 turns) to current hero
+    /// </summary>
+    [MenuItem("Tools/Combat Test/Apply Status Effects/Apply Bind", false, 19)]
+    public static void ApplyBind()
+    {
+        if (!Application.isPlaying) { EditorUtility.DisplayDialog("Not in Play Mode", "This function only works during Play Mode.", "OK"); return; }
+
+        var hero = GetCurrentHeroForTest();
+        if (hero == null) return;
+
+        var targets = new List<CombatantView> { hero };
+        var action = new ApplyDefenseDownGA(targets, 15, 2, "Bind");
+        ActionSystem.Instance.Perform(action);
+        Debug.Log($"[CombatTestTools] Applied Bind to {hero.name}");
+    }
+
+    [MenuItem("Tools/Combat Test/Apply Status Effects/Apply Bind", true)]
+    public static bool ValidateApplyBind() => Application.isPlaying;
+
+    /// <summary>
+    /// TEST FUNCTION: Apply Taunt (enemies target you for 2 turns) to current hero
+    /// </summary>
+    [MenuItem("Tools/Combat Test/Apply Status Effects/Apply Taunt", false, 20)]
+    public static void ApplyTaunt()
+    {
+        if (!Application.isPlaying) { EditorUtility.DisplayDialog("Not in Play Mode", "This function only works during Play Mode.", "OK"); return; }
+
+        var hero = GetCurrentHeroForTest();
+        if (hero == null) return;
+
+        // Taunt uses stacks to represent duration
+        var targets = new List<CombatantView> { hero };
+        var action = new AddStatusEffectGA(StatusEffectType.TAUNT, 2, targets);
+        ActionSystem.Instance.Perform(action);
+        Debug.Log($"[CombatTestTools] Applied Taunt (2 stacks) to {hero.name}");
+    }
+
+    [MenuItem("Tools/Combat Test/Apply Status Effects/Apply Taunt", true)]
+    public static bool ValidateApplyTaunt() => Application.isPlaying;
 }
 

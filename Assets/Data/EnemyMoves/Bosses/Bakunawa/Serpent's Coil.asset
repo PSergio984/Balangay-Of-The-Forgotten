@@ -50,6 +50,7 @@ MonoBehaviour:
       data:
         defensePercentage: 15
         duration: 2
+        customName: Bind
     - rid: 5040687042380169444
       type: {class: TargetsHitByPreviousEffectTM, ns: , asm: Assembly-CSharp}
       data: 

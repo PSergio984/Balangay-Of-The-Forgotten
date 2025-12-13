@@ -599,6 +599,23 @@ public class CombatantView : MonoBehaviour
     /// </remarks>
     public void AddStatusEffect(StatusEffectType type, int stackCount)
     {
+        AddStatusEffect(type, stackCount, null);
+    }
+    
+    /// <summary>
+    /// Adds stacks of a status effect to this combatant with a custom display name
+    /// </summary>
+    /// <param name="type">The type of status effect to add</param>
+    /// <param name="stackCount">How many stacks to add</param>
+    /// <param name="customName">Custom display name for this effect (e.g., "Bonecracked", "Rage", "Moonfall")</param>
+    /// <remarks>
+    /// Called by status effect systems to apply effects with custom names.
+    /// The custom name allows using consolidated move sprites instead of default effect sprites.
+    /// Examples: "Bonecracked" for DEFENSE_DOWN, "Rage" for RAGE, "Moonfall" for DEFENSE_DOWN
+    /// If the effect already exists, adds to the existing stacks and preserves the custom name.
+    /// </remarks>
+    public void AddStatusEffect(StatusEffectType type, int stackCount, string customName)
+    {
         // Add to existing stacks or create new entry
         if (statusEffects.ContainsKey(type))
         {
@@ -608,8 +625,15 @@ public class CombatantView : MonoBehaviour
         {
             statusEffects.Add(type, stackCount);
         }
-        // Update the visual display to show the new stack count
-        statusEffectsUI.UpdateStatusEffectUI(type, GetStatusEffectStacks(type));
+        // Update the visual display to show the new stack count with custom name (if provided)
+        if (!string.IsNullOrEmpty(customName))
+        {
+            statusEffectsUI.UpdateStatusEffectUI(type, GetStatusEffectStacks(type), customName);
+        }
+        else
+        {
+            statusEffectsUI.UpdateStatusEffectUI(type, GetStatusEffectStacks(type));
+        }
     }
     
     /// <summary>

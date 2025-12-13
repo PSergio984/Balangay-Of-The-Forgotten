@@ -116,3 +116,4 @@ Shadow Dive (Counter)
 9. Stun: Affected targets cannot attack.
 10. Devoured: for 2 turns, takes DMG equal to 20% of MAG (fixed at 60HP).
 11. Bind: reduce target DEF by 15% for 2 turns.
+12. Taunt: enemy targets you forr 2 turns

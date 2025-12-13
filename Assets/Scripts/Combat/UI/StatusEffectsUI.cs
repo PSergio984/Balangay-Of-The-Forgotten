@@ -344,6 +344,7 @@ public class StatusEffectsUI : MonoBehaviour
             "on guard" or "onguard" => onGuardSprite,
             "blessing" => blessingSprite,
             "rage" or "enraged" => rageSprite, // Rage already has its own sprite, use it
+            "eye of the dragon" or "eyedragon" or "eye dragon" => defenseDownSprite, // Eye of the Dragon uses default DEFENSE_DOWN sprite
             _ => null, // No consolidated sprite for this move name
         };
     }

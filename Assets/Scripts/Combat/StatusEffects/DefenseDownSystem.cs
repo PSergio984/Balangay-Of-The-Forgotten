@@ -83,7 +83,7 @@ public class DefenseDownSystem : MonoBehaviour
                     
                     // Update visual stacks to new value
                     int diff = action.DefensePercentage - existingPercent;
-                    target.AddStatusEffect(StatusEffectType.DEFENSE_DOWN, diff);
+                    target.AddStatusEffect(StatusEffectType.DEFENSE_DOWN, diff, action.CustomName);
                     
                     Debug.Log($"[DefenseDownSystem] {target.name}'s defense debuff worsened to -{action.DefensePercentage}% for {action.Duration} turns");
                 }
@@ -101,8 +101,8 @@ public class DefenseDownSystem : MonoBehaviour
                 defenseDurations[instanceId] = action.Duration;
                 combatantLookup[instanceId] = target;
                 
-                // Apply status effect with percentage as stacks (for UI display)
-                target.AddStatusEffect(StatusEffectType.DEFENSE_DOWN, action.DefensePercentage);
+                // Apply status effect with percentage as stacks (for UI display) and custom name for consolidated sprite
+                target.AddStatusEffect(StatusEffectType.DEFENSE_DOWN, action.DefensePercentage, action.CustomName);
                 
                 Debug.Log($"[DefenseDownSystem] {target.name} receives -{action.DefensePercentage}% defense for {action.Duration} turns");
             }

@@ -4269,6 +4269,11 @@ MonoBehaviour:
   enemyBoardView: {fileID: 90652668}
   moveNameColor: {r: 1, g: 0.5, b: 0.5, a: 1}
   moveNameOffsetY: 2
+  enemyTurnMoveDistance: 0.5
+  enemyTurnMoveDuration: 0.2
+  enemyAttackMoveDistance: 1
+  enemyAttackMoveForwardDuration: 0.15
+  enemyAttackMoveBackDuration: 0.25
 --- !u!1 &977712302
 GameObject:
   m_ObjectHideFlags: 0
@@ -5507,6 +5512,8 @@ MonoBehaviour:
   drawPilePoint: {fileID: 490317080}
   discardPilePoint: {fileID: 583315163}
   cardDiscardSound: {fileID: 11400000, guid: 3b32af99f81684946872ba76b13e11aa, type: 2}
+  heroTurnMoveDistance: 0.5
+  heroTurnMoveDuration: 0.5
   roleTurnAnimator: {fileID: 621209968}
 --- !u!1 &1390570762
 GameObject:

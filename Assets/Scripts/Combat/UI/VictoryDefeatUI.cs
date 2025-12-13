@@ -843,5 +843,13 @@ public class VictoryDefeatUI : Singleton<VictoryDefeatUI>
     /// Returns true if a banner animation is currently playing
     /// </summary>
     public bool IsAnimating => isAnimating;
+    
+    /// <summary>
+    /// Returns true if victory or defeat banner is currently showing
+    /// </summary>
+    /// <remarks>
+    /// Used by other systems to check if combat has ended and prevent further actions
+    /// </remarks>
+    public bool IsShowingResult => isShowingVictory || (bannerPanel != null && bannerPanel.gameObject.activeSelf);
 }
 

@@ -68,6 +68,12 @@ public class CardSystem : Singleton<CardSystem>
     [Header("🎵 Card Audio")]
     [SerializeField] private SoundData cardDiscardSound;
 
+    [Header("Hero Movement Settings")]
+    [Tooltip("How far heroes move forward (right) when their turn starts")]
+    [SerializeField] private float heroTurnMoveDistance = 0.3f;
+    [Tooltip("How long it takes for heroes to move forward at turn start")]
+    [SerializeField] private float heroTurnMoveDuration = 0.2f;
+
     // Only for UI/display, not for logic
     private int activeHeroIndex = 0;
     public int ActiveHeroIndex => activeHeroIndex;
@@ -188,12 +194,10 @@ public class CardSystem : Singleton<CardSystem>
         {
             // Store original position before moving
             heroTurnStartPositions[heroIndex] = currentHero.transform.position;
-            float moveDistance = 0.3f; // Small movement distance
-            float moveDuration = 0.2f; // Quick movement
             // Move right (positive X direction)
-            currentHero.transform.DOMoveX(currentHero.transform.position.x + moveDistance, moveDuration);
+            currentHero.transform.DOMoveX(currentHero.transform.position.x + heroTurnMoveDistance, heroTurnMoveDuration);
             // Wait for movement to complete
-            yield return new WaitForSeconds(moveDuration);
+            yield return new WaitForSeconds(heroTurnMoveDuration);
         }
 
         // Update the turn profile animator to match the current hero
@@ -397,6 +401,14 @@ public class CardSystem : Singleton<CardSystem>
         
         // Small additional wait to ensure animations/effects are fully settled
         yield return new WaitForSeconds(0.2f);
+        
+        // CRITICAL: Check if victory/defeat is showing before auto-advancing
+        // If combat has ended, don't advance turn or draw cards
+        if (VictoryDefeatUI.Instance != null && VictoryDefeatUI.Instance.IsShowingResult)
+        {
+            Debug.Log("[CardSystem] Victory/Defeat banner is showing. Aborting auto-advance to prevent drawing cards during victory/defeat.");
+            yield break;
+        }
         
         var endTurnButton = EndTurnButtonUI.Instance;
         if (endTurnButton != null)

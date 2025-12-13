@@ -27,6 +27,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 1e20db64a7c97d7479846606d26413bd, type: 2}
   combatBackgroundSprite: {fileID: 21300000, guid: 5ebcc386ec86f894b8df69958e44f515, type: 3}
   loadingVideoId: loadingMayari
-  MapMusic: {fileID: 0}
+  MapMusic: {fileID: 11400000, guid: 0a233204ae12be148b9043005ff1564e, type: 2}
   minibossReward: {fileID: 11400000, guid: 7476c27cc16d52d4c89df896eeaa16a3, type: 2}
   mainBossReward: {fileID: 11400000, guid: 5a52b58081dc5a44699d4de8e6d15914, type: 2}

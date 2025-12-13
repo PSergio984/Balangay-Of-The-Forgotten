@@ -40,6 +40,12 @@ public class ApplyDefenseUpGA : GameAction
     /// How many turns the defense buff lasts before expiring
     /// </summary>
     public int Duration { get; private set; }
+    
+    /// <summary>
+    /// Optional custom name for this effect (e.g., "On Guard")
+    /// Used to display consolidated move sprites instead of default effect sprites
+    /// </summary>
+    public string CustomName { get; private set; }
 
     /// <summary>
     /// Creates a new defense up action
@@ -47,7 +53,8 @@ public class ApplyDefenseUpGA : GameAction
     /// <param name="targets">Who should receive the defense buff</param>
     /// <param name="defensePercentage">Percentage of defense increase (1-90)</param>
     /// <param name="duration">How many turns it lasts</param>
-    public ApplyDefenseUpGA(List<CombatantView> targets, int defensePercentage, int duration)
+    /// <param name="customName">Optional custom name for consolidated sprite display (e.g., "On Guard")</param>
+    public ApplyDefenseUpGA(List<CombatantView> targets, int defensePercentage, int duration, string customName = null)
     {
         if (targets == null || targets.Count == 0)
             throw new System.ArgumentException("Targets cannot be null or empty", nameof(targets));
@@ -59,5 +66,6 @@ public class ApplyDefenseUpGA : GameAction
         Targets = new List<CombatantView>(targets);
         DefensePercentage = defensePercentage;
         Duration = duration;
+        CustomName = customName;
     }
 }

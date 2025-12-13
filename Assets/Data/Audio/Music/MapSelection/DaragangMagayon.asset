@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 16edac33fa8a6da49a81b313a27485f8, type: 3}
-  m_Name: Map
+  m_Name: DaragangMagayon
   m_EditorClassIdentifier: Assembly-CSharp::AudioSystem.SoundData
-  clip: {fileID: 8300000, guid: 9bec8f192c65eed44bc121f8dc33757e, type: 3}
+  clip: {fileID: 8300000, guid: 29ca44c4083443c41823cd3cb09d24d3, type: 3}
   mixerGroup: {fileID: 4271439559464837993, guid: 1d8e109cc8751d241b1a0f5629757c92, type: 2}
-  loop: 0
+  loop: 1
   playOnAwake: 0
   frequentSound: 0
   volume: 1

@@ -116,6 +116,14 @@ public class EndTurnButtonUI : MonoBehaviour
     /// </remarks>
     public void AdvanceToNextHero()
     {
+        // CRITICAL: Check if victory/defeat is showing before advancing
+        // If combat has ended, don't advance turn or draw cards
+        if (VictoryDefeatUI.Instance != null && VictoryDefeatUI.Instance.IsShowingResult)
+        {
+            Debug.Log("[EndTurnButtonUI] Victory/Defeat banner is showing. Cannot advance turn.");
+            return;
+        }
+        
         int heroCount = CurrentHeroUtil.GetHeroCount();
         int currentHeroIndex = CurrentHeroUtil.CurrentHeroIndex;
         Debug.Log($"[EndTurnButtonUI] Advancing turn. CurrentHeroIndex: {currentHeroIndex} / {heroCount - 1}");
@@ -123,6 +131,13 @@ public class EndTurnButtonUI : MonoBehaviour
         // Always discard current hero's hand before advancing
         ActionSystem.Instance.Perform(new DiscardAllCardsGA(), () =>
         {
+            // CRITICAL: Check again after discard completes (victory might have triggered during discard)
+            if (VictoryDefeatUI.Instance != null && VictoryDefeatUI.Instance.IsShowingResult)
+            {
+                Debug.Log("[EndTurnButtonUI] Victory/Defeat banner is showing after discard. Cannot advance turn or draw cards.");
+                return;
+            }
+            
             // If all heroes have acted, start enemy turn and reset to first hero
             if (currentHeroIndex >= heroCount - 1)
             {
@@ -147,8 +162,9 @@ public class EndTurnButtonUI : MonoBehaviour
     {
         var transition = SceneController.Instance
             .NewTransition()
-            .Load(SceneDatabase.Slots.Session, SceneDatabase.Scenes.MapSelection, setActive: true)
-            .Unload(SceneDatabase.Slots.SessionContent);
+            .Unload(SceneDatabase.Slots.SessionContent)
+            .Load(SceneDatabase.Slots.Session, SceneDatabase.Scenes.MapSelection, setActive: true);
+            
         
         // Only add loading video if provided
         if (!string.IsNullOrEmpty(loadingVideoId))

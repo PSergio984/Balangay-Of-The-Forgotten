@@ -82,8 +82,8 @@ public class DefenseUpSystem : MonoBehaviour
             defenseDurations[instanceId] = action.Duration;
             combatantLookup[instanceId] = target;
             
-            // Apply status effect with percentage as stacks (for UI display)
-            target.AddStatusEffect(StatusEffectType.DEFENSE_UP, action.DefensePercentage);
+            // Apply status effect with percentage as stacks (for UI display) and custom name for consolidated sprite
+            target.AddStatusEffect(StatusEffectType.DEFENSE_UP, action.DefensePercentage, action.CustomName);
             
             Debug.Log($"[DefenseUpSystem] {target.name} gains +{action.DefensePercentage}% defense for {action.Duration} turns");
         }

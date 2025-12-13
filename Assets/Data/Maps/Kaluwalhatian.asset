@@ -27,6 +27,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 81ff8d327f4eeab49806f93b816055a9, type: 2}
   combatBackgroundSprite: {fileID: 21300000, guid: 4a92f18362832de4099eb639ce5920ca, type: 3}
   loadingVideoId: loadingBathala
-  MapMusic: {fileID: 0}
+  MapMusic: {fileID: 11400000, guid: 8ca20d8b94d72ee4994a1a806cb2e890, type: 2}
   minibossReward: {fileID: 11400000, guid: a8dbe3d546c827b429f6daba862381ba, type: 2}
   mainBossReward: {fileID: 11400000, guid: 78122150924f17d4fb67e2ccce9101e4, type: 2}

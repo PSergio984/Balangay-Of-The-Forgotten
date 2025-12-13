@@ -377,35 +377,17 @@ public class MapButton : MonoBehaviour
         // Store selected map in transition data
         levelTransitionData.SelectedMapData = MapData;
 
-        // Select music: first enemy with CombatMusic, else MapMusic
-        SoundData selectedMusic = null;
-        if (MapData.EnemyDatas != null)
-        {
-            foreach (var enemy in MapData.EnemyDatas)
-            {
-                if (enemy != null && enemy.CombatMusic != null)
-                {
-                    selectedMusic = enemy.CombatMusic;
-                    break;
-                }
-            }
-        }
-        if (selectedMusic == null && MapData.MapMusic != null)
-        {
-            selectedMusic = MapData.MapMusic;
-        }
-
-
-        // Use SceneController to smoothly transition to combat, using selectedMusic
+        // Use SceneController to smoothly transition to combat
         var transition = SceneController.Instance
             .NewTransition()                                                                      // Start a new scene transition
             .Unload(SceneDatabase.Slots.SessionContent)                                          // Close the current map select screen
             .Load(SceneDatabase.Slots.SessionContent, SceneDatabase.Scenes.Combat, setActive: true); // Open the combat scene
 
-        // Only add music if selectedMusic is not null
-        if (selectedMusic != null)
+        // Add map music - it will be paused during loading and resume near the finish
+        // WithMusic plays in PHASE 1, WithPauseMusic pauses it in PHASE 2, then resumes in PHASE 7 (near end)
+        if (MapData.MapMusic != null)
         {
-            transition = transition.WithMusic(selectedMusic, MusicFadeTime); // Start playing selected combat music
+            transition = transition.WithMusic(MapData.MapMusic, MusicFadeTime);
         }
         
         // Only add loading video if provided - skip if null or empty
@@ -415,7 +397,8 @@ public class MapButton : MonoBehaviour
             transition = transition.WithLoadingVideo(loadingVideoId);  // Show map-specific loading video
         }
 
-        transition = transition.WithPauseMusic(9);
+        // Pause music during loading - MusicManager will resume it after fade out completes (near end of loading)
+        transition = transition.WithPauseMusic(7);
         
         transition.Perform();  // Actually do all the above actions
     }

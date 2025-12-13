@@ -493,6 +493,18 @@ public class EnemySystem : Singleton<EnemySystem>
     [Tooltip("Vertical offset for move name popup above enemy")]
     [SerializeField] private float moveNameOffsetY = 2f;
 
+    [Header("Enemy Movement Settings")]
+    [Tooltip("How far enemies move forward (left) when their turn starts")]
+    [SerializeField] private float enemyTurnMoveDistance = 0.3f;
+    [Tooltip("How long it takes for enemies to move forward at turn start")]
+    [SerializeField] private float enemyTurnMoveDuration = 0.2f;
+    [Tooltip("How far enemies move forward (left) when attacking")]
+    [SerializeField] private float enemyAttackMoveDistance = 1f;
+    [Tooltip("How long it takes for enemies to move forward during attack")]
+    [SerializeField] private float enemyAttackMoveForwardDuration = 0.15f;
+    [Tooltip("How long it takes for enemies to move back after attack")]
+    [SerializeField] private float enemyAttackMoveBackDuration = 0.25f;
+
     /// <summary>
     /// Makes all enemies perform their actions during enemy turn
     /// </summary>
@@ -526,8 +538,6 @@ public class EnemySystem : Singleton<EnemySystem>
 
         // Move all enemies slightly to the left to show they're preparing to attack
         enemyTurnStartPositions.Clear(); // Clear previous turn's positions
-        float moveDistance = 0.3f; // Small movement distance
-        float moveDuration = 0.2f; // Quick movement
         
         foreach (var enemy in enemyBoardView.EnemyViews)
         {
@@ -536,12 +546,12 @@ public class EnemySystem : Singleton<EnemySystem>
                 // Store original position before moving
                 enemyTurnStartPositions[enemy] = enemy.transform.position;
                 // Move left (negative X direction)
-                enemy.transform.DOMoveX(enemy.transform.position.x - moveDistance, moveDuration);
+                enemy.transform.DOMoveX(enemy.transform.position.x - enemyTurnMoveDistance, enemyTurnMoveDuration);
             }
         }
         
         // Wait for movement to complete
-        yield return new WaitForSeconds(moveDuration);
+        yield return new WaitForSeconds(enemyTurnMoveDuration);
 
         // Use StatusEffectTickSystem to process all enemy status effect ticks
         StatusEffectTickSystem.Instance.TickStatusEffects(enemyBoardView.EnemyViews.ConvertAll(e => (CombatantView)e));
@@ -758,8 +768,8 @@ public class EnemySystem : Singleton<EnemySystem>
         // Play attack animation on the enemy
         attacker.PlayAnimation(CombatantAnimState.Attack);
         
-        // Animate the enemy moving forward (attack windup) - moves left 1 unit in 0.15 seconds
-        Tween tween = attacker.transform.DOMoveX(attacker.transform.position.x - 1f, 0.15f);
+        // Animate the enemy moving forward (attack windup)
+        Tween tween = attacker.transform.DOMoveX(attacker.transform.position.x - enemyAttackMoveDistance, enemyAttackMoveForwardDuration);
         // Wait for the forward movement animation to complete
         yield return tween.WaitForCompletion();
         
@@ -782,8 +792,8 @@ public class EnemySystem : Singleton<EnemySystem>
         // Wait for remaining attack animation
         yield return new WaitForSeconds(attackDuration * 0.6f);
         
-        // Animate the enemy moving back to original position - moves right 1 unit in 0.25 seconds
-        Tween backTween = attacker.transform.DOMoveX(attacker.transform.position.x + 1f, 0.25f);
+        // Animate the enemy moving back to original position
+        Tween backTween = attacker.transform.DOMoveX(attacker.transform.position.x + enemyAttackMoveDistance, enemyAttackMoveBackDuration);
         yield return backTween.WaitForCompletion();
         
         // Return enemy to idle animation

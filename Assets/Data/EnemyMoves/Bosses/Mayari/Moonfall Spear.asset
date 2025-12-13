@@ -26,7 +26,7 @@ MonoBehaviour:
   - <targetMode>k__BackingField:
       rid: 5040687038726930761
     <effects>k__BackingField:
-      rid: -2
+      rid: 5040687169801552185
   references:
     version: 2
     RefIds:
@@ -48,3 +48,9 @@ MonoBehaviour:
     - rid: 5040687038726930761
       type: {class: RandomTargetTM, ns: , asm: Assembly-CSharp}
       data: 
+    - rid: 5040687169801552185
+      type: {class: ApplyDefenseDownEffect, ns: , asm: Assembly-CSharp}
+      data:
+        defensePercentage: 20
+        duration: 2
+        customName: Moonfall

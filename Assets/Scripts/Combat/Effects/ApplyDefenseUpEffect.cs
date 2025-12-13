@@ -45,6 +45,15 @@ public class ApplyDefenseUpEffect : Effects
     [Range(1, 10)]
     [InfoBox("@\"Defense buff lasts for \" + duration + \" turn(s)\"", InfoMessageType.None)]
     private int duration = 3;
+    
+    /// <summary>
+    /// Optional custom name for consolidated sprite display (e.g., "On Guard")
+    /// Leave empty to use default DEFENSE_UP sprite. Set to a name to use consolidated move sprite.
+    /// </summary>
+    [SerializeField]
+    [LabelText("Custom Effect Name (Optional)")]
+    [InfoBox("If set, this name will be used to display a consolidated move sprite instead of the default DEFENSE_UP sprite. Examples: 'On Guard'", InfoMessageType.None)]
+    private string customName;
 
     /// <summary>
     /// Creates a game action that applies defense buff to targets
@@ -60,6 +69,6 @@ public class ApplyDefenseUpEffect : Effects
             return null;
         }
 
-        return new ApplyDefenseUpGA(targets, defensePercentage, duration);
+        return new ApplyDefenseUpGA(targets, defensePercentage, duration, customName);
     }
 }
