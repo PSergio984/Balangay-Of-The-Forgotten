@@ -504,6 +504,29 @@ public class EnemySystem : Singleton<EnemySystem>
     [SerializeField] private float enemyAttackMoveForwardDuration = 0.15f;
     [Tooltip("How long it takes for enemies to move back after attack")]
     [SerializeField] private float enemyAttackMoveBackDuration = 0.25f;
+    
+    [Header("Enemy Hit Movement Settings")]
+    [Tooltip("How far enemies move left (backwards) when getting hit")]
+    [SerializeField] private float enemyHitMoveDistance = 0.2f;
+    [Tooltip("How long it takes for enemies to move left when hit")]
+    [SerializeField] private float enemyHitMoveDuration = 0.1f;
+    [Tooltip("How long it takes for enemies to return after being hit")]
+    [SerializeField] private float enemyHitReturnDuration = 0.15f;
+    
+    /// <summary>
+    /// Gets the enemy hit movement distance (editable in Unity Inspector)
+    /// </summary>
+    public float EnemyHitMoveDistance => enemyHitMoveDistance;
+    
+    /// <summary>
+    /// Gets the enemy hit movement duration (editable in Unity Inspector)
+    /// </summary>
+    public float EnemyHitMoveDuration => enemyHitMoveDuration;
+    
+    /// <summary>
+    /// Gets the enemy hit return duration (editable in Unity Inspector)
+    /// </summary>
+    public float EnemyHitReturnDuration => enemyHitReturnDuration;
 
     /// <summary>
     /// Makes all enemies perform their actions during enemy turn
@@ -599,6 +622,25 @@ public class EnemySystem : Singleton<EnemySystem>
             // Start tracking hit targets for this move sequence
             HitTargetTracker.StartMoveSequence(enemy);
 
+            // Move enemy forward (left) when executing a move/attack, then return
+            Vector3 originalEnemyPos = enemy.transform.position;
+            bool movedEnemy = false;
+            
+            // Store original position if not already stored
+            if (!enemyTurnStartPositions.ContainsKey(enemy))
+            {
+                enemyTurnStartPositions[enemy] = originalEnemyPos;
+            }
+            
+            // Move enemy forward (left/negative X direction) when attacking
+            movedEnemy = true;
+            float enemyCardAttackMoveDistance = 0.5f; // Distance for card-based attacks (separate from turn start movement)
+            float enemyCardAttackMoveForwardDuration = 0.15f;
+            float enemyCardAttackMoveBackDuration = 0.2f;
+            
+            Tween enemyAttackMoveTween = enemy.transform.DOMoveX(originalEnemyPos.x - enemyCardAttackMoveDistance, enemyCardAttackMoveForwardDuration);
+            yield return enemyAttackMoveTween.WaitForCompletion();
+
             // Handle manual target effect (single-target, e.g., attack or debuff)
             if (move.ManualTargetEffect != null)
             {
@@ -681,6 +723,19 @@ public class EnemySystem : Singleton<EnemySystem>
             if (move.ManualTargetEffect == null && (move.OtherEffects == null || move.OtherEffects.Count == 0))
             {
                 Debug.LogWarning($"[EnemySystem] {enemy.name} move '{moveName}' has no effects configured! Move will do nothing.");
+            }
+            
+            // Wait a brief moment for attack visual, then return enemy to original position
+            if (movedEnemy)
+            {
+                yield return new WaitForSeconds(0.3f); // Brief pause for attack animation
+                
+                if (enemy != null && enemyTurnStartPositions.ContainsKey(enemy))
+                {
+                    Vector3 returnPos = enemyTurnStartPositions[enemy];
+                    enemy.transform.DOMoveX(returnPos.x, enemyCardAttackMoveBackDuration);
+                    // Don't remove from dictionary yet - we need it for the turn end return
+                }
             }
 
         }

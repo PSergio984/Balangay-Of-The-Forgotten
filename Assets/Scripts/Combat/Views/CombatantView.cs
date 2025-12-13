@@ -434,9 +434,41 @@ public class CombatantView : MonoBehaviour
             Debug.LogWarning($"[CombatantView] Damage called on {gameObject.name}, but AnimationController is NULL! Check if CombatantAnimationController component exists.", this);
         }
 
-        // Play a subtle screen shake animation when taking damage (0.15 seconds, 0.15 intensity)
-        // Reduced intensity for better UX - just a small shake to indicate hit
-        transform.DOShakePosition(0.15f, 0.15f);
+        // Different hit movement for enemies vs heroes
+        // Enemies move left (backwards) when hit, heroes get a subtle shake
+        if (this is EnemyView)
+        {
+            // Enemy: Move left (backwards) when hit, then return
+            // Get hit movement settings from EnemySystem (editable in Unity Inspector)
+            if (EnemySystem.Instance != null)
+            {
+                float hitMoveDistance = EnemySystem.Instance.EnemyHitMoveDistance;
+                float hitMoveDuration = EnemySystem.Instance.EnemyHitMoveDuration;
+                float returnDuration = EnemySystem.Instance.EnemyHitReturnDuration;
+                
+                Vector3 originalPos = transform.position;
+                transform.DOMoveX(originalPos.x - hitMoveDistance, hitMoveDuration)
+                    .OnComplete(() => {
+                        // Return to original position after moving left
+                        transform.DOMoveX(originalPos.x, returnDuration);
+                    });
+            }
+            else
+            {
+                // Fallback if EnemySystem is not available
+                Vector3 originalPos = transform.position;
+                transform.DOMoveX(originalPos.x - 0.2f, 0.1f)
+                    .OnComplete(() => {
+                        transform.DOMoveX(originalPos.x, 0.15f);
+                    });
+            }
+        }
+        else
+        {
+            // Hero: Play a subtle screen shake animation when taking damage (0.15 seconds, 0.15 intensity)
+            // Reduced intensity for better UX - just a small shake to indicate hit
+            transform.DOShakePosition(0.15f, 0.15f);
+        }
         
         // Update the health display to show the new health value (animated)
         UpdateHealth();

@@ -1611,7 +1611,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 54084e53289d92549b16bb147618720a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HealSystem
-  healVFX: {fileID: 1172081452124834319, guid: ac009bb7498fcfb4b96614c4fd1f735c, type: 3}
+  healVFX: {fileID: 8771972552311404799, guid: bbf9e36a48d6c5648a13889afab076fd, type: 3}
 --- !u!1 &454954085
 GameObject:
   m_ObjectHideFlags: 0
@@ -3406,7 +3406,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4576408673901004281, guid: b91acd901c4ce844f93ed852ea44a6a0, type: 3}
       propertyPath: m_text
-      value: Enemy Name
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 5030237936782935030, guid: b91acd901c4ce844f93ed852ea44a6a0, type: 3}
       propertyPath: m_Name
@@ -3442,7 +3442,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6557787857785036326, guid: b91acd901c4ce844f93ed852ea44a6a0, type: 3}
       propertyPath: m_text
-      value: 2500/2500
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 6557787857785036326, guid: b91acd901c4ce844f93ed852ea44a6a0, type: 3}
       propertyPath: m_fontSize
@@ -3637,6 +3637,8 @@ GameObject:
   - component: {fileID: 844015678}
   - component: {fileID: 844015677}
   - component: {fileID: 844015676}
+  - component: {fileID: 844015698}
+  - component: {fileID: 844015697}
   m_Layer: 0
   m_Name: StatusEffectSystem
   m_TagString: Untagged
@@ -3940,6 +3942,30 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 624e108314a059d48a9c474a59a52be5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CritUpSystem
+--- !u!114 &844015697
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 844015672}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc3e4776655bb3a4bb5d74c86baab4e6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::RestingStatusEffectSystem
+--- !u!114 &844015698
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 844015672}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7695daaa990b6f94ba68c9a4bc244554, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::NoCooldownSystem
 --- !u!1 &876527142
 GameObject:
   m_ObjectHideFlags: 0
@@ -4278,6 +4304,9 @@ MonoBehaviour:
   enemyAttackMoveDistance: 1
   enemyAttackMoveForwardDuration: 0.15
   enemyAttackMoveBackDuration: 0.25
+  enemyHitMoveDistance: 0.2
+  enemyHitMoveDuration: 0.1
+  enemyHitReturnDuration: 0.15
 --- !u!1 &977712302
 GameObject:
   m_ObjectHideFlags: 0
@@ -4370,7 +4399,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 74b8ae89b783b63428985ff5e5ee0926, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EndTurnButtonUI
-  mapSelectionMusic: {fileID: 0}
+  mapSelectionMusic: {fileID: 11400000, guid: ee085cfef2764e244b3af8925cfb2023, type: 2}
   MusicFadeTime: 2
   loadingVideoId: loading
   canPlayMultipleCards: 0
@@ -5518,6 +5547,9 @@ MonoBehaviour:
   cardDiscardSound: {fileID: 11400000, guid: 3b32af99f81684946872ba76b13e11aa, type: 2}
   heroTurnMoveDistance: 0.5
   heroTurnMoveDuration: 0.5
+  heroAttackMoveDistance: 0.5
+  heroAttackMoveForwardDuration: 0.15
+  heroAttackMoveBackDuration: 0.2
   roleTurnAnimator: {fileID: 621209968}
 --- !u!1 &1390570762
 GameObject:
@@ -7048,7 +7080,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 88e14c7eb8f156f4db05942cbce31475, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DamageSystem
-  damageVFX: {fileID: 4021103657954561961, guid: 5c755f9bc5253ea418e919994537dcc7, type: 3}
+  damageVFX: {fileID: 2708598583397607911, guid: 6398d43fe79ea0140913dc5530c646af, type: 3}
 --- !u!1 &1933420815
 GameObject:
   m_ObjectHideFlags: 0

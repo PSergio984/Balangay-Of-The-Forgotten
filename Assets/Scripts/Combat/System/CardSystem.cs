@@ -73,6 +73,12 @@ public class CardSystem : Singleton<CardSystem>
     [SerializeField] private float heroTurnMoveDistance = 0.3f;
     [Tooltip("How long it takes for heroes to move forward at turn start")]
     [SerializeField] private float heroTurnMoveDuration = 0.2f;
+    [Tooltip("How far heroes move forward (right) when attacking with a card")]
+    [SerializeField] private float heroAttackMoveDistance = 0.5f;
+    [Tooltip("How long it takes for heroes to move forward during attack")]
+    [SerializeField] private float heroAttackMoveForwardDuration = 0.15f;
+    [Tooltip("How long it takes for heroes to move back after attack")]
+    [SerializeField] private float heroAttackMoveBackDuration = 0.2f;
 
     // Only for UI/display, not for logic
     private int activeHeroIndex = 0;
@@ -353,10 +359,36 @@ public class CardSystem : Singleton<CardSystem>
         // Determine animation type based on card effects (attack for damage, cast for magic/buffs)
         CombatantAnimState animState = DetermineCardAnimationType(playCardsGA.Card);
         
+        // Move hero forward (right) when attacking with a card, then return
+        Vector3 originalHeroPos = currentHero != null ? currentHero.transform.position : Vector3.zero;
+        bool movedHero = false;
+        if (currentHero != null && animState == CombatantAnimState.Attack)
+        {
+            // Store original position for return
+            if (!heroTurnStartPositions.ContainsKey(heroIndex))
+            {
+                heroTurnStartPositions[heroIndex] = originalHeroPos;
+            }
+            
+            // Move hero forward (right/positive X direction) when attacking
+            movedHero = true;
+            Tween attackMoveTween = currentHero.transform.DOMoveX(originalHeroPos.x + heroAttackMoveDistance, heroAttackMoveForwardDuration);
+            yield return attackMoveTween.WaitForCompletion();
+        }
+        
         // Play the hero animation and wait for it to complete
         if (currentHero != null)
         {
             yield return currentHero.PlayAnimationAndWait(animState, returnToIdle: true);
+        }
+        
+        // Return hero to original position after attack
+        if (movedHero && currentHero != null && heroTurnStartPositions.ContainsKey(heroIndex))
+        {
+            Vector3 returnPos = heroTurnStartPositions[heroIndex];
+            Tween returnTween = currentHero.transform.DOMoveX(returnPos.x, heroAttackMoveBackDuration);
+            yield return returnTween.WaitForCompletion();
+            heroTurnStartPositions.Remove(heroIndex); // Clean up
         }
 
         if (playCardsGA.Card.ManualTargetEffect != null)

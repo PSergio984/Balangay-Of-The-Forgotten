@@ -617,7 +617,7 @@ MonoBehaviour:
   ignoreDefenseSprite: {fileID: 21300000, guid: d637a652ae63d6d4a8fc31c80bed944e, type: 3}
   invulnerableSprite: {fileID: 21300000, guid: 20ecd34ff7c4c3d4f98d923315fe9041, type: 3}
   rageSprite: {fileID: 21300000, guid: a3b0bea1ca64acc49a34701c9b48e433, type: 3}
-  shieldSprite: {fileID: 21300000, guid: 9d8bdf71c3e4b944c8f2eb11af9dd6ba, type: 3}
+  shieldSprite: {fileID: -4219667615955243262, guid: 40ed720c43bec484d97bc5e6352fc922, type: 3}
   stunSprite: {fileID: 21300000, guid: c1763a75530d99c4fb29746a637bafed, type: 3}
   devouredSprite: {fileID: 21300000, guid: 7d3201f05b62e34469f5ca75739dc4d0, type: 3}
   tauntSprite: {fileID: 21300000, guid: 73dc1ecceb7afb042993660c571e1bcb, type: 3}

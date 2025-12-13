@@ -148,8 +148,14 @@ public class HealSystem : MonoBehaviour
             }
             else if (healVFX != null)
             {
-                // Fallback: use the old instantiation method
-                Instantiate(healVFX, popupPosition, Quaternion.identity);
+                // Fallback: use the old instantiation method with auto-destruction
+                GameObject spawnedVFX = Instantiate(healVFX, popupPosition, Quaternion.identity);
+                if (spawnedVFX != null)
+                {
+                    // Auto-destroy VFX after default duration (matches CombatVFXManager behavior)
+                    float vfxDuration = 2.0f; // Default duration before destroying VFX
+                    Destroy(spawnedVFX, vfxDuration);
+                }
             }
 
             // Apply the healing amount to this target (restores their health)

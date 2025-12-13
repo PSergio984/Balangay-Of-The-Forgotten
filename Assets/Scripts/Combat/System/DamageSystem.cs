@@ -151,10 +151,21 @@ public class DamageSystem : MonoBehaviour
                 }
             }
             
-            // Spawn damageVFX on hit (not on miss) - either as fallback or additional effect
+            // Spawn damageVFX on hit (not on miss) - ALWAYS spawn if assigned, regardless of CombatVFXManager
+            // This ensures the damageVFX prefab always appears when configured
             if (!isMiss && damageVFX != null)
             {
-                Instantiate(damageVFX, popupPosition, Quaternion.identity);
+                GameObject spawnedVFX = Instantiate(damageVFX, popupPosition, Quaternion.identity);
+                Debug.Log($"[DamageSystem] Spawned damageVFX at position {popupPosition}");
+                if (spawnedVFX == null)
+                {
+                    Debug.LogWarning($"[DamageSystem] Failed to instantiate damageVFX at position {popupPosition}. Check that damageVFX prefab is valid.", this);
+                }
+            }
+            else if (!isMiss && damageVFX == null)
+            {
+                // Debug warning if VFX is expected but not assigned
+                Debug.LogWarning($"[DamageSystem] damageVFX is null! Damage dealt but no VFX spawned. Assign a damageVFX prefab in the Inspector.", this);
             }
 
             // Apply the damage amount to this target (reduces their health)
