@@ -58,13 +58,67 @@ public class EndTurnButtonUI : MonoBehaviour
     [Header("Loading Overlay")]
     [Tooltip("Optional loading video ID. If empty, scene will load without loading overlay")]
     [SerializeField] private string loadingVideoId = "loading";
+    
+    [Header("Turn Management")]
+    [Tooltip("If true, players can play multiple cards per turn. If false, automatically advances to next hero after playing one card.")]
+    [SerializeField] private bool canPlayMultipleCards = true;
+    
+    /// <summary>
+    /// Static reference to the EndTurnButtonUI instance (for accessing settings)
+    /// </summary>
+    private static EndTurnButtonUI instance;
+    
+    /// <summary>
+    /// Whether players can play multiple cards per turn
+    /// </summary>
+    /// <remarks>
+    /// If false, after playing any card, automatically discards hand and advances to next hero (or enemy turn).
+    /// If true, players can play multiple cards and must manually click "End Turn" button.
+    /// </remarks>
+    public bool CanPlayMultipleCards => canPlayMultipleCards;
+    
+    /// <summary>
+    /// Gets the EndTurnButtonUI instance from the scene
+    /// </summary>
+    public static EndTurnButtonUI Instance
+    {
+        get
+        {
+            if (instance == null)
+            {
+                instance = FindFirstObjectByType<EndTurnButtonUI>();
+            }
+            return instance;
+        }
+    }
+    
+    private void Awake()
+    {
+        // Set instance reference if not already set
+        if (instance == null)
+        {
+            instance = this;
+        }
+    }
 
     public void OnClick()
     {
         Debug.Log("[EndTurnButtonUI] End Turn button clicked.");
+        AdvanceToNextHero();
+    }
+    
+    /// <summary>
+    /// Advances to the next hero (or enemy turn if all heroes have acted)
+    /// </summary>
+    /// <remarks>
+    /// Discards current hero's hand, then either advances to next hero or starts enemy turn.
+    /// Can be called manually or automatically when canPlayMultipleCards is false.
+    /// </remarks>
+    public void AdvanceToNextHero()
+    {
         int heroCount = CurrentHeroUtil.GetHeroCount();
         int currentHeroIndex = CurrentHeroUtil.CurrentHeroIndex;
-        Debug.Log($"[EndTurnButtonUI] CurrentHeroIndex: {currentHeroIndex} / {heroCount - 1}");
+        Debug.Log($"[EndTurnButtonUI] Advancing turn. CurrentHeroIndex: {currentHeroIndex} / {heroCount - 1}");
 
         // Always discard current hero's hand before advancing
         ActionSystem.Instance.Perform(new DiscardAllCardsGA(), () =>

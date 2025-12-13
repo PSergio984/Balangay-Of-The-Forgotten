@@ -367,6 +367,47 @@ public class CardSystem : Singleton<CardSystem>
             PerformEffectGA performEffectGA = new(effectWrapper.effects, targets, currentHero);
             ActionSystem.Instance.AddReaction(performEffectGA);
         }
+        
+        // If canPlayMultipleCards is false, automatically advance to next hero after playing a card
+        var endTurnButton = EndTurnButtonUI.Instance;
+        if (endTurnButton != null && !endTurnButton.CanPlayMultipleCards)
+        {
+            // Start a coroutine to wait for card effects to complete, then auto-advance
+            StartCoroutine(AutoAdvanceAfterCardPlay());
+        }
+    }
+    
+    /// <summary>
+    /// Coroutine that waits for card effects to complete, then automatically advances to next hero
+    /// </summary>
+    /// <remarks>
+    /// Used when canPlayMultipleCards is false to automatically discard and advance after playing a card.
+    /// Waits for the ActionSystem to finish processing all card effects before advancing.
+    /// </remarks>
+    private IEnumerator AutoAdvanceAfterCardPlay()
+    {
+        Debug.Log("[CardSystem] Auto-advance coroutine started (canPlayMultipleCards = false)");
+        
+        // Wait a frame to ensure all reactions are queued
+        yield return null;
+        
+        // Wait for ActionSystem to finish processing all reactions from the card
+        Debug.Log("[CardSystem] Waiting for ActionSystem to finish processing card effects...");
+        yield return new WaitUntil(() => !ActionSystem.Instance.isPerforming);
+        
+        // Small additional wait to ensure animations/effects are fully settled
+        yield return new WaitForSeconds(0.2f);
+        
+        var endTurnButton = EndTurnButtonUI.Instance;
+        if (endTurnButton != null)
+        {
+            Debug.Log("[CardSystem] Card effects complete. Auto-advancing turn - discarding current hero's hand and drawing next hero's hand");
+            endTurnButton.AdvanceToNextHero();
+        }
+        else
+        {
+            Debug.LogWarning("[CardSystem] EndTurnButtonUI.Instance is null! Cannot auto-advance turn.");
+        }
     }
     
     /// <summary>

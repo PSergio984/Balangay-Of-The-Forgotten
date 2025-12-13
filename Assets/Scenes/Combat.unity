@@ -2799,6 +2799,7 @@ MonoBehaviour:
   mapSelectionMusic: {fileID: 0}
   MusicFadeTime: 2
   loadingVideoId: loading
+  canPlayMultipleCards: 1
 --- !u!114 &747210482
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3466,7 +3467,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 5030237936782935030, guid: b91acd901c4ce844f93ed852ea44a6a0, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1001253640}
   m_SourcePrefab: {fileID: 100100000, guid: b91acd901c4ce844f93ed852ea44a6a0, type: 3}
 --- !u!224 &839346359 stripped
 RectTransform:
@@ -3511,7 +3515,7 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 6844995275052706621, guid: b91acd901c4ce844f93ed852ea44a6a0, type: 3}
   m_PrefabInstance: {fileID: 839346358}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 1001253639}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 67db9e8f0e2ae9c40bc1e2b64352a6b4, type: 3}
@@ -3573,8 +3577,8 @@ MonoBehaviour:
   mainBossBannerSprite: {fileID: 21300000, guid: 6ea36991c32dbf34abce26f1ed927b22, type: 3}
   fadeInDuration: 0.5
   slideDuration: 0.8
-  bounceDistance: 50
-  bounceDuration: 0.3
+  bounceDistance: 0
+  bounceDuration: 0
   holdDuration: 1.5
   fadeOutDuration: 0.5
   fadeInEase: 6
@@ -4340,6 +4344,27 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 977712302}
   m_CullTransparentMesh: 1
+--- !u!1 &1001253639 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5030237936782935030, guid: b91acd901c4ce844f93ed852ea44a6a0, type: 3}
+  m_PrefabInstance: {fileID: 839346358}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1001253640
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1001253639}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 74b8ae89b783b63428985ff5e5ee0926, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EndTurnButtonUI
+  mapSelectionMusic: {fileID: 0}
+  MusicFadeTime: 2
+  loadingVideoId: loading
+  canPlayMultipleCards: 0
 --- !u!1 &1008515197
 GameObject:
   m_ObjectHideFlags: 0
@@ -4353,6 +4378,7 @@ GameObject:
   - component: {fileID: 1008515200}
   - component: {fileID: 1008515199}
   - component: {fileID: 1008515202}
+  - component: {fileID: 1008515203}
   m_Layer: 5
   m_Name: EndTurnButtonUI
   m_TagString: Untagged
@@ -4489,6 +4515,23 @@ MonoBehaviour:
   mapSelectionMusic: {fileID: 11400000, guid: f63134034c71633408e2c786644a6ac8, type: 2}
   MusicFadeTime: 2
   loadingVideoId: loading
+  canPlayMultipleCards: 1
+--- !u!114 &1008515203
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1008515197}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 74b8ae89b783b63428985ff5e5ee0926, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EndTurnButtonUI
+  mapSelectionMusic: {fileID: 0}
+  MusicFadeTime: 2
+  loadingVideoId: loading
+  canPlayMultipleCards: 0
 --- !u!1 &1045538463
 GameObject:
   m_ObjectHideFlags: 0
