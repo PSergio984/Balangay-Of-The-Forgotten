@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Guardian's Oath
   m_EditorClassIdentifier: Assembly-CSharp::CardData
   <Title>k__BackingField: GUARDIAN'S OATH
-  <Target>k__BackingField: 1
+  <Target>k__BackingField: 2
   <Description>k__BackingField: Sacrifice 150 HP, shield alll ally for amount of
     300, Unstackable
   <Art>k__BackingField: {fileID: 21300000, guid: eb98c9c926605eb48bdeafb3d5f2d18e, type: 3}

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9081873033961a4479294312f055a96f, type: 3}
   m_Name: Berserker
   m_EditorClassIdentifier: Assembly-CSharp::CharacterBuildPreset
-  <PresetSprite>k__BackingField: {fileID: 21300000, guid: afb6516dee7c0364691a5497cd3c6dcd, type: 3}
+  <PresetSprite>k__BackingField: {fileID: 21300000, guid: e5d55764e97ddcc4c909ec44b91ef34f, type: 3}
   <PresetName>k__BackingField: Bruiser
   <Health>k__BackingField: 700
   <AttackPower>k__BackingField: 100

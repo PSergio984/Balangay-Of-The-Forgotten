@@ -357,8 +357,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 'Select 1 Build for: '
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 6c768b948183fc74cb98cc90082f6e3d, type: 2}
+  m_sharedMaterial: {fileID: 7288972926298314984, guid: 6c768b948183fc74cb98cc90082f6e3d, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -684,8 +684,8 @@ MonoBehaviour:
 
     None Selected'
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 6c768b948183fc74cb98cc90082f6e3d, type: 2}
+  m_sharedMaterial: {fileID: 7288972926298314984, guid: 6c768b948183fc74cb98cc90082f6e3d, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -1226,10 +1226,10 @@ Camera:
   m_LensShift: {x: 0, y: 0}
   m_NormalizedViewPortRect:
     serializedVersion: 2
-    x: 0
+    x: -0.33333334
     y: 0
     width: 1
-    height: 1
+    height: 0.44444445
   near clip plane: 0.3
   far clip plane: 1000
   field of view: 34
@@ -2122,8 +2122,8 @@ MonoBehaviour:
 
     None Selected'
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 6c768b948183fc74cb98cc90082f6e3d, type: 2}
+  m_sharedMaterial: {fileID: 7288972926298314984, guid: 6c768b948183fc74cb98cc90082f6e3d, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []

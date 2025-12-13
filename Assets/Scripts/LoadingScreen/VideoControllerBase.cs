@@ -720,10 +720,21 @@ public abstract class VideoControllerBase : MonoBehaviour
 
         if (currentVideoIndex >= GetTotalVideoCount())
         {
-            // Loop the last video
-            currentVideoIndex = GetTotalVideoCount() - 1;
-            LogDebug("Last video finished, looping last video");
-            PlayCurrentVideo();
+            // All videos finished - check if we should loop or transition
+            if (loopLastVideo)
+            {
+                // Loop the last video
+                currentVideoIndex = GetTotalVideoCount() - 1;
+                LogDebug("Last video finished, looping last video");
+                PlayCurrentVideo();
+            }
+            else
+            {
+                // All videos finished - transition to next scene
+                LogDebug("All videos finished - transitioning to next scene");
+                allVideosFinished = true;
+                LoadNextScene();
+            }
         }
         else
         {
