@@ -519,7 +519,8 @@ MonoBehaviour:
   webglVideoPlayer: {fileID: 619638569}
   pcVideoRoot: {fileID: 1621074808}
   webglVideoRoot: {fileID: 619638568}
-  pcVideoClips: []
+  pcVideoClips:
+  - {fileID: 32900000, guid: 629454ddb5810dd41bdbb86e189513f3, type: 3}
   webglVideoNames:
   - game_lore.mp4
   videoBackgroundMusic: []

@@ -2245,10 +2245,10 @@ Camera:
   m_LensShift: {x: 0, y: 0}
   m_NormalizedViewPortRect:
     serializedVersion: 2
-    x: 0
+    x: -0.33333334
     y: 0
     width: 1
-    height: 1
+    height: 0.44444445
   near clip plane: 0.3
   far clip plane: 1000
   field of view: 60
@@ -2534,8 +2534,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 18cf88083afb6174ab247296ae3763d9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MainMenu
-  mapSelectionMusic: {fileID: 11400000, guid: f63134034c71633408e2c786644a6ac8, type: 2}
+  mapSelectionMusic: {fileID: 11400000, guid: ee085cfef2764e244b3af8925cfb2023, type: 2}
   MusicFadeTime: 2
+  characterTransitionData: {fileID: 0}
 --- !u!114 &1136911418
 MonoBehaviour:
   m_ObjectHideFlags: 0

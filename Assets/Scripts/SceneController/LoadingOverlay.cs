@@ -575,14 +575,26 @@ public class LoadingOverlay : MonoBehaviour
         
         // Set video source
         string videoPath;
-#if UNITY_WEBGL
-        videoPath = System.IO.Path.Combine(Application.streamingAssetsPath, videoName);
-#else
-        videoPath = System.IO.Path.Combine(Application.streamingAssetsPath, videoName);
-#endif
-        
-        activePlayer.source = VideoSource.Url;
-        activePlayer.url = videoPath;
+        if (useWebGL)
+        {
+            // For WebGL, Application.streamingAssetsPath is a URL; just append the file name
+            videoPath = $"{Application.streamingAssetsPath}/{videoName}";
+            activePlayer.source = VideoSource.Url;
+            activePlayer.url = videoPath;
+        }
+        else
+        {
+            // For desktop/standalone builds, use file:// protocol for file paths
+            // Unity's VideoPlayer on desktop can handle file:// URLs or direct file paths
+            videoPath = System.IO.Path.Combine(Application.streamingAssetsPath, videoName);
+            // Convert to file:// URL format for better compatibility across platforms
+            if (!videoPath.StartsWith("file://") && !videoPath.StartsWith("http://") && !videoPath.StartsWith("https://"))
+            {
+                videoPath = "file://" + videoPath;
+            }
+            activePlayer.source = VideoSource.Url;
+            activePlayer.url = videoPath;
+        }
         activePlayer.isLooping = false; // Play once, then transition
         activePlayer.playOnAwake = false;
         
@@ -608,7 +620,20 @@ public class LoadingOverlay : MonoBehaviour
             // Try default video as fallback
             if (videoName != defaultLoadingVideo)
             {
-                activePlayer.url = System.IO.Path.Combine(Application.streamingAssetsPath, defaultLoadingVideo);
+                string fallbackPath;
+                if (useWebGL)
+                {
+                    fallbackPath = $"{Application.streamingAssetsPath}/{defaultLoadingVideo}";
+                }
+                else
+                {
+                    fallbackPath = System.IO.Path.Combine(Application.streamingAssetsPath, defaultLoadingVideo);
+                    if (!fallbackPath.StartsWith("file://") && !fallbackPath.StartsWith("http://") && !fallbackPath.StartsWith("https://"))
+                    {
+                        fallbackPath = "file://" + fallbackPath;
+                    }
+                }
+                activePlayer.url = fallbackPath;
                 activePlayer.Prepare();
                 
                 prepareElapsed = 0f;
