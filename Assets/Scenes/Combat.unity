@@ -3404,6 +3404,10 @@ PrefabInstance:
       propertyPath: m_ConstrainProportionsScale
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 4576408673901004281, guid: b91acd901c4ce844f93ed852ea44a6a0, type: 3}
+      propertyPath: m_text
+      value: Enemy Name
+      objectReference: {fileID: 0}
     - target: {fileID: 5030237936782935030, guid: b91acd901c4ce844f93ed852ea44a6a0, type: 3}
       propertyPath: m_Name
       value: EnemyHealthBar
@@ -3438,7 +3442,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6557787857785036326, guid: b91acd901c4ce844f93ed852ea44a6a0, type: 3}
       propertyPath: m_text
-      value: 123456789
+      value: 2500/2500
       objectReference: {fileID: 0}
     - target: {fileID: 6557787857785036326, guid: b91acd901c4ce844f93ed852ea44a6a0, type: 3}
       propertyPath: m_fontSize
@@ -4103,7 +4107,7 @@ MonoBehaviour:
   buttonFadeInDuration: 0.3
   fadeInEase: 1
   buttonFadeInEase: 0
-  mapSelectionMusic: {fileID: 0}
+  mapSelectionMusic: {fileID: 11400000, guid: ee085cfef2764e244b3af8925cfb2023, type: 2}
   MusicFadeTime: 2
 --- !u!114 &930427737
 MonoBehaviour:
@@ -4517,7 +4521,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 74b8ae89b783b63428985ff5e5ee0926, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EndTurnButtonUI
-  mapSelectionMusic: {fileID: 11400000, guid: f63134034c71633408e2c786644a6ac8, type: 2}
+  mapSelectionMusic: {fileID: 11400000, guid: ee085cfef2764e244b3af8925cfb2023, type: 2}
   MusicFadeTime: 2
   loadingVideoId: loading
   canPlayMultipleCards: 1
@@ -6045,7 +6049,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1493275683
 RectTransform:
   m_ObjectHideFlags: 0
@@ -7044,7 +7048,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 88e14c7eb8f156f4db05942cbce31475, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DamageSystem
-  damageVFX: {fileID: 2708598583397607911, guid: 6398d43fe79ea0140913dc5530c646af, type: 3}
+  damageVFX: {fileID: 4021103657954561961, guid: 5c755f9bc5253ea418e919994537dcc7, type: 3}
 --- !u!1 &1933420815
 GameObject:
   m_ObjectHideFlags: 0

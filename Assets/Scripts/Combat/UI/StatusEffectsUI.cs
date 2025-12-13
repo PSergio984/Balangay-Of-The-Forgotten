@@ -50,7 +50,7 @@ public class StatusEffectsUI : MonoBehaviour
     /// These images represent each type of status effect visually.
     /// Armor sprite for armor effects, burn sprite for burn effects, etc.
     /// </remarks>
-    [SerializeField] private Sprite armorSprite, attackUpSprite, attackDownSprite, burnSprite, critUpSprite, critDownSprite, defenseDownSprite, defenseUpSprite, dmgUpSprite, ignoreDefenseSprite, invulnerableSprite, rageSprite, shieldSprite, stunSprite, devouredSprite, tauntSprite, tempHpSprite, restingSprite, chargingSprite;
+    [SerializeField] private Sprite armorSprite, attackUpSprite, attackDownSprite, burnSprite, critUpSprite, critDownSprite, defenseDownSprite, defenseUpSprite, dmgUpSprite, ignoreDefenseSprite, invulnerableSprite, rageSprite, shieldSprite, stunSprite, devouredSprite, tauntSprite, tempHpSprite, restingSprite, chargingSprite, noCooldownSprite;
     
     [Header("Consolidated Move Sprites")]
     [Tooltip("Sprites for consolidated moves that combine multiple effects. These override the default effect sprites when a custom name is used.")]
@@ -60,6 +60,8 @@ public class StatusEffectsUI : MonoBehaviour
     [SerializeField] private Sprite focusedSprite; // For "Focused Aim"
     [SerializeField] private Sprite onGuardSprite; // For "On Guard" (DEFENSE_UP)
     [SerializeField] private Sprite blessingSprite; // For "Blessing" (DMG_UP)
+    [SerializeField] private Sprite dagatKabisayaanSprite; // For "Dagát ng Kabisayaan" special card (DMG_UP)
+    [SerializeField] private Sprite daragangMagayonSprite; // For "Daragang Magayon" special card (DEFENSE_UP)
     
     /// <summary>
     /// Dictionary tracking all currently displayed status effect UIs
@@ -310,6 +312,7 @@ public class StatusEffectsUI : MonoBehaviour
             StatusEffectType.FOCUSED => focusedSprite ?? ignoreDefenseSprite,
             StatusEffectType.INVULNERABLE => invulnerableSprite,
             StatusEffectType.RAGE => rageSprite,
+            StatusEffectType.NO_COOLDOWN => noCooldownSprite,
             StatusEffectType.RESTING => restingSprite,
             StatusEffectType.SHIELD => shieldSprite,
             StatusEffectType.STUN => stunSprite,
@@ -345,6 +348,8 @@ public class StatusEffectsUI : MonoBehaviour
             "blessing" => blessingSprite,
             "rage" or "enraged" => rageSprite, // Rage already has its own sprite, use it
             "eye of the dragon" or "eyedragon" or "eye dragon" => defenseDownSprite, // Eye of the Dragon uses default DEFENSE_DOWN sprite
+            "dagát ng kabisayaan" or "dagat ng kabisayaan" or "dagat kabisayaan" => dagatKabisayaanSprite, // Special card DMG_UP
+            "daragang magayon" or "daragang magayon buff" => daragangMagayonSprite, // Special card DEFENSE_UP
             _ => null, // No consolidated sprite for this move name
         };
     }

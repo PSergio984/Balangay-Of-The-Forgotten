@@ -40,6 +40,12 @@ public class ApplyDamageUpGA : GameAction
     /// How many turns the damage buff lasts before expiring
     /// </summary>
     public int Duration { get; private set; }
+    
+    /// <summary>
+    /// Optional custom name for this effect (e.g., "Dagát ng Kabisayaan", "Blessing")
+    /// Used to display consolidated move sprites instead of default effect sprites
+    /// </summary>
+    public string CustomName { get; private set; }
 
     /// <summary>
     /// Creates a new damage up action
@@ -47,7 +53,8 @@ public class ApplyDamageUpGA : GameAction
     /// <param name="targets">Who should receive the damage buff</param>
     /// <param name="damagePercentage">Percentage of damage increase (1-100)</param>
     /// <param name="duration">How many turns it lasts</param>
-    public ApplyDamageUpGA(List<CombatantView> targets, int damagePercentage, int duration)
+    /// <param name="customName">Optional custom name for consolidated sprite display (e.g., "Dagát ng Kabisayaan", "Blessing")</param>
+    public ApplyDamageUpGA(List<CombatantView> targets, int damagePercentage, int duration, string customName = null)
     {
         if (targets == null || targets.Count == 0)
             throw new System.ArgumentException("Targets cannot be null or empty", nameof(targets));
@@ -59,5 +66,6 @@ public class ApplyDamageUpGA : GameAction
         Targets = new List<CombatantView>(targets);
         DamagePercentage = damagePercentage;
         Duration = duration;
+        CustomName = customName;
     }
 }

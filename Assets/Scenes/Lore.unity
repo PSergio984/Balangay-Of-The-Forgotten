@@ -281,6 +281,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 50eb29bd4296fd94bbd1ee3f39e85343, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LoreController
+  loopLastVideo: 0
   pcVideoPlayer: {fileID: 1621074809}
   webglVideoPlayer: {fileID: 619638569}
   pcVideoRoot: {fileID: 1621074808}
@@ -299,6 +300,8 @@ MonoBehaviour:
   flickerMinAlpha: 0.3
   flickerMaxAlpha: 1
   showDebugLogs: 1
+  mapSelectionMusic: {fileID: 0}
+  MusicFadeTime: 2
 --- !u!1001 &619638566
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -511,6 +514,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 50eb29bd4296fd94bbd1ee3f39e85343, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LoreController
+  loopLastVideo: 0
   pcVideoPlayer: {fileID: 1621074809}
   webglVideoPlayer: {fileID: 619638569}
   pcVideoRoot: {fileID: 1621074808}
@@ -529,6 +533,8 @@ MonoBehaviour:
   flickerMinAlpha: 0.3
   flickerMaxAlpha: 1
   showDebugLogs: 1
+  mapSelectionMusic: {fileID: 11400000, guid: ee085cfef2764e244b3af8925cfb2023, type: 2}
+  MusicFadeTime: 2
 --- !u!1 &1917241845
 GameObject:
   m_ObjectHideFlags: 0

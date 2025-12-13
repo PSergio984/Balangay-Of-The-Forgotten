@@ -150,9 +150,10 @@ public class DamageSystem : MonoBehaviour
                     CombatVFXManager.Instance.PlayDamageEffect(popupPosition, false);
                 }
             }
-            else if (target != null && damageVFX != null)
+            
+            // Spawn damageVFX on hit (not on miss) - either as fallback or additional effect
+            if (!isMiss && damageVFX != null)
             {
-                // Fallback: use the old instantiation method
                 Instantiate(damageVFX, popupPosition, Quaternion.identity);
             }
 

@@ -48,13 +48,17 @@ public class RemoveDebuffsGA : GameAction
 
     /// <summary>
     /// Static list of status effect types that are considered debuffs
+    /// This list must match StatusEffectSystem.DebuffEffects for consistency
     /// </summary>
     public static readonly StatusEffectType[] DebuffTypes = new[]
     {
         StatusEffectType.BURN,
+        StatusEffectType.ATTACK_DOWN,
         StatusEffectType.DEFENSE_DOWN,
-        StatusEffectType.DEVOURED,
+        StatusEffectType.CRIT_DOWN,
         StatusEffectType.STUN,
+        StatusEffectType.DEVOURED,
+        StatusEffectType.TAUNT,
     };
 
     public RemoveDebuffsGA(List<CombatantView> targets)

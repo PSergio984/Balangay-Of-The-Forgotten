@@ -29,19 +29,17 @@ public class LoreController : VideoControllerBase
     /// </summary>
     protected override void LoadNextScene()
     {
-        var transition = SceneController.Instance
-            .NewTransition()
-            .Unload(SceneDatabase.Slots.SessionContent)
-            .Load(SceneDatabase.Slots.SessionContent, SceneDatabase.Scenes.MapSelection, setActive: true);
-        
-        // Play main menu music near the end of transition (music fades in as transition completes)
-        if (mapSelectionMusic != null)
+        // Stop music entirely before proceeding with the transition
+        if (MusicManager.Instance != null)
         {
-            transition = transition.WithMusic(mapSelectionMusic, MusicFadeTime);
+            MusicManager.Instance.StopMusic(MusicFadeTime);
         }
         
-        transition
-            .WithPauseMusic(9)
+        SceneController.Instance
+            .NewTransition()
+            .Unload(SceneDatabase.Slots.SessionContent)
+            .Load(SceneDatabase.Slots.SessionContent, SceneDatabase.Scenes.MapSelection, setActive: true)
+            .WithMusic(mapSelectionMusic, MusicFadeTime)
             .Perform();
     }
 }

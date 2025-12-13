@@ -11,7 +11,7 @@ using System.Collections.Generic;
  * - Special cards persist across maps if not played, but are consumed when used
  * - Three types as per AllMoves.md:
  *   1. Dagát ng Kabisayaan: +15% DMG to all players, 2 stacks
- *   2. Daragang Magayon: +25% DEF to two players, 1 stack
+ *   2. Daragang Magayon: +25% DEF to 2 players, 1 stack
  *   3. Bundok Pulag: No cooldown for all skills, 4 rounds
  * 
  * Integration:
@@ -39,9 +39,9 @@ public class SpecialCardData : ScriptableObject
         DamageUp,
         
         /// <summary>
-        /// Daragang Magayon: +25% DEF to 2 selected players for 1 turn
+        /// Daragang Magayon: +25% DEF to all players for 1 turn
         /// </summary>
-        DefenseUpTwoTargets,
+        DefenseUp,
         
         /// <summary>
         /// Bundok Pulag: No cooldown for all skills for 4 rounds
@@ -115,9 +115,9 @@ public class SpecialCardData : ScriptableObject
     public int Duration => duration;
     
     /// <summary>
-    /// Number of targets for DefenseUpTwoTargets (should be 2)
+    /// Number of targets (legacy field, kept for compatibility but DefenseUp now applies to all players)
     /// </summary>
-    [Tooltip("Number of ally targets required (only for DefenseUpTwoTargets)")]
+    [Tooltip("Legacy field - DefenseUp now applies to all players. Kept for backwards compatibility.")]
     [SerializeField] private int targetCount = 2;
     public int TargetCount => targetCount;
     
@@ -155,8 +155,8 @@ public class SpecialCardData : ScriptableObject
         {
             SpecialCardEffectType.DamageUp => 
                 $"+{effectPercentage}% damage to all allies for {duration} turns",
-            SpecialCardEffectType.DefenseUpTwoTargets => 
-                $"+{effectPercentage}% defense to {targetCount} selected allies for {duration} turns",
+            SpecialCardEffectType.DefenseUp => 
+                $"+{effectPercentage}% defense to all allies for {duration} turns",
             SpecialCardEffectType.NoCooldown => 
                 $"No cooldowns for all skills for {duration} rounds",
             _ => description

@@ -82,8 +82,8 @@ public class DamageUpSystem : MonoBehaviour
             damageDurations[instanceId] = action.Duration;
             combatantLookup[instanceId] = target;
             
-            // Apply status effect with percentage as stacks (for UI display)
-            target.AddStatusEffect(StatusEffectType.DMG_UP, action.DamagePercentage);
+            // Apply status effect with percentage as stacks (for UI display) and custom name for consolidated sprite
+            target.AddStatusEffect(StatusEffectType.DMG_UP, action.DamagePercentage, action.CustomName);
             
             Debug.Log($"[DamageUpSystem] {target.name} gains +{action.DamagePercentage}% damage for {action.Duration} turns");
         }

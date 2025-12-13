@@ -130,8 +130,8 @@ public class SpecialCardButtonUI : MonoBehaviour
             case SpecialCardData.SpecialCardEffectType.DamageUp:
                 return $"+{card.EffectPercentage}% DMG for {card.Duration} turns";
                 
-            case SpecialCardData.SpecialCardEffectType.DefenseUpTwoTargets:
-                return $"+{card.EffectPercentage}% DEF to {card.TargetCount} allies for {card.Duration} turn";
+            case SpecialCardData.SpecialCardEffectType.DefenseUp:
+                return $"+{card.EffectPercentage}% DEF to all allies for {card.Duration} turn";
                 
             case SpecialCardData.SpecialCardEffectType.NoCooldown:
                 return $"No cooldowns for {card.Duration} rounds";

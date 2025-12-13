@@ -286,7 +286,7 @@ public class SpecialCardPanelUI : MonoBehaviour
                 ApplyDamageUpEffect(playerCombatants, card);
                 break;
                 
-            case SpecialCardData.SpecialCardEffectType.DefenseUpTwoTargets:
+            case SpecialCardData.SpecialCardEffectType.DefenseUp:
                 ApplyDefenseUpEffect(playerCombatants, card);
                 break;
                 
@@ -307,22 +307,19 @@ public class SpecialCardPanelUI : MonoBehaviour
     /// </summary>
     private void ApplyDamageUpEffect(List<CombatantView> targets, SpecialCardData card)
     {
-        // Create and perform the ApplyDamageUpGA action
-        var action = new ApplyDamageUpGA(targets, card.EffectPercentage, card.Duration);
+        // Create and perform the ApplyDamageUpGA action with card name for custom sprite
+        var action = new ApplyDamageUpGA(targets, card.EffectPercentage, card.Duration, card.CardName);
         ActionSystem.Instance.Perform(action);
     }
     
     /// <summary>
-    /// Applies defense up effect to selected targets (or first 2 if no selection)
+    /// Applies defense up effect to all player combatants
     /// </summary>
     private void ApplyDefenseUpEffect(List<CombatantView> targets, SpecialCardData card)
     {
-        // For now, apply to first N targets based on TargetCount
-        int targetCount = Mathf.Min(card.TargetCount, targets.Count);
-        List<CombatantView> selectedTargets = targets.GetRange(0, targetCount);
-        
-        // Create and perform the ApplyDefenseUpGA action
-        var action = new ApplyDefenseUpGA(selectedTargets, card.EffectPercentage, card.Duration);
+        // Apply to all targets (all players)
+        // Create and perform the ApplyDefenseUpGA action with card name for custom sprite
+        var action = new ApplyDefenseUpGA(targets, card.EffectPercentage, card.Duration, card.CardName);
         ActionSystem.Instance.Perform(action);
     }
     
