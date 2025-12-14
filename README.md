@@ -124,8 +124,8 @@ Ranged damage dealer who strikes from afar. Provides consistent damage while sta
 
 ```bash
 # Alternative: Clone and run
-git clone https://github.com/jhparente/balangay_of_the_forgotten.git
-cd balangay_of_the_forgotten
+git clone https://github.com/PSergio984/Balangay-Of-The-Forgotten.git
+cd Balangay-Of-The-Forgotten
 # Extract and run the .exe
 ```
 
@@ -174,10 +174,16 @@ The game takes place in the **Philippine afterlife**, where players navigate thr
 
 ### Development Team
 
-- [@Nizuky](https://github.com/Nizuky) - **Project Manager & Lead Artist**
-- [@PSergio984](https://github.com/PSergio984) - **Lead Developer**
-- [@jhparente](https://github.com/jhparente) - **Game Design**
-- [@LanoiraCutie](https://github.com/LanoiraCutie) - **Game Design**
+<table>
+  <tr>
+    <td align="center"><a href="https://github.com/Nizuky"><img src="https://github.com/Nizuky.png" width="100px;" alt=""/><br /><sub><b>Nizuky</b></sub></a><br />Project Manager & Lead Artist</td>
+    <td align="center"><a href="https://github.com/PSergio984"><img src="https://github.com/PSergio984.png" width="100px;" alt=""/><br /><sub><b>PSergio984</b></sub></a><br />Lead Developer</td>
+    <td align="center"><a href="https://github.com/jhparente"><img src="https://github.com/jhparente.png" width="100px;" alt=""/><br /><sub><b>jhparente</b></sub></a><br />Game Design</td>
+    <td align="center"><a href="https://github.com/LanoiraCutie"><img src="https://github.com/LanoiraCutie.png" width="100px;" alt=""/><br /><sub><b>LanoiraCutie</b></sub></a><br />Game Design</td>
+  </tr>
+</table>
+
+
 
 Special thanks to all contributors and players who support this project.
 
