@@ -4558,7 +4558,6 @@ GameObject:
   - component: {fileID: 1008515200}
   - component: {fileID: 1008515199}
   - component: {fileID: 1008515202}
-  - component: {fileID: 1008515203}
   m_Layer: 5
   m_Name: EndTurnButtonUI
   m_TagString: Untagged
@@ -4693,22 +4692,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EndTurnButtonUI
   mapSelectionMusic: {fileID: 11400000, guid: ee085cfef2764e244b3af8925cfb2023, type: 2}
-  MusicFadeTime: 2
-  loadingVideoId: loading
-  canPlayMultipleCards: 1
---- !u!114 &1008515203
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1008515197}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 74b8ae89b783b63428985ff5e5ee0926, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::EndTurnButtonUI
-  mapSelectionMusic: {fileID: 0}
   MusicFadeTime: 2
   loadingVideoId: loading
   canPlayMultipleCards: 0
