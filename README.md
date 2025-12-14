@@ -207,6 +207,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 *Maligayang paglalakbay!* 🌊⚔️
 
-[![Star this repo](https://img.shields.io/github/stars/PSergio984/Balangay-Of-The-Forgotten?style=social)](https://github.com/PSergio984/Balangay-Of-The-Forgotten)
+[![Star this repo](https://img.shields.io/github/stars/psergio984/balangay-of-the-forgotten?style=social)](https://github.com/PSergio984/Balangay-Of-The-Forgotten)
+
 
 </div>
