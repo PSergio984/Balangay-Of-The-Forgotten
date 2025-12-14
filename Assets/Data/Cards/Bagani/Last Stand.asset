@@ -18,11 +18,36 @@ MonoBehaviour:
   <Art>k__BackingField: {fileID: 21300000, guid: c1be69654b9cd104dafe2e3c16e38af5, type: 3}
   <BackgroundArt>k__BackingField: {fileID: 21300000, guid: 4e3378caf792f1042958544f7ca07aae, type: 3}
   <RoleData>k__BackingField: {fileID: 11400000, guid: 8a873cc1966fdd641a8f8d3b47bd0288, type: 2}
+  <Cooldown>k__BackingField: 4
+  <SoundData>k__BackingField: {fileID: 11400000, guid: 9eeedbd427604094b99252362e6fb1ff, type: 2}
   <ManualTargetEffect>k__BackingField:
     rid: -2
-  <OtherEffects>k__BackingField: []
+  <OtherEffects>k__BackingField:
+  - <targetMode>k__BackingField:
+      rid: 5040687034078331174
+    <effects>k__BackingField:
+      rid: 5040687020829311065
   references:
     version: 2
     RefIds:
     - rid: -2
       type: {class: , ns: , asm: }
+    - rid: 5040687020829311065
+      type: {class: ConditionalEffect, ns: , asm: Assembly-CSharp}
+      data:
+        conditionType: 1
+        hpThreshold: 1
+        conditionTarget: 0
+        innerEffect:
+          rid: 5040687020829311236
+        showWarningIfFailed: 1
+        failureMessage: Condition not met!
+    - rid: 5040687020829311236
+      type: {class: ApplyDefenseUpEffect, ns: , asm: Assembly-CSharp}
+      data:
+        defensePercentage: 50
+        duration: 3
+        customName: On Guard
+    - rid: 5040687034078331174
+      type: {class: HeroTM, ns: , asm: Assembly-CSharp}
+      data: 

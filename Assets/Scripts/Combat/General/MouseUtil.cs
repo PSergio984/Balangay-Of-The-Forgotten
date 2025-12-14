@@ -45,8 +45,40 @@ public static class MouseUtil
     /// <remarks>
     /// This field caches the main camera to avoid repeated lookups.
     /// Used for converting screen coordinates to world coordinates through ray casting.
+    /// Validates and re-acquires camera reference if it's destroyed during scene transitions.
     /// </remarks>
     private static Camera _camera = Camera.main;
+
+    /// <summary>
+    /// Validates and re-acquires camera reference if it has been destroyed
+    /// </summary>
+    /// <returns>True if a valid camera is available, false otherwise</returns>
+    private static bool ValidateCamera()
+    {
+        // Check if camera reference is null or destroyed (Unity-specific null check)
+        if (_camera == null || !_camera)
+        {
+            // Try to find the main camera
+            _camera = Camera.main;
+            
+            if (_camera == null)
+            {
+                // Fallback: Find any camera in the active scene
+                Camera[] allCameras = Object.FindObjectsOfType<Camera>();
+                if (allCameras != null && allCameras.Length > 0)
+                {
+                    _camera = allCameras[0];
+                    Debug.LogWarning("[MouseUtil] Main camera not found, using first available camera: " + _camera.name);
+                }
+                else
+                {
+                    Debug.LogError("[MouseUtil] No camera found in the scene! Mouse position conversion will fail.");
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
 
     /// <summary>
     /// Converts current mouse position from screen coordinates to world coordinates
@@ -57,9 +89,17 @@ public static class MouseUtil
     /// This method takes the current mouse position and converts it to world coordinates
     /// by casting a ray from the camera through the mouse position and finding where
     /// it intersects with a plane at the specified Z depth.
+    /// Validates camera reference before use to handle scene transitions.
     /// </remarks>
     public static Vector3 GetMousePositionInWorldSpace(float zValue = 0f)
     {
+        // Validate and re-acquire camera if needed (handles scene transitions)
+        if (!ValidateCamera())
+        {
+            // Return zero if no valid camera is available
+            return Vector3.zero;
+        }
+
         // Create a plane facing the camera at the specified Z depth
         Plane dragPlane = new(_camera.transform.forward, new Vector3(0, 0, zValue));
         // Create a ray from camera through the mouse position

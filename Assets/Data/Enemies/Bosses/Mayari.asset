@@ -18,9 +18,11 @@ MonoBehaviour:
   <AttackPower>k__BackingField: 300
   <MagicPower>k__BackingField: 120
   <Defense>k__BackingField: 180
+  <AnimatorOverride>k__BackingField: {fileID: 22100000, guid: b5e4a306046de9d44a84833cfc498cc5, type: 2}
   <Moveset>k__BackingField:
-  - {fileID: 11400000, guid: abaa3b2c8fadd0040a92239afd42fd4f, type: 2}
-  - {fileID: 11400000, guid: abaa3b2c8fadd0040a92239afd42fd4f, type: 2}
-  - {fileID: 11400000, guid: abaa3b2c8fadd0040a92239afd42fd4f, type: 2}
-  - {fileID: 11400000, guid: abaa3b2c8fadd0040a92239afd42fd4f, type: 2}
-  - {fileID: 11400000, guid: abaa3b2c8fadd0040a92239afd42fd4f, type: 2}
+  - {fileID: 11400000, guid: 42db67d9edd57dd42843d1d77622c9bb, type: 2}
+  - {fileID: 11400000, guid: c673e9bb5f3008b4faa8e8fe3191d2d9, type: 2}
+  - {fileID: 11400000, guid: 50c31c0887dce4b4292890f7aa10dfb9, type: 2}
+  - {fileID: 11400000, guid: 385e582a6278063458684c0c6d6ff813, type: 2}
+  CombatMusic: {fileID: 11400000, guid: 995635a7908be6748865a6588a823212, type: 2}
+  <DeathStuckSprite>k__BackingField: {fileID: -9074925311204466063, guid: e3c92164dd0977542a0fbf27bdf66db8, type: 3}

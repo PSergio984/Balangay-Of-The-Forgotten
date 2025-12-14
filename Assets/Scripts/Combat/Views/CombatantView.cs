@@ -1,8 +1,9 @@
+using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening; // Import DOTween library for smooth animations
 using TMPro; // Import TextMeshPro for UI text components
-using UnityEngine; // Import Unity engine functionality
-
+using UnityEngine;
+using UnityEngine.UI; // Import Unity engine functionality
 /* COMBATANT VIEW DOCUMENTATION
  * 
  * Purpose: Base class for all characters that can fight (heroes, enemies, etc.)
@@ -19,21 +20,6 @@ using UnityEngine; // Import Unity engine functionality
 /// <summary>
 /// Base class for any character that can participate in combat
 /// </summary>
-/// <remarks>
-/// <para><strong>Purpose:</strong> Foundation for all fighting characters in the game</para>
-/// 
-/// <para><strong>What it does:</strong> This is the base class that both heroes and enemies 
-/// inherit from. It handles all the common stuff that any fighting character needs: 
-/// health tracking, taking damage, showing their appearance, and displaying their name. 
-/// When any character gets hurt, this handles the visual effects and health updates.</para>
-/// 
-/// <para><strong>How it works:</strong></para>
-/// <list type="bullet">
-/// <item>Sets up character with health, image, and name</item>
-/// <item>Tracks current and maximum health</item>
-/// <item>Handles damage with visual feedback (screen shake)</item>
-/// <item>Updates health display automatically</item>
-/// <item>Prevents health from going below zero</item>
 /// </list>
 /// 
 /// <para><strong>Features:</strong></para>
@@ -58,9 +44,11 @@ public class CombatantView : MonoBehaviour
     /// <remarks>
     /// Shows the character's health in format "HP: X" so players can see 
     /// how much health each character has remaining.
+    /// For enemies: assigned at runtime from scene health bar.
+    /// For heroes: assigned in prefab.
     /// </remarks>
     // UI text component that displays the current health points
-    [SerializeField] private TMP_Text healthText;
+    [SerializeField] protected TMP_Text healthText;
 
     /// <summary>
     /// UI text component that shows the character's name
@@ -68,9 +56,11 @@ public class CombatantView : MonoBehaviour
     /// <remarks>
     /// Displays the character's name so players can identify who is who.
     /// Helps distinguish between different enemies or characters.
+    /// For enemies: assigned at runtime from scene health bar.
+    /// For heroes: assigned in prefab.
     /// </remarks>
     // UI text component that shows the character's name
-    [SerializeField] private TMP_Text NameText;
+    [SerializeField] protected TMP_Text NameText;
     
 
     /// <summary>
@@ -106,6 +96,16 @@ public class CombatantView : MonoBehaviour
     private Dictionary<StatusEffectType, int> statusEffects = new();
 
     /// <summary>
+    /// Animation controller that manages animation state transitions for this combatant
+    /// </summary>
+    /// <remarks>
+    /// Handles all animation triggers and state changes during combat.
+    /// If not assigned, animations will not play but combat will still function.
+    /// Assign in Inspector or will attempt to find automatically in Awake.
+    /// </remarks>
+    [SerializeField] protected CombatantAnimationController animationController;
+
+    /// <summary>
     /// Visual component that displays the character's sprite/image
     /// </summary>
     /// <remarks>
@@ -134,7 +134,65 @@ public class CombatantView : MonoBehaviour
     /// </remarks>
     // The current health points this combatant has remaining
     public int CurrentHealth { get; private set; }
+
+    /// <summary>
+    /// Whether this combatant has been defeated (health reached zero)
+    /// </summary>
+    /// <remarks>
+    /// When true, the combatant cannot be targeted, does not process status effects,
+    /// and is visually greyed out. Use MarkAsDead() to set this and Revive() to reset.
+    /// </remarks>
+    public bool IsDead { get; private set; } = false;
     
+    /// <summary>
+    /// Cached original sprite color for restoring after revival
+    /// </summary>
+    private Color originalSpriteColor = Color.white;
+    
+    /// <summary>
+    /// Whether the original sprite color has been cached
+    /// </summary>
+    private bool hasOriginalColor = false;
+
+    /// <summary>
+    /// UI Slider component for health bar visualization
+    /// </summary>
+    /// <remarks>
+    /// For enemies: assigned at runtime from scene health bar.
+    /// For heroes: assigned in prefab.
+    /// </remarks>
+    [SerializeField] protected Slider sliderHealth;
+
+    /// <summary>
+    /// Gradient for health bar color (green to red)
+    /// </summary>
+    [SerializeField] protected Gradient gradientHealth;
+    
+    /// <summary>
+    /// Fill image for health bar color
+    /// </summary>
+    /// <remarks>
+    /// For enemies: assigned at runtime from scene health bar.
+    /// For heroes: assigned in prefab.
+    /// </remarks>
+    [SerializeField] protected Image fillHealth;
+    
+    [Header("Health Bar Animation")]
+    [Tooltip("Duration for health bar slider animation")]
+    [SerializeField] protected float healthAnimDuration = 0.4f;
+    
+    [Tooltip("Ease type for health decrease (damage)")]
+    [SerializeField] protected Ease healthDecreaseEase = Ease.OutQuint;
+    
+    [Tooltip("Ease type for health increase (healing)")]
+    [SerializeField] protected Ease healthIncreaseEase = Ease.OutBack;
+    
+    [Tooltip("Enable pulsing animation when health changes")]
+    [SerializeField] protected bool enableHealthPulse = true;
+    
+    [Tooltip("Scale multiplier for health text pulse")]
+    [SerializeField] protected float healthPulseScale = 1.2f;
+
         /// <summary>
         /// The defense stat of this combatant (used in damage reduction)
         /// </summary>
@@ -149,9 +207,56 @@ public class CombatantView : MonoBehaviour
         /// The magic power stat of this combatant (used for magic skills)
         /// </summary>
         public float MagicPower { get; protected set; }
+        
 
     /// <summary>
-    /// Sets up the basic properties of this combatant
+    /// Validates and caches component references
+    /// </summary>
+    /// <remarks>
+    /// Called automatically by Unity when component initializes.
+    /// Finds animation controller if not assigned in Inspector.
+    /// </remarks>
+    protected virtual void Awake()
+    {
+        // Eagerly assign the animation controller from the component on this GameObject
+        if (animationController == null)
+        {
+            animationController = GetComponent<CombatantAnimationController>();
+        }
+        
+        if (animationController == null)
+        {
+            Debug.LogWarning($"[CombatantView] No CombatantAnimationController found on {gameObject.name}. Animations will not play.", this);
+        }
+    }
+    
+    /// <summary>
+    /// Ensures the animation controller is assigned (call if Setup happens before Awake)
+    /// </summary>
+    protected void EnsureAnimationController()
+    {
+        if (animationController == null)
+        {
+            animationController = GetComponent<CombatantAnimationController>();
+        }
+    }
+    
+    // Expose animationController to subclasses (e.g., HeroView)
+    protected CombatantAnimationController AnimationController
+    {
+        get
+        {
+            // Lazy initialization if not yet assigned
+            if (animationController == null)
+            {
+                animationController = GetComponent<CombatantAnimationController>();
+            }
+            return animationController;
+        }
+    }
+
+    /// <summary>
+    /// Sets up the basic properties of this combatant (for heroes with prefab UI)
     /// </summary>
     /// <param name="health">Starting health value (becomes both current and max health)</param>
     /// <param name="image">Sprite image to display for this character</param>
@@ -160,36 +265,181 @@ public class CombatantView : MonoBehaviour
     /// <param name="attackPower">Attack power stat</param>
     /// <param name="defense">Defense stat</param>
     /// <remarks>
-    /// Called by child classes (HeroView, EnemyView) to initialize the character.
-    /// Sets up health, appearance, and name, then updates the health display.
+    /// Called by HeroView to initialize with all UI components assigned in prefab.
+    /// For enemies, use SetupBaseWithoutUI instead since UI is assigned at runtime.
     /// </remarks>
-    // Sets up the basic properties of this combatant (health, appearance, name, stats)
     protected void SetupBase(int health, Sprite image, string name, float magicPower, float attackPower, float defense)
     {
         MaxHealth = CurrentHealth = health;
+        previousHealth = health; // Initialize previous health
         MagicPower = magicPower;
         AttackPower = attackPower;
         Defense = defense;
         spriteRenderer.sprite = image;
         NameText.text = name;
-        MagicText.text = $"MP: {MagicPower}";
+        MagicText.text = $"MAG: {MagicPower}";
         AttackText.text = $"ATK: {AttackPower}";
         DefenseText.text = $"DEF: {Defense}";
-        UpdateHealthText();
+        if (sliderHealth != null)
+        {
+            sliderHealth.maxValue = MaxHealth;
+        }
+        SetHealthImmediate(); // Use immediate set for initialization
     }
 
     /// <summary>
-    /// Updates the health text UI to reflect the current health value
+    /// Sets up the basic properties of this combatant without requiring UI (for enemies)
     /// </summary>
+    /// <param name="health">Starting health value (becomes both current and max health)</param>
+    /// <param name="image">Sprite image to display for this character</param>
+    /// <param name="name">Name to display for this character (cached for later UI assignment)</param>
+    /// <param name="magicPower">Magic power stat</param>
+    /// <param name="attackPower">Attack power stat</param>
+    /// <param name="defense">Defense stat</param>
     /// <remarks>
-    /// Called whenever health changes to keep the display accurate.
-    /// Shows health in format "HP: X" for clear readability.
+    /// Called by EnemyView to initialize stats and sprite without requiring UI components.
+    /// UI components (health bar, name text, etc.) are assigned later via AssignHealthBar.
     /// </remarks>
-    // Updates the health text UI to reflect the current health value
-    private void UpdateHealthText()
+    protected void SetupBaseWithoutUI(int health, Sprite image, string name, float magicPower, float attackPower, float defense)
     {
-        // Display current health in format "HP: X"
-        healthText.text = "HP: " + CurrentHealth;
+        MaxHealth = CurrentHealth = health;
+        MagicPower = magicPower;
+        AttackPower = attackPower;
+        Defense = defense;
+        if (spriteRenderer != null && image != null)
+            spriteRenderer.sprite = image;
+    }
+
+    /// <summary>
+    /// Stores previous health value for detecting healing vs damage
+    /// </summary>
+    private int previousHealth = -1;
+
+    /// <summary>
+    /// Updates health UI immediately without animation
+    /// </summary>
+    private void UpdateHealth()
+    {
+        previousHealth = CurrentHealth;
+        
+        if (sliderHealth != null)
+        {
+            DOTween.Kill(sliderHealth);
+            
+            // Set slider values
+            sliderHealth.maxValue = MaxHealth;
+            sliderHealth.minValue = 0;
+            sliderHealth.value = CurrentHealth;
+            
+            // Make Fill completely independent - properly configured to stretch based on health
+            if (sliderHealth.fillRect != null)
+            {
+                float normalized = Mathf.Clamp01((float)CurrentHealth / MaxHealth);
+                var fillRect = sliderHealth.fillRect;
+                
+                // Make Fill completely independent with left-to-right stretch based on health
+                // Set anchors to stretch from left (0) to normalized value (health percentage)
+                fillRect.anchorMin = Vector2.zero;
+                fillRect.anchorMax = new Vector2(normalized, 1f);
+                
+                // Clear all offsets to ensure it fills exactly from left edge
+                fillRect.offsetMin = Vector2.zero;
+                fillRect.offsetMax = Vector2.zero;
+                
+                // Set pivot to left edge so it scales from left
+                fillRect.pivot = new Vector2(0f, 0.5f);
+                
+                // Force layout rebuild to apply changes immediately
+                UnityEngine.UI.LayoutRebuilder.ForceRebuildLayoutImmediate(fillRect);
+                
+                // Also rebuild parent to ensure proper layout
+                if (fillRect.parent != null)
+                {
+                    UnityEngine.UI.LayoutRebuilder.ForceRebuildLayoutImmediate(fillRect.parent as RectTransform);
+                }
+            }
+        }
+        
+        if (fillHealth != null && gradientHealth != null)
+        {
+            float normalized = (float)CurrentHealth / MaxHealth;
+            if (CurrentHealth <= 0 || normalized < 0.01f)
+            {
+                fillHealth.color = new Color(0, 0, 0, 0);
+            }
+            else
+            {
+                fillHealth.color = gradientHealth.Evaluate(normalized);
+            }
+        }
+        
+        if (healthText != null)
+        {
+            DOTween.Kill(healthText.transform);
+            healthText.transform.localScale = Vector3.one;
+            healthText.text = $"{CurrentHealth}/{MaxHealth}";
+        }
+    }
+
+    /// <summary>
+    /// Immediately sets health without animation (for initialization)
+    /// </summary>
+    private void SetHealthImmediate()
+    {
+        previousHealth = CurrentHealth;
+        
+        if (sliderHealth != null)
+        {
+            sliderHealth.maxValue = MaxHealth;
+            sliderHealth.minValue = 0;
+            sliderHealth.value = CurrentHealth;
+            
+            // Make Fill completely independent - properly configured to stretch based on health
+            if (sliderHealth.fillRect != null)
+            {
+                float normalized = Mathf.Clamp01((float)CurrentHealth / MaxHealth);
+                var fillRect = sliderHealth.fillRect;
+                
+                // Make Fill completely independent with left-to-right stretch based on health
+                // Set anchors to stretch from left (0) to normalized value (health percentage)
+                fillRect.anchorMin = Vector2.zero;
+                fillRect.anchorMax = new Vector2(normalized, 1f);
+                
+                // Clear all offsets to ensure it fills exactly from left edge
+                fillRect.offsetMin = Vector2.zero;
+                fillRect.offsetMax = Vector2.zero;
+                
+                // Set pivot to left edge so it scales from left
+                fillRect.pivot = new Vector2(0f, 0.5f);
+                
+                // Force layout rebuild to apply changes immediately
+                UnityEngine.UI.LayoutRebuilder.ForceRebuildLayoutImmediate(fillRect);
+                
+                // Also rebuild parent to ensure proper layout
+                if (fillRect.parent != null)
+                {
+                    UnityEngine.UI.LayoutRebuilder.ForceRebuildLayoutImmediate(fillRect.parent as RectTransform);
+                }
+            }
+            
+            if (fillHealth != null && gradientHealth != null)
+            {
+                float normalized = (float)CurrentHealth / MaxHealth;
+                if (CurrentHealth <= 0 || normalized < 0.01f)
+                {
+                    fillHealth.color = new Color(0, 0, 0, 0);
+                }
+                else
+                {
+                    fillHealth.color = gradientHealth.Evaluate(normalized);
+                }
+            }
+        }
+        
+        if (healthText != null)
+        {
+            healthText.text = $"{CurrentHealth}/{MaxHealth}";
+        }
     }
 
     /// <summary>
@@ -215,12 +465,210 @@ public class CombatantView : MonoBehaviour
             CurrentHealth = 0;
         }
 
-        // Play a screen shake animation when taking damage (0.2 seconds, 0.5 intensity)
-        // Then return to original position to fix animation issue
-        transform.DOShakePosition(0.2f, 0.5f);
+        // Use the property to ensure lazy initialization of animation controller
+        var animCtrl = AnimationController;
         
-        // Update the health display to show the new health value
-        UpdateHealthText();
+        // Play hit animation if animation controller exists
+        if (animCtrl != null)
+        {
+            Debug.Log($"[CombatantView] Damage called on {gameObject.name}, triggering PlayHit animation", this);
+            animCtrl.PlayHit();
+        }
+        else
+        {
+            Debug.LogWarning($"[CombatantView] Damage called on {gameObject.name}, but AnimationController is NULL! Check if CombatantAnimationController component exists.", this);
+        }
+
+        // Different hit movement for enemies vs heroes
+        // Enemies move left (backwards) when hit, heroes get a subtle shake
+        if (this is EnemyView)
+        {
+            // Enemy: Move left (backwards) when hit, then return
+            // Get hit movement settings from EnemySystem (editable in Unity Inspector)
+            if (EnemySystem.Instance != null)
+            {
+                float hitMoveDistance = EnemySystem.Instance.EnemyHitMoveDistance;
+                float hitMoveDuration = EnemySystem.Instance.EnemyHitMoveDuration;
+                float returnDuration = EnemySystem.Instance.EnemyHitReturnDuration;
+                
+                Vector3 originalPos = transform.position;
+                transform.DOMoveX(originalPos.x - hitMoveDistance, hitMoveDuration)
+                    .OnComplete(() => {
+                        // Return to original position after moving left
+                        transform.DOMoveX(originalPos.x, returnDuration);
+                    });
+            }
+            else
+            {
+                // Fallback if EnemySystem is not available
+                Vector3 originalPos = transform.position;
+                transform.DOMoveX(originalPos.x - 0.2f, 0.1f)
+                    .OnComplete(() => {
+                        transform.DOMoveX(originalPos.x, 0.15f);
+                    });
+            }
+        }
+        else
+        {
+            // Hero: Play a subtle screen shake animation when taking damage (0.15 seconds, 0.15 intensity)
+            // Reduced intensity for better UX - just a small shake to indicate hit
+            transform.DOShakePosition(0.15f, 0.15f);
+        }
+        
+        // Update the health display to show the new health value (animated)
+        UpdateHealth();
+    }
+
+    /// <summary>
+    /// Heals this combatant, increasing health with visual effects
+    /// </summary>
+    /// <param name="healAmount">How much health to restore</param>
+    /// <remarks>
+    /// Called by healing effects and abilities. Increases health up to MaxHealth,
+    /// plays a healing visual indicator, and updates the health display with
+    /// the healing-specific animation (green pulse, upward direction).
+    /// </remarks>
+    public void Heal(int healAmount)
+    {
+        // Cannot heal if dead
+        if (IsDead) return;
+        
+        // Apply healing (clamped to MaxHealth)
+        CurrentHealth = Mathf.Min(CurrentHealth + healAmount, MaxHealth);
+        
+        // Update the health display (animation will detect this is healing)
+        UpdateHealth();
+    }
+
+    /// <summary>
+    /// Marks this combatant as dead, applying visual effects and preventing further targeting
+    /// </summary>
+    /// <remarks>
+    /// Called when health reaches zero. For heroes, greys out the sprite and stops animations.
+    /// For enemies, only sets the IsDead flag (enemies have separate death logic and should not turn gray).
+    /// Dead combatants cannot be targeted, do not process status effect ticks, and skip card discard/draw logic.
+    /// 
+    /// NOTE: Death animation is commented out as it's not yet implemented.
+    /// When animation is ready, uncomment the animator.SetTrigger("Death") line.
+    /// </remarks>
+    public void MarkAsDead()
+    {
+        if (IsDead) return; // Already dead
+        
+        IsDead = true;
+        
+        Debug.Log($"[CombatantView] {gameObject.name} has been marked as DEAD", this);
+        
+        // Only apply graying visual effect to heroes, not enemies
+        // Enemies have separate death logic (death animation, stuck sprite, etc.) and should not turn gray
+        if (this is HeroView)
+        {
+            // Cache original sprite color if not yet cached
+            if (spriteRenderer != null && !hasOriginalColor)
+            {
+                originalSpriteColor = spriteRenderer.color;
+                hasOriginalColor = true;
+            }
+            
+            // Grey out the sprite to show death state visually (heroes only)
+            if (spriteRenderer != null)
+            {
+                // Set to grey with some transparency
+                spriteRenderer.color = new Color(0.4f, 0.4f, 0.4f, 0.7f);
+            }
+            
+            // Stop the animator to freeze animation (heroes only)
+            if (animationController != null)
+            {
+                // Disable animator to freeze animation in current frame
+                var animator = animationController.GetComponent<Animator>();
+                if (animator != null)
+                {
+                    animator.enabled = false;
+                    // NOTE: Death animation not yet implemented - commented out for now
+                    // When animation is ready, enable animator and play death:
+                    // animator.enabled = true;
+                    // animator.SetTrigger("Death");
+                }
+            }
+        }
+        // For enemies, IsDead flag is set but no visual graying is applied
+        // Enemy death visuals are handled by EnemySystem (death animation, stuck sprite, etc.)
+    }
+
+    /// <summary>
+    /// Revives this combatant from death, restoring visual state
+    /// </summary>
+    /// <remarks>
+    /// Used for resurrection mechanics or when resetting combat state.
+    /// Restores original sprite color and re-enables animations.
+    /// Does not restore health - call ResetToMaxHP() or Heal() separately.
+    /// </remarks>
+    public void Revive()
+    {
+        if (!IsDead) return; // Not dead
+        
+        IsDead = false;
+        
+        Debug.Log($"[CombatantView] {gameObject.name} has been REVIVED", this);
+        
+        // Restore original sprite color
+        if (spriteRenderer != null && hasOriginalColor)
+        {
+            spriteRenderer.color = originalSpriteColor;
+        }
+        
+        // Re-enable animator
+        if (animationController != null)
+        {
+            var animator = animationController.GetComponent<Animator>();
+            if (animator != null)
+            {
+                animator.enabled = true;
+                animationController.PlayIdle();
+            }
+        }
+    }
+
+    /// <summary>
+    /// Resets this combatant's health to maximum (for combat reset between fights)
+    /// </summary>
+    /// <remarks>
+    /// Called when initializing a new combat or resetting after previous fight.
+    /// Sets CurrentHealth to MaxHealth and updates the health display.
+    /// </remarks>
+    public void ResetToMaxHP()
+    {
+        CurrentHealth = MaxHealth;
+        SetHealthImmediate();
+        Debug.Log($"[CombatantView] {gameObject.name} HP reset to max: {MaxHealth}", this);
+    }
+
+    /// <summary>
+    /// Clears all active status effects from this combatant
+    /// </summary>
+    /// <remarks>
+    /// Called when resetting combat state between fights.
+    /// Removes all status effects and updates the UI to reflect the cleared state.
+    /// </remarks>
+    public void ClearAllStatusEffects()
+    {
+        // Get all effect types currently active
+        var effectTypes = new List<StatusEffectType>(statusEffects.Keys);
+        
+        // Clear the dictionary
+        statusEffects.Clear();
+        
+        // Update UI for each cleared effect (sets stack to 0, which removes the icon)
+        foreach (var type in effectTypes)
+        {
+            if (statusEffectsUI != null)
+            {
+                statusEffectsUI.UpdateStatusEffectUI(type, 0);
+            }
+        }
+        
+        Debug.Log($"[CombatantView] {gameObject.name} cleared all status effects", this);
     }
 
     /// <summary>
@@ -235,6 +683,23 @@ public class CombatantView : MonoBehaviour
     /// </remarks>
     public void AddStatusEffect(StatusEffectType type, int stackCount)
     {
+        AddStatusEffect(type, stackCount, null);
+    }
+    
+    /// <summary>
+    /// Adds stacks of a status effect to this combatant with a custom display name
+    /// </summary>
+    /// <param name="type">The type of status effect to add</param>
+    /// <param name="stackCount">How many stacks to add</param>
+    /// <param name="customName">Custom display name for this effect (e.g., "Bonecracked", "Rage", "Moonfall")</param>
+    /// <remarks>
+    /// Called by status effect systems to apply effects with custom names.
+    /// The custom name allows using consolidated move sprites instead of default effect sprites.
+    /// Examples: "Bonecracked" for DEFENSE_DOWN, "Rage" for RAGE, "Moonfall" for DEFENSE_DOWN
+    /// If the effect already exists, adds to the existing stacks and preserves the custom name.
+    /// </remarks>
+    public void AddStatusEffect(StatusEffectType type, int stackCount, string customName)
+    {
         // Add to existing stacks or create new entry
         if (statusEffects.ContainsKey(type))
         {
@@ -244,8 +709,15 @@ public class CombatantView : MonoBehaviour
         {
             statusEffects.Add(type, stackCount);
         }
-        // Update the visual display to show the new stack count
-        statusEffectsUI.UpdateStatusEffectUI(type, GetStatusEffectStacks(type));
+        // Update the visual display to show the new stack count with custom name (if provided)
+        if (!string.IsNullOrEmpty(customName))
+        {
+            statusEffectsUI.UpdateStatusEffectUI(type, GetStatusEffectStacks(type), customName);
+        }
+        else
+        {
+            statusEffectsUI.UpdateStatusEffectUI(type, GetStatusEffectStacks(type));
+        }
     }
     
     /// <summary>
@@ -288,5 +760,89 @@ public class CombatantView : MonoBehaviour
         // Return current stacks or 0 if effect not present
         if (statusEffects.ContainsKey(type)) return statusEffects[type];
         else return 0;
+    }
+
+    /// <summary>
+    /// Triggers an animation state for this combatant
+    /// </summary>
+    /// <param name="state">The animation state to play</param>
+    /// <remarks>
+    /// <para><strong>Use case:</strong> External systems (cards, abilities, AI) can trigger animations</para>
+    /// <para><strong>Example:</strong> <c>heroView.PlayAnimation(CombatantAnimState.Attack);</c></para>
+    /// <para><strong>Safety:</strong> Safe to call even if animation controller is missing</para>
+    /// </remarks>
+    public void PlayAnimation(CombatantAnimState state)
+    {
+        if (animationController != null)
+        {
+            animationController.SetState(state);
+        }
+    }
+
+    /// <summary>
+    /// Returns to idle animation state
+    /// </summary>
+    /// <remarks>
+    /// Call when character finishes an action and should return to default state.
+    /// Safe to call even if animation controller is missing.
+    /// </remarks>
+    public void PlayIdleAnimation()
+    {
+        if (animationController != null)
+        {
+            animationController.PlayIdle();
+        }
+    }
+    
+    /// <summary>
+    /// Plays an animation and waits for it to complete before returning
+    /// </summary>
+    /// <param name="state">The animation state to play</param>
+    /// <param name="returnToIdle">If true, returns to idle animation after completing</param>
+    /// <returns>Coroutine that waits for animation to finish</returns>
+    /// <remarks>
+    /// <para><strong>Use case:</strong> When you need to wait for an animation to finish 
+    /// before continuing (e.g., hit animation before next target, attack animation before damage)</para>
+    /// <para><strong>Example:</strong> <c>yield return target.PlayAnimationAndWait(CombatantAnimState.Hit);</c></para>
+    /// <para><strong>Timing:</strong> Uses animation clip length plus a small buffer for transitions</para>
+    /// </remarks>
+    public IEnumerator PlayAnimationAndWait(CombatantAnimState state, bool returnToIdle = true)
+    {
+        if (animationController != null)
+        {
+            // Trigger the animation
+            animationController.SetState(state);
+            
+            // Get the duration of this animation type
+            float duration = animationController.GetAnimationDuration(state);
+            
+            // Wait for the animation to complete (with small buffer for transitions)
+            yield return new WaitForSeconds(duration + 0.05f);
+            
+            // Optionally return to idle
+            if (returnToIdle && state != CombatantAnimState.Dead && state != CombatantAnimState.Idle)
+            {
+                animationController.PlayIdle();
+            }
+        }
+        else
+        {
+            // No animation controller, use fallback timing
+            yield return new WaitForSeconds(0.3f);
+        }
+    }
+    
+    /// <summary>
+    /// Gets the duration of a specific animation state
+    /// </summary>
+    /// <param name="state">The animation state to query</param>
+    /// <returns>Duration in seconds, or a default fallback</returns>
+    public float GetAnimationDuration(CombatantAnimState state)
+    {
+        if (animationController != null)
+        {
+            return animationController.GetAnimationDuration(state);
+        }
+        return 0.5f; // Default fallback
     }
 }

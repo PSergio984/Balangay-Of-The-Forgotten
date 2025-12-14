@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 49a48b108fa7b434392a0ba71fe38b5c, type: 3}
+  m_Name: Special Card Collection
+  m_EditorClassIdentifier: Assembly-CSharp::SpecialCardCollectionData
+  allSpecialCardAssets:
+  - {fileID: 11400000, guid: ebd06b485a9033d42bd0639d6e24ba9a, type: 2}
+  - {fileID: 11400000, guid: 38f85c406dfb6624fb2add304f9559d8, type: 2}
+  - {fileID: 11400000, guid: 3caba3d2c289dd345a006d3e4c08d4e8, type: 2}
+  collectedCards: []

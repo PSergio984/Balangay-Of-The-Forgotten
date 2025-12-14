@@ -13,17 +13,49 @@ MonoBehaviour:
   m_Name: Guardian's Oath
   m_EditorClassIdentifier: Assembly-CSharp::CardData
   <Title>k__BackingField: GUARDIAN'S OATH
-  <Target>k__BackingField: 1
+  <Target>k__BackingField: 2
   <Description>k__BackingField: Sacrifice 150 HP, shield alll ally for amount of
     300, Unstackable
   <Art>k__BackingField: {fileID: 21300000, guid: eb98c9c926605eb48bdeafb3d5f2d18e, type: 3}
   <BackgroundArt>k__BackingField: {fileID: 21300000, guid: 143f95eb116944d47b7e499395969022, type: 3}
   <RoleData>k__BackingField: {fileID: 11400000, guid: 8a873cc1966fdd641a8f8d3b47bd0288, type: 2}
+  <Cooldown>k__BackingField: 4
+  <SoundData>k__BackingField: {fileID: 11400000, guid: 6ba7754fc25af094f9bd55127ea7e896, type: 2}
   <ManualTargetEffect>k__BackingField:
     rid: -2
-  <OtherEffects>k__BackingField: []
+  <OtherEffects>k__BackingField:
+  - <targetMode>k__BackingField:
+      rid: 5040687034078331148
+    <effects>k__BackingField:
+      rid: 5040687012623680001
+  - <targetMode>k__BackingField:
+      rid: 5040687012623680002
+    <effects>k__BackingField:
+      rid: 5040687012623680003
   references:
     version: 2
     RefIds:
     - rid: -2
       type: {class: , ns: , asm: }
+    - rid: 5040687012623680001
+      type: {class: SelfDamageEffect, ns: , asm: Assembly-CSharp}
+      data:
+        flatDamage: 0
+        percentOfCurrentHP: 0.25
+        percentOfMaxHP: 0
+    - rid: 5040687012623680002
+      type: {class: AllHeroesTM, ns: , asm: Assembly-CSharp}
+      data: 
+    - rid: 5040687012623680003
+      type: {class: ApplyShieldEffect, ns: , asm: Assembly-CSharp}
+      data:
+        flatShieldAmount: 0
+        percentOfTargetMaxHP: 0
+        percentOfCasterCurrentHP: 0.25
+        percentOfCasterMaxHP: 0
+        duration: 2
+        canStack: 0
+        excludeCaster: 1
+    - rid: 5040687034078331148
+      type: {class: HeroTM, ns: , asm: Assembly-CSharp}
+      data: 

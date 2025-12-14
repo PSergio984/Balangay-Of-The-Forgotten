@@ -1,0 +1,56 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f63fd39cb4db76b4292a781834573221, type: 3}
+  m_Name: Moonfall Spear
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyMoveData
+  <Description>k__BackingField: Moonfall Spear
+  <Information>k__BackingField: "\u2022\tDeals 125% MAG on all players.\r\n\u2022\t50%
+    chance to stun 2 players for 1 turn.\r\n"
+  <SoundData>k__BackingField: {fileID: 11400000, guid: 02a068d0706b2b943a9c1c0181e284a5, type: 2}
+  <ManualTargetEffect>k__BackingField:
+    rid: -2
+  <OtherEffects>k__BackingField:
+  - <targetMode>k__BackingField:
+      rid: 5040687038726930760
+    <effects>k__BackingField:
+      rid: 1437264605691248861
+  - <targetMode>k__BackingField:
+      rid: 5040687038726930761
+    <effects>k__BackingField:
+      rid: 5040687169801552185
+  references:
+    version: 2
+    RefIds:
+    - rid: -2
+      type: {class: , ns: , asm: }
+    - rid: 1437264605691248861
+      type: {class: DealDamageEffect, ns: , asm: Assembly-CSharp}
+      data:
+        baseDamage: 0
+        damageAmplification: 1
+        accuracy: 1
+        critChance: 0
+        defenseIgnore: 0
+        AttackAmp: 1.05
+        MagicAmp: 0
+    - rid: 5040687038726930760
+      type: {class: RandomTargetTM, ns: , asm: Assembly-CSharp}
+      data: 
+    - rid: 5040687038726930761
+      type: {class: RandomTargetTM, ns: , asm: Assembly-CSharp}
+      data: 
+    - rid: 5040687169801552185
+      type: {class: ApplyDefenseDownEffect, ns: , asm: Assembly-CSharp}
+      data:
+        defensePercentage: 20
+        duration: 2
+        customName: Moonfall

@@ -1,0 +1,676 @@
+fileFormatVersion: 2
+guid: 4cfa348f97945504b9206b5ab4b8627c
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -294616937111448491
+    second: SirenaAnimationTurn_0
+  - first:
+      213: -191001261760395212
+    second: SirenaAnimationTurn_1
+  - first:
+      213: -357318415750763694
+    second: SirenaAnimationTurn_2
+  - first:
+      213: -8420054525804040544
+    second: SirenaAnimationTurn_3
+  - first:
+      213: -6881595977658430339
+    second: SirenaAnimationTurn_4
+  - first:
+      213: 2652330993775463577
+    second: SirenaAnimationTurn_5
+  - first:
+      213: 824692370807865577
+    second: SirenaAnimationTurn_6
+  - first:
+      213: -6380302228628886754
+    second: SirenaAnimationTurn_7
+  - first:
+      213: 785669691999768564
+    second: SirenaAnimationTurn_8
+  - first:
+      213: 395244150734743370
+    second: SirenaAnimationTurn_9
+  - first:
+      213: -244543524856819200
+    second: SirenaAnimationTurn_10
+  - first:
+      213: 1312710924688730882
+    second: SirenaAnimationTurn_11
+  - first:
+      213: -4687753392081629328
+    second: SirenaAnimationTurn_12
+  - first:
+      213: 981774279323999444
+    second: SirenaAnimationTurn_13
+  - first:
+      213: -7776166193815107991
+    second: SirenaAnimationTurn_14
+  - first:
+      213: -171985845327413192
+    second: SirenaAnimationTurn_15
+  - first:
+      213: 8256407854518878902
+    second: SirenaAnimationTurn_16
+  - first:
+      213: 782780629024461304
+    second: SirenaAnimationTurn_17
+  - first:
+      213: 6171176280285583196
+    second: SirenaAnimationTurn_18
+  - first:
+      213: -7517068403843992023
+    second: SirenaAnimationTurn_19
+  - first:
+      213: -1822348496874670990
+    second: SirenaAnimationTurn_20
+  - first:
+      213: 2422674531433444665
+    second: SirenaAnimationTurn_21
+  - first:
+      213: 4424836489728509264
+    second: SirenaAnimationTurn_22
+  - first:
+      213: -196722919074253560
+    second: SirenaAnimationTurn_23
+  - first:
+      213: -7904792282728759216
+    second: SirenaAnimationTurn_24
+  - first:
+      213: -5015940566542162467
+    second: SirenaAnimationTurn_25
+  - first:
+      213: 4770460643513540411
+    second: SirenaAnimationTurn_26
+  - first:
+      213: -6362385127515399824
+    second: SirenaAnimationTurn_27
+  - first:
+      213: 1730450361785564716
+    second: SirenaAnimationTurn_28
+  - first:
+      213: -1355952216933393781
+    second: SirenaAnimationTurn_29
+  - first:
+      213: -6097092190956634686
+    second: SirenaAnimationTurn_30
+  - first:
+      213: -859923534508681098
+    second: SirenaAnimationTurn_31
+  - first:
+      213: 1239064073328515250
+    second: SirenaAnimationTurn_32
+  - first:
+      213: -4852752879122076078
+    second: SirenaAnimationTurn_33
+  - first:
+      213: 4170415773948791811
+    second: SirenaAnimationTurn_34
+  - first:
+      213: 7396680848356828818
+    second: SirenaAnimationTurn_35
+  - first:
+      213: -8945404207291193680
+    second: SirenaAnimationTurn_36
+  - first:
+      213: 4199777923732737995
+    second: SirenaAnimationTurn_37
+  - first:
+      213: 7630679641298366265
+    second: SirenaAnimationTurn_38
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WindowsStoreApps
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: SirenaAnimationTurn_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 55498a6e47f49ebf0800000000000000
+      internalID: -294616937111448491
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SirenaAnimationTurn_1
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 0
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 438ce194d5d695df0800000000000000
+      internalID: -191001261760395212
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SirenaAnimationTurn_2
+      rect:
+        serializedVersion: 2
+        x: 128
+        y: 0
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 25b68754bcc8a0bf0800000000000000
+      internalID: -357318415750763694
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SirenaAnimationTurn_3
+      rect:
+        serializedVersion: 2
+        x: 192
+        y: 0
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0aea7082505f52b80800000000000000
+      internalID: -8420054525804040544
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SirenaAnimationTurn_4
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 0
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d7c89e72be8af70a0800000000000000
+      internalID: -6881595977658430339
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SirenaAnimationTurn_5
+      rect:
+        serializedVersion: 2
+        x: 320
+        y: 0
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 99cceb67cf8fec420800000000000000
+      internalID: 2652330993775463577
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SirenaAnimationTurn_6
+      rect:
+        serializedVersion: 2
+        x: 384
+        y: 0
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9e04af28755e17b00800000000000000
+      internalID: 824692370807865577
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SirenaAnimationTurn_7
+      rect:
+        serializedVersion: 2
+        x: 448
+        y: 0
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e1b21f66dec9477a0800000000000000
+      internalID: -6380302228628886754
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SirenaAnimationTurn_8
+      rect:
+        serializedVersion: 2
+        x: 512
+        y: 0
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4ffcf661c6247ea00800000000000000
+      internalID: 785669691999768564
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SirenaAnimationTurn_9
+      rect:
+        serializedVersion: 2
+        x: 576
+        y: 0
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a47681406703c7500800000000000000
+      internalID: 395244150734743370
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SirenaAnimationTurn_10
+      rect:
+        serializedVersion: 2
+        x: 640
+        y: 0
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 00299c4b5f43b9cf0800000000000000
+      internalID: -244543524856819200
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SirenaAnimationTurn_11
+      rect:
+        serializedVersion: 2
+        x: 704
+        y: 0
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 20ba8d681afa73210800000000000000
+      internalID: 1312710924688730882
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SirenaAnimationTurn_12
+      rect:
+        serializedVersion: 2
+        x: 768
+        y: 0
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 07f875e6021c1feb0800000000000000
+      internalID: -4687753392081629328
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SirenaAnimationTurn_13
+      rect:
+        serializedVersion: 2
+        x: 832
+        y: 0
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4dcd8b06186ff9d00800000000000000
+      internalID: 981774279323999444
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SirenaAnimationTurn_14
+      rect:
+        serializedVersion: 2
+        x: 896
+        y: 0
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 966cf3feb02851490800000000000000
+      internalID: -7776166193815107991
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SirenaAnimationTurn_15
+      rect:
+        serializedVersion: 2
+        x: 960
+        y: 0
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8304ddee8cbfc9df0800000000000000
+      internalID: -171985845327413192
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SirenaAnimationTurn_16
+      rect:
+        serializedVersion: 2
+        x: 1024
+        y: 0
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6b2c7590337a49270800000000000000
+      internalID: 8256407854518878902
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SirenaAnimationTurn_17
+      rect:
+        serializedVersion: 2
+        x: 1088
+        y: 0
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8f15f02b5defcda00800000000000000
+      internalID: 782780629024461304
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: f3be88809807ccc42ab40be896d2f283
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries:
+      - key: SpriteEditor.SliceSettings
+        value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":64.0,"y":64.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":1,"keepEmptyRects":false,"isAlternate":false}'
+    nameFileIdTable:
+      SirenaAnimationTurn_0: -294616937111448491
+      SirenaAnimationTurn_1: -191001261760395212
+      SirenaAnimationTurn_10: -244543524856819200
+      SirenaAnimationTurn_11: 1312710924688730882
+      SirenaAnimationTurn_12: -4687753392081629328
+      SirenaAnimationTurn_13: 981774279323999444
+      SirenaAnimationTurn_14: -7776166193815107991
+      SirenaAnimationTurn_15: -171985845327413192
+      SirenaAnimationTurn_16: 8256407854518878902
+      SirenaAnimationTurn_17: 782780629024461304
+      SirenaAnimationTurn_2: -357318415750763694
+      SirenaAnimationTurn_3: -8420054525804040544
+      SirenaAnimationTurn_4: -6881595977658430339
+      SirenaAnimationTurn_5: 2652330993775463577
+      SirenaAnimationTurn_6: 824692370807865577
+      SirenaAnimationTurn_7: -6380302228628886754
+      SirenaAnimationTurn_8: 785669691999768564
+      SirenaAnimationTurn_9: 395244150734743370
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

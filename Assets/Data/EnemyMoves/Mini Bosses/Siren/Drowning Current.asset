@@ -13,7 +13,8 @@ MonoBehaviour:
   m_Name: Drowning Current
   m_EditorClassIdentifier: Assembly-CSharp::EnemyMoveData
   <Description>k__BackingField: Drowning Current
-  <Information>k__BackingField: Drowning Current
+  <Information>k__BackingField: "\u2022\tDeals 1.2 x MAG to one enemy"
+  <SoundData>k__BackingField: {fileID: 11400000, guid: d4cf11e9b8cf3474ba897b27db18ea04, type: 2}
   <ManualTargetEffect>k__BackingField:
     rid: -2
   <OtherEffects>k__BackingField:
@@ -33,8 +34,9 @@ MonoBehaviour:
       type: {class: DealDamageEffect, ns: , asm: Assembly-CSharp}
       data:
         baseDamage: 0
+        damageAmplification: 1
         accuracy: 1
         critChance: 0
         defenseIgnore: 0
-        AttackAmp: 1
+        AttackAmp: 0
         MagicAmp: 1.2

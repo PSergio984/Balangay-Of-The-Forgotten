@@ -54,17 +54,90 @@ public class EndTurnButtonUI : MonoBehaviour
     
     [SerializeField] private SoundData mapSelectionMusic;
     [SerializeField] private float MusicFadeTime = 2f;
+    
+    [Header("Loading Overlay")]
+    [Tooltip("Optional loading video ID. If empty, scene will load without loading overlay")]
+    [SerializeField] private string loadingVideoId = "loading";
+    
+    [Header("Turn Management")]
+    [Tooltip("If true, players can play multiple cards per turn. If false, automatically advances to next hero after playing one card.")]
+    [SerializeField] private bool canPlayMultipleCards = true;
+    
+    /// <summary>
+    /// Static reference to the EndTurnButtonUI instance (for accessing settings)
+    /// </summary>
+    private static EndTurnButtonUI instance;
+    
+    /// <summary>
+    /// Whether players can play multiple cards per turn
+    /// </summary>
+    /// <remarks>
+    /// If false, after playing any card, automatically discards hand and advances to next hero (or enemy turn).
+    /// If true, players can play multiple cards and must manually click "End Turn" button.
+    /// </remarks>
+    public bool CanPlayMultipleCards => canPlayMultipleCards;
+    
+    /// <summary>
+    /// Gets the EndTurnButtonUI instance from the scene
+    /// </summary>
+    public static EndTurnButtonUI Instance
+    {
+        get
+        {
+            if (instance == null)
+            {
+                instance = FindFirstObjectByType<EndTurnButtonUI>();
+            }
+            return instance;
+        }
+    }
+    
+    private void Awake()
+    {
+        // Set instance reference if not already set
+        if (instance == null)
+        {
+            instance = this;
+        }
+    }
 
     public void OnClick()
     {
         Debug.Log("[EndTurnButtonUI] End Turn button clicked.");
+        AdvanceToNextHero();
+    }
+    
+    /// <summary>
+    /// Advances to the next hero (or enemy turn if all heroes have acted)
+    /// </summary>
+    /// <remarks>
+    /// Discards current hero's hand, then either advances to next hero or starts enemy turn.
+    /// Can be called manually or automatically when canPlayMultipleCards is false.
+    /// </remarks>
+    public void AdvanceToNextHero()
+    {
+        // CRITICAL: Check if victory/defeat is showing before advancing
+        // If combat has ended, don't advance turn or draw cards
+        if (VictoryDefeatUI.Instance != null && VictoryDefeatUI.Instance.IsShowingResult)
+        {
+            Debug.Log("[EndTurnButtonUI] Victory/Defeat banner is showing. Cannot advance turn.");
+            return;
+        }
+        
         int heroCount = CurrentHeroUtil.GetHeroCount();
         int currentHeroIndex = CurrentHeroUtil.CurrentHeroIndex;
-        Debug.Log($"[EndTurnButtonUI] CurrentHeroIndex: {currentHeroIndex} / {heroCount - 1}");
+        Debug.Log($"[EndTurnButtonUI] Advancing turn. CurrentHeroIndex: {currentHeroIndex} / {heroCount - 1}");
 
         // Always discard current hero's hand before advancing
         ActionSystem.Instance.Perform(new DiscardAllCardsGA(), () =>
         {
+            // CRITICAL: Check again after discard completes (victory might have triggered during discard)
+            if (VictoryDefeatUI.Instance != null && VictoryDefeatUI.Instance.IsShowingResult)
+            {
+                Debug.Log("[EndTurnButtonUI] Victory/Defeat banner is showing after discard. Cannot advance turn or draw cards.");
+                return;
+            }
+            
             // If all heroes have acted, start enemy turn and reset to first hero
             if (currentHeroIndex >= heroCount - 1)
             {
@@ -77,6 +150,7 @@ public class EndTurnButtonUI : MonoBehaviour
             {
                 // Advance to next hero
                 CurrentHeroUtil.CurrentHeroIndex++;
+
                 Debug.Log($"[EndTurnButtonUI] Next hero: {CurrentHeroUtil.CurrentHeroIndex}");
                 // Draw new hand for the next hero using CardSystem performer
                 ActionSystem.Instance.Perform(new DrawCardsGA(5));
@@ -86,13 +160,24 @@ public class EndTurnButtonUI : MonoBehaviour
 
     public void goBackToMainMenu()
     {
-        SceneController.Instance
+        var transition = SceneController.Instance
             .NewTransition()
-            .Load(SceneDatabase.Slots.SessionContent, SceneDatabase.Scenes.MapSelection, setActive: true)
-            .Unload(SceneDatabase.Scenes.Combat)
-            .WithOverlay()
-            .WithMusic(mapSelectionMusic, MusicFadeTime)
-            .WithClearUnusedAssets()
-            .Perform();
+            .Unload(SceneDatabase.Slots.SessionContent)
+            .Load(SceneDatabase.Slots.Session, SceneDatabase.Scenes.MapSelection, setActive: true);
+            
+        
+        // Only add loading video if provided
+        if (!string.IsNullOrEmpty(loadingVideoId))
+        {
+            transition = transition.WithLoadingVideo(loadingVideoId);
+        }
+        
+        // Play map selection music with smooth fade
+        if (mapSelectionMusic != null)
+        {
+            transition = transition.WithMusic(mapSelectionMusic, MusicFadeTime);
+        }
+        
+        transition.Perform();
     }
 }

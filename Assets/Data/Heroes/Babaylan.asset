@@ -13,10 +13,18 @@ MonoBehaviour:
   m_Name: Babaylan
   m_EditorClassIdentifier: Assembly-CSharp::HeroData
   <Image>k__BackingField: {fileID: 21300000, guid: e3d885e1e0de56e468c1205c6be12b98, type: 3}
+  <RoleCard>k__BackingField: {fileID: 21300000, guid: 9573ed6f825d3ee47a4e5f0f1b1d5724, type: 3}
   <HeroName>k__BackingField: Babaylan
-  <Health>k__BackingField: 100
-  <AttackPower>k__BackingField: 1
-  <Defense>k__BackingField: 115
+  <Health>k__BackingField: 800
+  <AttackPower>k__BackingField: 0
+  <MagicPower>k__BackingField: 180
+  <Defense>k__BackingField: 130
+  <AnimatorOverride>k__BackingField: {fileID: 22100000, guid: ac69aad7279a60e4aa0f4717c086f690, type: 2}
+  <TurnProfileOverride>k__BackingField: {fileID: 22100000, guid: a50164459377cbe4fb14d86777a2cb58, type: 2}
+  <BuildPresets>k__BackingField:
+  - {fileID: 11400000, guid: 0b5aa2aa182d17c46b6aa173844011e5, type: 2}
+  - {fileID: 11400000, guid: 58c1803d893fd9446846def17503351b, type: 2}
+  - {fileID: 11400000, guid: 1964a2717bbd48247a1a2caabbf73eb6, type: 2}
   <Deck>k__BackingField:
   - {fileID: 11400000, guid: f8d901766cb7f2640b5d829f9d3707f9, type: 2}
   - {fileID: 11400000, guid: 33f83760a230b9045a98786affb90c15, type: 2}

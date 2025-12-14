@@ -13,7 +13,8 @@ MonoBehaviour:
   m_Name: Split Body
   m_EditorClassIdentifier: Assembly-CSharp::EnemyMoveData
   <Description>k__BackingField: Split Body
-  <Information>k__BackingField: Split Body
+  <Information>k__BackingField: "\u2022\tDeals 1.6 x ATK to all enemies"
+  <SoundData>k__BackingField: {fileID: 11400000, guid: 6ac0f44caaf046546b63edaf6bfd68a7, type: 2}
   <ManualTargetEffect>k__BackingField:
     rid: -2
   <OtherEffects>k__BackingField:
@@ -30,11 +31,12 @@ MonoBehaviour:
       type: {class: DealDamageEffect, ns: , asm: Assembly-CSharp}
       data:
         baseDamage: 0
+        damageAmplification: 1
         accuracy: 1
         critChance: 0
         defenseIgnore: 0
         AttackAmp: 1.6
-        MagicAmp: 1
+        MagicAmp: 0
     - rid: 8634069544632844537
       type: {class: AllHeroesTM, ns: , asm: Assembly-CSharp}
       data: 

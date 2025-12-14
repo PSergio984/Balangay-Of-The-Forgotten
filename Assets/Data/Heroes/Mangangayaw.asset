@@ -13,10 +13,18 @@ MonoBehaviour:
   m_Name: Mangangayaw
   m_EditorClassIdentifier: Assembly-CSharp::HeroData
   <Image>k__BackingField: {fileID: 21300000, guid: 939c3cdf06eb5c74d83e61a6c2d06b64, type: 3}
+  <RoleCard>k__BackingField: {fileID: 21300000, guid: 9a0cd5ac2f18bf84fafe2449373867ea, type: 3}
   <HeroName>k__BackingField: Mangangayaw
   <Health>k__BackingField: 600
   <AttackPower>k__BackingField: 45
+  <MagicPower>k__BackingField: 0
   <Defense>k__BackingField: 80
+  <AnimatorOverride>k__BackingField: {fileID: 22100000, guid: 27e6ad057bdfd654e90b5ae625d25d57, type: 2}
+  <TurnProfileOverride>k__BackingField: {fileID: 22100000, guid: 400b9b9d4c6a7ab49bc512cc6a6a5a1f, type: 2}
+  <BuildPresets>k__BackingField:
+  - {fileID: 11400000, guid: 818a4ddc9d0ec87439d439ffbcaaa6de, type: 2}
+  - {fileID: 11400000, guid: 7ba081303bba19b4db47a1e330fee984, type: 2}
+  - {fileID: 11400000, guid: 383b426c8b12c444ba46f756401c4a3e, type: 2}
   <Deck>k__BackingField:
   - {fileID: 11400000, guid: 16e7b9915493a294e9423ea47041a4c8, type: 2}
   - {fileID: 11400000, guid: d5e2ad42e7307d74590f2aa418fc078d, type: 2}

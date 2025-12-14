@@ -13,13 +13,21 @@ MonoBehaviour:
   m_Name: Mandirigma
   m_EditorClassIdentifier: Assembly-CSharp::HeroData
   <Image>k__BackingField: {fileID: 21300000, guid: f57408739fac32547aaea38af8bff034, type: 3}
+  <RoleCard>k__BackingField: {fileID: 21300000, guid: deae191da40133c43816b96239a6f431, type: 3}
   <HeroName>k__BackingField: Mandirigma
   <Health>k__BackingField: 750
   <AttackPower>k__BackingField: 200
+  <MagicPower>k__BackingField: 0
   <Defense>k__BackingField: 125
+  <AnimatorOverride>k__BackingField: {fileID: 22100000, guid: 42db0f552efe2fe43ab1371ee3fdd04f, type: 2}
+  <TurnProfileOverride>k__BackingField: {fileID: 22100000, guid: ff073faca2f471d498bb1916c3d02616, type: 2}
+  <BuildPresets>k__BackingField:
+  - {fileID: 11400000, guid: f6673d915a8a83243b1d3a2ec2e265f0, type: 2}
+  - {fileID: 11400000, guid: d7cd5360285802149a4a0202dacb56b5, type: 2}
+  - {fileID: 11400000, guid: d80749e46917a3e438f4f789e2bd4043, type: 2}
   <Deck>k__BackingField:
   - {fileID: 11400000, guid: 5efc5dbdf3e70f54388d290bb88aa14c, type: 2}
   - {fileID: 11400000, guid: 6b054a64db2681b469a97659f722185d, type: 2}
   - {fileID: 11400000, guid: b7132fd677565c5478e40a6fd9c24b10, type: 2}
-  - {fileID: 11400000, guid: 209c319033a2f3b43b3346780517b2a7, type: 2}
   - {fileID: 11400000, guid: d6aa432e9993ccc458cdb6006004ccb0, type: 2}
+  - {fileID: 11400000, guid: cda638a054c25b64899a04d155a3bcbe, type: 2}

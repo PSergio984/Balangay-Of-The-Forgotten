@@ -1,5 +1,5 @@
 using UnityEngine;
-
+using System.Collections.Generic;
 
 /*
  * 
@@ -9,8 +9,10 @@ using UnityEngine;
  * - Stores all data for a single map (ID, scene, visuals, unlock state)
  * - Created as asset files in the project (right-click → Map Selection/Map Data)
  * - Referenced by MapButton to display and load the correct map
+ * - Contains combat-specific data (enemies, background) for dynamic level setup
  * 
- * Integration: Used by map selection system to configure each playable map
+ * Integration: Used by map selection system to configure each playable map,
+ *              and by MatchSetupSystem to set up combat based on selected level
  */
 
 /// <summary>
@@ -56,9 +58,149 @@ public class MapData : ScriptableObject
     /// Visual preview image shown in map selection screen (public getter)
     /// </summary>
     public Sprite MapThumbnail => mapThumbnail;
+
+    [Header("Boss Info")]
+
+    /// <summary>
+    /// Portrait image of the boss enemy for this map
+    /// </summary>
+    /// <remarks>
+    /// <para><strong>Why:</strong> Displayed in map selection to preview the boss encounter</para>
+    /// <para><strong>How:</strong> Assign a boss portrait sprite in Inspector</para>
+    /// </remarks>
+    [Tooltip("Portrait image of the boss enemy displayed in map selection")]
+    [SerializeField] private Sprite bossImage;
+
+    /// <summary>
+    /// Portrait image of the boss enemy for this map (public getter)
+    /// </summary>
+    public Sprite BossImage => bossImage;
+
+    /// <summary>
+    /// Icon representing the combat type or difficulty of this map
+    /// </summary>
+    /// <remarks>
+    /// <para><strong>Why:</strong> Visual indicator for players in map selection UI</para>
+    /// <para><strong>How:</strong> Assign an icon sprite in Inspector</para>
+    /// </remarks>
+    [Tooltip("Icon representing the combat type or difficulty of this map")]
+    [SerializeField] private Sprite combatMapIcon;
+
+    /// <summary>
+    /// Icon representing the combat type or difficulty of this map (public getter)
+    /// </summary>
+    public Sprite CombatMapIcon => combatMapIcon;
+
+    /// <summary>
+    /// Display name of the boss enemy for this map
+    /// </summary>
+    /// <remarks>
+    /// <para><strong>Why:</strong> Shown in UI to introduce the boss encounter</para>
+    /// <para><strong>How:</strong> Enter the boss name in Inspector (e.g., "Dark Guardian")</para>
+    /// </remarks>
+    [Tooltip("Display name of the boss enemy shown in map selection UI")]
+    [SerializeField] private string bossName;
+
+    /// <summary>
+    /// Display name of the boss enemy for this map (public getter)
+    /// </summary>
+    public string BossName => bossName;
+
+    [Header("Combat Setup")]
+    
+    /// <summary>
+    /// List of enemies that will spawn when this map is loaded in combat
+    /// </summary>
+    /// <remarks>
+    /// <para><strong>Why:</strong> Each map can have different enemy configurations</para>
+    /// <para><strong>How:</strong> Assign EnemyData assets in Inspector for this level's enemies</para>
+    /// </remarks>
+    [Tooltip("Enemies that will appear in combat for this level")]
+    [SerializeField] private List<EnemyData> enemyDatas = new List<EnemyData>();
+    
+    /// <summary>
+    /// Public getter for the enemy data list used by MatchSetupSystem (read-only view)
+    /// </summary>
+    /// <remarks>
+    /// <para><strong>Why:</strong> Returns read-only view to prevent external mutation of internal state</para>
+    /// </remarks>
+    public IReadOnlyList<EnemyData> EnemyDatas => enemyDatas;
+    
+    /// <summary>
+    /// Background sprite displayed in the combat scene for this map
+    /// </summary>
+    /// <remarks>
+    /// <para><strong>Why:</strong> Each map should have a unique visual environment</para>
+    /// <para><strong>How:</strong> Assign a background sprite in Inspector, MatchSetupSystem applies it</para>
+    /// </remarks>
+    [Tooltip("Background image shown during combat for this level")]
+    [SerializeField] private Sprite combatBackgroundSprite;
+    
+    /// <summary>
+    /// Public getter for combat background sprite used by MatchSetupSystem
+    /// </summary>
+    public Sprite CombatBackgroundSprite => combatBackgroundSprite;
+    
     
     /// <summary>
     /// Runtime reference to the UI button representing this map (set by map selection manager)
     /// </summary>
     public GameObject MapButtonObj { get; set; }
+
+    [Header("Loading Screen")]
+    /// <summary>
+    /// Custom loading video filename for this map (without .mp4 extension).
+    /// Example: "loadingMayari" will load "loadingMayari.mp4" from StreamingAssets.
+    /// Leave empty to use default loading video.
+    /// </summary>
+    /// <remarks>
+    /// <para><strong>Why:</strong> Each map can have a unique loading video for immersion</para>
+    /// <para><strong>How:</strong> Enter the video filename without extension (e.g., "loadingApolaki", "loadingBathala")</para>
+    /// <para><strong>Video location:</strong> Videos should be in StreamingAssets folder</para>
+    /// </remarks>
+    [Tooltip("Video filename without extension (e.g., 'loadingMayari' → 'loadingMayari.mp4'). Leave empty for default.")]
+    [SerializeField] private string loadingVideoId;
+    
+    /// <summary>
+    /// Gets the loading video ID for this map, or null if using default
+    /// </summary>
+    public string LoadingVideoId => string.IsNullOrEmpty(loadingVideoId) ? null : loadingVideoId;
+
+    [Header("Music")]
+    /// <summary>
+    /// Music to play for this map if no enemy-specific music is set.
+    /// </summary>
+    [Tooltip("Music to play for this map if no enemy-specific music is set.")]
+    public AudioSystem.SoundData MapMusic;
+
+    [Header("Rewards")]
+    /// <summary>
+    /// Reward data for the first enemy (miniboss) defeat
+    /// </summary>
+    /// <remarks>
+    /// <para><strong>Why:</strong> Each map can have different rewards for defeating the miniboss</para>
+    /// <para><strong>How:</strong> Assign reward sprites and items in Inspector for the first enemy reward</para>
+    /// </remarks>
+    [Tooltip("Reward data shown when the first enemy (miniboss) is defeated")]
+    [SerializeField] private RewardData minibossReward;
+
+    /// <summary>
+    /// Reward data for the first enemy (miniboss) defeat (public getter)
+    /// </summary>
+    public RewardData MinibossReward => minibossReward;
+
+    /// <summary>
+    /// Reward data for the second enemy (main boss) defeat
+    /// </summary>
+    /// <remarks>
+    /// <para><strong>Why:</strong> Each map can have different rewards for defeating the main boss</para>
+    /// <para><strong>How:</strong> Assign reward sprites and items in Inspector for the main boss reward</para>
+    /// </remarks>
+    [Tooltip("Reward data shown when the second enemy (main boss) is defeated")]
+    [SerializeField] private RewardData mainBossReward;
+
+    /// <summary>
+    /// Reward data for the second enemy (main boss) defeat (public getter)
+    /// </summary>
+    public RewardData MainBossReward => mainBossReward;
 }

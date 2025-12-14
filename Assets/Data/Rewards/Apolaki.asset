@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 886a4481eb5baf942a2b0a9e485c1698, type: 3}
+  m_Name: Apolaki
+  m_EditorClassIdentifier: Assembly-CSharp::RewardData
+  closedChestSprite: {fileID: 4007693841356990869, guid: 64a6779de4d425945b86026db8830560, type: 3}
+  openChestSprite: {fileID: -1364693967, guid: 64a6779de4d425945b86026db8830560, type: 3}
+  glowSprite: {fileID: 21300000, guid: ffbb2af54a1b03c46b8aac181297cd0d, type: 3}
+  rewardItemSprite: {fileID: 21300000, guid: cabbfd9689c9fbc4f9ad3c922d6dcfc0, type: 3}
+  associatedRelic: {fileID: 11400000, guid: 92b260c77c0baf745af0792cefdf3c45, type: 2}
+  specialCardReward: {fileID: 0}

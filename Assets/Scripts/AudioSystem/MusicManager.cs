@@ -25,8 +25,13 @@ namespace AudioSystem
         
         // Current state
         private AudioClip currentClip;
+        private SoundData currentMusicData; // Store the SoundData reference for resume
         private float currentVolume = 1f;
         private bool isMusicPlaying = false;
+        
+        // Pause/resume state (for scene transitions)
+        private SoundData pausedMusicData;
+        private bool isPaused = false;
         
         protected override void Awake()
         {
@@ -61,7 +66,17 @@ namespace AudioSystem
         /// </summary>
         public void PlayMusic(SoundData musicData, float fadeTime = -1f)
         {
-            if (musicData?.clip == null) return;
+            if (musicData == null)
+            {
+                Debug.LogWarning("[MusicManager] PlayMusic called with null musicData - ignoring");
+                return;
+            }
+            
+            if (musicData.clip == null)
+            {
+                Debug.LogWarning($"[MusicManager] PlayMusic called with SoundData '{musicData.name}' but clip is null - ignoring");
+                return;
+            }
             
             float actualFadeTime = fadeTime > 0 ? fadeTime : defaultFadeTime;
             
@@ -71,6 +86,14 @@ namespace AudioSystem
             // Normalize and store the desired target volume for this track
             float targetVolume = Mathf.Clamp(musicData.volume, 0f, 1f);
             currentVolume = targetVolume;
+            
+            // Clear paused state when playing new music
+            isPaused = false;
+            pausedMusicData = null;
+            
+            // IMPORTANT: Set currentMusicData immediately so PauseMusicForTransition() can correctly store the new music
+            // This prevents the issue where pause happens before crossfade completes and stores old music instead
+            currentMusicData = musicData;
 
             if (currentFadeCoroutine != null)
             {
@@ -90,6 +113,11 @@ namespace AudioSystem
             
             float actualFadeTime = fadeTime > 0 ? fadeTime : defaultFadeTime;
             
+            // Clear paused state when stopping
+            isPaused = false;
+            pausedMusicData = null;
+            currentMusicData = null; // Clear current music data when stopping
+            
             if (currentFadeCoroutine != null)
             {
                 // Ensure no partial fades remain before starting fade out
@@ -98,6 +126,101 @@ namespace AudioSystem
 
             currentFadeCoroutine = StartCoroutine(FadeOutMusic(actualFadeTime));
         }
+        
+        /// <summary>
+        /// Pause music during transition (stores current music for later resume)
+        /// Stops music with fade out but remembers what was playing
+        /// </summary>
+        public void PauseMusicForTransition(float fadeTime = -1f)
+        {
+            if (!isMusicPlaying || currentClip == null) return;
+            
+            // Store the current music data for resume
+            if (currentMusicData != null)
+            {
+                pausedMusicData = currentMusicData;
+            }
+            else
+            {
+                // Fallback: create a temporary SoundData if we don't have the original reference
+                AudioSource currentSource = GetCurrentAudioSource();
+                if (currentSource != null)
+                {
+                    pausedMusicData = ScriptableObject.CreateInstance<SoundData>();
+                    pausedMusicData.clip = currentClip;
+                    pausedMusicData.volume = currentVolume;
+                    pausedMusicData.pitch = currentSource.pitch;
+                }
+                else
+                {
+                    return; // Can't pause without source
+                }
+            }
+            
+            isPaused = true;
+            
+            // Stop with fade (but don't clear currentMusicData - we'll need it)
+            float actualFadeTime = fadeTime > 0 ? fadeTime : defaultFadeTime;
+            
+            if (currentFadeCoroutine != null)
+            {
+                CancelCurrentFadeAndStabilize();
+            }
+            
+            currentFadeCoroutine = StartCoroutine(FadeOutMusicForPause(actualFadeTime));
+        }
+        
+        /// <summary>
+        /// Fade out music for pause (doesn't clear currentMusicData)
+        /// </summary>
+        private IEnumerator FadeOutMusicForPause(float fadeTime)
+        {
+            AudioSource currentSource = GetCurrentAudioSource();
+            if (currentSource == null) yield break;
+            
+            float startVolume = currentSource.volume;
+            float elapsedTime = 0f;
+            
+            while (elapsedTime < fadeTime)
+            {
+                elapsedTime += Time.deltaTime;
+                float progress = elapsedTime / fadeTime;
+                currentSource.volume = startVolume * (1f - fadeCurve.Evaluate(progress));
+                yield return null;
+            }
+            
+            currentSource.Stop();
+            currentSource.volume = 0f;
+            isMusicPlaying = false;
+            // Don't clear currentClip or currentMusicData - we need them for resume
+            
+            currentFadeCoroutine = null;
+        }
+        
+        /// <summary>
+        /// Resume music that was paused during transition
+        /// </summary>
+        public void ResumePausedMusic(float fadeTime = -1f)
+        {
+            if (!isPaused || pausedMusicData == null || pausedMusicData.clip == null) return;
+            
+            // Restore the paused music
+            PlayMusic(pausedMusicData, fadeTime);
+            
+            // Clear paused state
+            isPaused = false;
+            pausedMusicData = null;
+        }
+        
+        /// <summary>
+        /// Check if music is currently paused (waiting to resume)
+        /// </summary>
+        public bool IsPaused => isPaused;
+        
+        /// <summary>
+        /// Get the currently paused music data (if any)
+        /// </summary>
+        public SoundData PausedMusicData => pausedMusicData;
         
         /// <summary>
         /// Professional crossfade implementation without volume dips
@@ -147,6 +270,7 @@ namespace AudioSystem
             float finalTarget = currentVolume;
             newSource.volume = finalTarget;
             currentClip = musicData.clip;
+            currentMusicData = musicData; // Store reference for resume
             currentVolume = finalTarget;
             isMusicPlaying = true;
             currentSourceIndex = GetSourceIndex(newSource);
@@ -177,6 +301,8 @@ namespace AudioSystem
             currentSource.volume = 0f;
             isMusicPlaying = false;
             currentClip = null;
+            // Don't clear currentMusicData here - we might need it for resume
+            // Only clear it when explicitly stopping or playing new music
             
             currentFadeCoroutine = null;
         }
@@ -274,6 +400,7 @@ namespace AudioSystem
                 }
 
                 currentClip = null;
+                currentMusicData = null;
                 isMusicPlaying = false;
                 currentSourceIndex = 0;
             }

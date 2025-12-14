@@ -1,0 +1,56 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f63fd39cb4db76b4292a781834573221, type: 3}
+  m_Name: Serpent's Coil
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyMoveData
+  <Description>k__BackingField: Eclipse Fang
+  <Information>k__BackingField: "\u2022\tHeals Bakunawa for 50 (+100%) MAG.\r\n\u2022\tDeals
+    110% MAG as damage to a single target.\r\n"
+  <SoundData>k__BackingField: {fileID: 11400000, guid: e9a8ce36a28148b4487fc05634a35116, type: 2}
+  <ManualTargetEffect>k__BackingField:
+    rid: -2
+  <OtherEffects>k__BackingField:
+  - <targetMode>k__BackingField:
+      rid: 1437264605691248871
+    <effects>k__BackingField:
+      rid: 1437264605691248861
+  - <targetMode>k__BackingField:
+      rid: 5040687042380169444
+    <effects>k__BackingField:
+      rid: 5040687038726930811
+  references:
+    version: 2
+    RefIds:
+    - rid: -2
+      type: {class: , ns: , asm: }
+    - rid: 1437264605691248861
+      type: {class: DealDamageEffect, ns: , asm: Assembly-CSharp}
+      data:
+        baseDamage: 50
+        damageAmplification: 1
+        accuracy: 1
+        critChance: 0
+        defenseIgnore: 0
+        AttackAmp: 1.5
+        MagicAmp: 0
+    - rid: 1437264605691248871
+      type: {class: RandomTargetTM, ns: , asm: Assembly-CSharp}
+      data: 
+    - rid: 5040687038726930811
+      type: {class: ApplyDefenseDownEffect, ns: , asm: Assembly-CSharp}
+      data:
+        defensePercentage: 15
+        duration: 2
+        customName: Bind
+    - rid: 5040687042380169444
+      type: {class: TargetsHitByPreviousEffectTM, ns: , asm: Assembly-CSharp}
+      data: 

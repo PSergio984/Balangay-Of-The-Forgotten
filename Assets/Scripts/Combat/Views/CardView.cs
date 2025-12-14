@@ -10,6 +10,7 @@ using DG.Tweening;
  * - Handles both drag-to-play and manual targeting interactions
  * - For manual target cards: shows targeting arrow instead of dragging
  * - For regular cards: uses drag-and-drop to play them
+ * - Displays cooldown overlay and blocks interaction when card is on cooldown
  * 
  * 
  * Design reasoning:
@@ -18,8 +19,9 @@ using DG.Tweening;
  * - Both interaction styles use the same  for consistency
  * - DOTween provides smooth, optimized animations for better UX
  * - Visual feedback helps players understand different card interaction modes
+ * - Cooldown overlay clearly shows when cards cannot be played
  * 
- * Integration: Works with DOTween hover system, drag system, and ManualTargetingSystem
+ * Integration: Works with DOTween hover system, drag system, ManualTargetingSystem, and CooldownSystem
  */
 
 /// <summary>
@@ -130,6 +132,31 @@ public class CardView : MonoBehaviour
     /// </summary>
     [SerializeField] private SpriteRenderer RoleCircleIcon;
 
+    [Header("Hover Settings")]
+    [Tooltip("How far the card moves up when hovered (in world units)")]
+    [SerializeField] private float hoverDistance = 0.2f;
+    
+    [Header("Cooldown UI")]
+    /// <summary>
+    /// The cooldown overlay sprite that appears when the card is on cooldown
+    /// </summary>
+    [SerializeField] private SpriteRenderer cooldownOverlay;
+    
+    /// <summary>
+    /// The sprite for the cooldown badge/icon background
+    /// </summary>
+    [SerializeField] private SpriteRenderer cooldownBadge;
+    
+    /// <summary>
+    /// Text component that shows the remaining cooldown number
+    /// </summary>
+    [SerializeField] private TMP_Text cooldownText;
+    
+    /// <summary>
+    /// The color to tint the card when on cooldown (greyed out)
+    /// </summary>
+    [SerializeField] private Color cooldownTintColor = new Color(0.5f, 0.5f, 0.5f, 1f);
+
     /// <summary>
     /// Container that holds all the visual parts of the card
     /// </summary>
@@ -227,6 +254,16 @@ public class CardView : MonoBehaviour
     private static CardView currentlyHoveredCard;
     [SerializeField]  private float lastHoverEventTime = 0f;
     [SerializeField] private const float HOVER_DEBOUNCE_TIME = 0.05f;
+    
+    /// <summary>
+    /// Stores all sprite renderers for tinting during cooldown
+    /// </summary>
+    private SpriteRenderer[] allSpriteRenderers;
+    
+    /// <summary>
+    /// Original colors of sprite renderers before cooldown tint
+    /// </summary>
+    private Color[] originalColors;
 
     /// <summary>
     /// Sets the card's sorting order using SortingGroup component
@@ -261,28 +298,74 @@ public class CardView : MonoBehaviour
     /// </remarks>
     public void Setup(Card card)
     {
+        // Unsubscribe first to prevent duplicate event handlers
+        CooldownSystem.OnCooldownChanged -= OnCooldownChanged;
+
+        // Validate card data
+        if (card == null)
+        {
+            Debug.LogError("[CardView] Setup called with null card!");
+            return;
+        }
+        
+        // Check if card has valid data
+        if (!card.IsValid)
+        {
+            Debug.LogError($"[CardView] Setup called with invalid card (CardData is null)!");
+            return;
+        }
+
         // Remember which card this visual represents
         Card = card;
-        // Show the card's name in the title text
-        Title.text = card.Title;
-        // Show what the card does in the description text
-        Description.text = card.Description;
-        Target.text = card.Target;
-        // Show the card's artwork
-        CardArt.sprite = card.CardArt;
-        BackgroundArt.sprite = card.CardBackground;
-        // NOW, SET ALL THE ROLE-BASED SPRITES
-        RoleIcon.sprite = card.RoleIcon;
-        RoleCircleIcon.sprite = card.RoleCircleIcon;
-        MainBorder.sprite = card.MainBorder;
-        DarkBorder.sprite = card.DarkBorder;
-        LowerBorder.sprite = card.LowerBorder;
+        
+        // Show the card's name in the title text (with null check)
+        if (Title != null) Title.text = card.Title;
+        else Debug.LogWarning($"[CardView] Title is null for card '{card.Title}'");
+        
+        // Show what the card does in the description text (with null check)
+        if (Description != null) Description.text = card.Description;
+        else Debug.LogWarning($"[CardView] Description is null for card '{card.Title}'");
+        
+        if (Target != null) Target.text = card.Target;
+        else Debug.LogWarning($"[CardView] Target is null for card '{card.Title}'");
+        
+        // Show the card's artwork (with null checks)
+        if (CardArt != null) CardArt.sprite = card.CardArt;
+        else Debug.LogWarning($"[CardView] CardArt is null for card '{card.Title}'");
+        
+        if (BackgroundArt != null) BackgroundArt.sprite = card.CardBackground;
+        else Debug.LogWarning($"[CardView] BackgroundArt is null for card '{card.Title}'");
+        
+        // NOW, SET ALL THE ROLE-BASED SPRITES (with null checks)
+        if (RoleIcon != null) RoleIcon.sprite = card.RoleIcon;
+        else Debug.LogWarning($"[CardView] RoleIcon is null for card '{card.Title}'");
+        
+        if (RoleCircleIcon != null) RoleCircleIcon.sprite = card.RoleCircleIcon;
+        else Debug.LogWarning($"[CardView] RoleCircleIcon is null for card '{card.Title}'");
+        
+        if (MainBorder != null) MainBorder.sprite = card.MainBorder;
+        else Debug.LogWarning($"[CardView] MainBorder is null for card '{card.Title}'");
+        
+        if (DarkBorder != null) DarkBorder.sprite = card.DarkBorder;
+        else Debug.LogWarning($"[CardView] DarkBorder is null for card '{card.Title}'");
+        
+        if (LowerBorder != null) LowerBorder.sprite = card.LowerBorder;
+        else Debug.LogWarning($"[CardView] LowerBorder is null for card '{card.Title}'");
+        
         // Store original scale for optimized hover animations
         originalScale = transform.localScale;
         originalRotation = transform.rotation;
         // Position will be updated after hand positioning
         originalsInitialized = true;
-        
+
+        // Cache sprite renderers for cooldown tinting
+        CacheSpriteRenderers();
+
+        // Initialize cooldown display
+        UpdateCooldownDisplay();
+
+        // Subscribe to cooldown changes
+        CooldownSystem.OnCooldownChanged += OnCooldownChanged;
     }
     
     /// <summary>
@@ -350,12 +433,23 @@ public class CardView : MonoBehaviour
             originalsInitialized = true;
         }
         
+        // Check if victory/defeat/reward UI is showing - block card interactions
+        if (VictoryDefeatUI.Instance != null && VictoryDefeatUI.Instance.IsAnimating)
+        {
+            return; // Block hover when victory/defeat banner is showing
+        }
+        
+        if (RewardChestUI.Instance != null && RewardChestUI.Instance.IsShowing)
+        {
+            return; // Block hover when reward chest is showing
+        }
+        
         isHovering = true;
         transform.DOKill();
         BringCardToFront();
             
         // Perfect card game hover with rotation
-        Vector3 hoverPosition = originalPosition + Vector3.up * 0.2f;
+        Vector3 hoverPosition = originalPosition + Vector3.up * hoverDistance;
         Vector3 hoverScale = originalScale * 1.1f;
         Quaternion straightRotation = Quaternion.identity; // 0 degrees = straight
         // Animate to hover state
@@ -371,7 +465,7 @@ public class CardView : MonoBehaviour
         
         // Safety checks
         if (this == null || transform == null) return;
-        if (!Interactions.Instance.PlayerCanHover()) return;
+        if (Interactions.Instance == null || !Interactions.Instance.PlayerCanHover()) return;
         if (!isHovering) return;
         
         // Clear static reference if this was the hovered card
@@ -421,11 +515,31 @@ public class CardView : MonoBehaviour
     /// <remarks>
     /// Unity calls this automatically when the mouse button is pressed on the card.
     /// Branches between manual targeting and drag behavior based on card type.
+    /// Blocks interaction if card is on cooldown.
     /// </remarks>
     void OnMouseDown()
     {
+        // Check if victory/defeat/reward UI is showing - block card interactions
+        if (VictoryDefeatUI.Instance != null && VictoryDefeatUI.Instance.IsAnimating)
+        {
+            return; // Block interaction when victory/defeat banner is showing
+        }
+        
+        if (RewardChestUI.Instance != null && RewardChestUI.Instance.IsShowing)
+        {
+            return; // Block interaction when reward chest is showing
+        }
+        
+        // CRITICAL: Check cooldown FIRST before any other checks or state changes
+        // This prevents any visual feedback or state changes for cards on cooldown
+        if (!CanInteract())
+        {
+            Debug.Log($"[CardView] Card '{Card?.Title ?? "Unknown"}' is on cooldown ({Card?.CurrentCooldown ?? 0} rounds remaining) - blocking interaction");
+            return;
+        }
+        
         // Check if player is allowed to interact with cards
-        if (!Interactions.Instance.PlayerCanInteract()) return;
+        if (Interactions.Instance == null || !Interactions.Instance.PlayerCanInteract()) return;
         
         // Check if this card needs manual targeting (like single-target spells)
         if (Card.ManualTargetEffect != null)
@@ -445,7 +559,9 @@ public class CardView : MonoBehaviour
             BringCardToFront();
             
             // Start targeting mode - shows arrow from card to mouse cursor
-            ManualTargetingSystem.Instance.StartTargeting(transform.position);
+            // Use originalPosition instead of transform.position to ensure arrow starts from
+            // the card's actual hand position, not the hovered position
+            ManualTargetingSystem.Instance.StartTargeting(originalPosition);
         }
         else
         {
@@ -472,17 +588,25 @@ public class CardView : MonoBehaviour
     /// <remarks>
     /// Unity calls this repeatedly while the mouse is held down and moving.
     /// Only works for regular cards - manual target cards don't drag.
+    /// Does nothing if card is on cooldown.
     /// </remarks>
     void OnMouseDrag()
     {
+        // CRITICAL: Check cooldown FIRST - if card became on cooldown during drag, stop immediately
+        if (!CanInteract()) return;
+        
         // Check if player is allowed to interact with cards
-        if (!Interactions.Instance.PlayerCanInteract()) return;
+        if (Interactions.Instance == null || !Interactions.Instance.PlayerCanInteract()) return;
         
         // Manual target cards don't drag - they use targeting arrows instead
-        if(Card.ManualTargetEffect != null)
+        if (Card.ManualTargetEffect != null)
         {
             return;
         }
+        
+        // Only move if player is actually dragging this card
+        if (!Interactions.Instance.PlayerIsDragging) return;
+        
         // Make the card follow the mouse position
         transform.position = MouseUtil.GetMousePositionInWorldSpace(-1);
     }
@@ -493,11 +617,23 @@ public class CardView : MonoBehaviour
     /// <remarks>
     /// Unity calls this automatically when the mouse button is released.
     /// Handles both manual targeting completion and drag-to-play validation.
+    /// Returns card to hand if on cooldown or if play fails.
     /// </remarks>
     void OnMouseUp()
     {
+        // CRITICAL: Check cooldown FIRST - if card is on cooldown, return it to hand position
+        if (!CanInteract())
+        {
+            ReturnCardToHand();
+            return;
+        }
+        
         // Check if player is allowed to interact with cards
-        if (!Interactions.Instance.PlayerCanInteract()) return;
+        if (Interactions.Instance == null || !Interactions.Instance.PlayerCanInteract())
+        {
+            ReturnCardToHand();
+            return;
+        }
 
         // Handle manual target cards (like single-target damage spells)
         if (Card.ManualTargetEffect != null)
@@ -548,12 +684,156 @@ public class CardView : MonoBehaviour
             Interactions.Instance.PlayerIsDragging = false;
         }
     }
+    
+    /// <summary>
+    /// Returns the card to its original hand position with smooth animation
+    /// </summary>
+    /// <remarks>
+    /// Used when card interaction fails or is blocked (cooldown, invalid target, etc.)
+    /// Resets all interaction states and smoothly animates the card back to hand.
+    /// </remarks>
+    private void ReturnCardToHand()
+    {
+        // Clear any interaction states
+        if (Interactions.Instance != null)
+        {
+            Interactions.Instance.PlayerIsDragging = false;
+            Interactions.Instance.PlayerIsTargeting = false;
+        }
+        
+        // Cancel any targeting in progress
+        if (ManualTargetingSystem.Instance != null)
+        {
+            ManualTargetingSystem.Instance.CancelTargeting();
+        }
+        
+        // Kill any existing animations
+        transform.DOKill();
+        
+        // Reset sorting order
+        ResetCardSortingOrder();
+        
+        // Smoothly animate back to original hand position
+        transform.DOMove(originalPosition, 0.3f).SetEase(Ease.OutQuart);
+        transform.DORotate(originalRotation.eulerAngles, 0.3f).SetEase(Ease.OutQuart);
+        transform.DOScale(originalScale, 0.3f).SetEase(Ease.OutQuart);
+        
+        Debug.Log($"[CardView] Card '{Card?.Title ?? "Unknown"}' returned to hand");
+    }
+    
+    #region Cooldown Methods
+    /// <summary>
+    /// Caches all sprite renderers for efficient cooldown tinting
+    /// </summary>
+    private void CacheSpriteRenderers()
+    {
+        allSpriteRenderers = GetComponentsInChildren<SpriteRenderer>();
+        originalColors = new Color[allSpriteRenderers.Length];
+        for (int i = 0; i < allSpriteRenderers.Length; i++)
+        {
+            originalColors[i] = allSpriteRenderers[i].color;
+        }
+    }
+    
+    /// <summary>
+    /// Handles cooldown change events from CooldownSystem
+    /// </summary>
+    /// <param name="card">The card that changed</param>
+    private void OnCooldownChanged(Card card)
+    {
+        // Only update if this is our card
+        if (card == Card)
+        {
+            UpdateCooldownDisplay();
+        }
+    }
+    
+    /// <summary>
+    /// Updates the cooldown visual display based on current card state
+    /// </summary>
+    public void UpdateCooldownDisplay()
+    {
+        if (Card == null) return;
+        
+        bool isOnCooldown = Card.IsOnCooldown;
+        
+        // Show/hide cooldown overlay
+        if (cooldownOverlay != null)
+        {
+            cooldownOverlay.gameObject.SetActive(isOnCooldown);
+        }
+        
+        // Show/hide cooldown badge
+        if (cooldownBadge != null)
+        {
+            cooldownBadge.gameObject.SetActive(isOnCooldown);
+        }
+        
+        // Update cooldown text
+        if (cooldownText != null)
+        {
+            cooldownText.gameObject.SetActive(isOnCooldown);
+            if (isOnCooldown)
+            {
+                cooldownText.text = Card.CurrentCooldown.ToString();
+            }
+        }
+        
+        // Apply or remove tint
+        ApplyCooldownTint(isOnCooldown);
+    }
+    
+    /// <summary>
+    /// Applies or removes the cooldown tint from all sprite renderers
+    /// </summary>
+    /// <param name="applyTint">Whether to apply the tint (true) or restore original colors (false)</param>
+    private void ApplyCooldownTint(bool applyTint)
+    {
+        if (allSpriteRenderers == null || originalColors == null) return;
+        
+        for (int i = 0; i < allSpriteRenderers.Length; i++)
+        {
+            if (allSpriteRenderers[i] != null)
+            {
+                // Skip cooldown UI elements from tinting
+                if (allSpriteRenderers[i] == cooldownOverlay || 
+                    allSpriteRenderers[i] == cooldownBadge)
+                {
+                    continue;
+                }
+                
+                if (applyTint)
+                {
+                    // Apply grey tint
+                    allSpriteRenderers[i].color = originalColors[i] * cooldownTintColor;
+                }
+                else
+                {
+                    // Restore original color
+                    allSpriteRenderers[i].color = originalColors[i];
+                }
+            }
+        }
+    }
+    
+    /// <summary>
+    /// Checks if the card can be interacted with (not on cooldown)
+    /// </summary>
+    /// <returns>True if the card can be played, false if on cooldown</returns>
+    private bool CanInteract()
+    {
+        return Card != null && !Card.IsOnCooldown;
+    }
+    #endregion
 
     /// <summary>
     /// Clean up DOTween animations when the card is destroyed to prevent errors
     /// </summary>
     private void OnDestroy()
     {
+        // Unsubscribe from cooldown events
+        CooldownSystem.OnCooldownChanged -= OnCooldownChanged;
+        
         // Clear static reference if this card was hovered
         if (currentlyHoveredCard == this)
         {

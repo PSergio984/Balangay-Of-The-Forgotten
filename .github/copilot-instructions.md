@@ -22,7 +22,7 @@ When invoked:
 - **Genre:** Turn-based combat RPG
 - **Architecture:** MonoBehaviour-based, event-driven systems
 - **Key Systems:** Combat mechanics, UI navigation, scene management, buff/debuff systems (taunt effects)
-- **Current Focus:** Combat implementation, VFX integration, scene transitions
+- **Current Focus:** Combat implementation, VFX integration, scene transitions -**Unity MCP ** There's also a unity MCP package that needs to be used for some systems for better performance and maintainability.
 
 ## Core Systems
 

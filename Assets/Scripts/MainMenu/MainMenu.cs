@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using AudioSystem;
+using System.Runtime.InteropServices;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -53,30 +54,22 @@ using UnityEditor;
 /// </remarks>
 public class MainMenu : MonoBehaviour
 {
-
+#if UNITY_WEBGL && !UNITY_EDITOR
     /// <summary>
-    /// Button that quits the game when clicked
+    /// JavaScript function to refresh the page in WebGL builds.
+    /// This calls location.reload() in the browser to properly refresh.
     /// </summary>
-    /// <remarks>
-    /// When players click this button, it exits the application. In editor, it stops 
-    /// play mode instead of trying to quit (which would cause issues).
-    /// Assign a UI Button component in the Inspector.
-    /// </remarks>
-    [SerializeField] private Button QuitButton;
+    [DllImport("__Internal")]
+    private static extern void RefreshPage();
+#endif
+
     [SerializeField] private SoundData mapSelectionMusic;
     [SerializeField] private float MusicFadeTime = 2f;
+    
+    [Header("Character Data")]
+    [Tooltip("Reference to CharacterTransitionData - will be cleared when starting a new game session")]
+    [SerializeField] private CharacterTransitionData characterTransitionData;
 
-    /// <summary>
-    /// Sets up button listeners when the menu loads
-    /// </summary>
-    /// <remarks>
-    /// Unity calls this automatically when the scene starts. Connects the button 
-    /// click events to their respective methods so the menu responds to player input.
-    /// </remarks>
-    void Start()
-    {
-        QuitButton.onClick.AddListener(QuitGame);
-    }
 
     /// <summary>
     /// Initiates a new game session by transitioning from the menu to the session scenes
@@ -85,6 +78,8 @@ public class MainMenu : MonoBehaviour
     /// Performs a complex scene transition that loads the session infrastructure and map selection,
     /// unloads the menu, and applies transition effects. This should be called when the player
     /// clicks the start button.
+    /// 
+    /// Also clears CharacterTransitionData to ensure a fresh start for character selection.
     /// </remarks>
     public void StartSession()
     {
@@ -94,12 +89,42 @@ public class MainMenu : MonoBehaviour
             return;
         }
         
+        // Clear character transition data when starting a new game session
+        // This ensures old character selections don't persist into a new game
+        if (characterTransitionData == null)
+        {
+            // Try to find it automatically
+            #if UNITY_EDITOR
+            string[] guids = UnityEditor.AssetDatabase.FindAssets("t:CharacterTransitionData");
+            if (guids.Length > 0)
+            {
+                string path = UnityEditor.AssetDatabase.GUIDToAssetPath(guids[0]);
+                characterTransitionData = UnityEditor.AssetDatabase.LoadAssetAtPath<CharacterTransitionData>(path);
+            }
+            #endif
+            
+            if (characterTransitionData == null)
+            {
+                characterTransitionData = Resources.Load<CharacterTransitionData>("CharacterTransitionData");
+            }
+        }
+        
+        if (characterTransitionData != null)
+        {
+            characterTransitionData.Clear();
+            Debug.Log("[MainMenu] Cleared CharacterTransitionData for new game session");
+        }
+        else
+        {
+            Debug.LogWarning("[MainMenu] CharacterTransitionData not found - cannot clear old data. This is okay if starting first game.");
+        }
+        
         SceneController.Instance
             .NewTransition()
-            .Unload(SceneDatabase.Slots.Menu)
-            .Load(SceneDatabase.Slots.SessionContent, SceneDatabase.Scenes.MapSelection, setActive: true)
-            .WithOverlay()
-            .WithMusic(mapSelectionMusic, MusicFadeTime)
+            .Unload(SceneDatabase.Slots.MainMenu)
+            .Load(SceneDatabase.Slots.SessionContent, SceneDatabase.Scenes.CharacterSelection, setActive: true)
+            .WithLoadingVideo("loading")
+            .WithPauseMusic()
             .Perform();
     }
 
@@ -107,23 +132,40 @@ public class MainMenu : MonoBehaviour
     /// Quits the application or stops editor play mode
     /// </summary>
     /// <remarks>
-    /// Called when the quit button is clicked. In a built game, this closes the 
-    /// application. In the Unity editor, it stops play mode instead of trying 
-    /// to quit (which would cause problems in the editor).
+    /// Called when the quit button is clicked. Behavior depends on platform:
+    /// - Editor: Stops play mode
+    /// - WebGL: Refreshes the page using JavaScript (since Application.Quit doesn't work)
+    /// - Standalone: Quits the application
     /// </remarks>
-    private void QuitGame()
+    public void QuitGame()
     {
         #if UNITY_EDITOR
-                if (Application.isEditor)
-                {
-                    // Stop playing the scene in the editor
-                    EditorApplication.isPlaying = false;
-                }
-                else
-        #endif  
-            {
-            // Quit the application
-            Application.Quit();
-        }
+        // Stop playing the scene in the editor
+        EditorApplication.isPlaying = false;
+        #elif UNITY_WEBGL
+        // On WebGL, use JavaScript to refresh the page properly
+        RefreshPage();
+        #else
+        // Quit the application on standalone builds
+        Application.Quit();
+        #endif
+    }
+
+    /// <summary>
+    /// Initiates a scene transition back to the loading screen.
+    /// </summary>
+    /// <remarks>
+    /// Triggers a transition that unloads the main menu, loads the loading scene, sets it active,
+    /// plays the loading video, and performs the transition. This is typically used to return to the
+    /// loading screen from the main menu, ensuring a consistent transition effect and video playback.
+    /// </remarks>
+    public void GoBackLoadingScreen()
+    {
+        SceneController.Instance
+            .NewTransition()
+            .Unload(SceneDatabase.Slots.MainMenu)
+            .Load(SceneDatabase.Slots.LoadingScreen, SceneDatabase.Scenes.LoadingScreen, setActive: true)
+            .WithLoadingVideo("loading")
+            .Perform();
     }
 }

@@ -18,23 +18,25 @@ MonoBehaviour:
   <Art>k__BackingField: {fileID: 21300000, guid: 73dc1ecceb7afb042993660c571e1bcb, type: 3}
   <BackgroundArt>k__BackingField: {fileID: 21300000, guid: 8f042a3ef46026c4391110dba1f592fb, type: 3}
   <RoleData>k__BackingField: {fileID: 11400000, guid: 8a873cc1966fdd641a8f8d3b47bd0288, type: 2}
+  <Cooldown>k__BackingField: 2
+  <SoundData>k__BackingField: {fileID: 11400000, guid: 26f605d65a2ae774787468bc26c677f4, type: 2}
   <ManualTargetEffect>k__BackingField:
     rid: -2
   <OtherEffects>k__BackingField:
   - <targetMode>k__BackingField:
-      rid: 8634069544632844643
+      rid: 5040687156429848800
     <effects>k__BackingField:
-      rid: 8634069544632844644
+      rid: 5040687156429848801
   references:
     version: 2
     RefIds:
     - rid: -2
       type: {class: , ns: , asm: }
-    - rid: 8634069544632844643
+    - rid: 5040687156429848800
       type: {class: HeroTM, ns: , asm: Assembly-CSharp}
       data: 
-    - rid: 8634069544632844644
+    - rid: 5040687156429848801
       type: {class: AddStatusEffectEffect, ns: , asm: Assembly-CSharp}
       data:
-        statusEffectType: 9
+        statusEffectType: 17
         stackCount: 2

@@ -18,32 +18,28 @@ MonoBehaviour:
   <Art>k__BackingField: {fileID: 21300000, guid: fff4f63a01c20564194ebba1d65c2e6a, type: 3}
   <BackgroundArt>k__BackingField: {fileID: 21300000, guid: 680849f4f87527943a8c87a5718fc2cc, type: 3}
   <RoleData>k__BackingField: {fileID: 11400000, guid: 22c12e1b910d4314f914ae5367dc7d2e, type: 2}
+  <Cooldown>k__BackingField: 3
+  <SoundData>k__BackingField: {fileID: 11400000, guid: 9b021f5e46145884f8ec70eec64583eb, type: 2}
   <ManualTargetEffect>k__BackingField:
-    rid: 8634069038218609607
+    rid: -2
   <OtherEffects>k__BackingField:
   - <targetMode>k__BackingField:
-      rid: 8634069038218609608
+      rid: 5040687174602457590
     <effects>k__BackingField:
       rid: 8634069038218609609
   references:
     version: 2
     RefIds:
-    - rid: 8634069038218609607
-      type: {class: DealDamageEffect, ns: , asm: Assembly-CSharp}
-      data:
-        baseDamage: 0
-        accuracy: 1
-        critChance: 0
-        defenseIgnore: 0
-        AttackAmp: 1
-        MagicAmp: 1
-    - rid: 8634069038218609608
-      type: {class: RandomTargetTM, ns: , asm: Assembly-CSharp}
+    - rid: -2
+      type: {class: , ns: , asm: }
+    - rid: 5040687174602457590
+      type: {class: AllEnemiesTM, ns: , asm: Assembly-CSharp}
       data: 
     - rid: 8634069038218609609
       type: {class: DealDamageEffect, ns: , asm: Assembly-CSharp}
       data:
-        baseDamage: 0
+        baseDamage: 100
+        damageAmplification: 1
         accuracy: 0.8
         critChance: 0
         defenseIgnore: 100

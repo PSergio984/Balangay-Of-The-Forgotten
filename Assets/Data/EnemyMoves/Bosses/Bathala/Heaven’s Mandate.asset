@@ -1,0 +1,51 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f63fd39cb4db76b4292a781834573221, type: 3}
+  m_Name: "Heaven\u2019s Mandate"
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyMoveData
+  <Description>k__BackingField: "Heaven\u2019s Mandate "
+  <Information>k__BackingField: "\u2022\tIncreases DEF for 30% for 3 turns\r\n\u2022\tRemoves
+    Debuff.\r\n\u2022\tWon\u2019t work if it gets pick after the previous turn\r\n"
+  <SoundData>k__BackingField: {fileID: 11400000, guid: 6c23c56399307a64ca235822577c6e3e, type: 2}
+  <ManualTargetEffect>k__BackingField:
+    rid: -2
+  <OtherEffects>k__BackingField:
+  - <targetMode>k__BackingField:
+      rid: 5040687038726930736
+    <effects>k__BackingField:
+      rid: 5040687038726930737
+  - <targetMode>k__BackingField:
+      rid: 5040687038726930738
+    <effects>k__BackingField:
+      rid: 5040687038726930739
+  references:
+    version: 2
+    RefIds:
+    - rid: -2
+      type: {class: , ns: , asm: }
+    - rid: 5040687038726930736
+      type: {class: SelfEnemyTM, ns: , asm: Assembly-CSharp}
+      data: 
+    - rid: 5040687038726930737
+      type: {class: ApplyDefenseUpEffect, ns: , asm: Assembly-CSharp}
+      data:
+        defensePercentage: 30
+        duration: 3
+    - rid: 5040687038726930738
+      type: {class: SelfEnemyTM, ns: , asm: Assembly-CSharp}
+      data: 
+    - rid: 5040687038726930739
+      type: {class: RemoveDebuffEffect, ns: , asm: Assembly-CSharp}
+      data:
+        removeAllDebuffs: 1
+        specificDebuff: 10
+        includeCaster: 1

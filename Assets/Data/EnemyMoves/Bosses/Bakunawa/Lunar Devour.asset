@@ -1,0 +1,57 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f63fd39cb4db76b4292a781834573221, type: 3}
+  m_Name: Lunar Devour
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyMoveData
+  <Description>k__BackingField: 'Lunar Devour '
+  <Information>k__BackingField: "\u2022\tDeal 80% MAG to all enemies.\r\n\u2022\tEach
+    target that are hit by this gets inflicted by Devoured: for 2 turns, takes DMG
+    equal to 20% of MAG (fixed at 60HP).\r\n"
+  <SoundData>k__BackingField: {fileID: 11400000, guid: 6c8ca04b9cf873a47b31e231c7ab108a, type: 2}
+  <ManualTargetEffect>k__BackingField:
+    rid: -2
+  <OtherEffects>k__BackingField:
+  - <targetMode>k__BackingField:
+      rid: 1437264605691248873
+    <effects>k__BackingField:
+      rid: 1437264605691248861
+  - <targetMode>k__BackingField:
+      rid: 5040687042380169305
+    <effects>k__BackingField:
+      rid: 5040687042380169442
+  references:
+    version: 2
+    RefIds:
+    - rid: -2
+      type: {class: , ns: , asm: }
+    - rid: 1437264605691248861
+      type: {class: DealDamageEffect, ns: , asm: Assembly-CSharp}
+      data:
+        baseDamage: 0
+        damageAmplification: 1
+        accuracy: 1
+        critChance: 0
+        defenseIgnore: 0
+        AttackAmp: 0
+        MagicAmp: 0.8
+    - rid: 1437264605691248873
+      type: {class: AllHeroesTM, ns: , asm: Assembly-CSharp}
+      data: 
+    - rid: 5040687042380169305
+      type: {class: TargetsHitByPreviousEffectTM, ns: , asm: Assembly-CSharp}
+      data: 
+    - rid: 5040687042380169442
+      type: {class: ApplyDevouredEffect, ns: , asm: Assembly-CSharp}
+      data:
+        magDamagePercentage: 20
+        fixedDamage: 0
+        duration: 2

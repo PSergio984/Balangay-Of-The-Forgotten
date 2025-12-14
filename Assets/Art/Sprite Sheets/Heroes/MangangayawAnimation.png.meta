@@ -1,0 +1,754 @@
+fileFormatVersion: 2
+guid: 8fed084c9f66184499fad721c5242138
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -6144304907982711334
+    second: MangangayawAnimation_0
+  - first:
+      213: 7169345381028587980
+    second: MangangayawAnimation_1
+  - first:
+      213: -6367350307558414483
+    second: MangangayawAnimation_2
+  - first:
+      213: -1625475218395213135
+    second: MangangayawAnimation_3
+  - first:
+      213: -8457541984216339773
+    second: MangangayawAnimation_4
+  - first:
+      213: -1152799844459672369
+    second: MangangayawAnimation_5
+  - first:
+      213: -1299702745685458146
+    second: MangangayawAnimation_6
+  - first:
+      213: -6239424227835650105
+    second: MangangayawAnimation_7
+  - first:
+      213: -1084721479218910670
+    second: MangangayawAnimation_8
+  - first:
+      213: 6609549412035109860
+    second: MangangayawAnimation_9
+  - first:
+      213: -5629775322794294000
+    second: MangangayawAnimation_10
+  - first:
+      213: 3972172793072481768
+    second: MangangayawAnimation_11
+  - first:
+      213: 2675935904311600921
+    second: MangangayawAnimation_12
+  - first:
+      213: 418727420481222327
+    second: MangangayawAnimation_13
+  - first:
+      213: 1247772256294797627
+    second: MangangayawAnimation_14
+  - first:
+      213: -3806708680984214220
+    second: MangangayawAnimation_15
+  - first:
+      213: 1090680577429383070
+    second: MangangayawAnimation_16
+  - first:
+      213: -3055662479065585126
+    second: MangangayawAnimation_17
+  - first:
+      213: -1208679021508738432
+    second: MangangayawAnimation_18
+  - first:
+      213: -5545768549373911049
+    second: MangangayawAnimation_19
+  - first:
+      213: 8772436346028566015
+    second: MangangayawAnimation_20
+  - first:
+      213: 6164380117468461776
+    second: MangangayawAnimation_21
+  - first:
+      213: 2577845671080404238
+    second: MangangayawAnimation_22
+  - first:
+      213: 3564529006726336283
+    second: MangangayawAnimation_23
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: MangangayawAnimation_0
+      rect:
+        serializedVersion: 2
+        x: 9
+        y: 2
+        width: 55
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ad550087d3b0bbaa0800000000000000
+      internalID: -6144304907982711334
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MangangayawAnimation_1
+      rect:
+        serializedVersion: 2
+        x: 89
+        y: 2
+        width: 55
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cc9eb44a3a1ae7360800000000000000
+      internalID: 7169345381028587980
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MangangayawAnimation_2
+      rect:
+        serializedVersion: 2
+        x: 169
+        y: 2
+        width: 55
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d67a18581a0a2a7a0800000000000000
+      internalID: -6367350307558414483
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MangangayawAnimation_3
+      rect:
+        serializedVersion: 2
+        x: 249
+        y: 2
+        width: 55
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1b25a58a6e62179e0800000000000000
+      internalID: -1625475218395213135
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MangangayawAnimation_4
+      rect:
+        serializedVersion: 2
+        x: 329
+        y: 2
+        width: 55
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3ca25d51066c0aa80800000000000000
+      internalID: -8457541984216339773
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MangangayawAnimation_5
+      rect:
+        serializedVersion: 2
+        x: 409
+        y: 2
+        width: 55
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fcc0bd536ae6000f0800000000000000
+      internalID: -1152799844459672369
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MangangayawAnimation_6
+      rect:
+        serializedVersion: 2
+        x: 489
+        y: 2
+        width: 55
+        height: 63
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e1381d92d3786fde0800000000000000
+      internalID: -1299702745685458146
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MangangayawAnimation_7
+      rect:
+        serializedVersion: 2
+        x: 569
+        y: 2
+        width: 55
+        height: 63
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7cfd3e009bc1969a0800000000000000
+      internalID: -6239424227835650105
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MangangayawAnimation_8
+      rect:
+        serializedVersion: 2
+        x: 649
+        y: 2
+        width: 55
+        height: 63
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 23aabeecf8b42f0f0800000000000000
+      internalID: -1084721479218910670
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MangangayawAnimation_9
+      rect:
+        serializedVersion: 2
+        x: 729
+        y: 2
+        width: 55
+        height: 63
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4e3aebddb26d9bb50800000000000000
+      internalID: 6609549412035109860
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MangangayawAnimation_10
+      rect:
+        serializedVersion: 2
+        x: 809
+        y: 2
+        width: 55
+        height: 63
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0150697fb250fd1b0800000000000000
+      internalID: -5629775322794294000
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MangangayawAnimation_11
+      rect:
+        serializedVersion: 2
+        x: 889
+        y: 2
+        width: 55
+        height: 63
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8e57e8d1c1eff1730800000000000000
+      internalID: 3972172793072481768
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MangangayawAnimation_12
+      rect:
+        serializedVersion: 2
+        x: 969
+        y: 2
+        width: 55
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 917e43af685d22520800000000000000
+      internalID: 2675935904311600921
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MangangayawAnimation_13
+      rect:
+        serializedVersion: 2
+        x: 1049
+        y: 2
+        width: 55
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7b6bf73de5e9fc500800000000000000
+      internalID: 418727420481222327
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MangangayawAnimation_14
+      rect:
+        serializedVersion: 2
+        x: 1129
+        y: 2
+        width: 55
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b310a01914af05110800000000000000
+      internalID: 1247772256294797627
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MangangayawAnimation_15
+      rect:
+        serializedVersion: 2
+        x: 1209
+        y: 2
+        width: 55
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4354a8a9f9adb2bc0800000000000000
+      internalID: -3806708680984214220
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MangangayawAnimation_16
+      rect:
+        serializedVersion: 2
+        x: 1289
+        y: 2
+        width: 55
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e97a81dd430e22f00800000000000000
+      internalID: 1090680577429383070
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MangangayawAnimation_17
+      rect:
+        serializedVersion: 2
+        x: 1369
+        y: 2
+        width: 55
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a1a6ec53a2b1895d0800000000000000
+      internalID: -3055662479065585126
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MangangayawAnimation_18
+      rect:
+        serializedVersion: 2
+        x: 1449
+        y: 2
+        width: 55
+        height: 63
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 082418375d8e93fe0800000000000000
+      internalID: -1208679021508738432
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MangangayawAnimation_19
+      rect:
+        serializedVersion: 2
+        x: 1529
+        y: 2
+        width: 55
+        height: 63
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7ffd80813e87903b0800000000000000
+      internalID: -5545768549373911049
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MangangayawAnimation_20
+      rect:
+        serializedVersion: 2
+        x: 1609
+        y: 2
+        width: 55
+        height: 63
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ff522cbd064fdb970800000000000000
+      internalID: 8772436346028566015
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MangangayawAnimation_21
+      rect:
+        serializedVersion: 2
+        x: 1689
+        y: 2
+        width: 55
+        height: 63
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0da303a7e074c8550800000000000000
+      internalID: 6164380117468461776
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MangangayawAnimation_22
+      rect:
+        serializedVersion: 2
+        x: 1769
+        y: 2
+        width: 55
+        height: 63
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e05a686daf856c320800000000000000
+      internalID: 2577845671080404238
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MangangayawAnimation_23
+      rect:
+        serializedVersion: 2
+        x: 1849
+        y: 2
+        width: 55
+        height: 63
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b1fcf75fe30c77130800000000000000
+      internalID: 3564529006726336283
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      MangangayawAnimation_0: -6144304907982711334
+      MangangayawAnimation_1: 7169345381028587980
+      MangangayawAnimation_10: -5629775322794294000
+      MangangayawAnimation_11: 3972172793072481768
+      MangangayawAnimation_12: 2675935904311600921
+      MangangayawAnimation_13: 418727420481222327
+      MangangayawAnimation_14: 1247772256294797627
+      MangangayawAnimation_15: -3806708680984214220
+      MangangayawAnimation_16: 1090680577429383070
+      MangangayawAnimation_17: -3055662479065585126
+      MangangayawAnimation_18: -1208679021508738432
+      MangangayawAnimation_19: -5545768549373911049
+      MangangayawAnimation_2: -6367350307558414483
+      MangangayawAnimation_20: 8772436346028566015
+      MangangayawAnimation_21: 6164380117468461776
+      MangangayawAnimation_22: 2577845671080404238
+      MangangayawAnimation_23: 3564529006726336283
+      MangangayawAnimation_3: -1625475218395213135
+      MangangayawAnimation_4: -8457541984216339773
+      MangangayawAnimation_5: -1152799844459672369
+      MangangayawAnimation_6: -1299702745685458146
+      MangangayawAnimation_7: -6239424227835650105
+      MangangayawAnimation_8: -1084721479218910670
+      MangangayawAnimation_9: 6609549412035109860
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

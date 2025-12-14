@@ -2,6 +2,7 @@ using UnityEngine;
 using Sirenix.OdinInspector;
 using System.Collections.Generic;
 using System.Linq;
+using AudioSystem;
 
 [CreateAssetMenu(menuName = "Data/Enemy")]
 public class EnemyData : ScriptableObject
@@ -55,6 +56,13 @@ public class EnemyData : ScriptableObject
     [field: ValidateInput("@Defense > 0", "Defense must be greater than 0")]
     public float Defense { get; private set; }
 
+    [Title("Animation", "Animation controller for this enemy", TitleAlignments.Centered)]
+    [field: SerializeField]
+    [field: LabelText("Enemy Animator Override Controller")]
+    [field: AssetsOnly]
+    [field: InfoBox("Assign an AnimatorOverrideController to give this enemy unique animations.", InfoMessageType.Info)]
+    public AnimatorOverrideController AnimatorOverride { get; private set; }
+
     [field: SerializeField]
     [field: LabelText("Enemy Moveset ")]
     [field: Required("Enemy needs a moveset!")]
@@ -62,6 +70,18 @@ public class EnemyData : ScriptableObject
     [field: ListDrawerSettings(ShowIndexLabels = true, DraggableItems = true, ShowPaging = true, NumberOfItemsPerPage = 8)]
     [field: ValidateInput("@ValidateMoveset()", "Moveset has issues that need to be fixed")]
     public List<EnemyMoveData> Moveset { get; private set; }
+
+    [Header("Music")]
+    [Tooltip("Music to play when this enemy appears in combat.")]
+    public AudioSystem.SoundData CombatMusic;
+
+    [Header("Death Animation")]
+    [Tooltip("Sprite to show after death animation completes (stuck/frozen sprite before removal)")]
+    [field: SerializeField]
+    [field: PreviewField(100)]
+    [field: LabelText("Death Stuck Sprite")]
+    [field: AssetsOnly]
+    public Sprite DeathStuckSprite { get; private set; }
 
      private bool ValidateMoveset()
     {

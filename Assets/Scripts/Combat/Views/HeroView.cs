@@ -61,5 +61,27 @@ public class HeroView : CombatantView
    {
        // Set up the base combatant properties using explicit values
        SetupBase(heroData.Health, heroData.Image, heroData.HeroName, heroData.MagicPower, heroData.AttackPower, heroData.Defense);
+
+       // Force-assign the animation controller in case Setup is called before Awake
+       animationController = GetComponent<CombatantAnimationController>();
+       var animCtrl = AnimationController;
+       if (animCtrl != null)
+       {
+           if (heroData.AnimatorOverride != null)
+           {
+               Debug.Log($"[HeroView] Setting AnimatorOverrideController: {heroData.AnimatorOverride.name}", this);
+               animCtrl.SetAnimatorOverride(heroData.AnimatorOverride);
+           }
+           else
+           {
+               Debug.LogWarning($"[HeroView] HeroData.AnimatorOverride is null for hero: {heroData.HeroName}", this);
+           }
+           // Force play idle animation after setup
+           animCtrl.PlayIdle();
+       }
+       else
+       {
+           Debug.LogWarning($"[HeroView] AnimationController is null on {gameObject.name}", this);
+       }
    }
 }

@@ -85,11 +85,72 @@ public class EffectSystem : MonoBehaviour
     /// </remarks>
     private IEnumerator PerformEffectPerformer(PerformEffectGA performEffectGA)
     {
+        // Defensive check: Ensure PerformEffectGA is valid
+        if (performEffectGA == null)
+        {
+            Debug.LogError("[EffectSystem] PerformEffectGA is null! Cannot process effect.");
+            yield return null;
+            yield break;
+        }
+
+        // Defensive check: Ensure Effect is not null
+        if (performEffectGA.Effect == null)
+        {
+            Debug.LogError($"[EffectSystem] PerformEffectGA has null Effect! Cannot process. Targets: {(performEffectGA.Targets != null ? performEffectGA.Targets.Count.ToString() : "null")}");
+            yield return null;
+            yield break;
+        }
+
         // Get the specific game action that this effect should perform (damage, heal, etc.)
         // Pass the targets and caster info so the effect knows who is involved
-        GameAction effectAction = performEffectGA.Effect.GetGameAction(performEffectGA.Targets, CurrentHeroUtil.GetCurrentHero());
-        // Add the effect's action to the action queue to be processed by other systems
-        ActionSystem.Instance.AddReaction(effectAction);
+        // Use caster from PerformEffectGA if provided (for enemy attacks), otherwise fall back to current hero (for hero cards)
+        CombatantView caster = performEffectGA.Caster ?? CurrentHeroUtil.GetCurrentHero();
+        
+        Debug.Log($"[EffectSystem] Processing effect {performEffectGA.Effect.GetType().Name}. " +
+                 $"Caster: {(caster != null ? caster.name : "null")} " +
+                 $"(from PerformEffectGA: {(performEffectGA.Caster != null ? performEffectGA.Caster.name : "null")}, " +
+                 $"fallback: {(CurrentHeroUtil.GetCurrentHero() != null ? CurrentHeroUtil.GetCurrentHero().name : "null")}), " +
+                 $"Targets: {(performEffectGA.Targets != null ? performEffectGA.Targets.Count : 0)}");
+        
+        // Log warning if caster is still null (should be rare)
+        if (caster == null)
+        {
+            Debug.LogWarning($"[EffectSystem] Caster is null while processing effect {performEffectGA.Effect.GetType().Name}. " +
+                           $"PerformEffectGA.Caster was {(performEffectGA.Caster == null ? "null" : "set")}, " +
+                           $"GetCurrentHero() returned {(CurrentHeroUtil.GetCurrentHero() == null ? "null" : "a hero")}. " +
+                           $"Effect will proceed with null caster.");
+        }
+        
+        GameAction effectAction = null;
+        bool hasError = false;
+        try
+        {
+            effectAction = performEffectGA.Effect.GetGameAction(performEffectGA.Targets, caster);
+        }
+        catch (System.Exception ex)
+        {
+            Debug.LogError($"[EffectSystem] Exception while processing effect {performEffectGA.Effect.GetType().Name}: {ex.Message}\n{ex.StackTrace}");
+            hasError = true;
+        }
+        
+        // If an error occurred, exit early (cannot yield in catch block, so we check flag here)
+        if (hasError)
+        {
+            yield return null;
+            yield break;
+        }
+        
+        // Only add the action if it's not null (some effects like ConditionalEffect return null when condition isn't met)
+        if (effectAction != null)
+        {
+            // Add the effect's action to the action queue to be processed by other systems
+            ActionSystem.Instance.AddReaction(effectAction);
+        }
+        else
+        {
+            Debug.Log($"[EffectSystem] Effect {performEffectGA.Effect.GetType().Name} returned null action (condition not met or no valid targets)");
+        }
+        
         // Wait one frame before continuing to ensure proper coroutine execution flow
         yield return null;
     }

@@ -1,0 +1,608 @@
+fileFormatVersion: 2
+guid: 517f78f36b6a44d428afbdbf415d9145
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -7221812534086333437
+    second: BathalaAnimationTurn_0
+  - first:
+      213: 5737854914276476144
+    second: BathalaAnimationTurn_1
+  - first:
+      213: -5633007334776193715
+    second: BathalaAnimationTurn_2
+  - first:
+      213: -4755842693693923809
+    second: BathalaAnimationTurn_3
+  - first:
+      213: -5249370545782896157
+    second: BathalaAnimationTurn_4
+  - first:
+      213: -6415897427026000771
+    second: BathalaAnimationTurn_5
+  - first:
+      213: 1490853402649892121
+    second: BathalaAnimationTurn_6
+  - first:
+      213: 8787011478958000693
+    second: BathalaAnimationTurn_7
+  - first:
+      213: -9079239958735610086
+    second: BathalaAnimationTurn_8
+  - first:
+      213: -7879286083456141338
+    second: BathalaAnimationTurn_9
+  - first:
+      213: 3190915116312209409
+    second: BathalaAnimationTurn_10
+  - first:
+      213: -2425986376224385595
+    second: BathalaAnimationTurn_11
+  - first:
+      213: 8201265315979796175
+    second: BathalaAnimationTurn_12
+  - first:
+      213: -9041104125409384774
+    second: BathalaAnimationTurn_13
+  - first:
+      213: 8549772434654199388
+    second: BathalaAnimationTurn_14
+  - first:
+      213: 8394171566554286062
+    second: BathalaAnimationTurn_15
+  - first:
+      213: 3370817457755762232
+    second: BathalaAnimationTurn_16
+  - first:
+      213: 3759066728148023309
+    second: BathalaAnimationTurn_17
+  - first:
+      213: 258287921616273109
+    second: BathalaAnimationTurn_18
+  - first:
+      213: 1810778298498202728
+    second: BathalaAnimationTurn_19
+  - first:
+      213: -2989497074959154218
+    second: BathalaAnimationTurn_20
+  - first:
+      213: 4288656295281673588
+    second: BathalaAnimationTurn_21
+  - first:
+      213: -1060030465446835436
+    second: BathalaAnimationTurn_22
+  - first:
+      213: -4311674902138299131
+    second: BathalaAnimationTurn_23
+  - first:
+      213: -6144278756966662744
+    second: BathalaAnimationTurn_24
+  - first:
+      213: 4554381457723018556
+    second: BathalaAnimationTurn_25
+  - first:
+      213: -5460762316437927031
+    second: BathalaAnimationTurn_26
+  - first:
+      213: 7667483207638116419
+    second: BathalaAnimationTurn_27
+  - first:
+      213: 9005419275923053946
+    second: BathalaAnimationTurn_28
+  - first:
+      213: -4471768722114326756
+    second: BathalaAnimationTurn_29
+  - first:
+      213: 538659637042933115
+    second: BathalaAnimationTurn_30
+  - first:
+      213: 4215129474327511682
+    second: BathalaAnimationTurn_31
+  - first:
+      213: -5067223908110013628
+    second: BathalaAnimationTurn_32
+  - first:
+      213: -4548798040003000700
+    second: BathalaAnimationTurn_33
+  - first:
+      213: 4592100664418975574
+    second: BathalaAnimationTurn_34
+  - first:
+      213: -9199178965459189770
+    second: BathalaAnimationTurn_35
+  - first:
+      213: -8587429026114960416
+    second: BathalaAnimationTurn_36
+  - first:
+      213: -316106442114502443
+    second: BathalaAnimationTurn_37
+  - first:
+      213: -1074368572153068056
+    second: BathalaAnimationTurn_38
+  - first:
+      213: 51515930076022114
+    second: BathalaAnimationTurn_39
+  - first:
+      213: -8167819355467407198
+    second: BathalaAnimationTurn_40
+  - first:
+      213: 3565392259838151957
+    second: BathalaAnimationTurn_41
+  - first:
+      213: 3494063819247630422
+    second: BathalaAnimationTurn_42
+  - first:
+      213: 3507578197375239620
+    second: BathalaAnimationTurn_43
+  - first:
+      213: 1115371183796395609
+    second: BathalaAnimationTurn_44
+  - first:
+      213: -5470822065824701281
+    second: BathalaAnimationTurn_45
+  - first:
+      213: -7706253059103377677
+    second: BathalaAnimationTurn_46
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WindowsStoreApps
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: BathalaAnimationTurn_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 64
+        height: 96
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 30c025753c7f6cb90800000000000000
+      internalID: -7221812534086333437
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BathalaAnimationTurn_1
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 0
+        width: 64
+        height: 96
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0f4cd22e4a4f0af40800000000000000
+      internalID: 5737854914276476144
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BathalaAnimationTurn_2
+      rect:
+        serializedVersion: 2
+        x: 128
+        y: 0
+        width: 64
+        height: 96
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d4dbe798ca983d1b0800000000000000
+      internalID: -5633007334776193715
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BathalaAnimationTurn_3
+      rect:
+        serializedVersion: 2
+        x: 192
+        y: 0
+        width: 64
+        height: 96
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f1e9cb2844adffdb0800000000000000
+      internalID: -4755842693693923809
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BathalaAnimationTurn_4
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 0
+        width: 64
+        height: 96
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3e9463c0d4d7627b0800000000000000
+      internalID: -5249370545782896157
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BathalaAnimationTurn_5
+      rect:
+        serializedVersion: 2
+        x: 320
+        y: 0
+        width: 64
+        height: 96
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d74c5c2784726f6a0800000000000000
+      internalID: -6415897427026000771
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BathalaAnimationTurn_6
+      rect:
+        serializedVersion: 2
+        x: 384
+        y: 0
+        width: 64
+        height: 96
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9151125554390b410800000000000000
+      internalID: 1490853402649892121
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BathalaAnimationTurn_7
+      rect:
+        serializedVersion: 2
+        x: 448
+        y: 0
+        width: 64
+        height: 96
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 53a4290726cb1f970800000000000000
+      internalID: 8787011478958000693
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BathalaAnimationTurn_8
+      rect:
+        serializedVersion: 2
+        x: 512
+        y: 0
+        width: 64
+        height: 96
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a1f18058c5f000280800000000000000
+      internalID: -9079239958735610086
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BathalaAnimationTurn_9
+      rect:
+        serializedVersion: 2
+        x: 576
+        y: 0
+        width: 64
+        height: 96
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6e7fae7ad0727a290800000000000000
+      internalID: -7879286083456141338
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BathalaAnimationTurn_10
+      rect:
+        serializedVersion: 2
+        x: 640
+        y: 0
+        width: 64
+        height: 96
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 108a6306468684c20800000000000000
+      internalID: 3190915116312209409
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BathalaAnimationTurn_11
+      rect:
+        serializedVersion: 2
+        x: 704
+        y: 0
+        width: 64
+        height: 96
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5c555378e3a255ed0800000000000000
+      internalID: -2425986376224385595
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BathalaAnimationTurn_12
+      rect:
+        serializedVersion: 2
+        x: 768
+        y: 0
+        width: 64
+        height: 96
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fce15bb4a5fb0d170800000000000000
+      internalID: 8201265315979796175
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BathalaAnimationTurn_13
+      rect:
+        serializedVersion: 2
+        x: 832
+        y: 0
+        width: 64
+        height: 96
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ab6a7a323bb878280800000000000000
+      internalID: -9041104125409384774
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: d0daa49a855f453408df8338414ffac7
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries:
+      - key: SpriteEditor.SliceSettings
+        value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":64.0,"y":96.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":1,"keepEmptyRects":false,"isAlternate":false}'
+    nameFileIdTable:
+      BathalaAnimationTurn_0: -7221812534086333437
+      BathalaAnimationTurn_1: 5737854914276476144
+      BathalaAnimationTurn_10: 3190915116312209409
+      BathalaAnimationTurn_11: -2425986376224385595
+      BathalaAnimationTurn_12: 8201265315979796175
+      BathalaAnimationTurn_13: -9041104125409384774
+      BathalaAnimationTurn_2: -5633007334776193715
+      BathalaAnimationTurn_3: -4755842693693923809
+      BathalaAnimationTurn_4: -5249370545782896157
+      BathalaAnimationTurn_5: -6415897427026000771
+      BathalaAnimationTurn_6: 1490853402649892121
+      BathalaAnimationTurn_7: 8787011478958000693
+      BathalaAnimationTurn_8: -9079239958735610086
+      BathalaAnimationTurn_9: -7879286083456141338
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

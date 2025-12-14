@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using Sirenix.OdinInspector;
+using AudioSystem;
 /* CARD DATA DOCUMENTATION
  * 
  * Purpose: ScriptableObject that defines the design-time properties and data for cards
@@ -149,6 +150,36 @@ public class CardData : ScriptableObject
     [field: LabelText("Card Role")]
     public CardRoleData RoleData { get; private set; }
 
+    /// <summary>
+    /// The cooldown duration for this card (number of rounds before it can be played again)
+    /// </summary>
+    /// <remarks>
+    /// After playing a card with cooldown, it becomes unplayable for this many rounds.
+    /// 0 means no cooldown - the card can be played every turn.
+    /// Cooldown decreases by 1 at the start of each player turn.
+    /// </remarks>
+    [field: SerializeField]
+    [field: BoxGroup("Basic Info")]
+    [field: LabelText("Cooldown (Rounds)")]
+    [field: Range(0, 10)]
+    [field: InfoBox("@Cooldown == 0 ? \"No cooldown - can play every turn\" : \"After playing, wait \" + Cooldown + \" round(s) to play again\"", InfoMessageType.None)]
+    public int Cooldown { get; private set; } = 0;
+
+
+    [Title("Audio", "Sound effect for this card", TitleAlignments.Centered)]
+    
+    /// <summary>
+    /// Sound effect played when this card is played
+    /// </summary>
+    /// <remarks>
+    /// Optional sound that plays when the card is cast/played.
+    /// If left empty, no sound will play for this card.
+    /// </remarks>
+    [field: SerializeField]
+    [field: LabelText("Card Sound Effect")]
+    [field: InfoBox("Optional: Assign a sound effect to play when this card is played", InfoMessageType.None)]
+    [field: AssetsOnly]
+    public SoundData SoundData { get; private set; }
 
     [Title("Card Effects", "Define what this card does when played", TitleAlignments.Centered)]
     [InfoBox("Manual Target Effect: Player chooses the target (like single-target damage)\n" +

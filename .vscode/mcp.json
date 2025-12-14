@@ -9,6 +9,16 @@
         "ghcr.io/microsoft/mcp-dotnet-samples/awesome-copilot:latest"
       ],
       "type": "stdio"
+    },
+    "unityMCP": {
+      "command": "C:\\Users\\admin\\AppData\\Local\\Microsoft\\WinGet\\Links\\uv.exe",
+      "args": [
+        "run",
+        "--directory",
+        "C:\\Users\\admin\\AppData\\Local\\UnityMCP\\UnityMcpServer\\src",
+        "server.py"
+      ],
+      "type": "stdio"
     }
   },
   "inputs": []

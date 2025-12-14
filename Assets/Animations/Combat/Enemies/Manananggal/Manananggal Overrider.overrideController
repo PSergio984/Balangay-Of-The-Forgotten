@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!221 &22100000
+AnimatorOverrideController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Manananggal Overrider
+  m_Controller: {fileID: 9100000, guid: eb526f05f63d8b84a98125979989d8d5, type: 2}
+  m_Clips:
+  - m_OriginalClip: {fileID: 7400000, guid: 04107e30c59e63149963b22866245012, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 3f48f7acd4d28f34da54cd6b2feaf671, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: 4c687edce0260214cb970d53a4d3ac62, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 30e8dd12ea291f444a4991d5781abcbb, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: 0160b87c1b7274d4099ab2ca73502f14, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 20343212eacb22b4ab55b82fc59f4d6a, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: f3407c9dfb3815c468cbf48fa0f5108e, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 20343212eacb22b4ab55b82fc59f4d6a, type: 2}

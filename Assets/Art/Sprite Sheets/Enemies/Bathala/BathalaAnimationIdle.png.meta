@@ -1,0 +1,726 @@
+fileFormatVersion: 2
+guid: d70566264c1a8604b88c4b9acb36f7be
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 7757818279168096282
+    second: BathalaAnimationIdle_0
+  - first:
+      213: 2950899491614639240
+    second: BathalaAnimationIdle_1
+  - first:
+      213: 5543886920479065081
+    second: BathalaAnimationIdle_2
+  - first:
+      213: 9042886512382838969
+    second: BathalaAnimationIdle_3
+  - first:
+      213: -375269847080861611
+    second: BathalaAnimationIdle_4
+  - first:
+      213: 3445155914580083257
+    second: BathalaAnimationIdle_5
+  - first:
+      213: 486074069581493753
+    second: BathalaAnimationIdle_6
+  - first:
+      213: -5902992911324774368
+    second: BathalaAnimationIdle_7
+  - first:
+      213: -5111917948182145576
+    second: BathalaAnimationIdle_8
+  - first:
+      213: 8364160228162896843
+    second: BathalaAnimationIdle_9
+  - first:
+      213: 2856727593817057229
+    second: BathalaAnimationIdle_10
+  - first:
+      213: 3108798061168326041
+    second: BathalaAnimationIdle_11
+  - first:
+      213: 3316998460708811065
+    second: BathalaAnimationIdle_12
+  - first:
+      213: -5255823068648461077
+    second: BathalaAnimationIdle_13
+  - first:
+      213: 552163574671481387
+    second: BathalaAnimationIdle_14
+  - first:
+      213: -5082223876840293641
+    second: BathalaAnimationIdle_15
+  - first:
+      213: 2305043555357854667
+    second: BathalaAnimationIdle_16
+  - first:
+      213: -8359014299455318747
+    second: BathalaAnimationIdle_17
+  - first:
+      213: -6567179170539624701
+    second: BathalaAnimationIdle_18
+  - first:
+      213: 3996124718833965111
+    second: BathalaAnimationIdle_19
+  - first:
+      213: 3326313928808147976
+    second: BathalaAnimationIdle_20
+  - first:
+      213: 2464253710697239737
+    second: BathalaAnimationIdle_21
+  - first:
+      213: -8150165553640404180
+    second: BathalaAnimationIdle_22
+  - first:
+      213: -6496564104784236724
+    second: BathalaAnimationIdle_23
+  - first:
+      213: 5051148725950480887
+    second: BathalaAnimationIdle_24
+  - first:
+      213: 4442063623464599269
+    second: BathalaAnimationIdle_25
+  - first:
+      213: 3624392885846986354
+    second: BathalaAnimationIdle_26
+  - first:
+      213: 2834885409062470185
+    second: BathalaAnimationIdle_27
+  - first:
+      213: 965161019105704595
+    second: BathalaAnimationIdle_28
+  - first:
+      213: 704832427369559709
+    second: BathalaAnimationIdle_29
+  - first:
+      213: 5932085069110494998
+    second: BathalaAnimationIdle_30
+  - first:
+      213: -1747538157332358329
+    second: BathalaAnimationIdle_31
+  - first:
+      213: 5619063443621380135
+    second: BathalaAnimationIdle_32
+  - first:
+      213: 8369289360804616915
+    second: BathalaAnimationIdle_33
+  - first:
+      213: 8127879956142980188
+    second: BathalaAnimationIdle_34
+  - first:
+      213: -5941880929508933961
+    second: BathalaAnimationIdle_35
+  - first:
+      213: 4867779939054382426
+    second: BathalaAnimationIdle_36
+  - first:
+      213: 274741851741339822
+    second: BathalaAnimationIdle_37
+  - first:
+      213: 2169173320438027308
+    second: BathalaAnimationIdle_38
+  - first:
+      213: -8605974221689604263
+    second: BathalaAnimationIdle_39
+  - first:
+      213: -518502149567616702
+    second: BathalaAnimationIdle_40
+  - first:
+      213: -8301965799261998312
+    second: BathalaAnimationIdle_41
+  - first:
+      213: 3065090327506119485
+    second: BathalaAnimationIdle_42
+  - first:
+      213: 8062430628014803823
+    second: BathalaAnimationIdle_43
+  - first:
+      213: -167150330854565537
+    second: BathalaAnimationIdle_44
+  - first:
+      213: 3607704107894037880
+    second: BathalaAnimationIdle_45
+  - first:
+      213: 6033000109986460236
+    second: BathalaAnimationIdle_46
+  - first:
+      213: 4506792301996146990
+    second: BathalaAnimationIdle_47
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WindowsStoreApps
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: BathalaAnimationIdle_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 64
+        height: 96
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a18b8d94f9e49ab60800000000000000
+      internalID: 7757818279168096282
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BathalaAnimationIdle_1
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 0
+        width: 64
+        height: 96
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 884429df373b3f820800000000000000
+      internalID: 2950899491614639240
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BathalaAnimationIdle_2
+      rect:
+        serializedVersion: 2
+        x: 128
+        y: 0
+        width: 64
+        height: 96
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9f3c61a08c7dfec40800000000000000
+      internalID: 5543886920479065081
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BathalaAnimationIdle_3
+      rect:
+        serializedVersion: 2
+        x: 192
+        y: 0
+        width: 64
+        height: 96
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9b800ca2f59ce7d70800000000000000
+      internalID: 9042886512382838969
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BathalaAnimationIdle_4
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 0
+        width: 64
+        height: 96
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 55084d5ff06cacaf0800000000000000
+      internalID: -375269847080861611
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BathalaAnimationIdle_5
+      rect:
+        serializedVersion: 2
+        x: 320
+        y: 0
+        width: 64
+        height: 96
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 932c1641d07afcf20800000000000000
+      internalID: 3445155914580083257
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BathalaAnimationIdle_6
+      rect:
+        serializedVersion: 2
+        x: 384
+        y: 0
+        width: 64
+        height: 96
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9f5feeb7ac1eeb600800000000000000
+      internalID: 486074069581493753
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BathalaAnimationIdle_7
+      rect:
+        serializedVersion: 2
+        x: 448
+        y: 0
+        width: 64
+        height: 96
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 02086d8f83b541ea0800000000000000
+      internalID: -5902992911324774368
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BathalaAnimationIdle_8
+      rect:
+        serializedVersion: 2
+        x: 512
+        y: 0
+        width: 64
+        height: 96
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8d5d8a1d5b1de09b0800000000000000
+      internalID: -5111917948182145576
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BathalaAnimationIdle_9
+      rect:
+        serializedVersion: 2
+        x: 576
+        y: 0
+        width: 64
+        height: 96
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bc3891c8967731470800000000000000
+      internalID: 8364160228162896843
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BathalaAnimationIdle_10
+      rect:
+        serializedVersion: 2
+        x: 640
+        y: 0
+        width: 64
+        height: 96
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: dc7a5896c9225a720800000000000000
+      internalID: 2856727593817057229
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BathalaAnimationIdle_11
+      rect:
+        serializedVersion: 2
+        x: 704
+        y: 0
+        width: 64
+        height: 96
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9957c529d5ba42b20800000000000000
+      internalID: 3108798061168326041
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BathalaAnimationIdle_12
+      rect:
+        serializedVersion: 2
+        x: 768
+        y: 0
+        width: 64
+        height: 96
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 931f01b9688580e20800000000000000
+      internalID: 3316998460708811065
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BathalaAnimationIdle_13
+      rect:
+        serializedVersion: 2
+        x: 832
+        y: 0
+        width: 64
+        height: 96
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: beca7eef3c09f07b0800000000000000
+      internalID: -5255823068648461077
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BathalaAnimationIdle_14
+      rect:
+        serializedVersion: 2
+        x: 896
+        y: 0
+        width: 64
+        height: 96
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b2a143e78dda9a700800000000000000
+      internalID: 552163574671481387
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BathalaAnimationIdle_15
+      rect:
+        serializedVersion: 2
+        x: 960
+        y: 0
+        width: 64
+        height: 96
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7fafcef8f405879b0800000000000000
+      internalID: -5082223876840293641
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BathalaAnimationIdle_16
+      rect:
+        serializedVersion: 2
+        x: 1024
+        y: 0
+        width: 64
+        height: 96
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bcb88e4a6e82dff10800000000000000
+      internalID: 2305043555357854667
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BathalaAnimationIdle_17
+      rect:
+        serializedVersion: 2
+        x: 1088
+        y: 0
+        width: 64
+        height: 96
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5251e8858c0defb80800000000000000
+      internalID: -8359014299455318747
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BathalaAnimationIdle_18
+      rect:
+        serializedVersion: 2
+        x: 1152
+        y: 0
+        width: 64
+        height: 96
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 30724abb651bcd4a0800000000000000
+      internalID: -6567179170539624701
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 84fd3fc8abf05fe4583a0299fb6645a2
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries:
+      - key: SpriteEditor.SliceSettings
+        value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":64.0,"y":96.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":1,"keepEmptyRects":false,"isAlternate":false}'
+    nameFileIdTable:
+      BathalaAnimationIdle_0: 7757818279168096282
+      BathalaAnimationIdle_1: 2950899491614639240
+      BathalaAnimationIdle_10: 2856727593817057229
+      BathalaAnimationIdle_11: 3108798061168326041
+      BathalaAnimationIdle_12: 3316998460708811065
+      BathalaAnimationIdle_13: -5255823068648461077
+      BathalaAnimationIdle_14: 552163574671481387
+      BathalaAnimationIdle_15: -5082223876840293641
+      BathalaAnimationIdle_16: 2305043555357854667
+      BathalaAnimationIdle_17: -8359014299455318747
+      BathalaAnimationIdle_18: -6567179170539624701
+      BathalaAnimationIdle_2: 5543886920479065081
+      BathalaAnimationIdle_3: 9042886512382838969
+      BathalaAnimationIdle_4: -375269847080861611
+      BathalaAnimationIdle_5: 3445155914580083257
+      BathalaAnimationIdle_6: 486074069581493753
+      BathalaAnimationIdle_7: -5902992911324774368
+      BathalaAnimationIdle_8: -5111917948182145576
+      BathalaAnimationIdle_9: 8364160228162896843
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

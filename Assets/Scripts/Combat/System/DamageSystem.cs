@@ -92,47 +92,101 @@ public class DamageSystem : MonoBehaviour
     /// This is the main method that processes damage. It goes through each target,
     /// reduces their health, and shows a visual effect. Waits between targets so
     /// players can see each hit clearly instead of everything happening at once.
+    /// 
+    /// UPDATED: Now supports per-target damage calculation. If PerTargetDamages is set,
+    /// each target receives their specific damage amount. Otherwise, uses Amount for all targets.
+    /// Also integrates with CombatVFXManager for enhanced visual/audio feedback.
     /// </remarks>
     // The main method that processes damage actions and applies damage to targets
     private IEnumerator DealDamagePerformer(DealDamageGA dealDamageGA)
     {
+        // Check if per-target damage is specified (for defense-based AoE calculations)
+        // Only use per-target damages if the list is non-null and has enough entries for all targets
+        bool hasPerTargetDamages = dealDamageGA.PerTargetDamages != null && dealDamageGA.PerTargetDamages.Count == dealDamageGA.Targets.Count;
+        
         // Loop through every target that should receive damage
-        foreach (var target in dealDamageGA.Targets)
+        for (int i = 0; i < dealDamageGA.Targets.Count; i++)
         {
-            // Check if target still exists (might have been destroyed by previous damage)
+            var target = dealDamageGA.Targets[i];
             if (target == null)
             {
                 continue; // Skip this target and move to the next one
             }
 
-            // Apply the damage amount to this target (reduces their health)
-            target.Damage((int)dealDamageGA.Amount);
+            // Determine damage amount: use per-target if available, otherwise uniform amount
+            float damageAmount = (hasPerTargetDamages) ? dealDamageGA.PerTargetDamages[i] : dealDamageGA.Amount;
 
-            // Check if target still exists after taking damage (safety check)
-            if (target != null)
+            // Find the sprite renderer to get the correct visual position
+            SpriteRenderer spriteRenderer = target.GetComponentInChildren<SpriteRenderer>();
+            Vector3 popupPosition = spriteRenderer != null ? spriteRenderer.transform.position : target.transform.position;
+
+            // Determine if this was a miss or crit (by convention: if damageAmount == 0, it's a miss)
+            bool isMiss = damageAmount == 0f;
+            // If DealDamageGA has a crit info, you can extend this logic; for now, assume no crit info, so always false
+            bool isCrit = false;
+            
+            // Record hit target if damage was dealt (not a miss)
+            if (!isMiss && dealDamageGA.Caster != null)
             {
-                // Find the sprite renderer to get the correct visual position
-                SpriteRenderer spriteRenderer = target.GetComponentInChildren<SpriteRenderer>();
-                Vector3 vfxPosition = spriteRenderer != null ? spriteRenderer.transform.position : target.transform.position;
-
-                // Spawn a visual effect at the sprite's position to show damage was dealt
-                Instantiate(damageVFX, vfxPosition, Quaternion.identity);
+                HitTargetTracker.RecordHit(target, damageAmount, dealDamageGA.Caster);
             }
             
-            // Wait 0.15 seconds before damaging the next target (for visual timing)
-            yield return new WaitForSeconds(0.15f);
-            
-            /// <summary>
-            /// Check if the target died from the damage and handle death
-            /// </summary>
-            /// <remarks>
-            /// After dealing damage, check if the target's health reached zero or below.
-            /// If it's an enemy that died, create a KillEnemyGA action to remove them.
-            /// Hero death handling is planned for future implementation.
-            /// </remarks>
-            // Check if the target still exists and died from the damage
-            if(target != null && target.CurrentHealth <= 0)
+            // Show the popup before applying damage for immediate feedback
+            DamagePopUp.Create(popupPosition, Mathf.RoundToInt(damageAmount), isCrit, isMiss);
+
+            // Use CombatVFXManager for enhanced VFX/SFX if available
+            if (CombatVFXManager.Instance != null)
+            {
+                if (isMiss)
                 {
+                    CombatVFXManager.Instance.PlayMissEffect(popupPosition);
+                }
+                else if (isCrit)
+                {
+                    CombatVFXManager.Instance.PlayDamageEffect(popupPosition, true);
+                }
+                else
+                {
+                    CombatVFXManager.Instance.PlayDamageEffect(popupPosition, false);
+                }
+            }
+            
+            // Spawn damageVFX on hit (not on miss) - ALWAYS spawn if assigned, regardless of CombatVFXManager
+            // This ensures the damageVFX prefab always appears when configured
+            if (!isMiss && damageVFX != null)
+            {
+                GameObject spawnedVFX = Instantiate(damageVFX, popupPosition, Quaternion.identity);
+                Debug.Log($"[DamageSystem] Spawned damageVFX at position {popupPosition}");
+                if (spawnedVFX == null)
+                {
+                    Debug.LogWarning($"[DamageSystem] Failed to instantiate damageVFX at position {popupPosition}. Check that damageVFX prefab is valid.", this);
+                }
+            }
+            else if (!isMiss && damageVFX == null)
+            {
+                // Debug warning if VFX is expected but not assigned
+                Debug.LogWarning($"[DamageSystem] damageVFX is null! Damage dealt but no VFX spawned. Assign a damageVFX prefab in the Inspector.", this);
+            }
+
+            // Apply the damage amount to this target (reduces their health)
+            // This also triggers the hit animation internally
+            target.Damage(Mathf.RoundToInt(damageAmount));
+
+            // Wait for the hit animation to complete before processing next target
+            // This creates proper visual sequencing for multiple targets
+            float hitAnimDuration = target.GetAnimationDuration(CombatantAnimState.Hit);
+            yield return new WaitForSeconds(hitAnimDuration + 0.1f);
+
+            // Check if the target died from the damage and handle death
+            if(target != null && target.CurrentHealth <= 0 && !target.IsDead)
+            {
+                // Mark the target as dead (applies visual greying and stops animation)
+                target.MarkAsDead();
+                
+                // Play death animation and wait for it to complete
+                // NOTE: Death animation is commented out in MarkAsDead() until animations are ready
+                // yield return target.PlayAnimationAndWait(CombatantAnimState.Dead, returnToIdle: false);
+
                 // If the target is an enemy that died, create a kill enemy action
                 if (target is EnemyView enemyView)
                 {
@@ -141,14 +195,85 @@ public class DamageSystem : MonoBehaviour
                     // Add the kill action to be processed after damage
                     ActionSystem.Instance.AddReaction(killEnemyGA);
                 }
-                else
+                else if (target is HeroView heroView)
                 {
-                    //nothing here for now
-                    //handles heroes death        
+                    // Hero died - mark as dead and check if all heroes are dead
+                    Debug.Log($"[DamageSystem] Hero {heroView.gameObject.name} has died!");
+                    CheckForDefeat();
                 }
-                }
+            }
+            else if (target != null)
+            {
+                // Target survived, return to idle animation
+                target.PlayIdleAnimation();
+            }
         }
         // Wait one frame before continuing (required for coroutines)
         yield return null;
+    }
+    
+    /// <summary>
+    /// Checks if all heroes are dead and triggers defeat if so
+    /// </summary>
+    /// <remarks>
+    /// Called after a hero dies. Checks if all heroes in the party are marked as dead.
+    /// If all heroes are dead, shows defeat banner and allows player to continue.
+    /// </remarks>
+    private void CheckForDefeat()
+    {
+        // Get all heroes from HeroSystem
+        if (HeroSystem.Instance == null || HeroSystem.Instance.HeroViews == null)
+        {
+            Debug.LogWarning("[DamageSystem] HeroSystem.Instance or HeroViews is null! Cannot check for defeat.", this);
+            return;
+        }
+        
+        var heroes = HeroSystem.Instance.HeroViews;
+        
+        // Check if all heroes are dead using IsDead property
+        bool allHeroesDead = true;
+        foreach (var hero in heroes)
+        {
+            if (hero != null && !hero.IsDead)
+            {
+                allHeroesDead = false;
+                break;
+            }
+        }
+        
+        // If all heroes are dead, trigger defeat
+        if (allHeroesDead)
+        {
+            Debug.Log("[DamageSystem] ===== DEFEAT =====");
+            Debug.Log("[DamageSystem] All heroes have been defeated!");
+            
+            // Discard all cards for all heroes when defeat happens
+            if (CardSystem.Instance != null)
+            {
+                StartCoroutine(DiscardCardsOnDefeat());
+            }
+            
+            // Show defeat banner
+            if (VictoryDefeatUI.Instance != null)
+            {
+                VictoryDefeatUI.Instance.ShowDefeat();
+            }
+            else
+            {
+                Debug.LogWarning("[DamageSystem] VictoryDefeatUI.Instance is null! Cannot show defeat banner.", this);
+            }
+        }
+    }
+    
+    /// <summary>
+    /// Coroutine to discard all cards when defeat occurs
+    /// </summary>
+    private IEnumerator DiscardCardsOnDefeat()
+    {
+        if (CardSystem.Instance != null)
+        {
+            yield return CardSystem.Instance.DiscardAllCardsForAllHeroes();
+            Debug.Log("[DamageSystem] All cards discarded on defeat");
+        }
     }
 }

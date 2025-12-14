@@ -13,13 +13,19 @@ MonoBehaviour:
   m_Name: Bagani
   m_EditorClassIdentifier: Assembly-CSharp::HeroData
   <Image>k__BackingField: {fileID: 21300000, guid: 90c2c5d76e0aec44391da2c42ed93032, type: 3}
+  <RoleCard>k__BackingField: {fileID: 21300000, guid: 4b3a365b32aa3c8459b04e276b93ba68, type: 3}
   <HeroName>k__BackingField: Bagani
   <Health>k__BackingField: 1000
   <AttackPower>k__BackingField: 75
+  <MagicPower>k__BackingField: 0
   <Defense>k__BackingField: 200
+  <AnimatorOverride>k__BackingField: {fileID: 22100000, guid: b4a84f4b7a9043044bbd84d1133f6bd2, type: 2}
+  <TurnProfileOverride>k__BackingField: {fileID: 22100000, guid: da80c22579bf7c541a8bdc44e8be0fbf, type: 2}
+  <BuildPresets>k__BackingField:
+  - {fileID: 11400000, guid: 1bf2232f84bab3340aa09c41415fe062, type: 2}
+  - {fileID: 11400000, guid: c5f6fae3d5fee2d41aac853648c0af5b, type: 2}
+  - {fileID: 11400000, guid: 15014db4d61b59b469bf838f9a1b2fba, type: 2}
   <Deck>k__BackingField:
-  - {fileID: 11400000, guid: 84fb868badf54b64a82197a7933dc990, type: 2}
-  - {fileID: 11400000, guid: 8b5d7a1c6cdfa0446a52eea399fc2ab1, type: 2}
   - {fileID: 11400000, guid: 57ce94d0d13facb489afbbfd10d20699, type: 2}
   - {fileID: 11400000, guid: c8869bbac0c0b974c901ce9eecb092d7, type: 2}
   - {fileID: 11400000, guid: 14db5b1b3d0c83d4387ca4040b997604, type: 2}

@@ -13,9 +13,20 @@ MonoBehaviour:
   m_Name: DagatNgKabisayaan
   m_EditorClassIdentifier: Assembly-CSharp::MapData
   MapId: Dagat Ng Kabisayaan
-  IsUnlockedByDefault: 0
+  IsUnlockedByDefault: 1
   Scene:
     m_SceneAsset: {fileID: 102900000, guid: 8c9cfa26abfee488c85f1582747f6a02, type: 3}
     m_SceneName: Combat
   MapName: Dagat Ng Kabisayaan
-  mapThumbnail: {fileID: 3934874985737040794, guid: 817b41b3ac0cd10428748b1a5b0e2948, type: 3}
+  mapThumbnail: {fileID: 21300000, guid: 455a9ff5c5874ce4ba566cfee94f1fa7, type: 3}
+  bossImage: {fileID: 21300000, guid: 89e3beee3f4fb7f469680a5618692d7d, type: 3}
+  combatMapIcon: {fileID: 21300000, guid: 8a2121e47ad39c44fac5904225c9e958, type: 3}
+  bossName: Bakunawa
+  enemyDatas:
+  - {fileID: 11400000, guid: bcd9445ea2359f846823d38c5dcabb1c, type: 2}
+  - {fileID: 11400000, guid: 47ba028629da84246952941a644ef81e, type: 2}
+  combatBackgroundSprite: {fileID: 21300000, guid: 91c836ed92cb2d848a27c1265f74b768, type: 3}
+  loadingVideoId: loadingBakunawa
+  MapMusic: {fileID: 11400000, guid: 642db3ae22897b44b8f76016392bf53d, type: 2}
+  minibossReward: {fileID: 11400000, guid: 493e8f2ed1241d549b6d8a706e26e73d, type: 2}
+  mainBossReward: {fileID: 11400000, guid: ed506c304c62a314ca52399220321c45, type: 2}

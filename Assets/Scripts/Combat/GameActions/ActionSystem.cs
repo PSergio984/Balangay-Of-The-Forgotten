@@ -146,13 +146,39 @@ public class ActionSystem : Singleton<ActionSystem>
     /// </summary>
     /// <param name="gameAction">The reaction action to add to the current processing queue</param>
     /// <remarks>
-    /// This is used internally during the Flow to queue up additional reactions
+    /// This is used internally during the Flow to queue up additional reactions.
+    /// WARNING: This method should only be called during active Flow() execution.
+    /// If called outside of Flow(), the action will be lost and a warning will be logged.
     /// </remarks>
     // Method for other systems to add additional reactions during action processing
     // This is used internally during the Flow to queue up additional reactions
     public void AddReaction(GameAction gameAction)
     {
-        reactions?.Add(gameAction);
+        // Skip null actions (some effects like ConditionalEffect return null when condition isn't met)
+        if (gameAction == null)
+        {
+            return;
+        }
+        
+        // Check if we're in an active Flow execution using the isPerforming flag
+        // This is the reliable indicator of whether reactions can be added
+        if (!isPerforming)
+        {
+            Debug.LogWarning($"[ActionSystem] AddReaction() called outside of active Flow() execution. " +
+                           $"Action '{gameAction.GetType().Name}' will be lost. " +
+                           $"Ensure AddReaction() is only called during action processing (inside performers or reactions).");
+            return;
+        }
+        
+        // Defensive check: reactions should always be set during Flow execution, but verify it's not null
+        if (reactions == null)
+        {
+            Debug.LogError($"[ActionSystem] reactions list is null during active Flow execution. " +
+                         $"This indicates a bug in the ActionSystem. Action '{gameAction.GetType().Name}' will be lost.");
+            return;
+        }
+        
+        reactions.Add(gameAction);
     }
 
     /// <summary>
@@ -184,6 +210,10 @@ public class ActionSystem : Singleton<ActionSystem>
         PerformSubscribers(action, postSubs);  // Trigger any global post-reactions  
         yield return PerformReactions();       // Execute all queued post-reactions
 
+        // Reset reactions to null after Flow completes to prevent stale references
+        // This ensures AddReaction() can properly detect when called outside of Flow execution
+        reactions = null;
+
         // All phases complete - run any cleanup code
         OnFlowFinished?.Invoke();
     }
@@ -204,6 +234,13 @@ public class ActionSystem : Singleton<ActionSystem>
         // Process each reaction one by one (important for turn-based timing)
         foreach(var reaction in reactions)
         {
+            // Skip null reactions (defensive check - should not happen if AddReaction is used correctly)
+            if (reaction == null)
+            {
+                Debug.LogWarning("[ActionSystem] Skipping null reaction in PerformReactions");
+                continue;
+            }
+            
             // Each reaction goes through the full Flow process (Pre->Main->Post)
             yield return Flow(reaction);
         }
@@ -375,5 +412,53 @@ public class ActionSystem : Singleton<ActionSystem>
             // Try to remove it (this likely won't work due to the wrapper mismatch)
             subs[typeof(T)].Remove(wrappedReaction);
         }
+    }
+    
+    /// <summary>
+    /// Resets the ActionSystem state for a clean combat start.
+    /// Call this when transitioning between combat encounters to ensure a fresh state.
+    /// </summary>
+    /// <remarks>
+    /// This method clears:
+    /// - The isPerforming flag (in case a previous fight ended mid-action)
+    /// - The reactions list (clear any pending reactions)
+    /// - All active coroutines on this MonoBehaviour
+    /// 
+    /// This does NOT clear:
+    /// - Performers (action logic stays registered)
+    /// - Pre/Post subscriptions (passive abilities stay registered - they will be re-registered anyway)
+    /// 
+    /// Call this at the start of each combat encounter to prevent state carry-over bugs.
+    /// </remarks>
+    public void ResetCombatState()
+    {
+        Debug.Log("[ActionSystem] Resetting combat state for new encounter");
+        
+        // Stop any running coroutines to prevent lingering action processing
+        StopAllCoroutines();
+        
+        // Reset the performing flag to allow new actions
+        isPerforming = false;
+        
+        // Clear any pending reactions
+        reactions = null;
+        
+        Debug.Log("[ActionSystem] Combat state reset complete - ready for new encounter");
+    }
+    
+    /// <summary>
+    /// Clears all reaction subscriptions (PRE and POST).
+    /// Use this when completely resetting the game state, not just between fights.
+    /// </summary>
+    /// <remarks>
+    /// This clears all global passive ability subscriptions.
+    /// Only use this for full game resets, not between combat encounters.
+    /// Systems will need to re-subscribe their reactions after calling this.
+    /// </remarks>
+    public static void ClearAllReactionSubscriptions()
+    {
+        Debug.Log("[ActionSystem] Clearing all reaction subscriptions");
+        preSubs.Clear();
+        postSubs.Clear();
     }
 }

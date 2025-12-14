@@ -1,4 +1,6 @@
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 /* HERO SYSTEM DOCUMENTATION
@@ -49,6 +51,12 @@ public class HeroSystem : Singleton<HeroSystem>
 {
     // Expose all hero views for targeting
     public List<HeroView> HeroViews => HeroBoardView.HeroViews;
+    
+    /// <summary>
+    /// Stored hero data list for accessing turn profile overrides
+    /// </summary>
+    private List<HeroData> storedHeroDatas;
+    
     /// <summary>
     /// The visual display component that shows the hero to players
     /// </summary>
@@ -72,12 +80,35 @@ public class HeroSystem : Singleton<HeroSystem>
 
     public void Setup(List<HeroData> heroDatas)
         {
+            // Store hero datas for turn profile access
+            storedHeroDatas = heroDatas;
+            
             foreach (var heroData in heroDatas)
             {
                 // Tell the hero view to set up the hero's appearance and stats
                 HeroBoardView.AddHero(heroData);
             }
         }
+    
+    /// <summary>
+    /// Gets the turn profile override for the hero at the specified index
+    /// </summary>
+    /// <param name="heroIndex">Index of the hero (0-based)</param>
+    /// <returns>The AnimatorOverrideController for the hero's turn profile, or null if not found</returns>
+    public AnimatorOverrideController GetHeroTurnProfileOverride(int heroIndex)
+    {
+        if (storedHeroDatas == null || heroIndex < 0 || heroIndex >= storedHeroDatas.Count)
+        {
+            Debug.LogWarning($"[HeroSystem] Cannot get turn profile override for hero index {heroIndex}");
+            return null;
+        }
+        if (storedHeroDatas[heroIndex] == null)
+        {
+            Debug.LogWarning($"[HeroSystem] HeroData at index {heroIndex} is null. Cannot get turn profile override.");
+            return null;
+        }
+        return storedHeroDatas[heroIndex].TurnProfileOverride;
+    }
     /// <summary>
     /// Subscribe to enemy turn reactions when this system starts
     /// </summary>
@@ -118,6 +149,21 @@ public class HeroSystem : Singleton<HeroSystem>
     /// </remarks>
     private void EnemyTurnPreReaction(EnemyTurnGA enemyTurnGA)
     {
+        // CRITICAL: Check if this object is still valid before proceeding
+        // This prevents MissingReferenceException if HeroSystem was destroyed during scene transition
+        if (this == null || !this)
+        {
+            Debug.LogWarning("[HeroSystem] EnemyTurnPreReaction called but HeroSystem has been destroyed. Skipping reaction.");
+            return;
+        }
+        
+        // Check if ActionSystem is still valid
+        if (ActionSystem.Instance == null)
+        {
+            Debug.LogWarning("[HeroSystem] ActionSystem.Instance is null. Cannot discard cards.");
+            return;
+        }
+        
         DiscardAllCardsGA discardAllCardsGA = new();
         ActionSystem.Instance.AddReaction(discardAllCardsGA);
     }
@@ -150,11 +196,74 @@ public class HeroSystem : Singleton<HeroSystem>
     /// </remarks>
     private void EnemyTurnPostReaction(EnemyTurnGA enemyTurnGA)
     {
+        // CRITICAL: Check if this object is still valid before proceeding
+        // This prevents MissingReferenceException if HeroSystem was destroyed during scene transition
+        if (this == null || !this)
+        {
+            Debug.LogWarning("[HeroSystem] EnemyTurnPostReaction called but HeroSystem has been destroyed. Skipping reaction.");
+            return;
+        }
+        
+        // Check if HeroBoardView is still valid
+        if (HeroBoardView == null || !HeroBoardView)
+        {
+            Debug.LogWarning("[HeroSystem] HeroBoardView is null or destroyed. Cannot process enemy turn post-reaction.");
+            return;
+        }
+        
         // Use StatusEffectTickSystem to process all enemy status effect ticks
-        StatusEffectTickSystem.Instance.TickStatusEffects(HeroBoardView.HeroViews.ConvertAll(e => (CombatantView)e));
-        // Draw new hand for the player's next turn
+        // Only tick status effects for living heroes (dead heroes don't process status effects)
+        if (StatusEffectTickSystem.Instance != null)
+        {
+            var livingHeroes = HeroBoardView.HeroViews
+                .Where(h => h != null && !h.IsDead)
+                .Cast<CombatantView>()
+                .ToList();
+            StatusEffectTickSystem.Instance.TickStatusEffects(livingHeroes);
+        }
+        
+        // Delay card drawing until after player turn banner animation completes
+        // This provides better UX by not drawing cards simultaneously with the banner
+        // Only start coroutine if object is still valid
+        if (this != null && this)
+        {
+            StartCoroutine(DelayedCardDraw());
+        }
+    }
+    
+    /// <summary>
+    /// Delays card drawing until after the player turn banner animation completes
+    /// </summary>
+    private IEnumerator DelayedCardDraw()
+    {
+        // Wait for player turn banner animation to complete
+        // Banner animation duration: fadeInDuration (0.4s) + holdDuration (1.0s) + slideOutDuration (0.5s) = ~1.9s
+        // Add a small buffer for safety
+        float bannerAnimationDuration = 2.0f;
+        
+        // Wait for banner to finish animating
+        yield return new WaitForSeconds(bannerAnimationDuration);
+        
+        // CRITICAL: Check if this object is still valid before proceeding
+        // This prevents MissingReferenceException if HeroSystem was destroyed during the wait
+        if (this == null || !this)
+        {
+            Debug.LogWarning("[HeroSystem] DelayedCardDraw: HeroSystem was destroyed during wait. Aborting card draw.");
+            yield break;
+        }
+        
+        // Check if ActionSystem is still valid
+        if (ActionSystem.Instance == null)
+        {
+            Debug.LogWarning("[HeroSystem] DelayedCardDraw: ActionSystem.Instance is null. Cannot draw cards.");
+            yield break;
+        }
+        
+        // Now draw cards after the banner has finished
+        // Use Perform() instead of AddReaction() because we're outside of an active action flow
+        // (the EnemyTurnGA flow has already completed by the time this coroutine finishes)
         DrawCardsGA drawCardsGA = new(5);
-        ActionSystem.Instance.AddReaction(drawCardsGA);
+        ActionSystem.Instance.Perform(drawCardsGA);
     }
 
    

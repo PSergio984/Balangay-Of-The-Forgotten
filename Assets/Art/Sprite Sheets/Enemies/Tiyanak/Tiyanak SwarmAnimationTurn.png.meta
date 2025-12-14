@@ -1,0 +1,756 @@
+fileFormatVersion: 2
+guid: dc8c158f4274623448b1286d1729eed1
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 6286408159364785281
+    second: Tiyanak SwarmAnimationTurn_0
+  - first:
+      213: -1509272642450623308
+    second: Tiyanak SwarmAnimationTurn_1
+  - first:
+      213: -7950492792783790085
+    second: Tiyanak SwarmAnimationTurn_2
+  - first:
+      213: 6288746021922974382
+    second: Tiyanak SwarmAnimationTurn_3
+  - first:
+      213: 3563295267428752127
+    second: Tiyanak SwarmAnimationTurn_4
+  - first:
+      213: -1168958142386886572
+    second: Tiyanak SwarmAnimationTurn_5
+  - first:
+      213: -4845831864820114264
+    second: Tiyanak SwarmAnimationTurn_6
+  - first:
+      213: -6966090726157494386
+    second: Tiyanak SwarmAnimationTurn_7
+  - first:
+      213: -2658274665771479524
+    second: Tiyanak SwarmAnimationTurn_8
+  - first:
+      213: -1004199937852028890
+    second: Tiyanak SwarmAnimationTurn_9
+  - first:
+      213: -7468892669558967791
+    second: Tiyanak SwarmAnimationTurn_10
+  - first:
+      213: 401431802658967996
+    second: Tiyanak SwarmAnimationTurn_11
+  - first:
+      213: 279523802980084144
+    second: Tiyanak SwarmAnimationTurn_12
+  - first:
+      213: -4259979002764453728
+    second: Tiyanak SwarmAnimationTurn_13
+  - first:
+      213: 7848233731271263843
+    second: Tiyanak SwarmAnimationTurn_14
+  - first:
+      213: 5025010592763708418
+    second: Tiyanak SwarmAnimationTurn_15
+  - first:
+      213: 2813005484300274542
+    second: Tiyanak SwarmAnimationTurn_16
+  - first:
+      213: 924828628792265853
+    second: Tiyanak SwarmAnimationTurn_17
+  - first:
+      213: -4694269084835976647
+    second: Tiyanak SwarmAnimationTurn_18
+  - first:
+      213: 6555232713159297442
+    second: Tiyanak SwarmAnimationTurn_19
+  - first:
+      213: 1617945410664492092
+    second: Tiyanak SwarmAnimationTurn_20
+  - first:
+      213: 4504100256676245494
+    second: Tiyanak SwarmAnimationTurn_21
+  - first:
+      213: 3770071775529985387
+    second: Tiyanak SwarmAnimationTurn_22
+  - first:
+      213: -6015511502208044438
+    second: Tiyanak SwarmAnimationTurn_23
+  - first:
+      213: -149860548365599013
+    second: Tiyanak SwarmAnimationTurn_24
+  - first:
+      213: 3241608886748536684
+    second: Tiyanak SwarmAnimationTurn_25
+  - first:
+      213: -405109126123243071
+    second: Tiyanak SwarmAnimationTurn_26
+  - first:
+      213: 3227636359268095332
+    second: Tiyanak SwarmAnimationTurn_27
+  - first:
+      213: 1093834897316838612
+    second: Tiyanak SwarmAnimationTurn_28
+  - first:
+      213: 3619211101419587969
+    second: Tiyanak SwarmAnimationTurn_29
+  - first:
+      213: -7539591297118603180
+    second: Tiyanak SwarmAnimationTurn_30
+  - first:
+      213: 8186001991466065456
+    second: Tiyanak SwarmAnimationTurn_31
+  - first:
+      213: 9190435195822556296
+    second: Tiyanak SwarmAnimationTurn_32
+  - first:
+      213: -6862290693256376831
+    second: Tiyanak SwarmAnimationTurn_33
+  - first:
+      213: -2713072734574137941
+    second: Tiyanak SwarmAnimationTurn_34
+  - first:
+      213: -6833916458477132084
+    second: Tiyanak SwarmAnimationTurn_35
+  - first:
+      213: -5428174371812352769
+    second: Tiyanak SwarmAnimationTurn_36
+  - first:
+      213: 4808727900707863758
+    second: Tiyanak SwarmAnimationTurn_37
+  - first:
+      213: 3236481865782931295
+    second: Tiyanak SwarmAnimationTurn_38
+  - first:
+      213: -2964693007365186845
+    second: Tiyanak SwarmAnimationTurn_39
+  - first:
+      213: 3881295019952425420
+    second: Tiyanak SwarmAnimationTurn_40
+  - first:
+      213: -9064672048235855877
+    second: Tiyanak SwarmAnimationTurn_41
+  - first:
+      213: -8101008464948548661
+    second: Tiyanak SwarmAnimationTurn_42
+  - first:
+      213: 6796937012932189565
+    second: Tiyanak SwarmAnimationTurn_43
+  - first:
+      213: -352137140141851962
+    second: Tiyanak SwarmAnimationTurn_44
+  - first:
+      213: -1550020671815565067
+    second: Tiyanak SwarmAnimationTurn_45
+  - first:
+      213: -4276447820175708147
+    second: Tiyanak SwarmAnimationTurn_46
+  - first:
+      213: -5162329276756849533
+    second: Tiyanak SwarmAnimationTurn_47
+  - first:
+      213: 4885503886202532061
+    second: Tiyanak SwarmAnimationTurn_48
+  - first:
+      213: 6541814769147911980
+    second: Tiyanak SwarmAnimationTurn_49
+  - first:
+      213: 1388763848852122175
+    second: Tiyanak SwarmAnimationTurn_50
+  - first:
+      213: -741927220520762698
+    second: Tiyanak SwarmAnimationTurn_51
+  - first:
+      213: -6163521645513990597
+    second: Tiyanak SwarmAnimationTurn_52
+  - first:
+      213: -5799805826000490193
+    second: Tiyanak SwarmAnimationTurn_53
+  - first:
+      213: 2683518049338133773
+    second: Tiyanak SwarmAnimationTurn_54
+  - first:
+      213: 1005751438697124166
+    second: Tiyanak SwarmAnimationTurn_55
+  - first:
+      213: -1359407495804894424
+    second: Tiyanak SwarmAnimationTurn_56
+  - first:
+      213: 2708840964966376832
+    second: Tiyanak SwarmAnimationTurn_57
+  - first:
+      213: 1020338087605602651
+    second: Tiyanak SwarmAnimationTurn_58
+  - first:
+      213: -4107880890682048497
+    second: Tiyanak SwarmAnimationTurn_59
+  - first:
+      213: 3897778410477269639
+    second: Tiyanak SwarmAnimationTurn_60
+  - first:
+      213: 6363598470993261337
+    second: Tiyanak SwarmAnimationTurn_61
+  - first:
+      213: -693938234714472638
+    second: Tiyanak SwarmAnimationTurn_62
+  - first:
+      213: 3817330092365935092
+    second: Tiyanak SwarmAnimationTurn_63
+  - first:
+      213: -4949154534334594642
+    second: Tiyanak SwarmAnimationTurn_64
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WindowsStoreApps
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Tiyanak SwarmAnimationTurn_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1842e040aeecd3750800000000000000
+      internalID: 6286408159364785281
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Tiyanak SwarmAnimationTurn_1
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 0
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4b4f385378cfd0be0800000000000000
+      internalID: -1509272642450623308
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Tiyanak SwarmAnimationTurn_2
+      rect:
+        serializedVersion: 2
+        x: 128
+        y: 0
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bff91d0bdec2aa190800000000000000
+      internalID: -7950492792783790085
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Tiyanak SwarmAnimationTurn_3
+      rect:
+        serializedVersion: 2
+        x: 192
+        y: 0
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: eaaae5f003d164750800000000000000
+      internalID: 6288746021922974382
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Tiyanak SwarmAnimationTurn_4
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 0
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ffadbe4aa2e537130800000000000000
+      internalID: 3563295267428752127
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Tiyanak SwarmAnimationTurn_5
+      rect:
+        serializedVersion: 2
+        x: 320
+        y: 0
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 458aabd43c607cfe0800000000000000
+      internalID: -1168958142386886572
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Tiyanak SwarmAnimationTurn_6
+      rect:
+        serializedVersion: 2
+        x: 384
+        y: 0
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8acd020e79520ccb0800000000000000
+      internalID: -4845831864820114264
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Tiyanak SwarmAnimationTurn_7
+      rect:
+        serializedVersion: 2
+        x: 448
+        y: 0
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e875d3a7469735f90800000000000000
+      internalID: -6966090726157494386
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Tiyanak SwarmAnimationTurn_8
+      rect:
+        serializedVersion: 2
+        x: 512
+        y: 0
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c1e454f8649eb1bd0800000000000000
+      internalID: -2658274665771479524
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Tiyanak SwarmAnimationTurn_9
+      rect:
+        serializedVersion: 2
+        x: 576
+        y: 0
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6284cdc1a7d5012f0800000000000000
+      internalID: -1004199937852028890
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Tiyanak SwarmAnimationTurn_10
+      rect:
+        serializedVersion: 2
+        x: 640
+        y: 0
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1123b6d50b9295890800000000000000
+      internalID: -7468892669558967791
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Tiyanak SwarmAnimationTurn_11
+      rect:
+        serializedVersion: 2
+        x: 704
+        y: 0
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cb1580ff81c229500800000000000000
+      internalID: 401431802658967996
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Tiyanak SwarmAnimationTurn_12
+      rect:
+        serializedVersion: 2
+        x: 768
+        y: 0
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0b9e4e6fa6111e300800000000000000
+      internalID: 279523802980084144
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Tiyanak SwarmAnimationTurn_13
+      rect:
+        serializedVersion: 2
+        x: 832
+        y: 0
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0a81a95daa381e4c0800000000000000
+      internalID: -4259979002764453728
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Tiyanak SwarmAnimationTurn_14
+      rect:
+        serializedVersion: 2
+        x: 896
+        y: 0
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 36689a23ff68aec60800000000000000
+      internalID: 7848233731271263843
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Tiyanak SwarmAnimationTurn_15
+      rect:
+        serializedVersion: 2
+        x: 960
+        y: 0
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 204814ea28c6cb540800000000000000
+      internalID: 5025010592763708418
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Tiyanak SwarmAnimationTurn_16
+      rect:
+        serializedVersion: 2
+        x: 1024
+        y: 0
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e6b81f2859dc90720800000000000000
+      internalID: 2813005484300274542
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Tiyanak SwarmAnimationTurn_17
+      rect:
+        serializedVersion: 2
+        x: 1088
+        y: 0
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d7c4649ecb6a5dc00800000000000000
+      internalID: 924828628792265853
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 9b414bec0a12c384eaa0513f922a39ab
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries:
+      - key: SpriteEditor.SliceOnImport
+        value: True
+      - key: SpriteEditor.SliceSettings
+        value: '{"sliceOnImport":true,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":64.0,"y":64.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":1,"keepEmptyRects":false,"isAlternate":false}'
+    nameFileIdTable:
+      Tiyanak SwarmAnimationTurn_0: 6286408159364785281
+      Tiyanak SwarmAnimationTurn_1: -1509272642450623308
+      Tiyanak SwarmAnimationTurn_10: -7468892669558967791
+      Tiyanak SwarmAnimationTurn_11: 401431802658967996
+      Tiyanak SwarmAnimationTurn_12: 279523802980084144
+      Tiyanak SwarmAnimationTurn_13: -4259979002764453728
+      Tiyanak SwarmAnimationTurn_14: 7848233731271263843
+      Tiyanak SwarmAnimationTurn_15: 5025010592763708418
+      Tiyanak SwarmAnimationTurn_16: 2813005484300274542
+      Tiyanak SwarmAnimationTurn_17: 924828628792265853
+      Tiyanak SwarmAnimationTurn_2: -7950492792783790085
+      Tiyanak SwarmAnimationTurn_3: 6288746021922974382
+      Tiyanak SwarmAnimationTurn_4: 3563295267428752127
+      Tiyanak SwarmAnimationTurn_5: -1168958142386886572
+      Tiyanak SwarmAnimationTurn_6: -4845831864820114264
+      Tiyanak SwarmAnimationTurn_7: -6966090726157494386
+      Tiyanak SwarmAnimationTurn_8: -2658274665771479524
+      Tiyanak SwarmAnimationTurn_9: -1004199937852028890
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
