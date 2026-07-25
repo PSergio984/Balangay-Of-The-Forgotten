@@ -64,6 +64,10 @@ public class VictoryDefeatUI : Singleton<VictoryDefeatUI>
     [Tooltip("Reference to the RewardChestUI component for showing rewards")]
     [SerializeField] private RewardChestUI rewardChestUI;
 
+    [Header("Leaderboard")]
+    [Tooltip("Name entry popup — shown after victory, before continue button")]
+    [SerializeField] private NameEntryUI nameEntryUI;
+
     [Header("Collection Systems")]
     [Tooltip("Reference to the RelicCollectionData for collecting main boss relics")]
     [SerializeField] private RelicCollectionData relicCollection;
@@ -214,6 +218,8 @@ public class VictoryDefeatUI : Singleton<VictoryDefeatUI>
         isFirstReward = true;
         rewardCollectedCallback = null;
         
+        RecordCombatClearTime();
+
         // Reset continue button state in case it was disabled
         if (continueButton != null)
         {
@@ -237,7 +243,37 @@ public class VictoryDefeatUI : Singleton<VictoryDefeatUI>
         this.hasMoreEnemies = hasMoreEnemies;
         this.isFirstReward = isFirstReward;
         rewardCollectedCallback = onRewardCollected;
+
+        if (!hasMoreEnemies)
+        {
+            RecordCombatClearTime();
+        }
+
         ShowBanner(victorySprite, true);
+    }
+
+    private void RecordCombatClearTime()
+    {
+        if (CombatTimer.Instance != null)
+        {
+            CombatTimer.Instance.StopTimer();
+        }
+
+        if (levelTransitionData == null)
+        {
+            Debug.LogError("[VictoryDefeatUI] levelTransitionData is null. Cannot record clear time.", this);
+            return;
+        }
+
+        if (CombatTimer.Instance != null)
+        {
+            levelTransitionData.ClearTimeSeconds = CombatTimer.Instance.ElapsedSeconds;
+            Debug.Log($"[VictoryDefeatUI] Recorded combat clear time: {CombatTimer.Instance.ElapsedSeconds}s");
+        }
+        else
+        {
+            levelTransitionData.ClearTimeSeconds = 0f;
+        }
     }
 
     /// <summary>
@@ -375,7 +411,39 @@ public class VictoryDefeatUI : Singleton<VictoryDefeatUI>
         // Phase 2: Hold
         yield return new WaitForSeconds(holdDuration);
         
-        // Phase 3: Show continue button (but check if enemies are still active first)
+        // Phase 3: Show NameEntryUI prompt (on final victory) and enable Continue button
+        if (isVictory && !hasMoreEnemies)
+        {
+            if (nameEntryUI != null)
+            {
+                string mapId = (levelTransitionData != null && levelTransitionData.SelectedMapData != null)
+                    ? levelTransitionData.SelectedMapData.MapId
+                    : string.Empty;
+                float clearTime = levelTransitionData != null ? levelTransitionData.ClearTimeSeconds : 0f;
+
+                nameEntryUI.Show(
+                    mapId: mapId,
+                    clearTimeSeconds: clearTime,
+                    onComplete: () => StartCoroutine(EnableContinueButtonRoutine())
+                );
+            }
+            else
+            {
+                Debug.LogWarning("[VictoryDefeatUI] nameEntryUI is not assigned! Skipping name entry and enabling continue button directly.", this);
+                yield return EnableContinueButtonRoutine();
+            }
+        }
+        else
+        {
+            yield return EnableContinueButtonRoutine();
+        }
+        
+        // Animation complete - button is now clickable (if no enemies are active)
+        isAnimating = false;
+    }
+
+    private IEnumerator EnableContinueButtonRoutine()
+    {
         if (continueButton != null)
         {
             continueButton.gameObject.SetActive(true);
@@ -383,7 +451,7 @@ public class VictoryDefeatUI : Singleton<VictoryDefeatUI>
             // CRITICAL: Check if enemies are still active before enabling button
             // Exception: On defeat, always enable the button (player has lost, let them continue)
             bool canProceed = true;
-            if (isVictory && EnemySystem.Instance != null && EnemySystem.Instance.EnemyViews != null)
+            if (isShowingVictory && EnemySystem.Instance != null && EnemySystem.Instance.EnemyViews != null)
             {
                 int activeEnemies = EnemySystem.Instance.EnemyViews.Count;
                 if (activeEnemies > 0)
@@ -392,14 +460,13 @@ public class VictoryDefeatUI : Singleton<VictoryDefeatUI>
                     canProceed = false;
                 }
             }
-            // On defeat (!isVictory), always enable the button regardless of enemies
             
             continueButton.interactable = canProceed;
-            yield return continueButtonCanvasGroup.DOFade(1f, buttonFadeInDuration).SetEase(buttonFadeInEase).WaitForCompletion();
+            if (continueButtonCanvasGroup != null)
+            {
+                yield return continueButtonCanvasGroup.DOFade(1f, buttonFadeInDuration).SetEase(buttonFadeInEase).WaitForCompletion();
+            }
         }
-        
-        // Animation complete - button is now clickable (if no enemies are active)
-        isAnimating = false;
     }
 
     /// <summary>
@@ -653,7 +720,7 @@ public class VictoryDefeatUI : Singleton<VictoryDefeatUI>
     private void NotifyRelicDisplayUI()
     {
         // Find RelicDisplayUI in the scene and notify it
-        RelicDisplayUI relicDisplay = FindObjectOfType<RelicDisplayUI>();
+        RelicDisplayUI relicDisplay = Object.FindFirstObjectByType<RelicDisplayUI>();
         if (relicDisplay != null)
         {
             relicDisplay.OnRelicCollected();
@@ -671,7 +738,7 @@ public class VictoryDefeatUI : Singleton<VictoryDefeatUI>
     private void NotifySpecialCardPanelUI()
     {
         // Find SpecialCardPanelUI in the scene and notify it
-        SpecialCardPanelUI specialCardPanel = FindObjectOfType<SpecialCardPanelUI>();
+        SpecialCardPanelUI specialCardPanel = Object.FindFirstObjectByType<SpecialCardPanelUI>();
         if (specialCardPanel != null)
         {
             specialCardPanel.RefreshDisplay();

@@ -1,6 +1,6 @@
 # TICKET-005 — NameEntryUI (Victory Screen Popup)
 
-**Status:** ready-for-agent  
+**Status:** completed  
 **Blocks:** TICKET-006 (VictoryDefeatUI integration)  
 **Blocked by:** TICKET-004 (LeaderboardManager must exist to call Submit)
 
@@ -43,8 +43,7 @@ public class NameEntryUI : MonoBehaviour
 1. Set `panelRoot.SetActive(true)`.
 2. Clear the `nameInputField` text.
 3. Enforce max character limit: `nameInputField.characterLimit = 20`.
-4. Wire `submitButton.onClick` → `OnSubmit()`.
-5. Wire `skipButton.onClick` → `OnSkip()`.
+4. Register `submitButton.onClick` → `OnSubmit()` and `skipButton.onClick` → `OnSkip()` once during `Awake()` (or clear existing listeners before wiring in `Show()`).
 
 ### `OnSubmit()`
 1. Take `nameInputField.text.Trim()`. If empty → use `"Anonymous"`.
@@ -68,10 +67,10 @@ public class NameEntryUI : MonoBehaviour
 
 ## Done when
 
-- [ ] `NameEntryUI` compiles.
-- [ ] Panel hidden on scene load.
-- [ ] `Show()` makes panel visible, clears prior input.
-- [ ] Submit with non-empty name → `LeaderboardManager.Instance.SubmitEntry` called with trimmed name.
-- [ ] Submit with empty name → `SubmitEntry` called with `"Anonymous"`.
-- [ ] Skip → `SubmitEntry` called with `"Anonymous"`.
-- [ ] `onComplete` is called in both Submit and Skip paths.
+- [x] `NameEntryUI` compiles.
+- [x] Panel hidden on scene load.
+- [x] `Show()` makes panel visible, clears prior input.
+- [x] Submit with non-empty name → `LeaderboardManager.Instance.SubmitEntry` called with trimmed name.
+- [x] Submit with empty name → `SubmitEntry` called with `"Anonymous"`.
+- [x] Skip → `SubmitEntry` called with `"Anonymous"`.
+- [x] `onComplete` is called in both Submit and Skip paths.

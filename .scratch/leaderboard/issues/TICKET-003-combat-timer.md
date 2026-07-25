@@ -31,7 +31,7 @@ public class CombatTimer : MonoBehaviour
 }
 ```
 
-Attach this to a persistent GameObject in the **Combat scene** (same one that hosts `MatchSetupSystem` or similar).
+Attach this to a scene-scoped GameObject in the **Combat scene** (same one that hosts `MatchSetupSystem` or similar; host does not use `DontDestroyOnLoad`). `MatchSetupSystem` must explicitly invoke `CombatTimer.Instance.ResetTimer()` at match initialization before starting the timer.
 
 ### [MODIFY] `Assets/Scripts/SceneController/LevelTransitionData.cs`
 

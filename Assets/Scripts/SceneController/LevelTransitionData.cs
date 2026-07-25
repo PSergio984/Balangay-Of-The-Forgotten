@@ -50,13 +50,21 @@ public class LevelTransitionData : ScriptableObject
     [Tooltip("The map data for the currently selected level - set automatically when player selects a level")]
     public MapData SelectedMapData;
 
+    /// <summary>
+    /// Clear time in seconds recorded from CombatTimer when a map is cleared.
+    /// Written by VictoryDefeatUI.RecordCombatClearTime before any scene transition.
+    /// </summary>
+    [Header("Runtime Data (Set by VictoryDefeatUI)")]
+    [Tooltip("Elapsed combat clear time in seconds — set when victory condition is reached")]
+    public float ClearTimeSeconds;
 
     /// <summary>
-    /// Clears the selected map data (call after reading or when returning to main menu)
+    /// Clears the selected map data and runtime clear-time (call after reading or when returning to main menu)
     /// </summary>
     public void Clear()
     {
         SelectedMapData = null;
+        ClearTimeSeconds = 0f;
     }
 
 

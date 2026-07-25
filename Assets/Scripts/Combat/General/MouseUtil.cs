@@ -64,7 +64,7 @@ public static class MouseUtil
             if (_camera == null)
             {
                 // Fallback: Find any camera in the active scene
-                Camera[] allCameras = Object.FindObjectsOfType<Camera>();
+                Camera[] allCameras = Object.FindObjectsByType<Camera>(FindObjectsSortMode.None);
                 if (allCameras != null && allCameras.Length > 0)
                 {
                     _camera = allCameras[0];

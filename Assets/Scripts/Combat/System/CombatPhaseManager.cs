@@ -35,7 +35,6 @@ public class CombatPhaseManager : MonoBehaviour
     [Tooltip("If true, shows Battle Start banner on scene start")]
     [SerializeField] private bool showBattleStartOnLoad = true;
 
-    private bool battleStartShown = false;
     private int turnCount = 0;
     
     // Static instance for easy access
@@ -45,7 +44,7 @@ public class CombatPhaseManager : MonoBehaviour
     // WORKAROUND: Due to a bug in ActionSystem.UnsubscribeReaction() where it creates a new wrapper
     // that doesn't match the original, we cannot reliably unsubscribe. Instead, we manually check
     // if this component is enabled before processing reactions to prevent stale reactions.
-    private bool isActiveAndEnabled = false;
+    private bool isComponentActive = false;
 
     private void Awake()
     {
@@ -54,22 +53,22 @@ public class CombatPhaseManager : MonoBehaviour
     
     private void OnEnable()
     {
-        isActiveAndEnabled = true;
+        isComponentActive = true;
         
         // Subscribe to enemy turn actions to show Enemy Turn banner
         // NOTE: These subscriptions cannot be properly unsubscribed due to ActionSystem bug
-        // We use the isActiveAndEnabled flag to prevent stale reactions
+        // We use the isComponentActive flag to prevent stale reactions
         ActionSystem.SubscribeReaction<EnemyTurnGA>(OnEnemyTurnStart, ReactionTiming.PRE);
         ActionSystem.SubscribeReaction<EnemyTurnGA>(OnEnemyTurnEnd, ReactionTiming.POST);
     }
 
     private void OnDisable()
     {
-        isActiveAndEnabled = false;
+        isComponentActive = false;
         
         // NOTE: UnsubscribeReaction doesn't work due to ActionSystem bug (creates new wrapper closure)
         // Leaving these calls here for documentation, but they have no effect
-        // The isActiveAndEnabled flag prevents stale reactions from executing
+        // The isComponentActive flag prevents stale reactions from executing
         ActionSystem.UnsubscribeReaction<EnemyTurnGA>(OnEnemyTurnStart, ReactionTiming.PRE);
         ActionSystem.UnsubscribeReaction<EnemyTurnGA>(OnEnemyTurnEnd, ReactionTiming.POST);
     }
@@ -121,7 +120,6 @@ public class CombatPhaseManager : MonoBehaviour
         if (combatPhaseUI != null)
         {
             combatPhaseUI.ShowBattleStart();
-            battleStartShown = true;
             
             // Wait for Battle Start animation to complete before showing Player Turn
             yield return new WaitForSeconds(2.5f);
@@ -138,7 +136,7 @@ public class CombatPhaseManager : MonoBehaviour
     private void OnEnemyTurnStart(EnemyTurnGA enemyTurnGA)
     {
         // Guard against stale reactions after component is disabled
-        if (!isActiveAndEnabled || combatPhaseUI == null)
+        if (!isComponentActive || combatPhaseUI == null)
             return;
             
         combatPhaseUI.ShowEnemyTurn();
@@ -150,7 +148,7 @@ public class CombatPhaseManager : MonoBehaviour
     private void OnEnemyTurnEnd(EnemyTurnGA enemyTurnGA)
     {
         // Guard against stale reactions after component is disabled
-        if (!isActiveAndEnabled || combatPhaseUI == null)
+        if (!isComponentActive || combatPhaseUI == null)
             return;
             
         turnCount++;

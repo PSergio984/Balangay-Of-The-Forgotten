@@ -1,6 +1,6 @@
 # TICKET-007 — LeaderboardUI Panel + Row Prefab
 
-**Status:** ready-for-agent  
+**Status:** completed  
 **Blocks:** TICKET-008 (Access points / wiring buttons)  
 **Blocked by:** TICKET-004 (LeaderboardManager must exist to query data)
 
@@ -64,8 +64,9 @@ public class LeaderboardUI : MonoBehaviour
     [SerializeField] private Transform         rowContainer;   // parent for row instances
     [SerializeField] private LeaderboardEntryRowUI rowPrefab;
 
-    // --- Public API ---
-    public void Open()                    // called by Main Menu / Map Select buttons
+    // --- Startup Validation & Public API ---
+    // Awake(): Validates tabButtons and tabMapIds (both exist, length 5, no unassigned elements). Disables UI gracefully on error.
+    public void Open()                    // called by Main Menu / Map Select buttons (guards against invalid config, sets UI focus)
     public void Close()                   // called by close button
     private void ShowTab(int tabIndex)    // clears rows, repopulates from LeaderboardManager
 }
@@ -110,10 +111,10 @@ public class LeaderboardUI : MonoBehaviour
 
 ## Done when
 
-- [ ] `LeaderboardUI` and `LeaderboardEntryRowUI` compile.
-- [ ] Panel hidden on scene load.
-- [ ] `Open()` → panel visible, tab 0 selected, rows populated from `LeaderboardManager`.
-- [ ] Switching tabs → rows update correctly.
-- [ ] Overall tab: shows only players with all 4 maps; displays summed personal best.
-- [ ] `Close()` → panel hidden.
-- [ ] Time format: 94.3s displays as "1:34", 725.0s displays as "12:05".
+- [x] `LeaderboardUI` and `LeaderboardEntryRowUI` compile.
+- [x] Panel hidden on scene load.
+- [x] `Open()` → panel visible, tab 0 selected, rows populated from `LeaderboardManager`.
+- [x] Switching tabs → rows update correctly.
+- [x] Overall tab: shows only players with all 4 maps; displays summed personal best.
+- [x] `Close()` → panel hidden.
+- [x] Time format: 94.3s displays as "1:34", 725.0s displays as "12:05".

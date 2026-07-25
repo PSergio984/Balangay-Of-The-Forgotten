@@ -22,7 +22,7 @@ Implement:
 public interface ILeaderboardRepository
 {
     LeaderboardSaveData Load();
-    void Save(LeaderboardSaveData data);
+    bool Save(LeaderboardSaveData data);
 }
 
 public class LeaderboardRepository : ILeaderboardRepository
@@ -34,7 +34,10 @@ public class LeaderboardRepository : ILeaderboardRepository
     //   - Otherwise → return parsed LeaderboardSaveData
     // Save(data):
     //   - Serialise to JSON (JsonUtility.ToJson, prettyPrint: false)
-    //   - Write synchronously with File.WriteAllText
+    //   - Write atomically (to temp file then replace target)
+    //   - First save when target leaderboard.json does not exist: create it via File.Move of the temp file.
+    //   - Any temporary file created during serialization or write must be removed on failure (catch + cleanup in finally).
+    //   - Catch write/serialisation failures, log Debug.LogWarning, return false on failure and true on success
 }
 ```
 
@@ -45,7 +48,7 @@ public class LeaderboardRepository : ILeaderboardRepository
 - Use `UnityEngine.JsonUtility` for serialisation — no third-party JSON library.
 - Use `System.IO.File` for file I/O — no coroutines, no async.
 - Load must never throw — all exceptions caught, warning logged with `Debug.LogWarning`.
-- Save may throw if the disk is full; that is acceptable (log the exception).
+- Save must catch write/serialization exceptions, log `Debug.LogWarning`, and return a boolean result (`true` on success, `false` on failure).
 - The file path must be derived at runtime (`Application.persistentDataPath`) — not baked in as a constant.
 
 ---

@@ -51,6 +51,7 @@ public class GuardiansOathEffect : Effects
     /// Duration is managed by StatusEffectTickSystem
     /// </summary>
     [SerializeField] private int shieldDuration = 2;
+    public int ShieldDuration => shieldDuration;
 
     public override GameAction GetGameAction(List<CombatantView> targets, CombatantView caster)
     {

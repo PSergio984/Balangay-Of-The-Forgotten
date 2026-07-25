@@ -115,8 +115,7 @@ public class MatchSetupSystem : MonoBehaviour
    [SerializeField] private RewardData fallbackMainBossReward;
 
    [SerializeField] private Animator roleTurnAnimator;
-   
-   /// </remarks>
+    
     /// <summary>
     /// Sets up everything needed for combat when the battle scene starts
     /// </summary>
@@ -127,6 +126,13 @@ public class MatchSetupSystem : MonoBehaviour
     /// </remarks>
     private void Start()
     {
+        if (CombatTimer.Instance == null)
+        {
+            Debug.LogError("[MatchSetupSystem] CombatTimer.Instance missing in scene! Aborting setup.", this);
+            enabled = false;
+            return;
+        }
+
         // Try to find CharacterTransitionData if not assigned
         if (characterTransitionData == null)
         {
@@ -213,6 +219,15 @@ public class MatchSetupSystem : MonoBehaviour
             Debug.Log("[MatchSetupSystem] ActionSystem combat state reset for new encounter");
         }
 
+        if (CombatTimer.Instance == null)
+        {
+            Debug.LogError("[MatchSetupSystem] CombatTimer.Instance missing before timer reset! Aborting setup.", this);
+            enabled = false;
+            yield break;
+        }
+        CombatTimer.Instance.ResetTimer();
+        Debug.Log("[MatchSetupSystem] CombatTimer reset for new encounter.");
+
 
         // --- Setup variables at top for use throughout method ---
         MapData selectedMapData = null;
@@ -256,6 +271,7 @@ public class MatchSetupSystem : MonoBehaviour
             Debug.LogWarning("[MatchSetupSystem] heroDatas is null or empty. Cannot setup heroes, cards, or animator override.", this);
             yield break;
         }
+
 
         // STEP 1: Spawn all hero entities first (multi-hero support)
         // This ensures heroes exist before cards are set up
@@ -324,6 +340,12 @@ public class MatchSetupSystem : MonoBehaviour
         
         yield return new WaitForSeconds(totalBannerDuration);
         
+        if (CombatTimer.Instance != null)
+        {
+            CombatTimer.Instance.StartTimer();
+            Debug.Log("[MatchSetupSystem] CombatTimer started.");
+        }
+
         // Now draw cards after both banners have finished
         DrawCardsGA drawCardsGA = new(5);
         ActionSystem.Instance.Perform(drawCardsGA);

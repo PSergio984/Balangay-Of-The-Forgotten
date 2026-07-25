@@ -26,24 +26,21 @@ Wire the Victory flow in `VictoryDefeatUI` so that:
 [SerializeField] private NameEntryUI nameEntryUI;
 ```
 
-**In `ShowVictory()` (or wherever the victory banner coroutine completes and the Continue button would be enabled):**
-
-Replace the line that enables the Continue button with:
-
+**In victory trigger (`ShowVictory` / `ShowVictoryWithReward`):**
+Immediately stop and record the timer via `RecordCombatClearTime()` before banner animations or delays begin:
 ```csharp
-// 1. Stop and record the timer
-levelTransitionData.ClearTimeSeconds = CombatTimer.Instance.ElapsedSeconds;
-CombatTimer.Instance.StopTimer();
-
-// 2. Show name entry; only show Continue button in the callback
-nameEntryUI.Show(
-    mapId: levelTransitionData.SelectedMapData.MapId,
-    clearTimeSeconds: levelTransitionData.ClearTimeSeconds,
-    onComplete: () => EnableContinueButton()
-);
+if (CombatTimer.Instance != null && CombatTimer.Instance.IsRunning)
+{
+    CombatTimer.Instance.StopTimer();
+    if (levelTransitionData != null)
+    {
+        levelTransitionData.ClearTimeSeconds = CombatTimer.Instance.ElapsedSeconds;
+    }
+}
 ```
 
-Where `EnableContinueButton()` is the existing logic (or a new private method) that makes the Continue button interactable and visible.
+**In banner completion path (`AnimateBanner`):**
+If `nameEntryUI != null`, display `nameEntryUI.Show(...)` with `EnableContinueButtonRoutine()` as completion callback; otherwise log `Debug.LogWarning` and enable Continue button directly.
 
 ---
 

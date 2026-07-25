@@ -1,6 +1,6 @@
 # TICKET-001 — Data Models
 
-**Status:** ready-for-agent  
+**Status:** ready-for-human  
 **Blocks:** TICKET-002 (Repository), TICKET-004 (LeaderboardManager)  
 **Blocked by:** nothing — start here
 
@@ -50,5 +50,5 @@ public class LeaderboardSaveData
 
 ## Done when
 
-- [ ] Both files compile with zero errors.
-- [ ] `new LeaderboardSaveData()` produces an object with an empty `Entries` list (no null).
+- [x] Both files compile with zero errors.
+- [x] `new LeaderboardSaveData()` produces an object with an empty `Entries` list (no null).

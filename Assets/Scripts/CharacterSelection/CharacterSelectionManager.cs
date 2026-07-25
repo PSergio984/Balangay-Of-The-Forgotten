@@ -43,9 +43,11 @@ public class CharacterSelectionManager : MonoBehaviour
     
     [Header("Selection Settings")]
     [SerializeField] private int minSelections = 1;
+    public int MinSelections => minSelections;
     [SerializeField] private int maxSelections = 3;
     [Tooltip("Name of the combat scene to load after selection")]
     [SerializeField] private string combatSceneName = "Combat";
+    public string CombatSceneName => combatSceneName;
     
     [Header("UI Feedback")]
     [SerializeField] private Button confirmButton;

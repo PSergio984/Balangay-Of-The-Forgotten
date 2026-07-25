@@ -27,8 +27,16 @@ public class LeaderboardManager : Singleton<LeaderboardManager>
     protected override void Awake()
     {
         base.Awake();
-        _repository = new LeaderboardRepository();
-        _data = _repository.Load();
+        if (_repository == null)
+        {
+            Initialize(new LeaderboardRepository());
+        }
+    }
+
+    public void Initialize(ILeaderboardRepository repository)
+    {
+        _repository = repository ?? new LeaderboardRepository();
+        _data = _repository.Load() ?? new LeaderboardSaveData();
     }
 
     // --- Public API ---

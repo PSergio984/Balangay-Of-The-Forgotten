@@ -63,77 +63,77 @@ public class StatusEffectTickSystem : Singleton<StatusEffectTickSystem>
 			}
 			
 			// DEVOURED: tick duration and apply DoT damage (handled by DevouredSystem)
-			DevouredSystem devouredSystem = FindObjectOfType<DevouredSystem>();
+			DevouredSystem devouredSystem = Object.FindFirstObjectByType<DevouredSystem>();
 			if (devouredSystem != null)
 			{
 				DevouredSystem.TickDevoured(combatant);
 			}
 			
 			// DEFENSE_UP: tick duration (handled by DefenseUpSystem)
-			DefenseUpSystem defenseUpSystem = FindObjectOfType<DefenseUpSystem>();
+			DefenseUpSystem defenseUpSystem = Object.FindFirstObjectByType<DefenseUpSystem>();
 			if (defenseUpSystem != null)
 			{
 				defenseUpSystem.TickDefenseUp(combatant);
 			}
 			
 			// DEFENSE_DOWN: tick duration (handled by DefenseDownSystem)
-			DefenseDownSystem defenseDownSystem = FindObjectOfType<DefenseDownSystem>();
+			DefenseDownSystem defenseDownSystem = Object.FindFirstObjectByType<DefenseDownSystem>();
 			if (defenseDownSystem != null)
 			{
 				defenseDownSystem.TickDefenseDown(combatant);
 			}
 			
 			// DMG_UP: tick duration (handled by DamageUpSystem)
-			DamageUpSystem damageUpSystem = FindObjectOfType<DamageUpSystem>();
+			DamageUpSystem damageUpSystem = Object.FindFirstObjectByType<DamageUpSystem>();
 			if (damageUpSystem != null)
 			{
 				damageUpSystem.TickDamageUp(combatant);
 			}
 			
 			// ATTACK_UP: tick duration (handled by AttackUpSystem)
-			AttackUpSystem attackUpSystem = FindObjectOfType<AttackUpSystem>();
+			AttackUpSystem attackUpSystem = Object.FindFirstObjectByType<AttackUpSystem>();
 			if (attackUpSystem != null)
 			{
 				attackUpSystem.TickAttackUp(combatant);
 			}
 			
 			// ATTACK_DOWN: tick duration (handled by AttackDownSystem)
-			AttackDownSystem attackDownSystem = FindObjectOfType<AttackDownSystem>();
+			AttackDownSystem attackDownSystem = Object.FindFirstObjectByType<AttackDownSystem>();
 			if (attackDownSystem != null)
 			{
 				attackDownSystem.TickAttackDown(combatant);
 			}
 			
 			// CRIT_UP: tick duration (handled by CritUpSystem)
-			CritUpSystem critUpSystem = FindObjectOfType<CritUpSystem>();
+			CritUpSystem critUpSystem = Object.FindFirstObjectByType<CritUpSystem>();
 			if (critUpSystem != null)
 			{
 				critUpSystem.TickCritUp(combatant);
 			}
 			
 			// CRIT_DOWN: tick duration (handled by CritDownSystem)
-			CritDownSystem critDownSystem = FindObjectOfType<CritDownSystem>();
+			CritDownSystem critDownSystem = Object.FindFirstObjectByType<CritDownSystem>();
 			if (critDownSystem != null)
 			{
 				critDownSystem.TickCritDown(combatant);
 			}
 			
 			// FOCUSED: tick duration (handled by FocusedSystem)
-			FocusedSystem focusedSystem = FindObjectOfType<FocusedSystem>();
+			FocusedSystem focusedSystem = Object.FindFirstObjectByType<FocusedSystem>();
 			if (focusedSystem != null)
 			{
 				focusedSystem.TickFocused(combatant);
 			}
 			
 			// DEFENSE_IGNORE: tick duration (handled by DefenseIgnoreSystem)
-			DefenseIgnoreSystem defenseIgnoreSystem = FindObjectOfType<DefenseIgnoreSystem>();
+			DefenseIgnoreSystem defenseIgnoreSystem = Object.FindFirstObjectByType<DefenseIgnoreSystem>();
 			if (defenseIgnoreSystem != null)
 			{
 				DefenseIgnoreSystem.TickDefenseIgnore(combatant);
 			}
 			
 			// RESTING/CHARGING: tick duration (handled by RestingStatusEffectSystem)
-			RestingStatusEffectSystem restingSystem = FindObjectOfType<RestingStatusEffectSystem>();
+			RestingStatusEffectSystem restingSystem = Object.FindFirstObjectByType<RestingStatusEffectSystem>();
 			if (restingSystem != null)
 			{
 				RestingStatusEffectSystem.TickResting(combatant);

@@ -1,4 +1,4 @@
-﻿# Leaderboard Feature — SPEC.md
+# Leaderboard Feature — SPEC.md
 
 **Status:** Ready for implementation  
 **Source:** Derived from /grill-me session on 2026-07-25  
@@ -73,8 +73,9 @@ Designed with a clean persistence seam so the local JSON store can be swapped fo
 
 ### R8 — Modularity boundary
 - **R8.1** All leaderboard code lives under `Assets/Scripts/Leaderboard/`.
-- **R8.2** The rest of the game (VictoryDefeatUI, MapSelectManager, MainMenu) depends only on `LeaderboardManager` (a singleton). No other leaderboard type is referenced from outside the folder.
-- **R8.3** `LeaderboardRepository` is injected into `LeaderboardManager` at setup time, not hard-coded, so it can be replaced (e.g. by a remote repository) without touching `LeaderboardManager`.
+- **R8.2** The rest of the game depends on `LeaderboardManager` for leaderboard queries/submissions. The Main Menu and Map Selection scenes both call `LeaderboardUI.Open()` to show the overlay panel. `VictoryDefeatUI` has a direct serialized dependency on `NameEntryUI` as a component for the name-entry popup flow. `CombatTimer` and `LevelTransitionData` belong to combat/scene infrastructure.
+- **R8.3** `LeaderboardManager` creates a `LeaderboardRepository` by default during initialization while exposing an `Initialize(ILeaderboardRepository)` seam to allow injection for testing or alternate storage without touching `LeaderboardManager`.
+
 
 ---
 
@@ -130,4 +131,6 @@ Modified files:
 
 ## Open questions
 
-None - all design decisions resolved during /grill-me session.
+- Tie-breaking for equal clear times: If two entries have identical clear times, how should they be ranked? (Currently unresolved — first-submitted-first-ranked is a candidate default.)
+- Case sensitivity of player names during Overall aggregation: Should `"PlayerOne"` and `"playerone"` be treated as the same player? (Currently unresolved — case-insensitive ordinal comparison is a candidate default.)
+- Repeated calls to `Initialize(ILeaderboardRepository)`: What happens if `Initialize` is called when the system is already initialized? Should it reset, replace the store, or no-op? (Currently unresolved — no-op is a candidate default.)

@@ -34,7 +34,7 @@ public abstract class Singleton<T> : MonoBehaviour where T : MonoBehaviour
     }
     
     // Nested abstract class for persistent singletons that survive scene changes
-    public abstract class PersistentSingleton<T> : Singleton<T> where T : MonoBehaviour
+    public abstract class PersistentSingleton<TPersistent> : Singleton<TPersistent> where TPersistent : MonoBehaviour
     {
         // Override Awake to add persistence across scene loads
         protected override void Awake()

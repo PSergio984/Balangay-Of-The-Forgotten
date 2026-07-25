@@ -6,6 +6,7 @@ using UnityEngine.EventSystems;
 using TMPro;
 
 
+
 /* MAP SELECT MANAGER 2 DOCUMENTATION
  * 
  * Purpose: Simplified map selection manager - works with pre-set buttons (no dynamic creation)
@@ -71,6 +72,13 @@ public class MapSelectManager2 : MonoBehaviour
     /// </summary>
     [Tooltip("Assign GameProgressData to track map completion and unlock Kaluwalhatian after 3 maps")]
     [SerializeField] private GameProgressData _gameProgress;
+
+    [Header("Leaderboard")]
+    [Tooltip("Leaderboard UI overlay component")]
+    [SerializeField] private LeaderboardUI leaderboardUI;
+
+    [Tooltip("Button to open leaderboard overlay panel")]
+    [SerializeField] private Button leaderboardButton;
 
     /// <summary>
     /// Reference to event system handler for selection management
@@ -171,6 +179,11 @@ public class MapSelectManager2 : MonoBehaviour
     private void Start()
     {
         _hasStarted = true; // Mark that Start() has been called
+
+        if (leaderboardButton != null)
+        {
+            leaderboardButton.onClick.AddListener(OpenLeaderboard);
+        }
         
         // Check for post-combat dialogue FIRST (before intro dialogue)
         // This handles the case where OnEnable ran before Start() and couldn't trigger
@@ -607,8 +620,80 @@ public class MapSelectManager2 : MonoBehaviour
             
             current.selectable.navigation = nav;
         }
-        
-        Debug.Log($"[MapSelectManager2] Navigation configured for {unlockedButtons.Count} unlocked buttons (supports up/down/left/right)", this);
+
+        // Include leaderboardButton in the navigation graph
+        if (leaderboardButton != null && unlockedButtons.Count > 0)
+        {
+            Selectable lbSelectable = leaderboardButton;
+            RectTransform lbRect = leaderboardButton.GetComponent<RectTransform>();
+            Vector2 lbPos = lbRect != null ? lbRect.position : Vector2.zero;
+
+            // Find the closest unlocked map button to the leaderboard button
+            Selectable closestToLB = null;
+            float closestDist = float.MaxValue;
+
+            for (int i = 0; i < unlockedButtons.Count; i++)
+            {
+                var other = unlockedButtons[i];
+                float dist = Vector2.Distance(lbPos, other.position);
+                if (dist < closestDist)
+                {
+                    closestDist = dist;
+                    closestToLB = other.selectable;
+                }
+            }
+
+            if (closestToLB != null)
+            {
+                Navigation lbNav = new Navigation { mode = Navigation.Mode.Explicit };
+                Navigation closestNav = closestToLB.navigation;
+
+                // Find position of the actual nearest button (not unlockedButtons[0])
+                Vector2 closestPos = Vector2.zero;
+                for (int i = 0; i < unlockedButtons.Count; i++)
+                {
+                    if (unlockedButtons[i].selectable == closestToLB)
+                    {
+                        closestPos = unlockedButtons[i].position;
+                        break;
+                    }
+                }
+
+                Vector2 dir = lbPos - closestPos;
+
+                if (Mathf.Abs(dir.y) > Mathf.Abs(dir.x))
+                {
+                    if (dir.y > 0) // LB is above
+                    {
+                        lbNav.selectOnDown = closestToLB;
+                        closestNav.selectOnUp = lbSelectable;
+                    }
+                    else // LB is below
+                    {
+                        lbNav.selectOnUp = closestToLB;
+                        closestNav.selectOnDown = lbSelectable;
+                    }
+                }
+                else
+                {
+                    if (dir.x > 0) // LB is to the right
+                    {
+                        lbNav.selectOnLeft = closestToLB;
+                        closestNav.selectOnRight = lbSelectable;
+                    }
+                    else // LB is to the left
+                    {
+                        lbNav.selectOnRight = closestToLB;
+                        closestNav.selectOnLeft = lbSelectable;
+                    }
+                }
+
+                leaderboardButton.navigation = lbNav;
+                closestToLB.navigation = closestNav;
+            }
+        }
+
+        Debug.Log($"[MapSelectManager2] Navigation configured for {unlockedButtons.Count} unlocked buttons and leaderboard button (supports up/down/left/right)", this);
     }
 
     #endregion
@@ -681,7 +766,7 @@ public class MapSelectManager2 : MonoBehaviour
         }
         
         // Find DialogueTrigger with IntroScene type in the scene
-        DialogueTrigger[] dialogueTriggers = FindObjectsOfType<DialogueTrigger>();
+        DialogueTrigger[] dialogueTriggers = Object.FindObjectsByType<DialogueTrigger>(FindObjectsSortMode.None);
         
         foreach (var dialogueTrigger in dialogueTriggers)
         {
@@ -753,7 +838,7 @@ public class MapSelectManager2 : MonoBehaviour
         Debug.Log($"[MapSelectManager2] Determining dialogue type - PostFinalBoss: {shouldTriggerPostFinalBoss}, PostVictory: {shouldTriggerPostVictory}, Completed maps: {_gameProgress.CompletedMapCount}, IsGameCompleted: {_gameProgress.IsGameCompleted}");
         
         // Find DialogueTriggers in the scene
-        DialogueTrigger[] dialogueTriggers = FindObjectsOfType<DialogueTrigger>(true); // Include inactive objects
+        DialogueTrigger[] dialogueTriggers = Object.FindObjectsByType<DialogueTrigger>(FindObjectsInactive.Include, FindObjectsSortMode.None); // Include inactive objects
         Debug.Log($"[MapSelectManager2] Found {dialogueTriggers.Length} DialogueTrigger(s) in scene (including inactive)");
         
         if (shouldTriggerPostFinalBoss)
@@ -829,11 +914,26 @@ public class MapSelectManager2 : MonoBehaviour
                     }
                 }
             }
-            
+
             if (!foundPostVictory)
             {
-                Debug.LogWarning("[MapSelectManager2] No DialogueTrigger with PostVictory dialogue found. Skipping dialogue.");
+                Debug.LogError("[MapSelectManager2] No DialogueTrigger with PostVictory dialogue found! Check that a DialogueTrigger in the MapSelection scene has dialogueType set to PostVictory (value 2).");
             }
+        }
+    }
+
+    /// <summary>
+    /// Opens the Leaderboard overlay panel.
+    /// </summary>
+    public void OpenLeaderboard()
+    {
+        if (leaderboardUI != null)
+        {
+            leaderboardUI.Open();
+        }
+        else
+        {
+            Debug.LogWarning("[MapSelectManager2] leaderboardUI is null! Cannot open leaderboard panel.", this);
         }
     }
 

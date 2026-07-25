@@ -48,6 +48,7 @@ public class MainMenuVideoController : MonoBehaviour
     [Header("Transition Settings")]
     [SerializeField] private SoundData MenuMusic;
     [SerializeField] private float MusicFadeTime = 2f;
+    public float MusicFadeTimeDuration => MusicFadeTime;
 
 
 
@@ -56,6 +57,7 @@ public class MainMenuVideoController : MonoBehaviour
 
     // Private variables
     private bool videoStarted = false;
+    public bool VideoStarted => videoStarted;
     private bool videoFinished = false;
     private bool canSkip = false;
     
