@@ -442,7 +442,7 @@ public class EnemySystem : Singleton<EnemySystem>
     private void TriggerPostVictoryDialogue()
     {
         // Find all DialogueTriggers in the scene
-        DialogueTrigger[] dialogueTriggers = Object.FindObjectsByType<DialogueTrigger>(FindObjectsSortMode.None);
+        DialogueTrigger[] dialogueTriggers = UnityEngine.Object.FindObjectsByType<DialogueTrigger>(FindObjectsSortMode.None);
         
         foreach (var dialogueTrigger in dialogueTriggers)
         {
@@ -467,7 +467,7 @@ public class EnemySystem : Singleton<EnemySystem>
     private void TriggerPostFinalBossDialogue()
     {
         // Find all DialogueTriggers in the scene
-        DialogueTrigger[] dialogueTriggers = Object.FindObjectsByType<DialogueTrigger>(FindObjectsSortMode.None);
+        DialogueTrigger[] dialogueTriggers = UnityEngine.Object.FindObjectsByType<DialogueTrigger>(FindObjectsSortMode.None);
         
         foreach (var dialogueTrigger in dialogueTriggers)
         {

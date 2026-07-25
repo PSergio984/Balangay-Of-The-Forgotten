@@ -16,7 +16,7 @@ Build the singleton manager that owns all leaderboard business logic: submitting
 
 ### `Assets/Scripts/Leaderboard/LeaderboardManager.cs`
 
-```
+```csharp
 public class LeaderboardManager : Singleton<LeaderboardManager>
 {
     // Injected at Awake() — creates a new LeaderboardRepository() by default

@@ -18,7 +18,7 @@ Build the leaderboard overlay panel with 5 tabs (4 maps + Overall) and a scrolla
 
 Single-row prefab controller. Displays rank, name, and formatted clear time.
 
-```
+```csharp
 public class LeaderboardEntryRowUI : MonoBehaviour
 {
     [SerializeField] private TMP_Text rankText;      // "#1", "#2", ...
@@ -48,7 +48,7 @@ static string FormatTime(float seconds)
 
 Overlay panel controller. Manages tabs, clears and repopulates rows on tab switch.
 
-```
+```csharp
 public class LeaderboardUI : MonoBehaviour
 {
     [Header("Panel")]

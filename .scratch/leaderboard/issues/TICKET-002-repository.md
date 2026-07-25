@@ -18,7 +18,7 @@ Build the `ILeaderboardRepository` interface and its JSON-file implementation. T
 
 Implement:
 
-```
+```csharp
 public interface ILeaderboardRepository
 {
     LeaderboardSaveData Load();
@@ -33,11 +33,11 @@ public class LeaderboardRepository : ILeaderboardRepository
     //   - If file is corrupt/unparseable → log warning, return new LeaderboardSaveData()
     //   - Otherwise → return parsed LeaderboardSaveData
     // Save(data):
-    //   - Serialise to JSON (JsonUtility.ToJson, prettyPrint: false)
+    //   - Serialize to JSON (JsonUtility.ToJson, prettyPrint: false)
     //   - Write atomically (to temp file then replace target)
     //   - First save when target leaderboard.json does not exist: create it via File.Move of the temp file.
     //   - Any temporary file created during serialization or write must be removed on failure (catch + cleanup in finally).
-    //   - Catch write/serialisation failures, log Debug.LogWarning, return false on failure and true on success
+    //   - Catch write/serialization failures, log Debug.LogWarning, return false on failure and true on success
 }
 ```
 

@@ -129,8 +129,8 @@ Modified files:
 
 ---
 
-## Open questions
+## Open questions (Resolved)
 
-- Tie-breaking for equal clear times: If two entries have identical clear times, how should they be ranked? (Currently unresolved — first-submitted-first-ranked is a candidate default.)
-- Case sensitivity of player names during Overall aggregation: Should `"PlayerOne"` and `"playerone"` be treated as the same player? (Currently unresolved — case-insensitive ordinal comparison is a candidate default.)
-- Repeated calls to `Initialize(ILeaderboardRepository)`: What happens if `Initialize` is called when the system is already initialized? Should it reset, replace the store, or no-op? (Currently unresolved — no-op is a candidate default.)
+- **Tie-breaking for equal clear times**: Entries with identical clear times are ranked in the order they were submitted (first-submitted-first-ranked).
+- **Case sensitivity of player names during Overall aggregation**: Player names are compared case-sensitively. `"PlayerOne"` and `"playerone"` are treated as different players.
+- **Repeated calls to `Initialize(ILeaderboardRepository)`**: Calling `Initialize` when already initialized will replace the repository and reload data from the new source.

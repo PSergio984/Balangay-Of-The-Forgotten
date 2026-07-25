@@ -287,6 +287,12 @@ public class VictoryDefeatUI : Singleton<VictoryDefeatUI>
         isFirstReward = true;
         rewardCollectedCallback = null;
         
+        // Stop combat timer before showing defeat UI (matching victory behavior)
+        if (CombatTimer.Instance != null)
+        {
+            CombatTimer.Instance.StopTimer();
+        }
+        
         // Reset continue button state in case it was disabled
         if (continueButton != null)
         {

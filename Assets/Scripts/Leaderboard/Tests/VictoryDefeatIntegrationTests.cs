@@ -152,10 +152,4 @@ public class VictoryDefeatIntegrationTests
         Assert.IsTrue(callbackExecuted);
         Assert.IsTrue(continueButton.interactable);
     }
-
-    private T GetPrivateField<T>(object target, string fieldName)
-    {
-        var field = target.GetType().GetField(fieldName, System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
-        return field != null ? (T)field.GetValue(target) : default;
-    }
 }

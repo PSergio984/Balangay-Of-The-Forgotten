@@ -16,7 +16,7 @@ Build the name-entry popup that appears on the Victory screen. It is a self-cont
 
 ### `Assets/Scripts/Leaderboard/NameEntryUI.cs`
 
-```
+```csharp
 public class NameEntryUI : MonoBehaviour
 {
     [SerializeField] private GameObject        panelRoot;      // root panel to show/hide
