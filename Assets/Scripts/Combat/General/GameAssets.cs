@@ -10,7 +10,7 @@ public class GameAssets : MonoBehaviour
             if (_i == null)
             {
                 // Try to find an existing instance in the scene
-                _i = FindObjectOfType<GameAssets>();
+                _i = Object.FindFirstObjectByType<GameAssets>();
                 if (_i == null)
                 {
                     // Try to load from Resources (do not instantiate here, just log error)

@@ -98,7 +98,7 @@ public class DefenseIgnoreSystem : MonoBehaviour
                             try
                             {
                                 // Check if this wrapper belongs to this instance
-                                if (wrapper.Target == this)
+                                if (ReferenceEquals(wrapper.Target, this))
                                 {
                                     wrappersToRemove.Add(wrapper);
                                 }

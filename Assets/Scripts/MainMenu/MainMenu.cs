@@ -65,10 +65,41 @@ public class MainMenu : MonoBehaviour
 
     [SerializeField] private SoundData mapSelectionMusic;
     [SerializeField] private float MusicFadeTime = 2f;
+    public float MusicFadeDuration => MusicFadeTime;
     
     [Header("Character Data")]
     [Tooltip("Reference to CharacterTransitionData - will be cleared when starting a new game session")]
     [SerializeField] private CharacterTransitionData characterTransitionData;
+
+    [Header("Leaderboard")]
+    [Tooltip("Leaderboard overlay UI component")]
+    [SerializeField] private LeaderboardUI leaderboardUI;
+
+    [Tooltip("Button to open leaderboard overlay panel")]
+    [SerializeField] private Button leaderboardButton;
+
+    private void Start()
+    {
+        if (leaderboardButton != null)
+        {
+            leaderboardButton.onClick.AddListener(OpenLeaderboard);
+        }
+    }
+
+    /// <summary>
+    /// Opens the Leaderboard overlay panel.
+    /// </summary>
+    public void OpenLeaderboard()
+    {
+        if (leaderboardUI != null)
+        {
+            leaderboardUI.Open();
+        }
+        else
+        {
+            Debug.LogWarning("[MainMenu] leaderboardUI is null! Cannot open leaderboard panel.", this);
+        }
+    }
 
 
     /// <summary>

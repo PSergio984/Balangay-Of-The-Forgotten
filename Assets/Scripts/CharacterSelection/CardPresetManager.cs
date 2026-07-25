@@ -27,6 +27,7 @@ public class CardPresetManager : MonoBehaviour
     
     [Header("Settings")]
     [SerializeField] private bool autoWireCards = true;
+    public bool AutoWireCards => autoWireCards;
     [Tooltip("If true, clicking a card opens preset selection. If false, only manual ShowPresetSelection calls work.")]
     [SerializeField] private bool enableCardClickToOpenPresets = true;
     

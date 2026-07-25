@@ -47,6 +47,7 @@ public class SacrificeHpEffect : Effects
     /// (e.g., shield allies for the amount sacrificed)
     /// </summary>
     [SerializeField] private bool usesacrificeAmountInEffect = false;
+    public bool UseSacrificeAmountInEffect => usesacrificeAmountInEffect;
     
     /// <summary>
     /// Minimum HP the caster must have to perform sacrifice (prevents death)

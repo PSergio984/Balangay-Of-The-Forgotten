@@ -6,7 +6,6 @@ using DG.Tweening;
 using UnityEngine.InputSystem;
 using System.Collections;
 using AudioSystem;
-using AudioSystem;
 
 /* MENU EVENT SYSTEM HANDLER
  * 
