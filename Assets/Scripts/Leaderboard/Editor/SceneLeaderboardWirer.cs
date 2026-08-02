@@ -126,6 +126,21 @@ public static class SceneLeaderboardWirer
             EditorUtility.SetDirty(lbButton);
         }
 
+        // 6. Register LeaderboardButton with MenuEventSystemHandler for hover scale animations
+        if (lbButton != null)
+        {
+            MenuEventSystemHandler menuHandler = Object.FindFirstObjectByType<MenuEventSystemHandler>();
+            if (menuHandler != null)
+            {
+                if (!menuHandler.Selectables.Contains(lbButton))
+                {
+                    menuHandler.Selectables.Add(lbButton);
+                    EditorUtility.SetDirty(menuHandler);
+                    Debug.Log("[SceneLeaderboardWirer] Registered LeaderboardButton with MenuEventSystemHandler.");
+                }
+            }
+        }
+
         EditorSceneManager.MarkSceneDirty(scene);
         EditorSceneManager.SaveScene(scene);
         Debug.Log("[SceneLeaderboardWirer] MainMenu scene saved successfully.");

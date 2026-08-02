@@ -349,15 +349,22 @@ public static class LeaderboardPrefabBuilder
         LayoutElement titleL = titleObj.AddComponent<LayoutElement>();
         titleL.flexibleWidth = 1;
 
-        // Close Button
+        // Close Button (Direct child of panelObj, top-right anchored square outside layout groups)
         GameObject closeObj = new GameObject("CloseButton", typeof(RectTransform));
-        closeObj.transform.SetParent(headerObj.transform, false);
+        closeObj.transform.SetParent(panelObj.transform, false);
+        RectTransform closeRect = closeObj.GetComponent<RectTransform>();
+        closeRect.anchorMin = new Vector2(1f, 1f);
+        closeRect.anchorMax = new Vector2(1f, 1f);
+        closeRect.pivot = new Vector2(1f, 1f);
+        closeRect.anchoredPosition = new Vector2(-15f, -15f);
+        closeRect.sizeDelta = new Vector2(32f, 32f);
+
+        LayoutElement closeLayout = closeObj.AddComponent<LayoutElement>();
+        closeLayout.ignoreLayout = true;
+
         Image closeBg = closeObj.AddComponent<Image>();
-        closeBg.color = new Color(0.7f, 0.2f, 0.2f, 1f);
+        closeBg.color = new Color(0.75f, 0.15f, 0.15f, 1f);
         Button closeBtn = closeObj.AddComponent<Button>();
-        LayoutElement closeL = closeObj.AddComponent<LayoutElement>();
-        closeL.preferredWidth = 40;
-        closeL.preferredHeight = 40;
 
         GameObject closeTextObj = new GameObject("Text", typeof(RectTransform));
         closeTextObj.transform.SetParent(closeObj.transform, false);
@@ -395,13 +402,22 @@ public static class LeaderboardPrefabBuilder
             "OVERALL"
         };
 
+        Sprite tabBtnSprite = AssetDatabase.LoadAssetAtPath<Sprite>("Assets/Art/UI/Character Selection/CurrentBuildBg.png");
         Button[] tabButtons = new Button[5];
         for (int i = 0; i < 5; i++)
         {
             GameObject tabBtnObj = new GameObject($"TabButton_{i}", typeof(RectTransform));
             tabBtnObj.transform.SetParent(tabBarObj.transform, false);
             Image tabBg = tabBtnObj.AddComponent<Image>();
-            tabBg.color = new Color(0.2f, 0.25f, 0.3f, 1f);
+            if (tabBtnSprite != null)
+            {
+                tabBg.sprite = tabBtnSprite;
+                tabBg.color = Color.white;
+            }
+            else
+            {
+                tabBg.color = new Color(0.2f, 0.25f, 0.3f, 1f);
+            }
             Button tabBtn = tabBtnObj.AddComponent<Button>();
             tabButtons[i] = tabBtn;
 
