@@ -481,13 +481,27 @@ public class VictoryDefeatUI : Singleton<VictoryDefeatUI>
     /// </summary>
     private void OnContinueButtonClicked()
     {
+        // Guard 1: If RewardChestUI is currently active, ignore VictoryDefeatUI continue clicks
+        if (rewardChestUI != null && rewardChestUI.IsShowing)
+        {
+            Debug.Log("[VictoryDefeatUI] Ignoring continue click because RewardChestUI is currently active.");
+            return;
+        }
+
+        // Guard 2: If the Victory/Defeat banner panel is hidden, ignore continue clicks
+        if (bannerPanel != null && !bannerPanel.gameObject.activeSelf)
+        {
+            Debug.Log("[VictoryDefeatUI] Ignoring continue click because banner panel is hidden.");
+            return;
+        }
+
         if (continueButton != null)
         {
             continueButton.interactable = false; // Prevent multiple clicks
         }
         
-        // CRITICAL SAFETY CHECK: Verify no enemies are active before proceeding
-        if (EnemySystem.Instance != null && EnemySystem.Instance.EnemyViews != null)
+        // CRITICAL SAFETY CHECK: Verify no enemies are active before proceeding (only on Victory)
+        if (isShowingVictory && EnemySystem.Instance != null && EnemySystem.Instance.EnemyViews != null)
         {
             int activeEnemies = EnemySystem.Instance.EnemyViews.Count;
             if (activeEnemies > 0)
@@ -521,7 +535,7 @@ public class VictoryDefeatUI : Singleton<VictoryDefeatUI>
                 int activeEnemiesOnBoard = (EnemySystem.Instance.EnemyViews != null) ? EnemySystem.Instance.EnemyViews.Count : 0;
                 hasEnemiesRemaining = hasEnemiesInQueue || activeEnemiesOnBoard > 0;
                 
-                if (hasEnemiesRemaining)
+                if (isShowingVictory && hasEnemiesRemaining)
                 {
                     Debug.LogWarning($"[VictoryDefeatUI] CRITICAL: Attempted final victory transition but enemies still exist! Queue: {hasEnemiesInQueue}, Active: {activeEnemiesOnBoard}. Aborting transition.");
                     if (continueButton != null)
@@ -556,11 +570,26 @@ public class VictoryDefeatUI : Singleton<VictoryDefeatUI>
         }
         else
         {
-            // Edge case: reward data exists but no rewardChestUI (shouldn't happen)
+            // Edge case: reward data exists but no rewardChestUI (or reward object missing)
             Debug.LogWarning("[VictoryDefeatUI] Continue clicked but reward state is inconsistent. Reward data exists but no rewardChestUI.", this);
-            // Don't transition - just clear state
-            pendingRewardData = null;
+            
+            System.Action callback = rewardCollectedCallback;
             rewardCollectedCallback = null;
+            pendingRewardData = null;
+            hasMoreEnemies = false;
+            isFirstReward = true;
+            isShowingVictory = false;
+            HideBanner();
+            
+            if (callback != null)
+            {
+                Debug.Log("[VictoryDefeatUI] Invoking stored callback to ensure next enemy encounter spawns.");
+                callback.Invoke();
+            }
+            else
+            {
+                TransitionToMapSelection();
+            }
         }
     }
 
@@ -571,14 +600,13 @@ public class VictoryDefeatUI : Singleton<VictoryDefeatUI>
     {
         Debug.Log($"[VictoryDefeatUI] OnRewardChestComplete called. PendingReward: {(pendingRewardData != null ? pendingRewardData.name : "NULL")}, IsFirstReward: {isFirstReward}");
         
-        // CRITICAL SAFETY CHECK: Verify no enemies are active before proceeding
+        // Safety check: Log if enemies are still present, but allow progression since enemy was defeated
         if (EnemySystem.Instance != null && EnemySystem.Instance.EnemyViews != null)
         {
             int activeEnemies = EnemySystem.Instance.EnemyViews.Count;
             if (activeEnemies > 0)
             {
-                Debug.LogWarning($"[VictoryDefeatUI] CRITICAL: Cannot proceed after reward collection! {activeEnemies} enemy(ies) still active on board.");
-                return;
+                Debug.LogWarning($"[VictoryDefeatUI] Notice: {activeEnemies} enemy view(s) still in list during reward collection completion.");
             }
         }
         
@@ -830,8 +858,8 @@ public class VictoryDefeatUI : Singleton<VictoryDefeatUI>
     /// </summary>
     private void TransitionToMapSelection()
     {
-        // CRITICAL SAFETY CHECK: Verify no enemies are active before transitioning
-        if (EnemySystem.Instance != null && EnemySystem.Instance.EnemyViews != null)
+        // CRITICAL SAFETY CHECK: Verify no enemies are active before transitioning (only on victory)
+        if (isShowingVictory && EnemySystem.Instance != null && EnemySystem.Instance.EnemyViews != null)
         {
             int activeEnemies = EnemySystem.Instance.EnemyViews.Count;
             if (activeEnemies > 0)

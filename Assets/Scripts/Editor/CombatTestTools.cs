@@ -11,6 +11,28 @@ using System.Collections.Generic;
 /// </remarks>
 public class CombatTestTools
 {
+    [MenuItem("Tools/Combat Test/Clear All Save Data", false, 0)]
+    public static void ClearAllSaveData()
+    {
+        // 1. Clear Game Progress Data (PlayerPrefs)
+        PlayerPrefs.DeleteAll();
+        PlayerPrefs.Save();
+        Debug.Log("[CombatTestTools] Cleared all PlayerPrefs data.");
+
+        // 2. Clear Leaderboard Data (JSON file)
+        string leaderboardPath = System.IO.Path.Combine(Application.persistentDataPath, "leaderboard.json");
+        if (System.IO.File.Exists(leaderboardPath))
+        {
+            System.IO.File.Delete(leaderboardPath);
+            Debug.Log($"[CombatTestTools] Deleted leaderboard file at: {leaderboardPath}");
+        }
+        
+        EditorUtility.DisplayDialog(
+            "Save Data Cleared", 
+            "Successfully cleared all Game Progress (PlayerPrefs) and Leaderboard data.", 
+            "OK"
+        );
+    }
     /// <summary>
     /// TEST FUNCTION: Kills the current enemy for testing reward system
     /// Only available in Play Mode
