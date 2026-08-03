@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 49a48b108fa7b434392a0ba71fe38b5c, type: 3}
   m_Name: Special Card Collection
   m_EditorClassIdentifier: Assembly-CSharp::SpecialCardCollectionData
+  maxCapacity: 3
   allSpecialCardAssets:
   - {fileID: 11400000, guid: ebd06b485a9033d42bd0639d6e24ba9a, type: 2}
   - {fileID: 11400000, guid: 38f85c406dfb6624fb2add304f9559d8, type: 2}

@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9f203e740a37d6044b12d78636dde4c6, type: 3}
+  m_Name: Agos_PlayableCard
+  m_EditorClassIdentifier: Assembly-CSharp::CardData
+  <Title>k__BackingField: Agos
+  <Target>k__BackingField: 2
+  <Description>k__BackingField: No cooldowns for all skills for 4 rounds
+  <Art>k__BackingField: {fileID: 21300000, guid: 38ce99463c7e6d840871a13575d1709d, type: 3}
+  <BackgroundArt>k__BackingField: {fileID: 21300000, guid: 38ce99463c7e6d840871a13575d1709d, type: 3}
+  <RoleData>k__BackingField: {fileID: 11400000, guid: ab4c06c41fdd18c4abc250f38fd58440, type: 2}
+  <Cooldown>k__BackingField: 0
+  <SoundData>k__BackingField: {fileID: 0}
+  <ManualTargetEffect>k__BackingField:
+    rid: -2
+  <OtherEffects>k__BackingField: []
+  references:
+    version: 2
+    RefIds:
+    - rid: -2
+      type: {class: , ns: , asm: }

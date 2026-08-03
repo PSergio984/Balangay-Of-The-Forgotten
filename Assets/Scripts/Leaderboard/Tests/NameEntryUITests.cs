@@ -53,6 +53,7 @@ public class NameEntryUITests
         SetPrivateField(_nameEntryUI, "nameInputField", _nameInputField);
         SetPrivateField(_nameEntryUI, "submitButton", _submitButton);
         SetPrivateField(_nameEntryUI, "skipButton", _skipButton);
+        SetPrivateField(_nameEntryUI, "autoSubmitSilent", false);
 
         // Run Awake initialization after setting serialized references
         var awakeMethod = typeof(NameEntryUI).GetMethod("Awake", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
@@ -134,17 +135,36 @@ public class NameEntryUITests
     [Test]
     public void OnSkip_SubmitsAnonymous_HidesPanel_InvokesCallback()
     {
-        bool callbackFired = false;
-        _nameEntryUI.Show(GameProgressData.MAP_ID_DAGAT, 150.0f, () => callbackFired = true);
+        _nameEntryUI.Show(GameProgressData.MAP_ID_DAGAT, 150.0f, null);
 
         // Trigger skip via public skipButton event API
         _skipButton.onClick.Invoke();
+
+        var topEntries = LeaderboardManager.Instance.GetTopEntriesForMap(GameProgressData.MAP_ID_DAGAT);
+        Assert.AreEqual(1, topEntries.Count);
+        Assert.AreEqual("Anonymous", topEntries[0].PlayerName);
+    }
+
+    [Test]
+    public void Show_AutoSubmitSilent_SubmitsSessionNameAndInvokesCallback()
+    {
+        SetPrivateField(_nameEntryUI, "autoSubmitSilent", true);
+
+        var progressData = ScriptableObject.CreateInstance<GameProgressData>();
+        progressData.SetPlayerName("SilentSessionPlayer");
+        SetPrivateField(_nameEntryUI, "gameProgressData", progressData);
+
+        bool callbackFired = false;
+        _nameEntryUI.Show(GameProgressData.MAP_ID_DAGAT, 88.0f, () => callbackFired = true);
 
         Assert.IsFalse(_panelRoot.activeSelf);
         Assert.IsTrue(callbackFired);
 
         var topEntries = LeaderboardManager.Instance.GetTopEntriesForMap(GameProgressData.MAP_ID_DAGAT);
         Assert.AreEqual(1, topEntries.Count);
-        Assert.AreEqual("Anonymous", topEntries[0].PlayerName);
+        Assert.AreEqual("SilentSessionPlayer", topEntries[0].PlayerName);
+        Assert.AreEqual(88.0f, topEntries[0].ClearTime);
+
+        Object.DestroyImmediate(progressData);
     }
 }

@@ -12,6 +12,8 @@ public class NameEntryUI : MonoBehaviour
     [SerializeField] private TMP_InputField nameInputField;
     [SerializeField] private Button submitButton;
     [SerializeField] private Button skipButton;
+    [SerializeField] private GameProgressData gameProgressData;
+    [SerializeField] private bool autoSubmitSilent = true;
 
     private string _mapId;
     private float _clearTimeSeconds;
@@ -36,7 +38,7 @@ public class NameEntryUI : MonoBehaviour
     }
 
     /// <summary>
-    /// Displays the name entry popup with map details and clear time payload.
+    /// Displays the name entry popup or silently auto-submits using the session player name.
     /// </summary>
     /// <param name="mapId">Target map ID cleared.</param>
     /// <param name="clearTimeSeconds">Clear time in seconds.</param>
@@ -46,6 +48,32 @@ public class NameEntryUI : MonoBehaviour
         _mapId = mapId;
         _clearTimeSeconds = clearTimeSeconds;
         _onComplete = onComplete;
+
+        if (autoSubmitSilent)
+        {
+            string sessionName = "Anonymous";
+            if (gameProgressData != null && gameProgressData.HasPlayerName)
+            {
+                sessionName = gameProgressData.PlayerName;
+            }
+
+            if (LeaderboardManager.Instance != null)
+            {
+                LeaderboardManager.Instance.SubmitEntry(sessionName, _mapId, _clearTimeSeconds);
+            }
+            else
+            {
+                Debug.LogWarning("[NameEntryUI] LeaderboardManager.Instance is null. Leaderboard entry was not submitted.", this);
+            }
+
+            if (panelRoot != null)
+            {
+                panelRoot.SetActive(false);
+            }
+
+            _onComplete?.Invoke();
+            return;
+        }
 
         if (nameInputField != null)
         {

@@ -42,6 +42,7 @@ public class GameProgressData : ScriptableObject
     private const string PREFS_KALUWALHATIAN_UNLOCKED = "KaluwalhatianUnlocked";
     private const string PREFS_GAME_COMPLETED = "GameCompleted";
     private const string PREFS_INTRO_SEEN = "IntroDialogueSeen";
+    private const string PREFS_PLAYER_NAME = "PlayerName";
     
     // Number of maps required to unlock Kaluwalhatian
     private const int MAPS_REQUIRED_FOR_FINAL = 3;
@@ -62,6 +63,9 @@ public class GameProgressData : ScriptableObject
     
     [Tooltip("Whether the intro dialogue has been shown")]
     [SerializeField] private bool hasSeenIntroDialogue = false;
+    
+    [Tooltip("Active session player name")]
+    [SerializeField] private string playerName = string.Empty;
     
     #endregion
     
@@ -87,9 +91,35 @@ public class GameProgressData : ScriptableObject
     /// </summary>
     public bool HasSeenIntroDialogue => hasSeenIntroDialogue;
     
+    /// <summary>
+    /// Active session player name (defaults to "Anonymous" if empty).
+    /// </summary>
+    public string PlayerName => string.IsNullOrWhiteSpace(playerName) ? "Anonymous" : playerName;
+    
+    /// <summary>
+    /// Whether a non-empty player name has been set for this session.
+    /// </summary>
+    public bool HasPlayerName => !string.IsNullOrWhiteSpace(playerName);
+    
     #endregion
     
     #region Public Methods
+    
+    /// <summary>
+    /// Sets and normalizes the active session player name.
+    /// </summary>
+    /// <param name="name">Player name to set.</param>
+    public void SetPlayerName(string name)
+    {
+        string normalized = string.IsNullOrWhiteSpace(name) ? "Anonymous" : name.Trim();
+        if (normalized.Length > 20)
+        {
+            normalized = normalized.Substring(0, 20);
+        }
+        playerName = normalized;
+        Save();
+        Debug.Log($"[GameProgressData] Session player name set to '{playerName}'.");
+    }
     
     /// <summary>
     /// Marks a map as completed and checks for unlocks
@@ -225,11 +255,12 @@ public class GameProgressData : ScriptableObject
         PlayerPrefs.SetInt(PREFS_PREFIX + PREFS_KALUWALHATIAN_UNLOCKED, isKaluwalhatianUnlocked ? 1 : 0);
         PlayerPrefs.SetInt(PREFS_PREFIX + PREFS_GAME_COMPLETED, isGameCompleted ? 1 : 0);
         PlayerPrefs.SetInt(PREFS_PREFIX + PREFS_INTRO_SEEN, hasSeenIntroDialogue ? 1 : 0);
+        PlayerPrefs.SetString(PREFS_PREFIX + PREFS_PLAYER_NAME, playerName ?? string.Empty);
         
         PlayerPrefs.Save();
         
         // Enhanced debug logging to verify save
-        Debug.Log($"[GameProgressData] Progress saved. Completed maps: {CompletedMapCount}");
+        Debug.Log($"[GameProgressData] Progress saved. Completed maps: {CompletedMapCount}, PlayerName: '{PlayerName}'");
         Debug.Log($"[GameProgressData] Map completion status - Dagat: {dagatComplete}, Daragang: {daragangComplete}, Bundok: {bundokComplete}, Kaluwalhatian: {kaluwalhatianComplete}");
         Debug.Log($"[GameProgressData] Kaluwalhatian unlocked: {isKaluwalhatianUnlocked}, Game completed: {isGameCompleted}");
         Debug.Log($"[GameProgressData] Completed map IDs: {string.Join(", ", completedMapIds)}");
@@ -261,9 +292,10 @@ public class GameProgressData : ScriptableObject
         isKaluwalhatianUnlocked = PlayerPrefs.GetInt(PREFS_PREFIX + PREFS_KALUWALHATIAN_UNLOCKED, 0) == 1;
         isGameCompleted = PlayerPrefs.GetInt(PREFS_PREFIX + PREFS_GAME_COMPLETED, 0) == 1;
         hasSeenIntroDialogue = PlayerPrefs.GetInt(PREFS_PREFIX + PREFS_INTRO_SEEN, 0) == 1;
+        playerName = PlayerPrefs.GetString(PREFS_PREFIX + PREFS_PLAYER_NAME, string.Empty);
         
         // Enhanced debug logging to verify load
-        Debug.Log($"[GameProgressData] Progress loaded. Completed maps: {CompletedMapCount}, Kaluwalhatian unlocked: {isKaluwalhatianUnlocked}");
+        Debug.Log($"[GameProgressData] Progress loaded. Completed maps: {CompletedMapCount}, Kaluwalhatian unlocked: {isKaluwalhatianUnlocked}, PlayerName: '{PlayerName}'");
         Debug.Log($"[GameProgressData] Loaded from PlayerPrefs - Dagat: {dagatValue}, Daragang: {daragangValue}, Bundok: {bundokValue}, Kaluwalhatian: {kaluwalhatianValue}");
         Debug.Log($"[GameProgressData] Loaded completed map IDs: {string.Join(", ", completedMapIds)}");
     }
@@ -277,6 +309,7 @@ public class GameProgressData : ScriptableObject
         isKaluwalhatianUnlocked = false;
         isGameCompleted = false;
         hasSeenIntroDialogue = false;
+        playerName = string.Empty;
         
         // Clear all PlayerPrefs for this system
         PlayerPrefs.DeleteKey(GetMapPrefsKey(MAP_ID_DAGAT));
@@ -286,6 +319,7 @@ public class GameProgressData : ScriptableObject
         PlayerPrefs.DeleteKey(PREFS_PREFIX + PREFS_KALUWALHATIAN_UNLOCKED);
         PlayerPrefs.DeleteKey(PREFS_PREFIX + PREFS_GAME_COMPLETED);
         PlayerPrefs.DeleteKey(PREFS_PREFIX + PREFS_INTRO_SEEN);
+        PlayerPrefs.DeleteKey(PREFS_PREFIX + PREFS_PLAYER_NAME);
         
         PlayerPrefs.Save();
         Debug.Log("[GameProgressData] All progress has been reset.");

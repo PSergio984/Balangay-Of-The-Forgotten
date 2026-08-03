@@ -16,6 +16,7 @@ MonoBehaviour:
   cardName: Agos
   cardSprite: {fileID: 21300000, guid: 38ce99463c7e6d840871a13575d1709d, type: 3}
   glowSprite: {fileID: 21300000, guid: ffbb2af54a1b03c46b8aac181297cd0d, type: 3}
+  cardDataRepresentation: {fileID: 11400000, guid: ae71ee7296fb17e409c8d5a553df50ac, type: 2}
   effectType: 2
   effectPercentage: 15
   duration: 4

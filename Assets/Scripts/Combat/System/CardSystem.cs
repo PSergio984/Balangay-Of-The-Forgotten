@@ -153,12 +153,25 @@ public class CardSystem : Singleton<CardSystem>
     /// Each CardData gets converted into a playable Card and added to the draw pile.
     /// Call this once at game start to prepare the deck for play.
     /// </remarks>
+    [Header("Special Card Persistence")]
+    [SerializeField] private SpecialCardCollectionData specialCardCollection;
+
     // Setup for multiple heroes: each gets their own deck/hand/discard
     public void Setup(List<HeroData> heroDatas)
     {
         drawPiles.Clear();
         discardPiles.Clear();
         hands.Clear();
+
+        if (specialCardCollection == null)
+        {
+            specialCardCollection = Resources.Load<SpecialCardCollectionData>("Special Card Collection");
+        }
+        if (specialCardCollection != null)
+        {
+            specialCardCollection.Load();
+        }
+
         for (int i = 0; i < heroDatas.Count; i++)
         {
             var deck = new List<Card>();
@@ -172,6 +185,22 @@ public class CardSystem : Singleton<CardSystem>
                 }
                 deck.Add(new Card(cardData));
             }
+
+            // Check if hero holds an assigned Special Card
+            if (specialCardCollection != null && heroDatas[i] != null && !string.IsNullOrEmpty(heroDatas[i].HeroName))
+            {
+                SpecialCardData assignedSpecial = specialCardCollection.GetSpecialCardForHero(heroDatas[i].HeroName);
+                if (assignedSpecial != null && specialCardCollection.HasCard(assignedSpecial.CardId))
+                {
+                    CardData playableData = assignedSpecial.GetOrCreatePlayableCardData();
+                    if (playableData != null)
+                    {
+                        deck.Add(new Card(playableData));
+                        Debug.Log($"[CardSystem] Added special card '{assignedSpecial.CardName}' to Hero '{heroDatas[i].HeroName}' deck.");
+                    }
+                }
+            }
+
             drawPiles.Add(deck);
             discardPiles.Add(new List<Card>());
             hands.Add(new List<Card>());
@@ -344,6 +373,25 @@ public class CardSystem : Singleton<CardSystem>
         // Remove card from hand and get the card view
         hand.Remove(playCardsGA.Card);
         CardView cardView = handView.RemoveCard(playCardsGA.Card);
+
+        // Check if this played card was an assigned special card, and consume it from persistent storage if so
+        if (specialCardCollection != null && currentHero != null && currentHero.HeroData != null)
+        {
+            string heroName = currentHero.HeroData.HeroName;
+            SpecialCardData assignedSpecial = specialCardCollection.GetSpecialCardForHero(heroName);
+            if (assignedSpecial != null)
+            {
+                bool isMatchingSpecial = (playCardsGA.Card.Data != null && playCardsGA.Card.Data == assignedSpecial.CardDataRepresentation) ||
+                                         (playCardsGA.Card.Data != null && playCardsGA.Card.Data == assignedSpecial.GetOrCreatePlayableCardData()) ||
+                                         playCardsGA.Card.Title == assignedSpecial.CardName;
+
+                if (isMatchingSpecial)
+                {
+                    specialCardCollection.ConsumeSpecialCardForHero(heroName, assignedSpecial);
+                    Debug.Log($"[CardSystem] Consumed special card '{assignedSpecial.CardName}' from hero '{heroName}' upon playing.");
+                }
+            }
+        }
         
         // Play card sound effect if available
         if (playCardsGA.Card.SoundData != null && soundBuilder != null && currentHero != null)

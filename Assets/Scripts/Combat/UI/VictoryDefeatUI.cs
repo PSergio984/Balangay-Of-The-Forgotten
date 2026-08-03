@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
@@ -703,8 +704,30 @@ public class VictoryDefeatUI : Singleton<VictoryDefeatUI>
             
             if (specialCard != null && specialCardCollection != null)
             {
-                bool added = specialCardCollection.AddSpecialCard(specialCard);
-                Debug.Log($"[VictoryDefeatUI] Collected special card: {specialCard.CardName} (Added: {added})");
+                // Gather active hero names from HeroSystem
+                List<string> activeHeroNames = new List<string>();
+                if (HeroSystem.Instance != null && HeroSystem.Instance.HeroViews != null)
+                {
+                    foreach (var heroView in HeroSystem.Instance.HeroViews)
+                    {
+                        if (heroView != null && heroView.HeroData != null && !string.IsNullOrEmpty(heroView.HeroData.HeroName))
+                        {
+                            activeHeroNames.Add(heroView.HeroData.HeroName);
+                        }
+                    }
+                }
+                
+                bool added = false;
+                if (activeHeroNames.Count > 0)
+                {
+                    added = specialCardCollection.AddSpecialCardToRandomHero(specialCard, activeHeroNames);
+                }
+                else
+                {
+                    Debug.LogWarning($"[VictoryDefeatUI] Could not assign special card '{specialCard.CardName}': No active hero views found in HeroSystem.");
+                }
+                
+                Debug.Log($"[VictoryDefeatUI] Collected special card: {specialCard.CardName} (Assigned/Added: {added})");
                 
                 // Notify SpecialCardPanelUI to refresh if card was successfully added
                 if (added)

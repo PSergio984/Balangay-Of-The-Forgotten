@@ -103,7 +103,7 @@ public class CreditsController : VideoControllerBase
         }
         
         // Clear SpecialCardCollectionData
-        SpecialCardCollectionData specialCardCollection = Resources.Load<SpecialCardCollectionData>("SpecialCardCollectionData");
+        SpecialCardCollectionData specialCardCollection = Resources.Load<SpecialCardCollectionData>("Special Card Collection");
         if (specialCardCollection != null)
         {
             specialCardCollection.Clear();

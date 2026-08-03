@@ -42,6 +42,12 @@ public class SpecialCardCollectionData : ScriptableObject
     
     #region Configuration
     
+    [Header("Capacity & Settings")]
+    [Tooltip("Maximum number of special cards allowed in total (customizable 2-4)")]
+    [Range(2, 4)]
+    [SerializeField] private int maxCapacity = 3;
+    public int MaxCapacity => maxCapacity;
+    
     [Header("Available Special Cards (Assign All Possible Cards)")]
     [Tooltip("All special card assets that can be collected - used for loading by ID")]
     [SerializeField] private List<SpecialCardData> allSpecialCardAssets = new List<SpecialCardData>();
@@ -58,6 +64,11 @@ public class SpecialCardCollectionData : ScriptableObject
     /// Set of collected card IDs for O(1) lookup
     /// </summary>
     private HashSet<string> collectedCardIds = new HashSet<string>();
+    
+    /// <summary>
+    /// Dictionary mapping HeroName to assigned SpecialCardData
+    /// </summary>
+    private Dictionary<string, SpecialCardData> heroCardAssignments = new Dictionary<string, SpecialCardData>();
     
     #endregion
     
@@ -78,79 +89,145 @@ public class SpecialCardCollectionData : ScriptableObject
     #region Public Methods
     
     /// <summary>
-    /// Adds a special card to the collection (called when mini-boss is defeated)
+    /// Gets the special card currently assigned to a hero by name, or null if none
     /// </summary>
-    /// <param name="card">The special card to add</param>
-    /// <returns>True if card was added, false if already owned or invalid</returns>
-    public bool AddSpecialCard(SpecialCardData card)
+    public SpecialCardData GetSpecialCardForHero(string heroName)
     {
-        if (card == null)
+        if (string.IsNullOrEmpty(heroName)) return null;
+        if (heroCardAssignments.TryGetValue(heroName, out var card))
         {
-            Debug.LogWarning("[SpecialCardCollectionData] Cannot add null special card.");
+            return card;
+        }
+        return null;
+    }
+    
+    /// <summary>
+    /// Randomly assigns a special card to an eligible hero in activeHeroNames who does not yet have a special card.
+    /// Capped by maxCapacity and 1 card per hero.
+    /// </summary>
+    public bool AddSpecialCardToRandomHero(SpecialCardData card, List<string> activeHeroNames)
+    {
+        if (card == null || string.IsNullOrEmpty(card.CardId))
+        {
+            Debug.LogWarning("[SpecialCardCollectionData] Cannot add null or empty ID card.");
             return false;
         }
         
-        if (string.IsNullOrEmpty(card.CardId))
+        if (activeHeroNames == null || activeHeroNames.Count == 0)
         {
-            Debug.LogWarning($"[SpecialCardCollectionData] Cannot add card with empty ID: {card.name}");
+            Debug.LogWarning("[SpecialCardCollectionData] No active heroes provided for assignment.");
             return false;
         }
         
-        // Check if already collected
-        if (HasCard(card.CardId))
+        if (heroCardAssignments.Count >= maxCapacity)
         {
-            Debug.Log($"[SpecialCardCollectionData] Special card '{card.CardName}' already in collection.");
+            Debug.LogWarning($"[SpecialCardCollectionData] Cannot assign special card '{card.CardName}': max capacity ({maxCapacity}) reached.");
             return false;
         }
         
-        // Add to collection
-        collectedCards.Add(card);
-        collectedCardIds.Add(card.CardId);
+        // Find eligible heroes without a special card assigned
+        List<string> eligibleHeroes = new List<string>();
+        foreach (var name in activeHeroNames)
+        {
+            if (!string.IsNullOrEmpty(name) && !heroCardAssignments.ContainsKey(name))
+            {
+                eligibleHeroes.Add(name);
+            }
+        }
         
-        Debug.Log($"[SpecialCardCollectionData] NEW SPECIAL CARD OBTAINED: '{card.CardName}' ({card.CardId}). Total cards: {CardCount}");
+        if (eligibleHeroes.Count == 0)
+        {
+            Debug.Log($"[SpecialCardCollectionData] All active heroes already hold a special card. Cannot assign '{card.CardName}'.");
+            return false;
+        }
         
-        // Save immediately
+        // Pick a random hero
+        int randomIndex = Random.Range(0, eligibleHeroes.Count);
+        string selectedHero = eligibleHeroes[randomIndex];
+        
+        heroCardAssignments[selectedHero] = card;
+        if (!collectedCards.Contains(card))
+        {
+            collectedCards.Add(card);
+            collectedCardIds.Add(card.CardId);
+        }
+        
+        Debug.Log($"[SpecialCardCollectionData] SPECIAL CARD ASSIGNED: '{card.CardName}' -> Hero '{selectedHero}'. Total assigned: {heroCardAssignments.Count}/{maxCapacity}");
+        
         Save();
-        
         return true;
     }
     
     /// <summary>
-    /// Uses (consumes) a special card, removing it from the collection permanently
+    /// Consumes (removes) a special card assigned to a specific hero when played in combat.
     /// </summary>
-    /// <param name="card">The special card to use</param>
-    /// <returns>True if card was used and removed, false if not in collection</returns>
+    public bool ConsumeSpecialCardForHero(string heroName, SpecialCardData card)
+    {
+        if (string.IsNullOrEmpty(heroName) || card == null) return false;
+        
+        if (heroCardAssignments.TryGetValue(heroName, out var assignedCard) && assignedCard != null && assignedCard.CardId == card.CardId)
+        {
+            heroCardAssignments.Remove(heroName);
+            collectedCards.Remove(card);
+            collectedCardIds.Remove(card.CardId);
+            
+            Debug.Log($"[SpecialCardCollectionData] SPECIAL CARD CONSUMED: '{card.CardName}' from Hero '{heroName}'. Remaining: {heroCardAssignments.Count}");
+            Save();
+            return true;
+        }
+        
+        return false;
+    }
+
+    /// <summary>
+    /// Legacy fallback method for adding special cards
+    /// </summary>
+    public bool AddSpecialCard(SpecialCardData card)
+    {
+        if (card == null || string.IsNullOrEmpty(card.CardId)) return false;
+        
+        // Check if already collected
+        if (HasCard(card.CardId)) return false;
+        
+        collectedCards.Add(card);
+        collectedCardIds.Add(card.CardId);
+        Save();
+        return true;
+    }
+    
+    /// <summary>
+    /// Uses (consumes) a special card from collection
+    /// </summary>
     public bool UseSpecialCard(SpecialCardData card)
     {
-        if (card == null)
+        if (card == null) return false;
+        
+        // Try removing from any hero assignment holding this card
+        string assignedHeroKey = null;
+        foreach (var kvp in heroCardAssignments)
         {
-            Debug.LogWarning("[SpecialCardCollectionData] Cannot use null special card.");
-            return false;
+            if (kvp.Value != null && kvp.Value.CardId == card.CardId)
+            {
+                assignedHeroKey = kvp.Key;
+                break;
+            }
         }
         
-        if (!HasCard(card.CardId))
+        if (assignedHeroKey != null)
         {
-            Debug.LogWarning($"[SpecialCardCollectionData] Special card '{card.CardName}' not in collection!");
-            return false;
+            heroCardAssignments.Remove(assignedHeroKey);
         }
         
-        // Remove from collection
         collectedCards.Remove(card);
         collectedCardIds.Remove(card.CardId);
         
-        Debug.Log($"[SpecialCardCollectionData] SPECIAL CARD USED: '{card.CardName}' - Removed from collection. Remaining: {CardCount}");
-        
-        // Save immediately
         Save();
-        
         return true;
     }
     
     /// <summary>
     /// Checks if a special card is in the collection
     /// </summary>
-    /// <param name="cardId">The card ID to check</param>
-    /// <returns>True if the card is in the collection</returns>
     public bool HasCard(string cardId)
     {
         if (string.IsNullOrEmpty(cardId)) return false;
@@ -160,7 +237,6 @@ public class SpecialCardCollectionData : ScriptableObject
     /// <summary>
     /// Gets all available special cards for current map
     /// </summary>
-    /// <returns>Read-only list of available special cards</returns>
     public IReadOnlyList<SpecialCardData> GetAvailableCards()
     {
         return collectedCards.AsReadOnly();
@@ -173,8 +249,16 @@ public class SpecialCardCollectionData : ScriptableObject
     {
         collectedCards.Clear();
         collectedCardIds.Clear();
+        heroCardAssignments.Clear();
         
-        // Clear PlayerPrefs
+        int assignCount = PlayerPrefs.GetInt(PREFS_PREFIX + "AssignCount", 0);
+        for (int i = 0; i < assignCount; i++)
+        {
+            PlayerPrefs.DeleteKey(PREFS_PREFIX + "AssignHero_" + i);
+            PlayerPrefs.DeleteKey(PREFS_PREFIX + "AssignCard_" + i);
+        }
+        PlayerPrefs.DeleteKey(PREFS_PREFIX + "AssignCount");
+        
         int count = PlayerPrefs.GetInt(PREFS_PREFIX + PREFS_CARD_COUNT, 0);
         for (int i = 0; i < count; i++)
         {
@@ -183,7 +267,7 @@ public class SpecialCardCollectionData : ScriptableObject
         PlayerPrefs.DeleteKey(PREFS_PREFIX + PREFS_CARD_COUNT);
         PlayerPrefs.Save();
         
-        Debug.Log("[SpecialCardCollectionData] Collection cleared.");
+        Debug.Log("[SpecialCardCollectionData] Collection and Hero Assignments cleared.");
     }
     
     #endregion
@@ -191,14 +275,24 @@ public class SpecialCardCollectionData : ScriptableObject
     #region Persistence
     
     /// <summary>
-    /// Saves collected card IDs to PlayerPrefs
+    /// Saves collected card IDs and Hero Assignments to PlayerPrefs
     /// </summary>
     public void Save()
     {
-        // Save count
-        PlayerPrefs.SetInt(PREFS_PREFIX + PREFS_CARD_COUNT, collectedCards.Count);
+        int index = 0;
+        foreach (var kvp in heroCardAssignments)
+        {
+            if (!string.IsNullOrEmpty(kvp.Key) && kvp.Value != null)
+            {
+                PlayerPrefs.SetString(PREFS_PREFIX + "AssignHero_" + index, kvp.Key);
+                PlayerPrefs.SetString(PREFS_PREFIX + "AssignCard_" + index, kvp.Value.CardId);
+                index++;
+            }
+        }
+        PlayerPrefs.SetInt(PREFS_PREFIX + "AssignCount", index);
         
-        // Save each card ID
+        // Save simple collected cards list
+        PlayerPrefs.SetInt(PREFS_PREFIX + PREFS_CARD_COUNT, collectedCards.Count);
         for (int i = 0; i < collectedCards.Count; i++)
         {
             if (collectedCards[i] != null && !string.IsNullOrEmpty(collectedCards[i].CardId))
@@ -208,41 +302,57 @@ public class SpecialCardCollectionData : ScriptableObject
         }
         
         PlayerPrefs.Save();
-        Debug.Log($"[SpecialCardCollectionData] Saved {collectedCards.Count} special cards to PlayerPrefs.");
+        Debug.Log($"[SpecialCardCollectionData] Saved {heroCardAssignments.Count} assignments & {collectedCards.Count} special cards to PlayerPrefs.");
     }
     
     /// <summary>
-    /// Loads collected cards from PlayerPrefs
+    /// Loads collected cards and Hero Assignments from PlayerPrefs
     /// </summary>
     public void Load()
     {
         collectedCards.Clear();
         collectedCardIds.Clear();
+        heroCardAssignments.Clear();
         
+        // Load hero assignments
+        int assignCount = PlayerPrefs.GetInt(PREFS_PREFIX + "AssignCount", 0);
+        for (int i = 0; i < assignCount; i++)
+        {
+            string heroName = PlayerPrefs.GetString(PREFS_PREFIX + "AssignHero_" + i, "");
+            string cardId = PlayerPrefs.GetString(PREFS_PREFIX + "AssignCard_" + i, "");
+            
+            if (!string.IsNullOrEmpty(heroName) && !string.IsNullOrEmpty(cardId))
+            {
+                SpecialCardData card = FindCardById(cardId);
+                if (card != null)
+                {
+                    heroCardAssignments[heroName] = card;
+                    if (!collectedCards.Contains(card))
+                    {
+                        collectedCards.Add(card);
+                        collectedCardIds.Add(cardId);
+                    }
+                }
+            }
+        }
+        
+        // Fallback load simple cards list
         int count = PlayerPrefs.GetInt(PREFS_PREFIX + PREFS_CARD_COUNT, 0);
-        
         for (int i = 0; i < count; i++)
         {
             string cardId = PlayerPrefs.GetString(PREFS_PREFIX + PREFS_CARD_ID_PREFIX + i, "");
-            
-            if (!string.IsNullOrEmpty(cardId))
+            if (!string.IsNullOrEmpty(cardId) && !collectedCardIds.Contains(cardId))
             {
-                // Find the card asset by ID
                 SpecialCardData card = FindCardById(cardId);
-                
                 if (card != null)
                 {
                     collectedCards.Add(card);
                     collectedCardIds.Add(cardId);
                 }
-                else
-                {
-                    Debug.LogWarning($"[SpecialCardCollectionData] Could not find special card asset for ID: {cardId}");
-                }
             }
         }
         
-        Debug.Log($"[SpecialCardCollectionData] Loaded {collectedCards.Count} special cards from PlayerPrefs.");
+        Debug.Log($"[SpecialCardCollectionData] Loaded {heroCardAssignments.Count} hero assignments and {collectedCards.Count} total special cards.");
     }
     
     /// <summary>
@@ -262,7 +372,7 @@ public class SpecialCardCollectionData : ScriptableObject
         }
         
         // Fallback: Try to find in Resources
-        var allCards = Resources.LoadAll<SpecialCardData>("SpecialCards");
+        var allCards = Resources.LoadAll<SpecialCardData>("");
         return allCards.FirstOrDefault(c => c.CardId == cardId);
     }
     

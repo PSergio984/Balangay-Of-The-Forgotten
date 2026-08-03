@@ -170,6 +170,7 @@ public class Card
     /// Used to access the original card design data.
     /// </remarks>
     private readonly CardData data;
+    public CardData Data => data;
     
     /// <summary>
     /// Creates a new card instance from card data
