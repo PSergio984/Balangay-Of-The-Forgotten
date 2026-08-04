@@ -14,7 +14,7 @@
  * Integration:
  * - Performs ApplyNoCooldownGA actions to grant the buff
  * - CooldownSystem checks HasNoCooldown() before incrementing cooldowns
- * - StatusEffectTickSystem calls TickNoCooldown() each turn for duration countdown
+ * - StatusEffectTickSystem calls TickNoCooldown(combatant) each turn for duration countdown
  * 
  * Used by:
  * - Bundok Pulag Mini-Boss Buff (4 rounds for all players)
@@ -75,19 +75,44 @@ public class NoCooldownSystem : MonoBehaviour
         foreach (var target in action.Targets)
         {
             if (target == null) continue;
-            
+
             int instanceId = target.GetInstanceID();
-            
+
             // Store or update duration data
             noCooldownDurations[instanceId] = action.Duration;
             combatantLookup[instanceId] = target;
-            
-            // Apply status effect with duration as stacks (for UI display)
+
+            // Apply status effect with duration as stacks (for UI display).
+            // Set the stacks rather than adding so re-applying the buff while it is
+            // still active refreshes to the full duration instead of inflating the icon.
+            int existingStacks = target.GetStatusEffectStacks(StatusEffectType.NO_COOLDOWN);
+            if (existingStacks > 0)
+            {
+                target.RemoveStatusEffect(StatusEffectType.NO_COOLDOWN, existingStacks);
+            }
             target.AddStatusEffect(StatusEffectType.NO_COOLDOWN, action.Duration);
-            
+
             Debug.Log($"[NoCooldownSystem] {target.name} gains NO COOLDOWN for {action.Duration} rounds");
         }
-        
+
+        // Clear any existing cooldowns on all party cards. The NoCooldown buff is party-wide
+        // (Agos targets all heroes), so resetting every card is the right scope.
+        if (CardSystem.Instance != null)
+        {
+            List<Card> allCards = CardSystem.Instance.GetAllCardsForHero(-1);
+            int resetCount = 0;
+            foreach (var card in allCards)
+            {
+                if (card == null) continue;
+                if (card.IsOnCooldown)
+                {
+                    card.ResetCooldown();
+                    resetCount++;
+                }
+            }
+            Debug.Log($"[NoCooldownSystem] Cleared cooldowns on {resetCount} card(s) (out of {allCards.Count} total).");
+        }
+
         yield return null;
     }
 
@@ -131,57 +156,45 @@ public class NoCooldownSystem : MonoBehaviour
     }
 
     /// <summary>
-    /// Ticks down NO_COOLDOWN duration for all affected combatants
-    /// Called by StatusEffectTickSystem at the end of each round
+    /// Ticks down NO_COOLDOWN duration for a single combatant
+    /// Called by StatusEffectTickSystem once per combatant at the end of each round.
     /// </summary>
-    public void TickNoCooldown()
+    public void TickNoCooldown(CombatantView combatant)
     {
-        List<int> toRemove = new List<int>();
-        
-        foreach (var kvp in noCooldownDurations)
+        if (combatant == null) return;
+
+        int instanceId = combatant.GetInstanceID();
+        if (!noCooldownDurations.TryGetValue(instanceId, out int duration))
         {
-            int instanceId = kvp.Key;
-            int duration = kvp.Value;
-            
-            if (duration > 0)
-            {
-                // Decrement duration
-                noCooldownDurations[instanceId] = duration - 1;
-                
-                // Get combatant reference
-                if (combatantLookup.TryGetValue(instanceId, out CombatantView combatant) && combatant != null)
-                {
-                    // Update status effect stacks to show remaining duration
-                    combatant.RemoveStatusEffect(StatusEffectType.NO_COOLDOWN, 1);
-                    
-                    Debug.Log($"[NoCooldownSystem] {combatant.name} NO COOLDOWN duration: {noCooldownDurations[instanceId]} rounds remaining");
-                    
-                    // If duration hit 0, remove completely
-                    if (noCooldownDurations[instanceId] <= 0)
-                    {
-                        int remainingStacks = combatant.GetStatusEffectStacks(StatusEffectType.NO_COOLDOWN);
-                        combatant.RemoveStatusEffect(StatusEffectType.NO_COOLDOWN, remainingStacks);
-                        toRemove.Add(instanceId);
-                        Debug.Log($"[NoCooldownSystem] {combatant.name} NO COOLDOWN expired");
-                    }
-                }
-                else
-                {
-                    // Combatant destroyed, mark for removal
-                    toRemove.Add(instanceId);
-                }
-            }
-            else
-            {
-                toRemove.Add(instanceId);
-            }
+            return;
         }
-        
-        // Clean up expired entries
-        foreach (int id in toRemove)
+
+        if (duration <= 0)
         {
-            noCooldownDurations.Remove(id);
-            combatantLookup.Remove(id);
+            noCooldownDurations.Remove(instanceId);
+            combatantLookup.Remove(instanceId);
+            return;
+        }
+
+        // Decrement duration
+        noCooldownDurations[instanceId] = duration - 1;
+
+        // Update status effect stacks to show remaining duration
+        combatant.RemoveStatusEffect(StatusEffectType.NO_COOLDOWN, 1);
+
+        Debug.Log($"[NoCooldownSystem] {combatant.name} NO COOLDOWN duration: {noCooldownDurations[instanceId]} rounds remaining");
+
+        // If duration hit 0, remove the entry and any leftover status-effect stacks
+        if (noCooldownDurations[instanceId] <= 0)
+        {
+            int remainingStacks = combatant.GetStatusEffectStacks(StatusEffectType.NO_COOLDOWN);
+            if (remainingStacks > 0)
+            {
+                combatant.RemoveStatusEffect(StatusEffectType.NO_COOLDOWN, remainingStacks);
+            }
+            noCooldownDurations.Remove(instanceId);
+            combatantLookup.Remove(instanceId);
+            Debug.Log($"[NoCooldownSystem] {combatant.name} NO COOLDOWN expired");
         }
     }
 

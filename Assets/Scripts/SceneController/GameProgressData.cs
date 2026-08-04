@@ -111,7 +111,7 @@ public class GameProgressData : ScriptableObject
     /// <param name="name">Player name to set.</param>
     public void SetPlayerName(string name)
     {
-        string normalized = string.IsNullOrWhiteSpace(name) ? "Anonymous" : name.Trim();
+        string normalized = name != null ? name.Trim() : string.Empty;
         if (normalized.Length > 20)
         {
             normalized = normalized.Substring(0, 20);
@@ -333,12 +333,36 @@ public class GameProgressData : ScriptableObject
     #endregion
     
     #region Unity Lifecycle
-    
+
+    /// <summary>
+    /// Runtime singleton reference. Resolved on first <see cref="OnEnable"/>.
+    /// Multiple components (e.g. <c>NewPlayerButtonUI</c>, <c>SessionNameEntryUI</c>)
+    /// should prefer this over a separately-asset-wired serialized field, because a
+    /// ScriptableObject loaded through two different asset references would be two
+    /// separate runtime instances and a reset on one would not be visible to the other.
+    /// </summary>
+    public static GameProgressData Instance { get; private set; }
+
     private void OnEnable()
     {
+        if (Instance != null && Instance != this)
+        {
+            return;
+        }
+        Instance = this;
         // Automatically load saved progress when ScriptableObject is enabled
         Load();
     }
-    
+
+    private void OnDisable()
+    {
+        // Clear the singleton reference so a later instance can take over after a
+        // domain reload or scene teardown instead of pointing at a stale object.
+        if (Instance == this)
+        {
+            Instance = null;
+        }
+    }
+
     #endregion
 }

@@ -139,6 +139,13 @@ public class StatusEffectTickSystem : Singleton<StatusEffectTickSystem>
 				RestingStatusEffectSystem.TickResting(combatant);
 			}
 			
+			// NO_COOLDOWN: tick duration (handled by NoCooldownSystem)
+			int noCooldownStacks = combatant.GetStatusEffectStacks(StatusEffectType.NO_COOLDOWN);
+			if (noCooldownStacks > 0 && NoCooldownSystem.Instance != null)
+			{
+				NoCooldownSystem.Instance.TickNoCooldown(combatant);
+			}
+
 			// Invulnerable: reduce stack by 1
 			int invulStacks = combatant.GetStatusEffectStacks(StatusEffectType.INVULNERABLE);
 			if (invulStacks > 0)

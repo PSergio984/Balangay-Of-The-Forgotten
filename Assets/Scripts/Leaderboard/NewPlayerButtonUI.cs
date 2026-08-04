@@ -66,9 +66,14 @@ public class NewPlayerButtonUI : MonoBehaviour
 
     private void OnConfirmReset()
     {
-        if (gameProgressData != null)
+        // Prefer the runtime singleton so the reset always lands on the same
+        // GameProgressData instance the name entry panel reads. If both components
+        // were wired to different asset instances, the reset would be invisible to
+        // the panel and the previous player name would leak back in.
+        var resolvedData = GameProgressData.Instance != null ? GameProgressData.Instance : gameProgressData;
+        if (resolvedData != null)
         {
-            gameProgressData.ResetProgress();
+            resolvedData.ResetProgress();
         }
 
         if (confirmationPanelRoot != null)

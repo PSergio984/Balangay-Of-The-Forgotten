@@ -386,25 +386,45 @@ public class CardSystem : Singleton<CardSystem>
         CardView cardView = handView.RemoveCard(playCardsGA.Card);
 
         // Check if this played card was an assigned special card, and consume it from persistent storage if so
-        if (specialCardCollection != null && currentHero != null && currentHero.HeroData != null)
+        if (specialCardCollection == null)
+        {
+            Debug.LogWarning("[CardSystem] Played a special card but SpecialCardCollectionData is null - cannot consume. Check inspector wiring or Resources path.");
+        }
+        else if (currentHero == null || currentHero.HeroData == null)
+        {
+            Debug.LogWarning($"[CardSystem] Played special card '{playCardsGA.Card?.Title}' but currentHero{(currentHero == null ? " is null" : ".HeroData is null")} - cannot resolve hero name for consume.");
+        }
+        else
         {
             string heroName = currentHero.HeroData.HeroName;
             var assignedSpecials = specialCardCollection.GetSpecialCardsForHero(heroName);
+            string playedTitle = playCardsGA.Card?.Title;
+            CardData playedData = playCardsGA.Card?.Data;
+            Debug.Log($"[CardSystem] SpecialConsumeCheck: hero='{heroName}' playedTitle='{playedTitle}' playedData='{playedData?.name}' assignedSpecials={assignedSpecials.Count} collection={specialCardCollection.name}");
+
+            bool consumedAny = false;
             foreach (var assignedSpecial in assignedSpecials)
             {
                 if (assignedSpecial == null) continue;
 
-                bool isMatchingSpecial = (playCardsGA.Card.Data != null && playCardsGA.Card.Data == assignedSpecial.CardDataRepresentation) ||
-                                         (playCardsGA.Card.Data != null && playCardsGA.Card.Data == assignedSpecial.GetOrCreatePlayableCardData()) ||
-                                         playCardsGA.Card.Title == assignedSpecial.CardName;
+                // Defensive match: (1) stable title match, (2) CardData reference equality
+                // against the representation asset, (3) CardData reference equality against
+                // the playable card data (runtime-synthesized).
+                bool matchByTitle = !string.IsNullOrEmpty(playedTitle) && playedTitle == assignedSpecial.CardName;
+                bool matchByRepresentation = playedData != null && assignedSpecial.CardDataRepresentation != null && playedData == assignedSpecial.CardDataRepresentation;
+                bool matchByPlayable = playedData != null && playedData == assignedSpecial.GetOrCreatePlayableCardData();
+
+                bool isMatchingSpecial = matchByTitle || matchByRepresentation || matchByPlayable;
 
                 if (isMatchingSpecial)
                 {
-                    specialCardCollection.ConsumeSpecialCardForHero(heroName, assignedSpecial);
-                    Debug.Log($"[CardSystem] Consumed special card '{assignedSpecial.CardName}' from hero '{heroName}' upon playing.");
+                    bool consumed = specialCardCollection.ConsumeSpecialCardForHero(heroName, assignedSpecial);
+                    consumedAny |= consumed;
+                    Debug.Log($"[CardSystem] Consumed special card '{assignedSpecial.CardName}' from hero '{heroName}' upon playing. (ConsumeSpecialCardForHero returned {consumed})");
                     break;
                 }
             }
+            Debug.Log($"[CardSystem] SpecialConsumeCheck done. consumedAny={consumedAny}. Remaining assignments for hero '{heroName}': {specialCardCollection.GetSpecialCardsForHero(heroName).Count}");
         }
         
         // Play card sound effect if available

@@ -159,6 +159,11 @@ public class HandView : MonoBehaviour
     private const float CardZOffset = 0.01f;
 
     /// <summary>
+    /// How much of the arc flattening is also applied as a base-Y raise when the hand is crowded.
+    /// </summary>
+    private const float BaseYRaiseScale = 0.5f;
+
+    /// <summary>
     /// Adds a new card to the hand and updates all card positions with animation
     /// </summary>
     /// <param name="cardView">The card view to add to the hand</param>
@@ -278,10 +283,16 @@ public class HandView : MonoBehaviour
         
         // Calculate effective spacing - compress if too many cards
         float effectiveWidth = handWidth;
+        float arcScale = 1f;
+        float baseYRaise = 0f;
         if (cardCount > maxCardsBeforeCompression)
         {
             // Compress the hand width slightly when there are many cards
-            effectiveWidth = handWidth * (maxCardsBeforeCompression / (float)cardCount);
+            float compression = maxCardsBeforeCompression / (float)cardCount;
+            effectiveWidth = handWidth * compression;
+            // Diminishing arc: flatten the fan and lift the hand so edge cards stay readable
+            arcScale = compression;
+            baseYRaise = (1f - arcScale) * (positioningInfluence * BaseYRaiseScale);
         }
 
         // Calculate spacing between cards
@@ -301,11 +312,11 @@ public class HandView : MonoBehaviour
             float xPos = startX + i * cardSpacing;
 
             // Evaluate the positioning curve to get Y-offset
-            float yOffset = positioningCurve.Evaluate(t) * positioningInfluence;
-            float yPos = baseYPosition + yOffset;
+            float yOffset = positioningCurve.Evaluate(t) * positioningInfluence * arcScale;
+            float yPos = baseYPosition + baseYRaise + yOffset;
 
             // Evaluate the rotation curve to get Z-rotation (tilt)
-            float zRotation = rotationCurve.Evaluate(t) * rotationInfluence;
+            float zRotation = rotationCurve.Evaluate(t) * rotationInfluence * arcScale;
 
             // Calculate final world position (Z offset matches spline-based method: negative Z/back)
             Vector3 targetPosition = transform.position + new Vector3(xPos, yPos, 0f) + CardZOffset * i * Vector3.back;
