@@ -78,12 +78,72 @@ public class MainMenu : MonoBehaviour
     [Tooltip("Button to open leaderboard overlay panel")]
     [SerializeField] private Button leaderboardButton;
 
+    [Header("Session Name Gate")]
+    [Tooltip("Main menu Start button. Disabled until a session player name exists. Leave null to auto-find a Button named 'Start'.")]
+    [SerializeField] private Button startButton;
+
+    [Tooltip("GameProgressData used for the name gate. Leave null to use the runtime singleton.")]
+    [SerializeField] private GameProgressData gameProgressData;
+
     private void Start()
     {
         if (leaderboardButton != null)
         {
             leaderboardButton.onClick.AddListener(OpenLeaderboard);
         }
+
+        if (startButton == null)
+        {
+            startButton = FindStartButton();
+        }
+        GameProgressData.PlayerNameStateChanged += OnPlayerNameStateChanged;
+        ApplyStartButtonGate();
+    }
+
+    private void OnDestroy()
+    {
+        GameProgressData.PlayerNameStateChanged -= OnPlayerNameStateChanged;
+    }
+
+    /// <summary>
+    /// Resolves GameProgressData at runtime, preferring the serialized field and
+    /// falling back to the singleton (mirrors SessionNameEntryUI.ResolveData).
+    /// </summary>
+    private GameProgressData ResolveProgressData()
+    {
+        return gameProgressData != null ? gameProgressData : GameProgressData.Instance;
+    }
+
+    /// <summary>
+    /// Auto-finds the Start button by GameObject name when it is not serialized.
+    /// The MainMenu scene names the button GameObject "Start".
+    /// </summary>
+    private Button FindStartButton()
+    {
+        foreach (var button in GetComponentsInChildren<Button>(true))
+        {
+            if (button != null && button.gameObject.name == "Start")
+            {
+                return button;
+            }
+        }
+        return null;
+    }
+
+    private void OnPlayerNameStateChanged()
+    {
+        ApplyStartButtonGate();
+    }
+
+    /// <summary>
+    /// Disables the Start button until a session player name exists, so a first-time
+    /// player cannot begin without entering a name.
+    /// </summary>
+    private void ApplyStartButtonGate()
+    {
+        if (startButton == null) return;
+        var data = ResolveProgressData();
+        startButton.interactable = data != null && data.HasPlayerName;
     }
 
     /// <summary>
@@ -114,6 +174,13 @@ public class MainMenu : MonoBehaviour
     /// </remarks>
     public void StartSession()
     {
+        var progressData = ResolveProgressData();
+        if (progressData != null && !progressData.HasPlayerName)
+        {
+            Debug.LogWarning("[MainMenu] Cannot start session without a player name. Enter a name first.");
+            return;
+        }
+
         if (SceneController.Instance == null)
         {
             Debug.LogError("SceneController.Instance is null. Cannot start session.");

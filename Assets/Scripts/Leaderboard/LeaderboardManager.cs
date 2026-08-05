@@ -138,6 +138,34 @@ public class LeaderboardManager : Singleton<LeaderboardManager>
     }
 
     /// <summary>
+    /// Clears all leaderboard entries and persists the empty state.
+    /// </summary>
+    /// <returns>True if the cleared state was saved successfully (or no repository exists); false on save failure.</returns>
+    public bool ClearLeaderboard()
+    {
+        if (_data == null)
+        {
+            _data = new LeaderboardSaveData();
+        }
+        if (_data.Entries == null)
+        {
+            _data.Entries = new List<LeaderboardEntry>();
+        }
+        _data.Entries.Clear();
+
+        if (_repository == null)
+        {
+            return true;
+        }
+
+        bool saveSuccess = _repository.Save(_data);
+        Debug.Log(saveSuccess
+            ? "[LeaderboardManager] Leaderboard cleared and saved."
+            : "[LeaderboardManager] Leaderboard cleared in memory but failed to save.");
+        return saveSuccess;
+    }
+
+    /// <summary>
     /// Returns top overall entries for players who have cleared ALL 4 maps.
     /// Scored by the sum of personal best clear times per map, sorted ascending.
     /// </summary>

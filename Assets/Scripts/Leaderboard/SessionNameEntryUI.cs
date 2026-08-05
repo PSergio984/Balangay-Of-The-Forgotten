@@ -58,12 +58,14 @@ public class SessionNameEntryUI : MonoBehaviour
 
     /// <summary>
     /// Resolves the GameProgressData instance at runtime.
-    /// Prefers the singleton; falls back to the serialized field so a
-    /// misconfigured prefab still works in the editor.
+    /// Prefers the serialized field and falls back to the runtime singleton
+    /// (mirrors <see cref="MainMenu.ResolveProgressData"/>). In the shipped scene the
+    /// wired asset IS the singleton instance, so both orders are equivalent there;
+    /// the field-first order also makes the component testable in isolation.
     /// </summary>
     private GameProgressData ResolveData()
     {
-        return GameProgressData.Instance != null ? GameProgressData.Instance : gameProgressData;
+        return gameProgressData != null ? gameProgressData : GameProgressData.Instance;
     }
 
     /// <summary>

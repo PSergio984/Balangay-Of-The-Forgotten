@@ -72,6 +72,13 @@ public class GameProgressData : ScriptableObject
     #region Public Properties
     
     /// <summary>
+    /// Raised whenever the session player name state changes (set, normalized, or reset),
+    /// so UI that depends on <see cref="HasPlayerName"/> (e.g. the main menu Start button gate)
+    /// can re-evaluate without polling.
+    /// </summary>
+    public static event System.Action PlayerNameStateChanged;
+
+    /// <summary>
     /// Total number of maps completed
     /// </summary>
     public int CompletedMapCount => completedMapIds.Count;
@@ -119,6 +126,7 @@ public class GameProgressData : ScriptableObject
         playerName = normalized;
         Save();
         Debug.Log($"[GameProgressData] Session player name set to '{playerName}'.");
+        PlayerNameStateChanged?.Invoke();
     }
     
     /// <summary>
@@ -323,6 +331,7 @@ public class GameProgressData : ScriptableObject
         
         PlayerPrefs.Save();
         Debug.Log("[GameProgressData] All progress has been reset.");
+        PlayerNameStateChanged?.Invoke();
     }
     
     private string GetMapPrefsKey(string mapId)

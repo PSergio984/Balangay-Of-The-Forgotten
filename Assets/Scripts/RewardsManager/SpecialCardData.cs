@@ -192,7 +192,12 @@ public class SpecialCardData : ScriptableObject
         typeof(CardData).GetField("<Art>k__BackingField", flags)?.SetValue(runtimePlayableCardData, cardSprite);
         typeof(CardData).GetField("<BackgroundArt>k__BackingField", flags)?.SetValue(runtimePlayableCardData, cardSprite);
         
-        List<Effects> effectsList = new List<Effects> { new SpecialCardEffect(this) };
+        var wrapper = new AutoTargetEffect();
+        var wrapperFlags = System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic;
+        typeof(AutoTargetEffect).GetField("<targetMode>k__BackingField", wrapperFlags)?.SetValue(wrapper, new EveryoneTM());
+        typeof(AutoTargetEffect).GetField("<effects>k__BackingField", wrapperFlags)?.SetValue(wrapper, new SpecialCardEffect(this));
+
+        List<AutoTargetEffect> effectsList = new List<AutoTargetEffect> { wrapper };
         typeof(CardData).GetField("<OtherEffects>k__BackingField", flags)?.SetValue(runtimePlayableCardData, effectsList);
 
         var specialRole = Resources.Load<CardRoleData>("SpecialRole");

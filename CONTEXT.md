@@ -29,9 +29,17 @@ A status effect (party-wide; `StatusEffectType.NO_COOLDOWN`) granted by the Agos
 _Avoid_: No-cd, skip cooldown, infinite cooldown
 
 **Player Name**:
-The active session identifier entered on the main menu's name entry panel. Required to start a session — the play button is disabled and the click is rejected while the field is blank. Truncated to 20 characters and trimmed of surrounding whitespace; an empty or whitespace-only submission is *not* coerced to `"Anonymous"`.
+The active session identifier entered on the main menu's name entry panel. Required to start a session — the play button is disabled and the click is rejected while the field is blank. Truncated to 20 characters and trimmed of surrounding whitespace; an empty or whitespace-only submission is *not* coerced to `"Anonymous"`. `SessionNameEntryUI` and `MainMenu` resolve their `GameProgressData` field-first (serialized reference, then the runtime singleton) — equivalent to singleton-first in the shipped scene, where the wired asset is the singleton, but keeps components testable in isolation.
 _Avoid_: Display name, username
 
 **New Player**:
 The main-menu reset action that clears all `GameProgressData` state (completed maps, unlocks, intro-seen flag, and player name) and re-opens the name entry panel. The panel must show an empty input field, never the previous name. Resolved at runtime through `GameProgressData.Instance`, not a separately-asset-wired serialized field, to guarantee all UI components read from the same ScriptableObject instance.
 _Avoid_: Reset, restart
+
+**Name Gate**:
+The main-menu rule that the Start button is disabled and `MainMenu.StartSession()` refuses to run until a session player name exists (`GameProgressData.HasPlayerName`). The gate re-evaluates on the `GameProgressData.PlayerNameStateChanged` event, which fires when a name is set and when progress is reset. The Start button may be wired by Inspector or auto-found by GameObject name `"Start"`.
+_Avoid_: Login, sign-in
+
+**Fan Cap**:
+The `HandView` rule that caps the hand's arc amplitude and edge tilt at `maxFanSpread` (default 0.5) regardless of hand size, so edge cards stay readable. The existing many-cards compression (`maxCardsBeforeCompression`) shrinks the arc further on crowded hands, and `minEdgeCurveValue` (default 0.3) raises the leftmost/rightmost cards so they never sit at the absolute bottom of the bell curve. Edge cards in a 4–6 card hand now tilt ~7.5° instead of 15° and drop ~1/3 as far.
+_Avoid_: Fan layout, arc flattening

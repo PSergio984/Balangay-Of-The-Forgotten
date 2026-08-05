@@ -101,10 +101,58 @@ public class SessionIdentityTests
         inputField.text = "NewSessionUser";
         playButton.onClick.Invoke();
 
-        Assert.IsFalse(panelRoot.activeSelf);
+        Assert.IsFalse(uiObj.activeSelf);
         Assert.AreEqual("NewSessionUser", _progressData.PlayerName);
 
         Object.DestroyImmediate(uiObj);
+    }
+
+    [Test]
+    public void GameProgressData_PlayerNameStateChanged_RaisedOnSetAndReset()
+    {
+        int raised = 0;
+        System.Action handler = () => raised++;
+        GameProgressData.PlayerNameStateChanged += handler;
+        try
+        {
+            _progressData.SetPlayerName("TestName");
+            Assert.AreEqual(1, raised);
+
+            _progressData.ResetProgress();
+            Assert.AreEqual(2, raised);
+        }
+        finally
+        {
+            GameProgressData.PlayerNameStateChanged -= handler;
+        }
+    }
+
+    [Test]
+    public void MainMenu_StartButton_DisabledUntilPlayerNameExists()
+    {
+        var menuObj = new GameObject("MainMenu_Test");
+        var menu = menuObj.AddComponent<MainMenu>();
+
+        var startBtnObj = new GameObject("Start");
+        startBtnObj.transform.SetParent(menuObj.transform);
+        var startButton = startBtnObj.AddComponent<Button>();
+        SetPrivateField(menu, "startButton", startButton);
+        SetPrivateField(menu, "gameProgressData", _progressData);
+
+        var startMethod = typeof(MainMenu).GetMethod("Start", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+        startMethod?.Invoke(menu, null);
+
+        Assert.IsFalse(startButton.interactable);
+
+        // Setting a name raises PlayerNameStateChanged, which must re-enable the button.
+        _progressData.SetPlayerName("GateOpener");
+        Assert.IsTrue(startButton.interactable);
+
+        // Clearing the name (New Player reset) must disable it again.
+        _progressData.ResetProgress();
+        Assert.IsFalse(startButton.interactable);
+
+        Object.DestroyImmediate(menuObj);
     }
 
     private void SetPrivateField(object target, string fieldName, object value)

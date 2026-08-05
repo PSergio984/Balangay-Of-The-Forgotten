@@ -50,9 +50,16 @@ public class LeaderboardAccessPointsTests
         _mainMenu = _mainMenuObj.AddComponent<MainMenu>();
         SetPrivateField(_mainMenu, "leaderboardUI", _leaderboardUI);
 
-        // Setup MapSelectManager2
+        // Setup MapSelectManager2 with child handler. Both components are added
+        // while inactive so their Awake calls fire only after the hierarchy is
+        // complete (each finds the other in its Awake).
         _mapSelectObj = new GameObject("MapSelectManager2_Test");
+        _mapSelectObj.SetActive(false);
+        var handlerObj = new GameObject("EventHandler");
+        handlerObj.transform.SetParent(_mapSelectObj.transform);
+        handlerObj.AddComponent<LevelSelectSystemEventHandler2>();
         _mapSelectManager = _mapSelectObj.AddComponent<MapSelectManager2>();
+        _mapSelectObj.SetActive(true);
         SetPrivateField(_mapSelectManager, "leaderboardUI", _leaderboardUI);
     }
 

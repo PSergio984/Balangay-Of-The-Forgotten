@@ -145,4 +145,24 @@ public class LeaderboardManagerTests
         Assert.AreEqual("Player2", overall[1].PlayerName);
         Assert.AreEqual(200f, overall[1].TotalBestTime);
     }
+
+    /// <summary>
+    /// Verifies ClearLeaderboard empties in-memory entries and persists the empty state.
+    /// </summary>
+    [Test]
+    public void ClearLeaderboard_ClearsEntriesAndPersists()
+    {
+        _manager.SubmitEntry("Player1", GameProgressData.MAP_ID_DAGAT, 60f);
+        _manager.SubmitEntry("Player2", GameProgressData.MAP_ID_BUNDOK, 45f);
+        Assert.AreEqual(2, _manager.GetTopEntriesForMap(GameProgressData.MAP_ID_DAGAT, 100).Count
+            + _manager.GetTopEntriesForMap(GameProgressData.MAP_ID_BUNDOK, 100).Count);
+
+        bool cleared = _manager.ClearLeaderboard();
+
+        Assert.IsTrue(cleared);
+        Assert.IsTrue(_mockRepo.SaveCalled);
+        Assert.AreEqual(0, _mockRepo.StoredData.Entries.Count);
+        Assert.AreEqual(0, _manager.GetTopEntriesForMap(GameProgressData.MAP_ID_DAGAT, 100).Count);
+        Assert.AreEqual(0, _manager.GetOverallTopEntries(100).Count);
+    }
 }

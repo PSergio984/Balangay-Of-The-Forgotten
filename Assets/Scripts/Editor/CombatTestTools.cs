@@ -683,5 +683,33 @@ public class CombatTestTools
         Debug.Log("[CombatTestTools] Cleared all special cards from collection.");
         EditorUtility.DisplayDialog("Special Cards Cleared", "All special cards removed from the collection.", "OK");
     }
+
+    /// <summary>
+    /// TEST FUNCTION: Clears all leaderboard entries (leaderboard.json) without touching other save data.
+    /// Useful for testing the leaderboard from a clean slate.
+    /// </summary>
+    [MenuItem("Tools/Leaderboard/Clear Leaderboard Data", false, 40)]
+    public static void ClearLeaderboardData()
+    {
+        // 1. Delete the leaderboard JSON file (hard reset, also handles corrupt files)
+        string leaderboardPath = System.IO.Path.Combine(Application.persistentDataPath, "leaderboard.json");
+        if (System.IO.File.Exists(leaderboardPath))
+        {
+            System.IO.File.Delete(leaderboardPath);
+            Debug.Log($"[CombatTestTools] Deleted leaderboard file at: {leaderboardPath}");
+        }
+
+        // 2. Re-initialize the in-memory manager state if running in Play Mode
+        if (Application.isPlaying && LeaderboardManager.Instance != null)
+        {
+            LeaderboardManager.Instance.ClearLeaderboard();
+        }
+
+        EditorUtility.DisplayDialog(
+            "Leaderboard Cleared",
+            $"Cleared leaderboard data at:\n{leaderboardPath}",
+            "OK"
+        );
+    }
 }
 

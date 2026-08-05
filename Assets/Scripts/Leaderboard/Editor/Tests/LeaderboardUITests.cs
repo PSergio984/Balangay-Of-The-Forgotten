@@ -25,9 +25,20 @@ public class LeaderboardUITests
     [SetUp]
     public void SetUp()
     {
-        // Setup LeaderboardManager Singleton
+        // Setup LeaderboardManager Singleton.
+        // NOTE: In the EditMode test runner, AddComponent does not invoke Awake
+        // synchronously, so the manager's Instance is never set. Invoke Awake
+        // manually (same pattern as LeaderboardUI.Awake below) after clearing any
+        // stale instance left over from a previous fixture.
+        if (LeaderboardManager.Instance != null)
+        {
+            Object.DestroyImmediate(LeaderboardManager.Instance.gameObject);
+        }
+
         _managerObject = new GameObject("LeaderboardManager_Test");
         _manager = _managerObject.AddComponent<LeaderboardManager>();
+        typeof(LeaderboardManager).GetMethod("Awake", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
+            ?.Invoke(_manager, null);
         _mockRepo = new MockLeaderboardRepository();
         _manager.Initialize(_mockRepo);
 

@@ -19,18 +19,41 @@ public class VictoryDefeatIntegrationTests
     private MapData _mapData;
     private GameObject _timerObj;
     private CombatTimer _combatTimer;
+    private GameObject _dotweenObj;
 
     [SetUp]
     public void SetUp()
     {
-        // Setup CombatTimer Singleton
+        // Setup CombatTimer Singleton.
+        // NOTE: In the EditMode test runner, AddComponent does not invoke Awake
+        // synchronously, so the timer's Instance is never set and
+        // VictoryDefeatUI.RecordCombatClearTime (which reads CombatTimer.Instance)
+        // would silently no-op. Invoke Awake manually after clearing any stale
+        // instance left over from a previous fixture.
+        if (CombatTimer.Instance != null)
+        {
+            Object.DestroyImmediate(CombatTimer.Instance.gameObject);
+        }
+
         _timerObj = new GameObject("CombatTimer_Test");
         _combatTimer = _timerObj.AddComponent<CombatTimer>();
+        typeof(CombatTimer).GetMethod("Awake", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
+            ?.Invoke(_combatTimer, null);
+
+        // DOTween is not initialized in the EditMode test runner (no scene
+        // component awakens). AnimateBanner's WaitForCompletion needs
+        // DOTween.instance, so create the component and invoke Awake manually.
+        // Its Awake assigns DOTween.instance.
+        _dotweenObj = new GameObject("DOTween");
+        var dotweenComp = _dotweenObj.AddComponent<DG.Tweening.Core.DOTweenComponent>();
+        typeof(DG.Tweening.Core.DOTweenComponent)
+            .GetMethod("Awake", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
+            ?.Invoke(dotweenComp, null);
 
         // Setup LevelTransitionData ScriptableObject
         _levelTransitionData = ScriptableObject.CreateInstance<LevelTransitionData>();
         _mapData = ScriptableObject.CreateInstance<MapData>();
-        SetPrivateField(_mapData, "mapId", GameProgressData.MAP_ID_DAGAT);
+        _mapData.MapId = GameProgressData.MAP_ID_DAGAT;
         _levelTransitionData.SelectedMapData = _mapData;
 
         // Setup NameEntryUI GameObject
@@ -39,10 +62,27 @@ public class VictoryDefeatIntegrationTests
         _panelRoot = new GameObject("NameEntryPanelRoot");
         _panelRoot.transform.SetParent(_nameEntryObj.transform);
         SetPrivateField(_nameEntryUI, "panelRoot", _panelRoot);
+        _panelRoot.SetActive(false);
 
         // Setup VictoryDefeatUI GameObject
         _victoryDefeatObj = new GameObject("VictoryDefeatUI_Test");
         _victoryDefeatUI = _victoryDefeatObj.AddComponent<VictoryDefeatUI>();
+
+        // Setup minimal banner components so ShowVictory's banner coroutine
+        // does not log unhandled errors (bannerPanel, victoryImage, sprite)
+        var bannerObj = new GameObject("BannerPanel", typeof(RectTransform), typeof(CanvasGroup));
+        bannerObj.transform.SetParent(_victoryDefeatObj.transform);
+        SetPrivateField(_victoryDefeatUI, "bannerPanel", bannerObj.GetComponent<RectTransform>());
+
+        var victoryImgObj = new GameObject("VictoryImage", typeof(RectTransform), typeof(CanvasGroup));
+        victoryImgObj.transform.SetParent(bannerObj.transform);
+        Image victoryImage = victoryImgObj.AddComponent<Image>();
+        SetPrivateField(_victoryDefeatUI, "victoryImage", victoryImage);
+        SetPrivateField(_victoryDefeatUI, "victoryImageCanvasGroup", victoryImgObj.GetComponent<CanvasGroup>());
+
+        var tex = new Texture2D(2, 2);
+        Sprite victorySprite = Sprite.Create(tex, new Rect(0, 0, 2, 2), new Vector2(0.5f, 0.5f));
+        SetPrivateField(_victoryDefeatUI, "victorySprite", victorySprite);
 
         // Set private fields on VictoryDefeatUI
         SetPrivateField(_victoryDefeatUI, "nameEntryUI", _nameEntryUI);
@@ -55,6 +95,7 @@ public class VictoryDefeatIntegrationTests
         if (_victoryDefeatObj != null) Object.DestroyImmediate(_victoryDefeatObj);
         if (_nameEntryObj != null) Object.DestroyImmediate(_nameEntryObj);
         if (_timerObj != null) Object.DestroyImmediate(_timerObj);
+        if (_dotweenObj != null) Object.DestroyImmediate(_dotweenObj);
         if (_levelTransitionData != null) Object.DestroyImmediate(_levelTransitionData);
         if (_mapData != null) Object.DestroyImmediate(_mapData);
     }
@@ -109,13 +150,18 @@ public class VictoryDefeatIntegrationTests
         _combatTimer.StartTimer();
         SetPrivateField(_combatTimer, "<ElapsedSeconds>k__BackingField", 45.5f);
 
-        Button continueButton = new GameObject("ContinueButton").AddComponent<Button>();
+        Button continueButton = new GameObject("ContinueButton", typeof(CanvasGroup)).AddComponent<Button>();
         continueButton.transform.SetParent(_victoryDefeatObj.transform);
         SetPrivateField(_victoryDefeatUI, "continueButton", continueButton);
+        SetPrivateField(_victoryDefeatUI, "continueButtonCanvasGroup", continueButton.GetComponent<CanvasGroup>());
 
         Button skipButton = new GameObject("SkipButton").AddComponent<Button>();
         skipButton.transform.SetParent(_nameEntryObj.transform);
         SetPrivateField(_nameEntryUI, "skipButton", skipButton);
+
+        // The test drives the manual-entry path, so disable silent auto-submit
+        // (default true would submit and hide the panel without showing it)
+        SetPrivateField(_nameEntryUI, "autoSubmitSilent", false);
 
         bool callbackExecuted = false;
 
@@ -127,13 +173,17 @@ public class VictoryDefeatIntegrationTests
         Assert.AreEqual(45.5f, _combatTimer.ElapsedSeconds);
         Assert.AreEqual(45.5f, _levelTransitionData.ClearTimeSeconds);
 
+        // Assert - Banner animation synchronously disables the continue button
+        // (re-enabled asynchronously by EnableContinueButtonRoutine after name entry)
+        Assert.IsFalse(continueButton.interactable);
+
         // Verify the persisted values that AnimateBanner would pass to NameEntryUI
         string expectedMapId = _levelTransitionData.SelectedMapData.MapId;
         float expectedClearTime = _levelTransitionData.ClearTimeSeconds;
         Assert.AreEqual(GameProgressData.MAP_ID_DAGAT, expectedMapId);
         Assert.AreEqual(45.5f, expectedClearTime);
 
-        // Simulate AnimateBanner continuation: hand off to NameEntryUI with persisted capture values
+        // Simulate AnimateBanner phase 3 handoff: show NameEntryUI with captured values
         _nameEntryUI.Show(
             expectedMapId,
             expectedClearTime,
@@ -147,9 +197,8 @@ public class VictoryDefeatIntegrationTests
         // supplied to Show, instead of assigning callbackExecuted directly)
         _nameEntryUI.TriggerSkip();
 
-        // Assert - Panel hidden, callback executed, continue button state preserved
+        // Assert - Panel hidden and callback executed
         Assert.IsFalse(_panelRoot.activeSelf);
         Assert.IsTrue(callbackExecuted);
-        Assert.IsTrue(continueButton.interactable);
     }
 }

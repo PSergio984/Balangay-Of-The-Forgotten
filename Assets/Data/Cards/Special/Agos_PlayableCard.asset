@@ -15,16 +15,27 @@ MonoBehaviour:
   <Title>k__BackingField: Agos
   <Target>k__BackingField: 2
   <Description>k__BackingField: No cooldowns for all skills for 4 rounds
-  <Art>k__BackingField: {fileID: 21300000, guid: 38ce99463c7e6d840871a13575d1709d, type: 3}
-  <BackgroundArt>k__BackingField: {fileID: 21300000, guid: 38ce99463c7e6d840871a13575d1709d, type: 3}
+  <Art>k__BackingField: {fileID: 21300000, guid: eb03cee68e8134e4ba4a0b408e2b1f70, type: 3}
+  <BackgroundArt>k__BackingField: {fileID: 21300000, guid: bb2899b0a6c5c504c934704b5b86b665, type: 3}
   <RoleData>k__BackingField: {fileID: 11400000, guid: ab4c06c41fdd18c4abc250f38fd58440, type: 2}
   <Cooldown>k__BackingField: 0
   <SoundData>k__BackingField: {fileID: 0}
   <ManualTargetEffect>k__BackingField:
     rid: -2
-  <OtherEffects>k__BackingField: []
+  <OtherEffects>k__BackingField:
+  - <targetMode>k__BackingField:
+      rid: 7928454204353937538
+    <effects>k__BackingField:
+      rid: 7928454182799933550
   references:
     version: 2
     RefIds:
     - rid: -2
       type: {class: , ns: , asm: }
+    - rid: 7928454182799933550
+      type: {class: SpecialCardEffect, ns: , asm: Assembly-CSharp}
+      data:
+        specialCardData: {fileID: 11400000, guid: ebd06b485a9033d42bd0639d6e24ba9a, type: 2}
+    - rid: 7928454204353937538
+      type: {class: AllHeroesTM, ns: , asm: Assembly-CSharp}
+      data: 
