@@ -89,6 +89,15 @@ public class SpecialCardData : ScriptableObject
     
     #endregion
     
+    #region Playable Card Mapping
+    
+    [Header("Playable Card Mapping")]
+    [Tooltip("Playable CardData asset used when dealt into a hero's hand during combat")]
+    [SerializeField] private CardData cardDataRepresentation;
+    public CardData CardDataRepresentation => cardDataRepresentation;
+    
+    #endregion
+    
     #region Effect Configuration
     
     [Header("Effect Configuration")]
@@ -118,7 +127,7 @@ public class SpecialCardData : ScriptableObject
     /// Number of targets (legacy field, kept for compatibility but DefenseUp now applies to all players)
     /// </summary>
     [Tooltip("Legacy field - DefenseUp now applies to all players. Kept for backwards compatibility.")]
-    [SerializeField] private int targetCount = 2;
+    [HideInInspector] [SerializeField] private int targetCount = 2;
     public int TargetCount => targetCount;
     
     #endregion
@@ -163,6 +172,43 @@ public class SpecialCardData : ScriptableObject
         };
     }
     
+    [System.NonSerialized] private CardData runtimePlayableCardData;
+
+    /// <summary>
+    /// Gets the assigned CardDataRepresentation or dynamically constructs one if not assigned.
+    /// </summary>
+    public CardData GetOrCreatePlayableCardData()
+    {
+        if (cardDataRepresentation != null) return cardDataRepresentation;
+        if (runtimePlayableCardData != null) return runtimePlayableCardData;
+
+        runtimePlayableCardData = ScriptableObject.CreateInstance<CardData>();
+        runtimePlayableCardData.name = string.IsNullOrEmpty(cardName) ? name : cardName;
+
+        var flags = System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic;
+        typeof(CardData).GetField("<Title>k__BackingField", flags)?.SetValue(runtimePlayableCardData, cardName);
+        typeof(CardData).GetField("<Description>k__BackingField", flags)?.SetValue(runtimePlayableCardData, GetEffectDescription());
+        typeof(CardData).GetField("<Target>k__BackingField", flags)?.SetValue(runtimePlayableCardData, CardTargetMode.Everyone);
+        typeof(CardData).GetField("<Art>k__BackingField", flags)?.SetValue(runtimePlayableCardData, cardSprite);
+        typeof(CardData).GetField("<BackgroundArt>k__BackingField", flags)?.SetValue(runtimePlayableCardData, cardSprite);
+        
+        var wrapper = new AutoTargetEffect();
+        var wrapperFlags = System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic;
+        typeof(AutoTargetEffect).GetField("<targetMode>k__BackingField", wrapperFlags)?.SetValue(wrapper, new EveryoneTM());
+        typeof(AutoTargetEffect).GetField("<effects>k__BackingField", wrapperFlags)?.SetValue(wrapper, new SpecialCardEffect(this));
+
+        List<AutoTargetEffect> effectsList = new List<AutoTargetEffect> { wrapper };
+        typeof(CardData).GetField("<OtherEffects>k__BackingField", flags)?.SetValue(runtimePlayableCardData, effectsList);
+
+        var specialRole = Resources.Load<CardRoleData>("SpecialRole");
+        if (specialRole != null)
+        {
+            typeof(CardData).GetField("<RoleData>k__BackingField", flags)?.SetValue(runtimePlayableCardData, specialRole);
+        }
+
+        return runtimePlayableCardData;
+    }
+    
     private void OnValidate()
     {
         if (string.IsNullOrEmpty(cardId))
@@ -172,6 +218,10 @@ public class SpecialCardData : ScriptableObject
         if (cardSprite == null)
         {
             Debug.LogWarning($"[SpecialCardData] {name} is missing a cardSprite!", this);
+        }
+        if (cardDataRepresentation == null)
+        {
+            Debug.LogWarning($"[SpecialCardData] {name} is missing a Playable CardData Representation asset reference!", this);
         }
     }
     

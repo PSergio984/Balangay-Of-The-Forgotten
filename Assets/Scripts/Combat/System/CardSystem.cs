@@ -153,12 +153,25 @@ public class CardSystem : Singleton<CardSystem>
     /// Each CardData gets converted into a playable Card and added to the draw pile.
     /// Call this once at game start to prepare the deck for play.
     /// </remarks>
+    [Header("Special Card Persistence")]
+    [SerializeField] private SpecialCardCollectionData specialCardCollection;
+
     // Setup for multiple heroes: each gets their own deck/hand/discard
     public void Setup(List<HeroData> heroDatas)
     {
         drawPiles.Clear();
         discardPiles.Clear();
         hands.Clear();
+
+        if (specialCardCollection == null)
+        {
+            specialCardCollection = Resources.Load<SpecialCardCollectionData>("Special Card Collection");
+        }
+        if (specialCardCollection != null)
+        {
+            specialCardCollection.Load();
+        }
+
         for (int i = 0; i < heroDatas.Count; i++)
         {
             var deck = new List<Card>();
@@ -172,6 +185,11 @@ public class CardSystem : Singleton<CardSystem>
                 }
                 deck.Add(new Card(cardData));
             }
+
+            // Special cards are NOT added to the deck. They are granted as extra
+            // hand slots at draw time (see DrawCardsPerformer) so they never enter
+            // the draw/discard piles and can never be recycled back into the deck.
+
             drawPiles.Add(deck);
             discardPiles.Add(new List<Card>());
             hands.Add(new List<Card>());
@@ -232,6 +250,28 @@ public class CardSystem : Singleton<CardSystem>
                 RefillDeck(heroIndex);
             }
             yield return DrawCard(heroIndex);
+        }
+
+        // Grant the current hero's assigned special cards as extra, guaranteed hand slots.
+        // Specials are one-shot: they persist here until played (consumed from the collection),
+        // never enter the draw/discard piles, and are re-added on the next turn draw if unplayed.
+        if (specialCardCollection != null && currentHero != null && currentHero.HeroData != null)
+        {
+            string heroName = currentHero.HeroData.HeroName;
+            var assignedSpecials = specialCardCollection.GetSpecialCardsForHero(heroName);
+            foreach (var assignedSpecial in assignedSpecials)
+            {
+                if (assignedSpecial == null || !specialCardCollection.HasCard(assignedSpecial.CardId)) continue;
+                CardData playableData = assignedSpecial.GetOrCreatePlayableCardData();
+                if (playableData == null) continue;
+                if (hand.Exists(c => c.Data == playableData)) continue; // already present in hand
+
+                var specialCard = new Card(playableData);
+                hand.Add(specialCard);
+                CardView cardView = CardViewCreator.Instance.CreateCardView(specialCard, drawPilePoint.position, drawPilePoint.rotation);
+                yield return handView.AddCard(cardView);
+                Debug.Log($"[CardSystem] Granted special card '{assignedSpecial.CardName}' as an extra hand slot for hero '{heroName}'.");
+            }
         }
     }
 
@@ -344,6 +384,48 @@ public class CardSystem : Singleton<CardSystem>
         // Remove card from hand and get the card view
         hand.Remove(playCardsGA.Card);
         CardView cardView = handView.RemoveCard(playCardsGA.Card);
+
+        // Check if this played card was an assigned special card, and consume it from persistent storage if so
+        if (specialCardCollection == null)
+        {
+            Debug.LogWarning("[CardSystem] Played a special card but SpecialCardCollectionData is null - cannot consume. Check inspector wiring or Resources path.");
+        }
+        else if (currentHero == null || currentHero.HeroData == null)
+        {
+            Debug.LogWarning($"[CardSystem] Played special card '{playCardsGA.Card?.Title}' but currentHero{(currentHero == null ? " is null" : ".HeroData is null")} - cannot resolve hero name for consume.");
+        }
+        else
+        {
+            string heroName = currentHero.HeroData.HeroName;
+            var assignedSpecials = specialCardCollection.GetSpecialCardsForHero(heroName);
+            string playedTitle = playCardsGA.Card?.Title;
+            CardData playedData = playCardsGA.Card?.Data;
+            Debug.Log($"[CardSystem] SpecialConsumeCheck: hero='{heroName}' playedTitle='{playedTitle}' playedData='{playedData?.name}' assignedSpecials={assignedSpecials.Count} collection={specialCardCollection.name}");
+
+            bool consumedAny = false;
+            foreach (var assignedSpecial in assignedSpecials)
+            {
+                if (assignedSpecial == null) continue;
+
+                // Defensive match: (1) stable title match, (2) CardData reference equality
+                // against the representation asset, (3) CardData reference equality against
+                // the playable card data (runtime-synthesized).
+                bool matchByTitle = !string.IsNullOrEmpty(playedTitle) && playedTitle == assignedSpecial.CardName;
+                bool matchByRepresentation = playedData != null && assignedSpecial.CardDataRepresentation != null && playedData == assignedSpecial.CardDataRepresentation;
+                bool matchByPlayable = playedData != null && playedData == assignedSpecial.GetOrCreatePlayableCardData();
+
+                bool isMatchingSpecial = matchByTitle || matchByRepresentation || matchByPlayable;
+
+                if (isMatchingSpecial)
+                {
+                    bool consumed = specialCardCollection.ConsumeSpecialCardForHero(heroName, assignedSpecial);
+                    consumedAny |= consumed;
+                    Debug.Log($"[CardSystem] Consumed special card '{assignedSpecial.CardName}' from hero '{heroName}' upon playing. (ConsumeSpecialCardForHero returned {consumed})");
+                    break;
+                }
+            }
+            Debug.Log($"[CardSystem] SpecialConsumeCheck done. consumedAny={consumedAny}. Remaining assignments for hero '{heroName}': {specialCardCollection.GetSpecialCardsForHero(heroName).Count}");
+        }
         
         // Play card sound effect if available
         if (playCardsGA.Card.SoundData != null && soundBuilder != null && currentHero != null)
@@ -625,7 +707,14 @@ public class CardSystem : Singleton<CardSystem>
     private IEnumerator DiscardCard(CardView cardView, int heroIndex)
     {
         var discardPile = discardPiles[heroIndex];
-        discardPile.Add(cardView.Card);
+        // Special cards never enter the discard pile, so RefillDeck can never recycle them.
+        // An unplayed special is simply dropped (and re-granted from the collection on the next draw).
+        bool isSpecial = cardView != null && cardView.Card != null &&
+                         specialCardCollection != null && specialCardCollection.IsSpecialCardData(cardView.Card.Data);
+        if (!isSpecial)
+        {
+            discardPile.Add(cardView.Card);
+        }
         cardView.transform.DOScale(Vector3.zero, 0.15f);
         Tween tween = cardView.transform.DOMove(discardPilePoint.position, 0.15f);
         yield return tween.WaitForCompletion();

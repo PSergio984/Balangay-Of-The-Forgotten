@@ -44,7 +44,9 @@ public class CombatPhaseManager : MonoBehaviour
     // WORKAROUND: Due to a bug in ActionSystem.UnsubscribeReaction() where it creates a new wrapper
     // that doesn't match the original, we cannot reliably unsubscribe. Instead, we manually check
     // if this component is enabled before processing reactions to prevent stale reactions.
+    // We also track whether we've already subscribed to prevent duplicate callbacks on re-enable.
     private bool isComponentActive = false;
+    private bool hasSubscribedToReactions = false;
 
     private void Awake()
     {
@@ -57,9 +59,14 @@ public class CombatPhaseManager : MonoBehaviour
         
         // Subscribe to enemy turn actions to show Enemy Turn banner
         // NOTE: These subscriptions cannot be properly unsubscribed due to ActionSystem bug
-        // We use the isComponentActive flag to prevent stale reactions
-        ActionSystem.SubscribeReaction<EnemyTurnGA>(OnEnemyTurnStart, ReactionTiming.PRE);
-        ActionSystem.SubscribeReaction<EnemyTurnGA>(OnEnemyTurnEnd, ReactionTiming.POST);
+        // We use isComponentActive flag to prevent stale reactions, and hasSubscribedToReactions
+        // to prevent duplicate subscriptions on re-enable.
+        if (!hasSubscribedToReactions)
+        {
+            ActionSystem.SubscribeReaction<EnemyTurnGA>(OnEnemyTurnStart, ReactionTiming.PRE);
+            ActionSystem.SubscribeReaction<EnemyTurnGA>(OnEnemyTurnEnd, ReactionTiming.POST);
+            hasSubscribedToReactions = true;
+        }
     }
 
     private void OnDisable()
@@ -69,6 +76,7 @@ public class CombatPhaseManager : MonoBehaviour
         // NOTE: UnsubscribeReaction doesn't work due to ActionSystem bug (creates new wrapper closure)
         // Leaving these calls here for documentation, but they have no effect
         // The isComponentActive flag prevents stale reactions from executing
+        // We do NOT reset hasSubscribedToReactions here since UnsubscribeReaction is ineffective
         ActionSystem.UnsubscribeReaction<EnemyTurnGA>(OnEnemyTurnStart, ReactionTiming.PRE);
         ActionSystem.UnsubscribeReaction<EnemyTurnGA>(OnEnemyTurnEnd, ReactionTiming.POST);
     }
@@ -161,6 +169,11 @@ public class CombatPhaseManager : MonoBehaviour
     private IEnumerator ShowPlayerTurnDelayed()
     {
         yield return new WaitForSeconds(playerTurnDelay);
+        
+        // Re-check component activity and object validity after delay
+        if (!isComponentActive || combatPhaseUI == null)
+            yield break;
+            
         combatPhaseUI.ShowPlayerTurn();
     }
 
@@ -169,7 +182,6 @@ public class CombatPhaseManager : MonoBehaviour
     /// </summary>
     public void ResetForNewBattle()
     {
-        battleStartShown = false;
         turnCount = 0;
         if (combatPhaseUI != null)
         {

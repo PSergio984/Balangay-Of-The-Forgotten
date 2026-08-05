@@ -78,12 +78,56 @@ public class MainMenu : MonoBehaviour
     [Tooltip("Button to open leaderboard overlay panel")]
     [SerializeField] private Button leaderboardButton;
 
+    [Header("Session Name Gate")]
+    [Tooltip("Main menu Start button. Leave null to auto-find a Button named 'Start'.")]
+    [SerializeField] private Button startButton;
+
+    [Tooltip("Pre-session name entry panel. Shown when Start is clicked without a session player name.")]
+    [SerializeField] private SessionNameEntryUI sessionNameEntryUI;
+
+    [Tooltip("GameProgressData used for the name gate. Leave null to use the runtime singleton.")]
+    [SerializeField] private GameProgressData gameProgressData;
+
     private void Start()
     {
         if (leaderboardButton != null)
         {
             leaderboardButton.onClick.AddListener(OpenLeaderboard);
         }
+
+        if (startButton == null)
+        {
+            startButton = FindStartButton();
+        }
+        if (sessionNameEntryUI == null)
+        {
+            sessionNameEntryUI = FindObjectOfType<SessionNameEntryUI>(true);
+        }
+    }
+
+    /// <summary>
+    /// Auto-finds the Start button by GameObject name when it is not serialized.
+    /// The MainMenu scene names the button GameObject "Start".
+    /// </summary>
+    private Button FindStartButton()
+    {
+        foreach (var button in GetComponentsInChildren<Button>(true))
+        {
+            if (button != null && button.gameObject.name == "Start")
+            {
+                return button;
+            }
+        }
+        return null;
+    }
+
+    /// <summary>
+    /// Resolves GameProgressData at runtime, preferring the serialized field and
+    /// falling back to the singleton (mirrors SessionNameEntryUI.ResolveData).
+    /// </summary>
+    private GameProgressData ResolveProgressData()
+    {
+        return gameProgressData != null ? gameProgressData : GameProgressData.Instance;
     }
 
     /// <summary>
@@ -114,6 +158,21 @@ public class MainMenu : MonoBehaviour
     /// </remarks>
     public void StartSession()
     {
+        var progressData = ResolveProgressData();
+        if (progressData != null && !progressData.HasPlayerName)
+        {
+            Debug.Log("[MainMenu] No session player name. Opening name entry panel instead of starting.");
+            if (sessionNameEntryUI != null)
+            {
+                sessionNameEntryUI.Show();
+            }
+            else
+            {
+                Debug.LogWarning("[MainMenu] sessionNameEntryUI is null! Cannot open name entry panel.", this);
+            }
+            return;
+        }
+
         if (SceneController.Instance == null)
         {
             Debug.LogError("SceneController.Instance is null. Cannot start session.");

@@ -5,11 +5,11 @@
   <Project Path="SREditor-Editor.csproj" />
   <Project Path="CFXREditor.csproj" />
   <Project Path="Assembly-CSharp-firstpass.csproj" />
+  <Project Path="Assembly-CSharp-Editor.csproj" />
   <Project Path="SREditor.csproj" />
   <Project Path="CFXR.WelcomeScreen.csproj" />
   <Project Path="CFXRRuntime.csproj" />
   <Project Path="Assembly-CSharp-Editor-firstpass.csproj" />
-  <Project Path="Assembly-CSharp-Editor.csproj" />
   <Project Path="Sirenix.OdinInspector.Modules.UnityMathematics.csproj" />
   <Project Path="KinoBloom.Runtime.csproj" />
   <Project Path="SRDemo-Editor.csproj" />

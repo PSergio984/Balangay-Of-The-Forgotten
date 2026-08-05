@@ -32,6 +32,32 @@ public class LeaderboardEntryRowUI : MonoBehaviour
         {
             clearTimeText.text = FormatTime(clearTimeSeconds);
         }
+
+        ApplyRankColoring(rank);
+    }
+
+    private void ApplyRankColoring(int rank)
+    {
+        Color rankColor = Color.white;
+        switch (rank)
+        {
+            case 1:
+                ColorUtility.TryParseHtmlString("#FFD700", out rankColor); // Gold
+                break;
+            case 2:
+                ColorUtility.TryParseHtmlString("#C0C0C0", out rankColor); // Silver
+                break;
+            case 3:
+                ColorUtility.TryParseHtmlString("#CD7F32", out rankColor); // Bronze
+                break;
+            default:
+                rankColor = Color.white;
+                break;
+        }
+
+        if (rankText != null) rankText.color = rankColor;
+        if (playerNameText != null) playerNameText.color = rankColor;
+        if (clearTimeText != null) clearTimeText.color = rankColor;
     }
 
     /// <summary>

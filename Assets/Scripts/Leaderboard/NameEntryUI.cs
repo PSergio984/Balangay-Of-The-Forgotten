@@ -12,6 +12,8 @@ public class NameEntryUI : MonoBehaviour
     [SerializeField] private TMP_InputField nameInputField;
     [SerializeField] private Button submitButton;
     [SerializeField] private Button skipButton;
+    [SerializeField] private GameProgressData gameProgressData;
+    [SerializeField] private bool autoSubmitSilent = true;
 
     private string _mapId;
     private float _clearTimeSeconds;
@@ -36,7 +38,19 @@ public class NameEntryUI : MonoBehaviour
     }
 
     /// <summary>
-    /// Displays the name entry popup with map details and clear time payload.
+    /// Resolves the GameProgressData instance at runtime, preferring the serialized
+    /// field and falling back to the runtime singleton (mirrors
+    /// <see cref="SessionNameEntryUI.ResolveData"/>). The victory popup prefab does not
+    /// wire the asset, so without this fallback the silent submit always used
+    /// "Anonymous" even after the player entered a name on the main menu.
+    /// </summary>
+    private GameProgressData ResolveData()
+    {
+        return gameProgressData != null ? gameProgressData : GameProgressData.Instance;
+    }
+
+    /// <summary>
+    /// Displays the name entry popup or silently auto-submits using the session player name.
     /// </summary>
     /// <param name="mapId">Target map ID cleared.</param>
     /// <param name="clearTimeSeconds">Clear time in seconds.</param>
@@ -46,6 +60,33 @@ public class NameEntryUI : MonoBehaviour
         _mapId = mapId;
         _clearTimeSeconds = clearTimeSeconds;
         _onComplete = onComplete;
+
+        if (autoSubmitSilent)
+        {
+            string sessionName = "Anonymous";
+            var resolvedData = ResolveData();
+            if (resolvedData != null && resolvedData.HasPlayerName)
+            {
+                sessionName = resolvedData.PlayerName;
+            }
+
+            if (LeaderboardManager.Instance != null)
+            {
+                LeaderboardManager.Instance.SubmitEntry(sessionName, _mapId, _clearTimeSeconds);
+            }
+            else
+            {
+                Debug.LogWarning("[NameEntryUI] LeaderboardManager.Instance is null. Leaderboard entry was not submitted.", this);
+            }
+
+            if (panelRoot != null)
+            {
+                panelRoot.SetActive(false);
+            }
+
+            _onComplete?.Invoke();
+            return;
+        }
 
         if (nameInputField != null)
         {

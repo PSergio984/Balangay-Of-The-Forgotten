@@ -16,8 +16,8 @@ Track elapsed combat time and carry it to the Victory screen via the existing `L
 
 ### [CREATE] `Assets/Scripts/Combat/System/CombatTimer.cs`
 
-```
-public class CombatTimer : MonoBehaviour
+```csharp
+public class CombatTimer : Singleton<CombatTimer>
 {
     // Public read-only elapsed seconds
     public float ElapsedSeconds { get; private set; }

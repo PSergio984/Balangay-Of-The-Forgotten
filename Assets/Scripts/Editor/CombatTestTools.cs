@@ -11,6 +11,28 @@ using System.Collections.Generic;
 /// </remarks>
 public class CombatTestTools
 {
+    [MenuItem("Tools/Combat Test/Clear All Save Data", false, 0)]
+    public static void ClearAllSaveData()
+    {
+        // 1. Clear Game Progress Data (PlayerPrefs)
+        PlayerPrefs.DeleteAll();
+        PlayerPrefs.Save();
+        Debug.Log("[CombatTestTools] Cleared all PlayerPrefs data.");
+
+        // 2. Clear Leaderboard Data (JSON file)
+        string leaderboardPath = System.IO.Path.Combine(Application.persistentDataPath, "leaderboard.json");
+        if (System.IO.File.Exists(leaderboardPath))
+        {
+            System.IO.File.Delete(leaderboardPath);
+            Debug.Log($"[CombatTestTools] Deleted leaderboard file at: {leaderboardPath}");
+        }
+        
+        EditorUtility.DisplayDialog(
+            "Save Data Cleared", 
+            "Successfully cleared all Game Progress (PlayerPrefs) and Leaderboard data.", 
+            "OK"
+        );
+    }
     /// <summary>
     /// TEST FUNCTION: Kills the current enemy for testing reward system
     /// Only available in Play Mode
@@ -472,6 +494,222 @@ public class CombatTestTools
     {
         // Only enable in play mode
         return Application.isPlaying;
+    }
+
+    // ========== SPECIAL CARD TEST FUNCTIONS ==========
+
+    /// <summary>
+    /// TEST FUNCTION: Gives the player all 3 special cards (Agos, Balaraw, Kalasag)
+    /// for manual testing. Assigns them to active heroes when in Play Mode so they
+    /// appear in each hero's hand during combat; otherwise adds them to the
+    /// collection (persists via PlayerPrefs).
+    /// </summary>
+    [MenuItem("Tools/Combat Test/Special Cards/Give All Special Cards (Agos, Balaraw, Kalasag)", false, 30)]
+    public static void GiveAllSpecialCards()
+    {
+        var cards = new List<SpecialCardData>();
+        var agos = AssetDatabase.LoadAssetAtPath<SpecialCardData>("Assets/Data/Rewards/Agos.asset");
+        var balaraw = AssetDatabase.LoadAssetAtPath<SpecialCardData>("Assets/Data/Rewards/Balaraw.asset");
+        var kalasag = AssetDatabase.LoadAssetAtPath<SpecialCardData>("Assets/Data/Rewards/Kalasag.asset");
+        if (agos != null) cards.Add(agos);
+        if (balaraw != null) cards.Add(balaraw);
+        if (kalasag != null) cards.Add(kalasag);
+
+        GiveSpecialCards("Special Cards Given", "Agos, Balaraw, Kalasag", cards);
+    }
+
+    /// <summary>
+    /// TEST FUNCTION: Gives the player only the Agos special card
+    /// </summary>
+    [MenuItem("Tools/Combat Test/Special Cards/Add Agos Only", false, 32)]
+    public static void AddAgosOnly()
+    {
+        var agos = AssetDatabase.LoadAssetAtPath<SpecialCardData>("Assets/Data/Rewards/Agos.asset");
+        GiveSpecialCards("Agos Given", "Agos", new List<SpecialCardData> { agos });
+    }
+
+    /// <summary>
+    /// TEST FUNCTION: Gives the player only the Balaraw special card
+    /// </summary>
+    [MenuItem("Tools/Combat Test/Special Cards/Add Balaraw Only", false, 33)]
+    public static void AddBalarawOnly()
+    {
+        var balaraw = AssetDatabase.LoadAssetAtPath<SpecialCardData>("Assets/Data/Rewards/Balaraw.asset");
+        GiveSpecialCards("Balaraw Given", "Balaraw", new List<SpecialCardData> { balaraw });
+    }
+
+    /// <summary>
+    /// TEST FUNCTION: Gives the player only the Kalasag special card
+    /// </summary>
+    [MenuItem("Tools/Combat Test/Special Cards/Add Kalasag Only", false, 34)]
+    public static void AddKalasagOnly()
+    {
+        var kalasag = AssetDatabase.LoadAssetAtPath<SpecialCardData>("Assets/Data/Rewards/Kalasag.asset");
+        GiveSpecialCards("Kalasag Given", "Kalasag", new List<SpecialCardData> { kalasag });
+    }
+
+    /// <summary>
+    /// Shared implementation for granting special cards: assigns to active heroes
+    /// in Play Mode (so cards enter their hands), otherwise adds them to the collection.
+    /// </summary>
+    private static void GiveSpecialCards(string dialogTitle, string cardNames, List<SpecialCardData> cards)
+    {
+        // Load the persistent collection (same path CardSystem uses)
+        var collection = Resources.Load<SpecialCardCollectionData>("Special Card Collection");
+        if (collection == null)
+        {
+            EditorUtility.DisplayDialog(
+                "Collection Not Found",
+                "SpecialCardCollectionData asset not found in Resources.\n\nExpected at: Assets/Data/Data Persistence/Resources/Special Card Collection.asset",
+                "OK"
+            );
+            Debug.LogWarning("[CombatTestTools] SpecialCardCollectionData not found in Resources!");
+            return;
+        }
+
+        var validCards = new List<SpecialCardData>();
+        foreach (var card in cards)
+        {
+            if (card != null) validCards.Add(card);
+        }
+
+        if (validCards.Count == 0)
+        {
+            EditorUtility.DisplayDialog(
+                "Cards Not Found",
+                $"Could not load special card asset(s) from Assets/Data/Rewards/ ({cardNames}).",
+                "OK"
+            );
+            Debug.LogWarning($"[CombatTestTools] No special card assets found for: {cardNames}");
+            return;
+        }
+
+        // Gather active hero names (assigns card to a hero so it enters their hand)
+        List<string> activeHeroNames = new List<string>();
+        if (Application.isPlaying && HeroSystem.Instance != null && HeroSystem.Instance.HeroViews != null)
+        {
+            foreach (var heroView in HeroSystem.Instance.HeroViews)
+            {
+                if (heroView != null && heroView.HeroData != null && !string.IsNullOrEmpty(heroView.HeroData.HeroName))
+                {
+                    activeHeroNames.Add(heroView.HeroData.HeroName);
+                }
+            }
+        }
+
+        collection.Load();
+
+        int assignedCount = 0;
+        int alreadyOwnedCount = 0;
+        foreach (var card in validCards)
+        {
+            if (collection.HasCard(card.CardId))
+            {
+                alreadyOwnedCount++;
+                Debug.Log($"[CombatTestTools] Special card '{card.CardName}' already in collection. Skipping.");
+                continue;
+            }
+
+            bool added;
+            if (Application.isPlaying && activeHeroNames.Count > 0)
+            {
+                added = collection.AddSpecialCardToRandomHero(card, activeHeroNames);
+            }
+            else
+            {
+                // No heroes (Edit Mode) - just collect the card so it persists
+                added = collection.AddSpecialCard(card);
+                if (added && !Application.isPlaying)
+                {
+                    Debug.Log($"[CombatTestTools] Added special card '{card.CardName}' to collection (Edit Mode - no hero assignment). Run in Play Mode to assign to heroes.");
+                }
+            }
+
+            if (added) assignedCount++;
+        }
+
+        // Refresh the in-scene panel if it exists (Play Mode)
+        if (Application.isPlaying)
+        {
+            var panel = Object.FindFirstObjectByType<SpecialCardPanelUI>();
+            if (panel != null)
+            {
+                panel.RefreshDisplay();
+            }
+        }
+
+        Debug.Log($"[CombatTestTools] Special cards given: {assignedCount} added, {alreadyOwnedCount} already owned.");
+
+        EditorUtility.DisplayDialog(
+            dialogTitle,
+            $"Successfully gave {assignedCount} special card(s) to the collection.\n\n{(alreadyOwnedCount > 0 ? $"{alreadyOwnedCount} card(s) were already owned.\n\n" : "")}" +
+            (Application.isPlaying && activeHeroNames.Count > 0
+                ? "Assigned to active heroes - they should appear in the special card panel / hero hands."
+                : "Collected only (no active heroes). Enter Play Mode with heroes present to have them assigned."),
+            "OK"
+        );
+    }
+
+    /// <summary>
+    /// TEST FUNCTION: Clears all special cards from the collection
+    /// </summary>
+    [MenuItem("Tools/Combat Test/Special Cards/Clear Special Cards", false, 31)]
+    public static void ClearSpecialCards()
+    {
+        var collection = Resources.Load<SpecialCardCollectionData>("Special Card Collection");
+        if (collection == null)
+        {
+            EditorUtility.DisplayDialog(
+                "Collection Not Found",
+                "SpecialCardCollectionData asset not found in Resources.\n\nExpected at: Assets/Data/Data Persistence/Resources/Special Card Collection.asset",
+                "OK"
+            );
+            Debug.LogWarning("[CombatTestTools] SpecialCardCollectionData not found in Resources!");
+            return;
+        }
+
+        collection.Load();
+        collection.Clear();
+
+        if (Application.isPlaying)
+        {
+            var panel = Object.FindFirstObjectByType<SpecialCardPanelUI>();
+            if (panel != null)
+            {
+                panel.RefreshDisplay();
+            }
+        }
+
+        Debug.Log("[CombatTestTools] Cleared all special cards from collection.");
+        EditorUtility.DisplayDialog("Special Cards Cleared", "All special cards removed from the collection.", "OK");
+    }
+
+    /// <summary>
+    /// TEST FUNCTION: Clears all leaderboard entries (leaderboard.json) without touching other save data.
+    /// Useful for testing the leaderboard from a clean slate.
+    /// </summary>
+    [MenuItem("Tools/Leaderboard/Clear Leaderboard Data", false, 40)]
+    public static void ClearLeaderboardData()
+    {
+        // 1. Delete the leaderboard JSON file (hard reset, also handles corrupt files)
+        string leaderboardPath = System.IO.Path.Combine(Application.persistentDataPath, "leaderboard.json");
+        if (System.IO.File.Exists(leaderboardPath))
+        {
+            System.IO.File.Delete(leaderboardPath);
+            Debug.Log($"[CombatTestTools] Deleted leaderboard file at: {leaderboardPath}");
+        }
+
+        // 2. Re-initialize the in-memory manager state if running in Play Mode
+        if (Application.isPlaying && LeaderboardManager.Instance != null)
+        {
+            LeaderboardManager.Instance.ClearLeaderboard();
+        }
+
+        EditorUtility.DisplayDialog(
+            "Leaderboard Cleared",
+            $"Cleared leaderboard data at:\n{leaderboardPath}",
+            "OK"
+        );
     }
 }
 

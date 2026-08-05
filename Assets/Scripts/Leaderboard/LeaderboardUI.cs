@@ -58,6 +58,8 @@ public class LeaderboardUI : MonoBehaviour
             return;
         }
 
+        _isValidConfig = true;
+
         if (closeButton != null)
         {
             closeButton.onClick.RemoveAllListeners();

@@ -1,2 +1,39 @@
 # Auto detect text files and perform LF normalization
 * text=auto
+
+# Unity binary assets must never be line-ending normalized
+*.a binary
+*.aif binary
+*.aiff binary
+*.bmp binary
+*.cub binary
+*.dll binary
+*.dds binary
+*.exe binary
+*.fbx binary
+*.flac binary
+*.gif binary
+*.hdr binary
+*.jar binary
+*.jpeg binary
+*.jpg binary
+*.lz4 binary
+*.lzma binary
+*.m4a binary
+*.mp3 binary
+*.oga binary
+*.ogg binary
+*.opus binary
+*.otf binary
+*.png binary
+*.psd binary
+*.sfb binary
+*.stl binary
+*.tga binary
+*.tif binary
+*.tiff binary
+*.ttf binary
+*.unity3d binary
+*.wav binary
+*.webm binary
+*.xm binary

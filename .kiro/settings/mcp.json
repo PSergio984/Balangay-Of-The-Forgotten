@@ -1,0 +1,14 @@
+{
+  "mcpServers": {
+    "unityMCP": {
+      "url": "http://127.0.0.1:8085/mcp",
+      "type": "http",
+      "env": {},
+      "disabled": false,
+      "autoApprove": [
+        "manage_scene",
+        "set_active_instance"
+      ]
+    }
+  }
+}

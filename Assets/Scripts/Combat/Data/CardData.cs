@@ -271,6 +271,9 @@ public enum CardTargetMode
 
     [LabelText("Single Target")]
     SingleTarget,
+
+    [LabelText("Everyone")]
+    Everyone,
 }
 
     public static class CardTargetModeExtensions
@@ -284,6 +287,7 @@ public enum CardTargetMode
                 CardTargetMode.AllAllies => "All Allies",
                 CardTargetMode.Self => "Self",
                 CardTargetMode.SingleTarget => "Single Target",
+                CardTargetMode.Everyone => "Everyone",
                 _ => targetMode.ToString()
             };
         }

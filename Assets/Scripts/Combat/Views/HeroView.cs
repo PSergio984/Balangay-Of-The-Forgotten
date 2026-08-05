@@ -48,6 +48,8 @@ using UnityEngine;
 /// </remarks>
 public class HeroView : CombatantView
 {
+   public HeroData HeroData { get; private set; }
+
    /// <summary>
    /// Sets up this hero view with data from a HeroData asset
    /// </summary>
@@ -59,6 +61,7 @@ public class HeroView : CombatantView
    /// </remarks>
    public void Setup(HeroData heroData)
    {
+       HeroData = heroData;
        // Set up the base combatant properties using explicit values
        SetupBase(heroData.Health, heroData.Image, heroData.HeroName, heroData.MagicPower, heroData.AttackPower, heroData.Defense);
 

@@ -442,7 +442,7 @@ public class EnemySystem : Singleton<EnemySystem>
     private void TriggerPostVictoryDialogue()
     {
         // Find all DialogueTriggers in the scene
-        DialogueTrigger[] dialogueTriggers = Object.FindObjectsByType<DialogueTrigger>(FindObjectsSortMode.None);
+        DialogueTrigger[] dialogueTriggers = UnityEngine.Object.FindObjectsByType<DialogueTrigger>(FindObjectsSortMode.None);
         
         foreach (var dialogueTrigger in dialogueTriggers)
         {
@@ -467,7 +467,7 @@ public class EnemySystem : Singleton<EnemySystem>
     private void TriggerPostFinalBossDialogue()
     {
         // Find all DialogueTriggers in the scene
-        DialogueTrigger[] dialogueTriggers = Object.FindObjectsByType<DialogueTrigger>(FindObjectsSortMode.None);
+        DialogueTrigger[] dialogueTriggers = UnityEngine.Object.FindObjectsByType<DialogueTrigger>(FindObjectsSortMode.None);
         
         foreach (var dialogueTrigger in dialogueTriggers)
         {
@@ -983,22 +983,31 @@ public class EnemySystem : Singleton<EnemySystem>
         if (VictoryDefeatUI.Instance != null)
         {
             // Check if there are more enemies to spawn OR if there are any enemies currently on the board
-            // CRITICAL: Also check EnemyViews to ensure no active enemies remain before transitioning
-            int activeEnemiesOnBoard = (enemyBoardView != null && enemyBoardView.EnemyViews != null) ? enemyBoardView.EnemyViews.Count : 0;
+            // Count only living active enemies on the board
+            int activeLivingEnemiesOnBoard = 0;
+            if (enemyBoardView != null && enemyBoardView.EnemyViews != null)
+            {
+                foreach (var enemy in enemyBoardView.EnemyViews)
+                {
+                    if (enemy != null && enemy.CurrentHealth > 0)
+                    {
+                        activeLivingEnemiesOnBoard++;
+                    }
+                }
+            }
             bool hasEnemiesInQueue = enemyQueue.Count > 0;
             bool hasMoreEnemiesToSpawn = (defeatedEnemyIndex + 1 < totalEnemyCount);
             
             // Only transition if: no enemies on board AND (no enemies in queue AND no more enemies to spawn)
-            bool hasMoreEnemies = hasEnemiesInQueue || hasMoreEnemiesToSpawn || activeEnemiesOnBoard > 0;
+            bool hasMoreEnemies = hasEnemiesInQueue || hasMoreEnemiesToSpawn || activeLivingEnemiesOnBoard > 0;
             bool isFirstReward = !isMainBoss; // First enemy (miniboss) = true, second enemy (main boss) = false
             
-            Debug.Log($"[EnemySystem] Has more enemies: {hasMoreEnemies} (active on board: {activeEnemiesOnBoard}, queue: {enemyQueue.Count}, defeated: {defeatedEnemyIndex + 1}, total: {totalEnemyCount})");
+            Debug.Log($"[EnemySystem] Has more enemies: {hasMoreEnemies} (living on board: {activeLivingEnemiesOnBoard}, queue: {enemyQueue.Count}, defeated: {defeatedEnemyIndex + 1}, total: {totalEnemyCount})");
             
-            // CRITICAL SAFETY CHECK: If there are still enemies on the board, do NOT transition
-            if (activeEnemiesOnBoard > 0)
+            // CRITICAL SAFETY CHECK: If there are still living enemies on the board, do NOT trigger victory screen yet
+            if (activeLivingEnemiesOnBoard > 0)
             {
-                Debug.LogWarning($"[EnemySystem] CRITICAL: {activeEnemiesOnBoard} enemy(ies) still active on board! Cannot transition to next scene. Waiting for all enemies to be defeated.");
-                // Don't show victory yet - wait for all enemies to be defeated
+                Debug.LogWarning($"[EnemySystem] CRITICAL: {activeLivingEnemiesOnBoard} living enemy(ies) still active on board! Cannot show victory reward yet.");
                 return;
             }
             
@@ -1017,12 +1026,22 @@ public class EnemySystem : Singleton<EnemySystem>
     /// </summary>
     private void OnRewardCollected()
     {
-        // CRITICAL SAFETY CHECK: Verify no enemies are active on the board before proceeding
-        int activeEnemiesOnBoard = (enemyBoardView != null && enemyBoardView.EnemyViews != null) ? enemyBoardView.EnemyViews.Count : 0;
-        
-        if (activeEnemiesOnBoard > 0)
+        // Filter for truly living active enemies (ignore dead/removing enemy views)
+        int activeLivingEnemies = 0;
+        if (enemyBoardView != null && enemyBoardView.EnemyViews != null)
         {
-            Debug.LogWarning($"[EnemySystem] CRITICAL: Cannot proceed after reward collection! {activeEnemiesOnBoard} enemy(ies) still active on board. Queue count: {enemyQueue.Count}");
+            foreach (var enemy in enemyBoardView.EnemyViews)
+            {
+                if (enemy != null && enemy.CurrentHealth > 0)
+                {
+                    activeLivingEnemies++;
+                }
+            }
+        }
+        
+        if (activeLivingEnemies > 0)
+        {
+            Debug.LogWarning($"[EnemySystem] CRITICAL: Cannot proceed after reward collection! {activeLivingEnemies} living enemy(ies) still active on board. Queue count: {enemyQueue.Count}");
             return;
         }
         
