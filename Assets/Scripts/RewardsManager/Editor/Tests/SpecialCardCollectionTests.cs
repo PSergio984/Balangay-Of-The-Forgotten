@@ -224,13 +224,26 @@ public class SpecialCardCollectionTests
     }
 
     [Test]
-    public void IsSpecialCardData_UnassignedData_ReturnsFalse()
+    public void IsSpecialCardData_MatchesCatalogCardEvenWhenConsumed()
     {
+        _collection.AddSpecialCardToRandomHero(_testCards[0], new List<string> { "Lakan" });
         CardData playable = _testCards[0].GetOrCreatePlayableCardData();
+        _collection.ConsumeSpecialCardForHero("Lakan", _testCards[0]);
 
         bool result = _collection.IsSpecialCardData(playable);
 
+        Assert.IsTrue(result);
+    }
+
+    [Test]
+    public void IsSpecialCardData_CardFromAnotherCatalog_ReturnsFalse()
+    {
+        CardData unrelated = ScriptableObject.CreateInstance<CardData>();
+
+        bool result = _collection.IsSpecialCardData(unrelated);
+
         Assert.IsFalse(result);
+        Object.DestroyImmediate(unrelated);
     }
 
     [Test]

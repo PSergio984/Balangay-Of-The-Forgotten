@@ -165,4 +165,45 @@ public class LeaderboardManagerTests
         Assert.AreEqual(0, _manager.GetTopEntriesForMap(GameProgressData.MAP_ID_DAGAT, 100).Count);
         Assert.AreEqual(0, _manager.GetOverallTopEntries(100).Count);
     }
+
+    /// <summary>
+    /// Verifies storage is capped at the best 10 entries per map.
+    /// </summary>
+    [Test]
+    public void SubmitEntry_PrunesToTopTenPerMap()
+    {
+        for (int i = 0; i < 12; i++)
+        {
+            _manager.SubmitEntry($"Player_{i}", GameProgressData.MAP_ID_DAGAT, 100f - i * 5f);
+        }
+
+        var entries = _manager.GetTopEntriesForMap(GameProgressData.MAP_ID_DAGAT, 100);
+        Assert.AreEqual(10, entries.Count);
+        Assert.AreEqual(_mockRepo.StoredData.Entries.Count, 10);
+
+        // The two slowest runs (95s and 100s = Player_1 and Player_0) must be pruned.
+        Assert.AreEqual(45f, entries[0].ClearTime);
+        Assert.AreEqual(90f, entries[9].ClearTime);
+        Assert.IsFalse(_mockRepo.StoredData.Entries.Exists(e => e.PlayerName == "Player_0"));
+        Assert.IsFalse(_mockRepo.StoredData.Entries.Exists(e => e.PlayerName == "Player_1"));
+    }
+
+    /// <summary>
+    /// Verifies pruning only touches the map being pruned, never other maps.
+    /// </summary>
+    [Test]
+    public void SubmitEntry_PruneIsPerMap()
+    {
+        for (int i = 0; i < 12; i++)
+        {
+            _manager.SubmitEntry($"Dagat_{i}", GameProgressData.MAP_ID_DAGAT, 100f - i);
+        }
+        _manager.SubmitEntry("Dara_1", GameProgressData.MAP_ID_DARAGANG, 40f);
+        _manager.SubmitEntry("Dara_2", GameProgressData.MAP_ID_DARAGANG, 50f);
+        _manager.SubmitEntry("Dara_3", GameProgressData.MAP_ID_DARAGANG, 60f);
+
+        Assert.AreEqual(10, _manager.GetTopEntriesForMap(GameProgressData.MAP_ID_DAGAT, 100).Count);
+        Assert.AreEqual(3, _manager.GetTopEntriesForMap(GameProgressData.MAP_ID_DARAGANG, 100).Count);
+        Assert.AreEqual(13, _mockRepo.StoredData.Entries.Count);
+    }
 }

@@ -128,7 +128,7 @@ public class SessionIdentityTests
     }
 
     [Test]
-    public void MainMenu_StartButton_DisabledUntilPlayerNameExists()
+    public void MainMenu_StartButton_StaysEnabledAndStartSessionOpensNamePanelWithoutName()
     {
         var menuObj = new GameObject("MainMenu_Test");
         var menu = menuObj.AddComponent<MainMenu>();
@@ -139,18 +139,26 @@ public class SessionIdentityTests
         SetPrivateField(menu, "startButton", startButton);
         SetPrivateField(menu, "gameProgressData", _progressData);
 
+        // Wire a SessionNameEntryUI like the MainMenu scene does.
+        var sessionUiObj = new GameObject("SessionNameEntryUI_Test");
+        sessionUiObj.transform.SetParent(menuObj.transform);
+        var sessionUI = sessionUiObj.AddComponent<SessionNameEntryUI>();
+        var panelRoot = new GameObject("PanelRoot");
+        panelRoot.transform.SetParent(sessionUiObj.transform);
+        SetPrivateField(sessionUI, "panelRoot", panelRoot);
+        SetPrivateField(sessionUI, "gameProgressData", _progressData);
+        SetPrivateField(menu, "sessionNameEntryUI", sessionUI);
+
         var startMethod = typeof(MainMenu).GetMethod("Start", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
         startMethod?.Invoke(menu, null);
 
-        Assert.IsFalse(startButton.interactable);
-
-        // Setting a name raises PlayerNameStateChanged, which must re-enable the button.
-        _progressData.SetPlayerName("GateOpener");
+        // The Start button is never locked; without a name it opens the name panel instead.
         Assert.IsTrue(startButton.interactable);
 
-        // Clearing the name (New Player reset) must disable it again.
-        _progressData.ResetProgress();
-        Assert.IsFalse(startButton.interactable);
+        menu.StartSession();
+
+        Assert.IsTrue(sessionUiObj.activeSelf);
+        Assert.IsFalse(_progressData.HasPlayerName);
 
         Object.DestroyImmediate(menuObj);
     }

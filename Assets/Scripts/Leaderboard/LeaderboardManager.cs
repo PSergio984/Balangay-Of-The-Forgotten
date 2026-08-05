@@ -103,6 +103,7 @@ public class LeaderboardManager : Singleton<LeaderboardManager>
         };
 
         _data.Entries.Add(entry);
+        PruneToTopPerMap(10);
 
         if (_repository != null)
         {
@@ -115,6 +116,33 @@ public class LeaderboardManager : Singleton<LeaderboardManager>
         }
 
         return true;
+    }
+
+    /// <summary>
+    /// Keeps at most <paramref name="maxPerMap"/> entries per map (best clear times),
+    /// dropping the rest so the stored leaderboard never grows unbounded.
+    /// </summary>
+    private void PruneToTopPerMap(int maxPerMap)
+    {
+        if (_data == null || _data.Entries == null || _data.Entries.Count <= maxPerMap)
+        {
+            return;
+        }
+
+        var keep = new HashSet<LeaderboardEntry>();
+        foreach (var group in _data.Entries.GroupBy(e => e.MapId))
+        {
+            foreach (var entry in group
+                .Where(e => e != null)
+                .OrderBy(e => e.ClearTime)
+                .ThenBy(e => e.DateTimeUtc)
+                .Take(maxPerMap))
+            {
+                keep.Add(entry);
+            }
+        }
+
+        _data.Entries.RemoveAll(e => !keep.Contains(e));
     }
 
     /// <summary>

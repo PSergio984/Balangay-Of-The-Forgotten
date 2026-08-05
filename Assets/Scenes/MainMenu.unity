@@ -3046,6 +3046,7 @@ MonoBehaviour:
   characterTransitionData: {fileID: 0}
   leaderboardUI: {fileID: 0}
   leaderboardButton: {fileID: 0}
+  sessionNameEntryUI: {fileID: 2065374631031948467}
 --- !u!114 &1136911418
 MonoBehaviour:
   m_ObjectHideFlags: 0

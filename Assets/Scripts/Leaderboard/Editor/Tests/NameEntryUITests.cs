@@ -157,6 +157,49 @@ public class NameEntryUITests
     }
 
     [Test]
+    public void Show_AutoSubmitSilent_WithoutSerializedData_FallsBackToSingletonSessionName()
+    {
+        SetPrivateField(_nameEntryUI, "autoSubmitSilent", true);
+
+        // Simulate the shipped prefab: gameProgressData is not wired (null).
+        // The session name must come from GameProgressData.Instance instead.
+        var singletonData = ScriptableObject.CreateInstance<GameProgressData>();
+        singletonData.SetPlayerName("SingletonHero");
+        SetStaticInstance(singletonData);
+
+        try
+        {
+            bool callbackFired = false;
+            _nameEntryUI.Show(GameProgressData.MAP_ID_DAGAT, 77.0f, () => callbackFired = true);
+
+            Assert.IsFalse(_panelRoot.activeSelf);
+            Assert.IsTrue(callbackFired);
+
+            var topEntries = LeaderboardManager.Instance.GetTopEntriesForMap(GameProgressData.MAP_ID_DAGAT);
+            Assert.AreEqual(1, topEntries.Count);
+            Assert.AreEqual("SingletonHero", topEntries[0].PlayerName);
+            Assert.AreEqual(77.0f, topEntries[0].ClearTime);
+        }
+        finally
+        {
+            SetStaticInstance(null);
+            Object.DestroyImmediate(singletonData);
+        }
+    }
+
+    private static void SetStaticInstance(GameProgressData instance)
+    {
+        var field = typeof(GameProgressData).GetField(
+            "<Instance>k__BackingField",
+            System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.NonPublic);
+        if (field == null)
+        {
+            Assert.Fail("GameProgressData.Instance backing field not found");
+        }
+        field.SetValue(null, instance);
+    }
+
+    [Test]
     public void Show_AutoSubmitSilent_SubmitsSessionNameAndInvokesCallback()
     {
         SetPrivateField(_nameEntryUI, "autoSubmitSilent", true);

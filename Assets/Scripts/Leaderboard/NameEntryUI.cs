@@ -38,6 +38,18 @@ public class NameEntryUI : MonoBehaviour
     }
 
     /// <summary>
+    /// Resolves the GameProgressData instance at runtime, preferring the serialized
+    /// field and falling back to the runtime singleton (mirrors
+    /// <see cref="SessionNameEntryUI.ResolveData"/>). The victory popup prefab does not
+    /// wire the asset, so without this fallback the silent submit always used
+    /// "Anonymous" even after the player entered a name on the main menu.
+    /// </summary>
+    private GameProgressData ResolveData()
+    {
+        return gameProgressData != null ? gameProgressData : GameProgressData.Instance;
+    }
+
+    /// <summary>
     /// Displays the name entry popup or silently auto-submits using the session player name.
     /// </summary>
     /// <param name="mapId">Target map ID cleared.</param>
@@ -52,9 +64,10 @@ public class NameEntryUI : MonoBehaviour
         if (autoSubmitSilent)
         {
             string sessionName = "Anonymous";
-            if (gameProgressData != null && gameProgressData.HasPlayerName)
+            var resolvedData = ResolveData();
+            if (resolvedData != null && resolvedData.HasPlayerName)
             {
-                sessionName = gameProgressData.PlayerName;
+                sessionName = resolvedData.PlayerName;
             }
 
             if (LeaderboardManager.Instance != null)

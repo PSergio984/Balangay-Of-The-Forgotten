@@ -115,20 +115,23 @@ public class SpecialCardCollectionData : ScriptableObject
     }
 
     /// <summary>
-    /// Returns true if the given CardData belongs to any special card currently assigned to a hero.
+    /// Returns true if the given CardData belongs to any special card in the catalog.
     /// Used by CardSystem to keep special cards out of the draw/discard piles.
     /// </summary>
+    /// <remarks>
+    /// Checked against the full catalog (not the currently assigned collection) so a
+    /// special card that was already consumed still counts as special. If this checked
+    /// collection membership instead, a played special would be considered normal once
+    /// consumed, enter the discard pile, and be recycled back into the deck by RefillDeck.
+    /// </remarks>
     public bool IsSpecialCardData(CardData cardData)
     {
         if (cardData == null) return false;
-        foreach (var heroList in heroCardAssignments.Values)
+        foreach (var specialCard in allSpecialCardAssets)
         {
-            foreach (var specialCard in heroList)
-            {
-                if (specialCard == null) continue;
-                if (specialCard.CardDataRepresentation != null && specialCard.CardDataRepresentation == cardData) return true;
-                if (specialCard.GetOrCreatePlayableCardData() == cardData) return true;
-            }
+            if (specialCard == null) continue;
+            if (specialCard.CardDataRepresentation != null && specialCard.CardDataRepresentation == cardData) return true;
+            if (specialCard.GetOrCreatePlayableCardData() == cardData) return true;
         }
         return false;
     }

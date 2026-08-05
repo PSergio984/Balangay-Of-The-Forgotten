@@ -417,9 +417,12 @@ public class VictoryDefeatUI : Singleton<VictoryDefeatUI>
         
         // Phase 2: Hold
         yield return new WaitForSeconds(holdDuration);
-        
-        // Phase 3: Show NameEntryUI prompt (on final victory) and enable Continue button
-        if (isVictory && !hasMoreEnemies)
+
+        // Phase 3: Show NameEntryUI prompt (on final victory) and enable Continue button.
+        // Only the final ShowVictory banner (no pending reward) submits the clear time;
+        // the reward banner for the last enemy skips submission, otherwise the same run
+        // would be submitted twice (once here, once after the chest triggers the final victory).
+        if (isVictory && !hasMoreEnemies && pendingRewardData == null)
         {
             if (nameEntryUI != null)
             {

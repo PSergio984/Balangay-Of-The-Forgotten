@@ -79,8 +79,11 @@ public class MainMenu : MonoBehaviour
     [SerializeField] private Button leaderboardButton;
 
     [Header("Session Name Gate")]
-    [Tooltip("Main menu Start button. Disabled until a session player name exists. Leave null to auto-find a Button named 'Start'.")]
+    [Tooltip("Main menu Start button. Leave null to auto-find a Button named 'Start'.")]
     [SerializeField] private Button startButton;
+
+    [Tooltip("Pre-session name entry panel. Shown when Start is clicked without a session player name.")]
+    [SerializeField] private SessionNameEntryUI sessionNameEntryUI;
 
     [Tooltip("GameProgressData used for the name gate. Leave null to use the runtime singleton.")]
     [SerializeField] private GameProgressData gameProgressData;
@@ -96,22 +99,10 @@ public class MainMenu : MonoBehaviour
         {
             startButton = FindStartButton();
         }
-        GameProgressData.PlayerNameStateChanged += OnPlayerNameStateChanged;
-        ApplyStartButtonGate();
-    }
-
-    private void OnDestroy()
-    {
-        GameProgressData.PlayerNameStateChanged -= OnPlayerNameStateChanged;
-    }
-
-    /// <summary>
-    /// Resolves GameProgressData at runtime, preferring the serialized field and
-    /// falling back to the singleton (mirrors SessionNameEntryUI.ResolveData).
-    /// </summary>
-    private GameProgressData ResolveProgressData()
-    {
-        return gameProgressData != null ? gameProgressData : GameProgressData.Instance;
+        if (sessionNameEntryUI == null)
+        {
+            sessionNameEntryUI = FindObjectOfType<SessionNameEntryUI>(true);
+        }
     }
 
     /// <summary>
@@ -130,20 +121,13 @@ public class MainMenu : MonoBehaviour
         return null;
     }
 
-    private void OnPlayerNameStateChanged()
-    {
-        ApplyStartButtonGate();
-    }
-
     /// <summary>
-    /// Disables the Start button until a session player name exists, so a first-time
-    /// player cannot begin without entering a name.
+    /// Resolves GameProgressData at runtime, preferring the serialized field and
+    /// falling back to the singleton (mirrors SessionNameEntryUI.ResolveData).
     /// </summary>
-    private void ApplyStartButtonGate()
+    private GameProgressData ResolveProgressData()
     {
-        if (startButton == null) return;
-        var data = ResolveProgressData();
-        startButton.interactable = data != null && data.HasPlayerName;
+        return gameProgressData != null ? gameProgressData : GameProgressData.Instance;
     }
 
     /// <summary>
@@ -177,7 +161,15 @@ public class MainMenu : MonoBehaviour
         var progressData = ResolveProgressData();
         if (progressData != null && !progressData.HasPlayerName)
         {
-            Debug.LogWarning("[MainMenu] Cannot start session without a player name. Enter a name first.");
+            Debug.Log("[MainMenu] No session player name. Opening name entry panel instead of starting.");
+            if (sessionNameEntryUI != null)
+            {
+                sessionNameEntryUI.Show();
+            }
+            else
+            {
+                Debug.LogWarning("[MainMenu] sessionNameEntryUI is null! Cannot open name entry panel.", this);
+            }
             return;
         }
 
